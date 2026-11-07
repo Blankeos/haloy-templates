@@ -61,11 +61,12 @@ Every template's `REPORT.md` carries its badges. A badge only counts while the t
 | | |
 |---|---|
 | ✅ **verified** (`haloy validate-config` passes) | 601 / 602 |
-| 🟢 **tested** (deployed, healthy, answers requests) | 4 / 602 |
+| 🟢 **tested** (deployed, healthy, answers requests) | 5 / 602 |
 | 🧩 **translation** | 387 clean, 168 with workarounds, 47 need a human |
 
 | 🟢 Tested | What was checked | Arch | Date |
 |---|---|---|---|
+| [`beszel`](templates/beszel) | Production (netc, 2026-11-07): hub deployed with a Let's Encrypt cert and shows server and per-container stats from a host-network agent (run with docker, not Haloy, since it needs host networking and the Docker socket). Hub image bumped to 0.21.1 and the docker.sock mount removed from the hub. | amd64 | 2026-11-07 |
 | [`chatwoot`](templates/chatwoot) | Production (netc, 2026-11-07): restored real data, login and conversations work. Rails boots slower than Haloy's health window, so the web target runs as a service behind the generated nginx gateway. | amd64 | 2026-11-07 |
 | [`rustfs`](templates/rustfs) | S3 API on the domain: create bucket, put and get object; bad credentials rejected. Console (9001) not published | arm64 | 2026-11-07 |
 | [`rybbit`](templates/rybbit) | all 6 targets up; /api and / both served on one host by the gateway; sign-up and session work; Postgres and ClickHouse connected | arm64 | 2026-11-07 |

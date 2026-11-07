@@ -3012,6 +3012,13 @@
   }
  },
  "tested": {
+  "beszel": {
+   "hash": "08d6bc80e6be09da81ecfb9a8a5932562f3176f8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73",
+   "arch": "amd64",
+   "notes": "Production (netc, 2026-11-07): hub deployed with a Let's Encrypt cert and shows server and per-container stats from a host-network agent (run with docker, not Haloy, since it needs host networking and the Docker socket). Hub image bumped to 0.21.1 and the docker.sock mount removed from the hub."
+  },
   "chatwoot": {
    "hash": "544615c78de05a1b770e4d8d32c737939a159ce6",
    "date": "2026-11-07",
