@@ -6,8 +6,8 @@ import { buildEnv, type Vars } from "./secrets";
 import { translate, type Result } from "./translate";
 
 export const PLACEHOLDER_DOMAIN = "app.example.com";
-const TEMPLATES = join(import.meta.dir, "templates");
 const ROOT = join(import.meta.dir, "..");
+const TEMPLATES = join(ROOT, "templates");
 
 const USAGE = `haloy-templates
 
@@ -15,7 +15,7 @@ const USAGE = `haloy-templates
   add <id> [--domain d] [--server s] [--out dir]   copy a bundled template and generate its .env
   env <id>                                 print a freshly generated .env for a template
   translate <id> [--domain d] [--out dir]  translate straight from upstream (dev)
-  sync [--only a,b] [--limit n]            re-translate upstream into src/templates (maintainers)
+  sync [--only a,b] [--limit n]            re-translate upstream into templates (maintainers)
 `;
 
 function flags(args: string[]) {

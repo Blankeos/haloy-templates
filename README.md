@@ -17,7 +17,7 @@ You need the [haloy CLI](https://haloy.dev/docs/client-installation) and a serve
 
 ## 📦 What you get
 
-Each template lives in `src/templates/<id>/`:
+Each template lives in `templates/<id>/`:
 
 | File | |
 |---|---|
@@ -50,7 +50,7 @@ Not translatable (flagged `manual`): Docker socket, `privileged`, devices, `cap_
 ## 🛠️ Maintain
 
 ```sh
-bun run sync       # re-translate upstream into src/templates
+bun run sync       # re-translate upstream into templates/
 bun run validate   # haloy validate-config on all of them
 bun test
 ```

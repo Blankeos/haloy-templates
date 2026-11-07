@@ -1,12 +1,12 @@
 # haloy-templates
 
-Dokploy templates translated into Haloy configs, bundled in `src/templates/<id>/`.
+Dokploy templates translated into Haloy configs, bundled in `templates/<id>/`.
 
 ## Layout
 
 - `src/translate.ts`: pure function `translate(input) -> files + warnings`. No I/O, deterministic.
 - `src/cli.ts`: `list`, `add`, `env`, `translate`, `sync`. `src/fetch.ts`: upstream fetch + capped cache. `src/secrets.ts`: `.env` generation.
-- `src/templates/`: generated. Never hand-edit; change the translator and re-sync. `index.json`, `UPSTREAM` (upstream commit) and `/COVERAGE.md` are generated too.
+- `templates/`: generated. Never hand-edit; change the translator and re-sync. `index.json`, `UPSTREAM` (upstream commit) and `/COVERAGE.md` are generated too.
 - Secrets never live in the repo. Each template has a `vars.json` recipe; `add` generates `.env`.
 
 ## Rules
