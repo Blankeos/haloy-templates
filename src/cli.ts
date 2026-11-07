@@ -15,7 +15,7 @@ const USAGE = `haloy-templates
   list                                     list bundled templates
   add <id> [--domain d] [--server s] [--platform p] [--out dir]   copy a bundled template and generate its .env
   env <id>                                 print a freshly generated .env for a template
-  translate <id> [--domain d] [--out dir]  translate straight from upstream (dev)
+  translate <id> [--domain d] [--out dir] [--compose f [--toml f]]   translate from upstream, or from your own files
   sync [--only a,b] [--limit n]            re-translate upstream into templates (maintainers)
   record verified --haloy v <id>...        mark templates as passing \`haloy validate-config\`
   record tested <id> --haloy v --arch a --notes "..."   mark a template as deployed and healthy
@@ -131,7 +131,10 @@ if (cmd === "list") {
   const { files } = await bundled(pos[0]);
   if (files["vars.json"]) process.stdout.write(buildEnv(JSON.parse(files["vars.json"]) as Vars));
 } else if (cmd === "translate" && pos[0]) {
-  const t = await fetchTemplate(pos[0]);
+  // --compose/--toml translate your own files (e.g. a stack that is already deployed) instead of an upstream template
+  const t = f.compose
+    ? { compose: await readFile(f.compose, "utf8"), templateToml: f.toml ? await readFile(f.toml, "utf8") : undefined }
+    : await fetchTemplate(pos[0]);
   const r = translate({ id: pos[0], ...t, domain: f.domain ?? PLACEHOLDER_DOMAIN });
   await writeFiles(join(f.out ?? "./out", r.id), r.files);
   console.log(`${r.id}: ${r.status} (${r.targets.length} targets, ${r.warnings.length} warnings)`);
