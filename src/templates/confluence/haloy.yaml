@@ -1,0 +1,21 @@
+name: confluence
+server: localhost
+targets:
+  confluence:
+    image: atlassian/confluence-server:8.6-ubuntu-jdk17
+    port: "8090"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: JVM_MINIMUM_MEMORY
+        value: 2048m
+      - name: JVM_MAXIMUM_MEMORY
+        value: 4096m
+      - name: CATALINA_CONNECTOR_PROXYNAME
+        value: app.example.com
+      - name: CATALINA_CONNECTOR_SCHEME
+        value: http
+      - name: CATALINA_CONNECTOR_SECURE
+        value: "true"
+    volumes:
+      - confluence-confluence-data:/var/atlassian/application-data/confluence

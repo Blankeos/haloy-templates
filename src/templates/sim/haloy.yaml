@@ -1,0 +1,82 @@
+name: sim
+server: localhost
+targets:
+  simstudio:
+    health_check_path: /
+    image: ghcr.io/simstudioai/simstudio:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: DATABASE_URL
+        from:
+          env: SIMSTUDIO__DATABASE_URL
+      - name: BETTER_AUTH_URL
+        value: http://app.example.com
+      - name: NEXT_PUBLIC_APP_URL
+        value: http://app.example.com
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: BETTER_AUTH_SECRET
+      - name: ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: API_ENCRYPTION_KEY
+        from:
+          env: API_ENCRYPTION_KEY
+      - name: INTERNAL_API_SECRET
+        from:
+          env: INTERNAL_API_SECRET
+      - name: SOCKET_SERVER_URL
+        value: http://sim-realtime:3002
+  sim-realtime:
+    health_check_path: /health
+    image: ghcr.io/simstudioai/realtime:latest
+    port: "3002"
+    domains:
+      - domain: socket-io.app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: DATABASE_URL
+        from:
+          env: SIM_REALTIME__DATABASE_URL
+      - name: NEXT_PUBLIC_APP_URL
+        value: http://app.example.com
+      - name: BETTER_AUTH_URL
+        value: http://app.example.com
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: BETTER_AUTH_SECRET
+      - name: INTERNAL_API_SECRET
+        from:
+          env: INTERNAL_API_SECRET
+  sim-migrations:
+    preset: service
+    image:
+      repository: sim-migrations
+      tag: latest
+      build_config:
+        context: ./sim-migrations
+        push: server
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: SIM_MIGRATIONS__DATABASE_URL
+  sim-db:
+    preset: database
+    image: pgvector/pgvector:pg17
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: simstudio
+    volumes:
+      - sim-postgres-data:/var/lib/postgresql/data

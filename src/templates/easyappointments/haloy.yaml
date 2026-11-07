@@ -1,0 +1,34 @@
+name: easyappointments
+server: localhost
+targets:
+  easyappointments:
+    image: alextselegidis/easyappointments:1.5.0
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BASE_URL
+        value: http://app.example.com
+      - name: DB_HOST
+        value: easyappointments-mysql
+      - name: DB_NAME
+        value: easyappointments
+      - name: DB_USERNAME
+        value: root
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - easyappointments-easyappointments:/var/www/html
+  easyappointments-mysql:
+    preset: database
+    image: mysql:8.0
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MYSQL_DATABASE
+        value: easyappointments
+    volumes:
+      - easyappointments-mysql:/var/lib/mysql

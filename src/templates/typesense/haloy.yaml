@@ -1,0 +1,18 @@
+name: typesense
+server: localhost
+targets:
+  typesense:
+    image: typesense/typesense:29.0
+    port: "8108"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TYPESENSE_API_KEY
+        from:
+          env: API_KEY
+      - name: TYPESENSE_ENABLE_CORS
+        value: "true"
+      - name: TYPESENSE_DATA_DIR
+        value: /data
+    volumes:
+      - typesense-typesense-data:/data

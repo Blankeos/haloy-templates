@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "PARSEABLE_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

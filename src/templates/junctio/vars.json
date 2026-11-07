@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "JUNCTIO_SECRET": "hash:64"
+  },
+  "derived": {}
+}

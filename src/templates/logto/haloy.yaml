@@ -1,0 +1,39 @@
+name: logto
+server: localhost
+targets:
+  logto-app:
+    image:
+      repository: logto-app
+      tag: latest
+      build_config:
+        context: ./logto-app
+        push: server
+    port: "3001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TRUST_PROXY_HEADER
+        value: "1"
+      - name: DB_URL
+        from:
+          env: LOGTO_APP__DB_URL
+      - name: ENDPOINT
+        value: http://app.example.com
+      - name: ADMIN_ENDPOINT
+        value: http://app.example.com
+    volumes:
+      - logto-logto-connectors:/etc/logto/packages/core/connectors
+  logto-postgres:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: logto
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: logto
+    volumes:
+      - logto-postgres-data:/var/lib/postgresql/data

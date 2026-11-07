@@ -1,0 +1,36 @@
+name: chatto
+server: localhost
+targets:
+  chatto:
+    image: ghcr.io/chattocorp/chatto:0.4
+    port: "4000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CHATTO_WEBSERVER_URL
+        value: https://app.example.com
+      - name: CHATTO_WEBSERVER_PORT
+        value: "4000"
+      - name: CHATTO_WEBSERVER_COOKIE_SIGNING_SECRET
+        from:
+          env: COOKIE_SECRET
+      - name: CHATTO_CORE_SECRET_KEY
+        from:
+          env: CORE_SECRET
+      - name: CHATTO_CORE_ASSETS_SIGNING_SECRET
+        from:
+          env: ASSETS_SECRET
+      - name: CHATTO_NATS_EMBEDDED_ENABLED
+        value: "true"
+      - name: CHATTO_NATS_EMBEDDED_DATA_DIR
+        value: /data
+      - name: CHATTO_OWNERS_EMAILS
+        value: admin@app.example.com
+      - name: CHATTO_SMTP_ENABLED
+        value: "false"
+      - name: CHATTO_SMTP_PORT
+        value: "587"
+      - name: CHATTO_SMTP_TLS
+        value: mandatory
+    volumes:
+      - chatto-chatto-data:/data

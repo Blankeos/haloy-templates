@@ -1,68 +1,66 @@
-# haloy-templates
+# 🪄 haloy-templates
 
-Turn any [Dokploy template](https://github.com/Dokploy/templates) into a [Haloy](https://haloy.dev) config.
+Every [Dokploy template](https://github.com/Dokploy/templates) (602 of them), translated into a ready-to-deploy [Haloy](https://haloy.dev) config.
 
-Haloy is a tiny CLI-driven deploy tool (about 25 MB on the server) with no UI, no templates marketplace and no compose support. This closes that gap: pick a template, get a `haloy.yaml`, run `deploy.sh`.
+Haloy is tiny (~25 MB on the server) but has no UI, no one-click installs and no compose support. This is the missing catalog.
+
+## 🚀 Use it
 
 ```sh
 bun install
-bun run translate rybbit --domain analytics.example.com --out ./out
-cd out/rybbit && ./deploy.sh        # needs the haloy CLI + a configured server
+bun run list                                  # what's bundled
+bun run add plausible --domain stats.example.com --server my-server --out ./apps
+cd apps/plausible && cat REPORT.md && ./deploy.sh
 ```
 
-Output per template:
+You need the [haloy CLI](https://haloy.dev/docs/client-installation) and a server running `haloyd`.
 
-| File | What |
+## 📦 What you get
+
+Each template lives in `src/templates/<id>/`:
+
+| File | |
 |---|---|
-| `haloy.yaml` | one Haloy target per compose service |
-| `deploy.sh` | `haloy deploy -t <target>` in dependency order (Haloy has no `depends_on`) |
-| `<target>/Dockerfile` | tiny Dockerfile for services that need a `command`/`entrypoint` or baked-in config files |
-| `.env` | generated secrets (`${password:32}` etc). Never overwritten, gitignored |
-| `REPORT.md` | what was translated, what needed a workaround, what needs a human |
+| `haloy.yaml` | one target per compose service |
+| `deploy.sh` | targets in dependency order (Haloy has no `depends_on`) |
+| `<target>/Dockerfile` | only where a `command`, `entrypoint` or config file had to be baked in |
+| `vars.json` | secret recipes. `add` turns them into a `.env` and never overwrites one |
+| `REPORT.md` | what needed a workaround and what needs a human |
 
-## What it maps
+## 🔁 How it translates
 
-| Compose / template.toml | Haloy |
+| Dokploy | Haloy |
 |---|---|
-| service | target (`<template>-<service>`; hostnames in env are rewritten to match) |
-| `image` | `image` |
-| postgres / mysql / redis / mongo / clickhouse... image | `preset: database` |
-| service without a domain | `preset: service` |
-| `command` / `entrypoint` | generated Dockerfile (Haloy has no such field) |
-| bind-mounted template files | baked into that Dockerfile |
-| named volumes, data-dir bind mounts | named volumes |
-| `[[config.domains]]` | `domains`, `port` |
-| path routing (`/api`) | a subdomain (`api.<host>`) + warning, Haloy routes by hostname only |
-| `${password:N}`, `${base64:N}`, ... | generated into `.env`, read with `from: env` |
+| service | target |
+| postgres, redis, mongo... | `preset: database` |
+| `command` / `entrypoint` / mounted config | tiny generated Dockerfile |
+| `/api` path routing | subdomain (`api.host`), Haloy routes by hostname only |
+| `${password:32}` and friends | generated into `.env`, read with `from: env` |
 | `depends_on` | order in `deploy.sh` |
-| HTTP healthcheck | `health_check_path` (command checks are dropped, with a warning) |
-| Traefik labels, restart, networks | dropped |
+| Traefik labels | dropped |
 
-Things Haloy cannot do are flagged `manual` in `REPORT.md`: Docker socket mounts, `privileged`, `cap_add`, devices, host networking, `build:` contexts, `env_file`.
+Not translatable (flagged `manual`): Docker socket, `privileged`, devices, `cap_add`, host networking, `build:`, `env_file`.
 
-## Coverage
+## ✅ Status
+
+- All 602 templates pass `haloy validate-config` (CI checks this).
+- 316 clean, 215 with workarounds, 71 need a human. Details in [COVERAGE.md](COVERAGE.md).
+- Validated is not the same as deployed. Deploy-tested so far: Uptime Kuma, Ackee + MongoDB.
+
+## 🛠️ Maintain
 
 ```sh
-bun run all --out ./out        # all ~600 templates + out/COVERAGE.md
-scripts/validate-all.sh ./out  # runs `haloy validate-config` on each (needs the haloy CLI)
+bun run sync       # re-translate upstream into src/templates
+bun run validate   # haloy validate-config on all of them
+bun test
 ```
 
-Current: 602 templates translated, 602 pass `haloy validate-config`. Roughly half need no manual work. See `COVERAGE.md` after a run.
+A weekly workflow runs `sync` and opens a PR. See [AGENTS.md](AGENTS.md) for the routine.
 
-Deploy-tested so far in a clean VM: Uptime Kuma, Ackee (with MongoDB), Rybbit and Chatwoot (hand-written equivalents).
+## 🧩 Agent skill
 
-## Notes
+[`skills/dokploy-to-haloy`](skills/dokploy-to-haloy/SKILL.md) teaches a coding agent to add, review, deploy and verify a template.
 
-- Fetches only `docker-compose.yml`, `template.toml` per template from GitHub raw and caches them in `~/.cache/haloy-templates` (20 MB cap). It never clones the repo.
-- Haloy does not interpolate `${VAR}` inside `value:` strings, so env values that embed a secret become a derived variable in `.env` read with `from: env`.
-- Platform defaults to `linux/amd64`, matching Haloy.
+---
 
-## Skill
-
-`skills/dokploy-to-haloy/SKILL.md` teaches a coding agent to add a template to a server: translate, review the report, deploy, verify.
-
-MIT licensed.
-
-## Credits
-
-Templates come from [Dokploy/templates](https://github.com/Dokploy/templates) (Apache-2.0); the few fixtures under `test/fixtures` are copies of them.
+MIT. Templates are derived from [Dokploy/templates](https://github.com/Dokploy/templates) (Apache-2.0).

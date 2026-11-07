@@ -1,0 +1,24 @@
+name: yamtrack
+server: localhost
+targets:
+  yamtrack:
+    image: ghcr.io/fuzzygrim/yamtrack
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: Europe/Berlin
+      - name: SECRET
+        from:
+          env: SECRET
+      - name: REDIS_URL
+        value: redis://yamtrack-redis:6379
+    volumes:
+      - yamtrack-yamtrack-db:/yamtrack/db
+  yamtrack-redis:
+    preset: database
+    image: redis:7-alpine
+    port: "6379"
+    volumes:
+      - yamtrack-redis-data:/data

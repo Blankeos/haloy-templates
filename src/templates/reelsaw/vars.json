@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "INLINE_BASE64_48": "base64:48",
+    "INLINE_PASSWORD_32": "password:32"
+  },
+  "derived": {
+    "REELSAW__DATABASE_URL": "postgres://reelsaw:${INLINE_PASSWORD_32}@reelsaw-db:5432/reelsaw"
+  }
+}

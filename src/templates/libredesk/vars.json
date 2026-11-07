@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "LIBREDESK_SYSTEM_USER_PASSWORD": "base64:32",
+    "PG_PASSWORD": "password:16"
+  },
+  "derived": {}
+}

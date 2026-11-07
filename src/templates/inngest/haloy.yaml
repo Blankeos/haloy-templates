@@ -1,0 +1,84 @@
+name: inngest
+server: localhost
+targets:
+  inngest:
+    health_check_path: /health
+    image:
+      repository: inngest
+      tag: latest
+      build_config:
+        context: ./inngest
+        push: server
+    port: "8288"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: INNGEST_PORT
+        value: "8288"
+      - name: INNGEST_HOST
+        value: 0.0.0.0
+      - name: INNGEST_EVENT_KEY
+        from:
+          env: EVENT_KEY
+      - name: INNGEST_SIGNING_KEY
+        from:
+          env: SIGNING_KEY
+      - name: INNGEST_POSTGRES_URI
+        from:
+          env: INNGEST__INNGEST_POSTGRES_URI
+      - name: INNGEST_REDIS_URI
+        value: redis://inngest-redis:6379
+      - name: INNGEST_POLL_INTERVAL
+        value: "60"
+      - name: INNGEST_QUEUE_WORKERS
+        value: "100"
+      - name: INNGEST_RETRY_INTERVAL
+        value: "1"
+      - name: INNGEST_TICK
+        value: "150"
+      - name: INNGEST_LOG_LEVEL
+        value: info
+      - name: INNGEST_JSON
+        value: "true"
+      - name: INNGEST_VERBOSE
+        value: "false"
+      - name: EVENT_KEY
+        from:
+          env: EVENT_KEY
+      - name: SIGNING_KEY
+        from:
+          env: SIGNING_KEY
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - inngest-inngest-data:/home/inngest/.inngest
+  inngest-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: inngest
+      - name: POSTGRES_USER
+        value: inngest
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_INITDB_ARGS
+        value: --encoding=UTF-8 --lc-collate=C --lc-ctype=C
+      - name: PGUSER
+        value: inngest
+    volumes:
+      - inngest-postgres-data:/var/lib/postgresql/data
+  inngest-redis:
+    preset: database
+    image:
+      repository: inngest-redis
+      tag: latest
+      build_config:
+        context: ./inngest-redis
+        push: server
+    port: "6379"
+    volumes:
+      - inngest-redis-data:/data

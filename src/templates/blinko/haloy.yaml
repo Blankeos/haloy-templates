@@ -1,0 +1,37 @@
+name: blinko
+server: localhost
+targets:
+  blinko-website:
+    image: blinkospace/blinko:1.6.3
+    port: "1111"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: NEXTAUTH_SECRET
+        from:
+          env: NEXTAUTH_SECRET
+      - name: DATABASE_URL
+        from:
+          env: BLINKO_WEBSITE__DATABASE_URL
+      - name: NEXTAUTH_URL
+        value: http://app.example.com
+      - name: NEXT_PUBLIC_BASE_URL
+        value: http://app.example.com
+  blinko-postgres:
+    preset: database
+    image: postgres:14
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: postgres
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: TZ
+        value: Asia/Shanghai
+    volumes:
+      - blinko-blinko-db:/var/lib/postgresql/data

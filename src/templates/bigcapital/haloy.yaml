@@ -1,0 +1,107 @@
+name: bigcapital
+server: localhost
+targets:
+  bigcapital-webapp:
+    image: bigcapitalhq/webapp:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+  bigcapital-server:
+    preset: service
+    image: bigcapitalhq/server:latest
+    port: "3000"
+    env:
+      - name: MAIL_PORT
+        value: "587"
+      - name: MAIL_SECURE
+        value: "false"
+      - name: MAIL_FROM_NAME
+        value: BigCapital
+      - name: MAIL_FROM_ADDRESS
+        value: noreply@app.example.com
+      - name: DB_HOST
+        value: bigcapital-mysql
+      - name: DB_USER
+        value: bigcapital
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DB_CHARSET
+        value: utf8mb4
+      - name: SYSTEM_DB_NAME
+        value: bigcapital
+      - name: TENANT_DB_NAME_PERFIX
+        value: bigcapital_tenant_
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: MONGODB_DATABASE_URL
+        value: mongodb://bigcapital-mongo/bigcapital
+      - name: BASE_URL
+        value: https://app.example.com
+      - name: AGENDASH_AUTH_USER
+        value: admin
+      - name: AGENDASH_AUTH_PASSWORD
+        from:
+          env: AGENDASH_AUTH_PASSWORD
+      - name: SIGNUP_DISABLED
+        value: "false"
+      - name: SIGNUP_EMAIL_CONFIRMATION
+        value: "false"
+      - name: GOTENBERG_URL
+        value: http://bigcapital-gotenberg:9000
+      - name: GOTENBERG_DOCS_URL
+        value: http://bigcapital-gotenberg:9000
+      - name: EXCHANGE_RATE_SERVICE
+        value: openexchangerates
+      - name: BANKING_CONNECT
+        value: "false"
+      - name: PLAID_ENV
+        value: sandbox
+      - name: HOSTED_ON_BIGCAPITAL_CLOUD
+        value: "false"
+      - name: NEW_RELIC_DISTRIBUTED_TRACING_ENABLED
+        value: "false"
+      - name: NEW_RELIC_LOG
+        value: "false"
+      - name: NEW_RELIC_AI_MONITORING_ENABLED
+        value: "false"
+      - name: NEW_RELIC_CUSTOM_INSIGHTS_EVENTS_MAX_SAMPLES_STORED
+        value: "10000"
+      - name: NEW_RELIC_SPAN_EVENTS_MAX_SAMPLES_STORED
+        value: "10000"
+      - name: NEW_RELIC_APP_NAME
+        value: BigCapital
+  bigcapital-mysql:
+    preset: database
+    image: mariadb:10.11
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: bigcapital
+      - name: MYSQL_USER
+        value: bigcapital
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+    volumes:
+      - bigcapital-mysql:/var/lib/mysql
+  bigcapital-mongo:
+    preset: database
+    image: mongo:7
+    port: "27017"
+    volumes:
+      - bigcapital-mongo:/data/db
+  bigcapital-redis:
+    preset: database
+    image: redis:7-alpine
+    port: "6379"
+    volumes:
+      - bigcapital-redis:/data
+  bigcapital-gotenberg:
+    preset: service
+    image: gotenberg/gotenberg:7
+    port: "9000"

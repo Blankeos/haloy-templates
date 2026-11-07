@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "INLINE_BASE64_64": "base64:64"
+  },
+  "derived": {}
+}

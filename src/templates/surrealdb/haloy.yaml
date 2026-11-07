@@ -1,0 +1,21 @@
+name: surrealdb
+server: localhost
+targets:
+  surrealdb:
+    image:
+      repository: surrealdb
+      tag: latest
+      build_config:
+        context: ./surrealdb
+        push: server
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SURREAL_USER
+        value: admin
+      - name: SURREAL_PASS
+        from:
+          env: SURREALDB_PASSWORD
+    volumes:
+      - surrealdb-db-data:/usr/app/data

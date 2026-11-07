@@ -1,0 +1,135 @@
+name: mautic
+server: localhost
+targets:
+  mautic-mysql:
+    preset: database
+    image:
+      repository: mautic-mysql
+      tag: latest
+      build_config:
+        context: ./mautic-mysql
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: mautic
+      - name: MYSQL_USER
+        value: mautic
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - mautic-mysql-data:/var/lib/mysql
+  mautic:
+    image:
+      repository: mautic
+      tag: latest
+      build_config:
+        context: ./mautic
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DOCKER_MAUTIC_ROLE
+        value: mautic_web
+      - name: DOCKER_MAUTIC_RUN_MIGRATIONS
+        value: "true"
+      - name: MAUTIC_DB_HOST
+        value: mautic-mysql
+      - name: MAUTIC_DB_PORT
+        value: "3306"
+      - name: MAUTIC_DB_DATABASE
+        value: mautic
+      - name: MAUTIC_DB_USER
+        value: mautic
+      - name: MAUTIC_DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MAUTIC_URL
+        value: https://app.example.com
+      - name: MAUTIC_TRUSTED_PROXIES
+        value: '["0.0.0.0/0"]'
+      - name: MAUTIC_MESSENGER_DSN_EMAIL
+        value: doctrine://default
+      - name: MAUTIC_MESSENGER_DSN_HIT
+        value: doctrine://default
+      - name: PHP_INI_DATE_TIMEZONE
+        value: UTC
+      - name: PHP_MEMORY_LIMIT
+        value: 512M
+    volumes:
+      - mautic-mautic-data:/var/www/html
+  mautic-cron:
+    preset: service
+    image: mautic/mautic:5.1.1-apache
+    port: "8080"
+    env:
+      - name: DOCKER_MAUTIC_ROLE
+        value: mautic_cron
+      - name: MAUTIC_DB_HOST
+        value: mautic-mysql
+      - name: MAUTIC_DB_PORT
+        value: "3306"
+      - name: MAUTIC_DB_DATABASE
+        value: mautic
+      - name: MAUTIC_DB_USER
+        value: mautic
+      - name: MAUTIC_DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MAUTIC_URL
+        value: https://app.example.com
+      - name: PHP_INI_DATE_TIMEZONE
+        value: UTC
+    volumes:
+      - mautic-mautic-data:/var/www/html
+  mautic-worker:
+    preset: service
+    image: mautic/mautic:5.1.1-apache
+    port: "8080"
+    env:
+      - name: DOCKER_MAUTIC_ROLE
+        value: mautic_worker
+      - name: DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL
+        value: "2"
+      - name: DOCKER_MAUTIC_WORKERS_CONSUME_HIT
+        value: "2"
+      - name: DOCKER_MAUTIC_WORKERS_CONSUME_FAILED
+        value: "2"
+      - name: MAUTIC_DB_HOST
+        value: mautic-mysql
+      - name: MAUTIC_DB_PORT
+        value: "3306"
+      - name: MAUTIC_DB_DATABASE
+        value: mautic
+      - name: MAUTIC_DB_USER
+        value: mautic
+      - name: MAUTIC_DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MAUTIC_URL
+        value: https://app.example.com
+      - name: MAUTIC_MESSENGER_DSN_EMAIL
+        value: doctrine://default
+      - name: MAUTIC_MESSENGER_DSN_HIT
+        value: doctrine://default
+      - name: PHP_INI_DATE_TIMEZONE
+        value: UTC
+    volumes:
+      - mautic-mautic-data:/var/www/html
+  mautic-phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PMA_HOST
+        value: mautic-mysql
+      - name: PMA_PORT
+        value: "3306"
+      - name: UPLOAD_LIMIT
+        value: 64M

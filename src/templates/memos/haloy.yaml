@@ -1,0 +1,15 @@
+name: memos
+server: localhost
+targets:
+  memos:
+    image: neosmemo/memos:stable
+    port: "5230"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MEMOS_MODE
+        value: prod
+      - name: MEMOS_PORT
+        value: "5230"
+    volumes:
+      - memos-memos-data:/var/opt/memos

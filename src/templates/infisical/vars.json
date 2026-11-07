@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password",
+    "ENCRYPTION_KEY": "hash:32",
+    "AUTH_SECRET": "base64:32"
+  },
+  "derived": {
+    "INFISICAL_BACKEND__DB_CONNECTION_URI": "postgres://infisical:${POSTGRES_PASSWORD}@infisical-db:5432/infisical"
+  }
+}

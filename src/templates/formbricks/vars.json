@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "SECRET_BASE": "base64:64",
+    "ENCRYPTION_KEY": "password:32",
+    "CRON_SECRET": "base64:32"
+  },
+  "derived": {}
+}

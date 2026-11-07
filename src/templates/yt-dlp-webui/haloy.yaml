@@ -1,0 +1,12 @@
+name: yt-dlp-webui
+server: localhost
+targets:
+  yt-dlp-webui:
+    health_check_path: /
+    image: marcobaobao/yt-dlp-webui
+    port: "3033"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - yt-dlp-webui-downloads:/downloads
+      - yt-dlp-webui-config:/config

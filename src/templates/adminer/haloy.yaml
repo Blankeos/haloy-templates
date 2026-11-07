@@ -1,0 +1,8 @@
+name: adminer
+server: localhost
+targets:
+  adminer:
+    image: adminer:4.8.1
+    port: "8080"
+    domains:
+      - domain: app.example.com

@@ -1,0 +1,40 @@
+name: joplin-server
+server: localhost
+targets:
+  joplin-server-joplin-db:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        value: joplin
+      - name: POSTGRES_DB
+        value: joplin
+    volumes:
+      - joplin-server-joplin-db-data:/var/lib/postgresql/data
+  joplin-server:
+    image: joplin/server:3.7.1
+    port: "22300"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_BASE_URL
+        value: http://app.example.com
+      - name: APP_PORT
+        value: "22300"
+      - name: DB_CLIENT
+        value: pg
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DATABASE
+        value: joplin
+      - name: POSTGRES_USER
+        value: joplin
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_HOST
+        value: joplin-server-joplin-db

@@ -1,0 +1,72 @@
+name: zabbix
+server: localhost
+targets:
+  zabbix-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: zabbix
+      - name: POSTGRES_USER
+        value: zabbix
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - zabbix-zabbix-postgres-data:/var/lib/postgresql/data
+  zabbix-java-gateway:
+    preset: service
+    image: zabbix/zabbix-java-gateway:alpine-7.4-latest
+    port: "8080"
+  zabbix-snmptraps:
+    preset: service
+    image: zabbix/zabbix-snmptraps:alpine-7.4-latest
+    port: "8080"
+    volumes:
+      - zabbix-zabbix-snmptraps:/var/lib/zabbix/snmptraps
+      - zabbix-zabbix-mibs:/var/lib/zabbix/mibs
+  zabbix-server-pgsql:
+    preset: service
+    image: zabbix/zabbix-server-pgsql:alpine-7.4-latest
+    port: "10051"
+    env:
+      - name: DB_SERVER_HOST
+        value: zabbix-postgres
+      - name: POSTGRES_USER
+        value: zabbix
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: zabbix
+      - name: ZBX_ENABLE_SNMP_TRAPS
+        value: "true"
+      - name: ZBX_JAVAGATEWAY
+        value: zabbix-java-gateway
+    volumes:
+      - zabbix-zabbix-server-data:/var/lib/zabbix
+      - zabbix-zabbix-snmptraps:/var/lib/zabbix/snmptraps
+      - zabbix-zabbix-mibs:/var/lib/zabbix/mibs
+  zabbix-web-nginx-pgsql:
+    health_check_path: /
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-7.4-latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DB_SERVER_HOST
+        value: zabbix-postgres
+      - name: POSTGRES_USER
+        value: zabbix
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: zabbix
+      - name: ZBX_SERVER_HOST
+        value: zabbix-server-pgsql
+      - name: PHP_TZ
+        value: UTC
+      - name: ZBX_SERVER_NAME
+        value: Dokploy Zabbix Monitoring

@@ -1,0 +1,11 @@
+name: cookie-cloud
+server: localhost
+targets:
+  cookie-cloud-cookiecloud:
+    health_check_path: /
+    image: easychen/cookiecloud:latest
+    port: "8088"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - cookie-cloud-cookiecloud-data:/data/api/data

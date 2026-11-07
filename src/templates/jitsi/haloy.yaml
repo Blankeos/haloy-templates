@@ -1,0 +1,140 @@
+name: jitsi
+server: localhost
+targets:
+  jitsi-web:
+    image: jitsi/web:${JITSI_IMAGE_VERSION:-unstable}
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUBLIC_URL
+        value: https://app.example.com
+      - name: TZ
+        value: UTC
+      - name: XMPP_DOMAIN
+        value: meet.jitsi
+      - name: XMPP_AUTH_DOMAIN
+        value: auth.meet.jitsi
+      - name: XMPP_BOSH_URL_BASE
+        value: http://jitsi-prosody:5280
+      - name: XMPP_MUC_DOMAIN
+        value: muc.meet.jitsi
+      - name: XMPP_GUEST_DOMAIN
+        value: guest.meet.jitsi
+      - name: XMPP_RECORDER_DOMAIN
+        value: recorder.meet.jitsi
+      - name: ENABLE_AUTH
+        value: "0"
+      - name: ENABLE_GUESTS
+        value: "1"
+      - name: ENABLE_LETSENCRYPT
+        value: "0"
+      - name: ENABLE_HTTP_REDIRECT
+        value: "0"
+      - name: ENABLE_XMPP_WEBSOCKET
+        value: "1"
+      - name: ENABLE_COLIBRI_WEBSOCKET
+        value: "1"
+      - name: DISABLE_HTTPS
+        value: "1"
+      - name: JICOFO_AUTH_USER
+        value: focus
+      - name: JVB_AUTH_USER
+        value: jvb
+      - name: JICOFO_AUTH_PASSWORD
+        from:
+          env: JICOFO_AUTH_PASSWORD
+      - name: JVB_AUTH_PASSWORD
+        from:
+          env: JVB_AUTH_PASSWORD
+    volumes:
+      - jitsi-jitsiwebconfig:/config
+      - jitsi-jitsiwebtranscripts:/usr/share/jitsi-meet/transcripts
+  jitsi-prosody:
+    preset: service
+    image: jitsi/prosody:${JITSI_IMAGE_VERSION:-unstable}
+    port: "8080"
+    env:
+      - name: TZ
+        value: UTC
+      - name: XMPP_DOMAIN
+        value: meet.jitsi
+      - name: XMPP_AUTH_DOMAIN
+        value: auth.meet.jitsi
+      - name: XMPP_MUC_DOMAIN
+        value: muc.meet.jitsi
+      - name: XMPP_GUEST_DOMAIN
+        value: guest.meet.jitsi
+      - name: XMPP_RECORDER_DOMAIN
+        value: recorder.meet.jitsi
+      - name: JICOFO_AUTH_USER
+        value: focus
+      - name: JVB_AUTH_USER
+        value: jvb
+      - name: JICOFO_AUTH_PASSWORD
+        from:
+          env: JICOFO_AUTH_PASSWORD
+      - name: JVB_AUTH_PASSWORD
+        from:
+          env: JVB_AUTH_PASSWORD
+      - name: JICOFO_COMPONENT_SECRET
+        from:
+          env: JICOFO_COMPONENT_SECRET
+      - name: ENABLE_AUTH
+        value: "0"
+      - name: ENABLE_GUESTS
+        value: "1"
+    volumes:
+      - jitsi-jitsiprosodyconfig:/config
+      - jitsi-jitsiprosodyplugins:/prosody-plugins-custom
+  jitsi-jicofo:
+    preset: service
+    image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-unstable}
+    port: "8080"
+    env:
+      - name: TZ
+        value: UTC
+      - name: XMPP_DOMAIN
+        value: meet.jitsi
+      - name: XMPP_AUTH_DOMAIN
+        value: auth.meet.jitsi
+      - name: XMPP_MUC_DOMAIN
+        value: muc.meet.jitsi
+      - name: XMPP_INTERNAL_MUC_DOMAIN
+        value: internal-muc.meet.jitsi
+      - name: JICOFO_AUTH_USER
+        value: focus
+      - name: JICOFO_AUTH_PASSWORD
+        from:
+          env: JICOFO_AUTH_PASSWORD
+      - name: JICOFO_COMPONENT_SECRET
+        from:
+          env: JICOFO_COMPONENT_SECRET
+      - name: JVB_BREWERY_MUC
+        value: jvbbrewery
+    volumes:
+      - jitsi-jitsijicofoconfig:/config
+  jitsi-jvb:
+    preset: service
+    image: jitsi/jvb:${JITSI_IMAGE_VERSION:-unstable}
+    port: "10000"
+    env:
+      - name: TZ
+        value: UTC
+      - name: XMPP_AUTH_DOMAIN
+        value: auth.meet.jitsi
+      - name: XMPP_INTERNAL_MUC_DOMAIN
+        value: internal-muc.meet.jitsi
+      - name: JVB_AUTH_USER
+        value: jvb
+      - name: JVB_AUTH_PASSWORD
+        from:
+          env: JVB_AUTH_PASSWORD
+      - name: JVB_BREWERY_MUC
+        value: jvbbrewery
+      - name: JVB_PORT
+        value: "10000"
+      - name: PUBLIC_URL
+        value: https://app.example.com
+    volumes:
+      - jitsi-jitsijvbconfig:/config

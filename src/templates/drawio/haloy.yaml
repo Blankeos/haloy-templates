@@ -1,0 +1,36 @@
+name: drawio
+server: localhost
+targets:
+  drawio-plantuml-server:
+    preset: service
+    image: plantuml/plantuml-server
+    port: "8080"
+    volumes:
+      - drawio-fonts-volume:/usr/share/fonts/drawio
+  drawio-image-export:
+    preset: service
+    image: jgraph/export-server
+    port: "8000"
+    env:
+      - name: DRAWIO_BASE_URL
+        value: https://app.example.com
+    volumes:
+      - drawio-fonts-volume:/usr/share/fonts/drawio
+  drawio:
+    image: jgraph/drawio:24.7.17
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: RAWIO_SELF_CONTAINED
+        value: "1"
+      - name: DRAWIO_USE_HTTP
+        value: "1"
+      - name: PLANTUML_URL
+        value: http://drawio-plantuml-server:8080/
+      - name: EXPORT_URL
+        value: http://drawio-image-export:8000/
+      - name: DRAWIO_BASE_URL
+        value: https://app.example.com
+      - name: DRAWIO_SERVER_URL
+        value: https://app.example.com/

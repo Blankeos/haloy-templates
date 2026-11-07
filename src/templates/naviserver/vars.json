@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "NAVISERVER_SECRET_KEY": "password:64",
+    "NAVISERVER_CLI_TOKEN": "password:64"
+  },
+  "derived": {}
+}

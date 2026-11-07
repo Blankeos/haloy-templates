@@ -1,0 +1,37 @@
+name: karakeep
+server: localhost
+targets:
+  karakeep-web:
+    image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MEILI_ADDR
+        value: http://karakeep-meilisearch:7700
+      - name: BROWSER_WEB_URL
+        value: http://karakeep-chrome:9222
+      - name: DATA_DIR
+        value: /data
+      - name: NEXTAUTH_SECRET
+        value: your_secure_key
+    volumes:
+      - karakeep-data:/data
+  karakeep-chrome:
+    preset: service
+    image:
+      repository: karakeep-chrome
+      tag: latest
+      build_config:
+        context: ./karakeep-chrome
+        push: server
+    port: "8080"
+  karakeep-meilisearch:
+    preset: service
+    image: getmeili/meilisearch:v1.13.3
+    port: "8080"
+    env:
+      - name: MEILI_NO_ANALYTICS
+        value: "true"
+    volumes:
+      - karakeep-meilisearch:/meili_data

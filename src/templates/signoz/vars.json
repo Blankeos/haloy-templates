@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "JWT_SECRET": "password:64"
+  },
+  "derived": {}
+}

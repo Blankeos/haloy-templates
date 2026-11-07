@@ -1,0 +1,52 @@
+name: notifuse
+server: localhost
+targets:
+  notifuse-db:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: postgres
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        value: postgres
+    volumes:
+      - notifuse-db-data:/var/lib/postgresql/data
+  notifuse:
+    health_check_path: /healthz
+    image: notifuse/notifuse:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ROOT_EMAIL
+        value: admin@app.example.com
+      - name: API_ENDPOINT
+        value: https://app.example.com
+      - name: DB_HOST
+        value: notifuse-db
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_USER
+        value: postgres
+      - name: DB_PASSWORD
+        value: postgres
+      - name: DB_PREFIX
+        value: notifuse
+      - name: DB_NAME
+        value: postgres
+      - name: DB_SSLMODE
+        value: disable
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: SERVER_PORT
+        value: "8080"
+      - name: SERVER_HOST
+        value: 0.0.0.0
+      - name: ENVIRONMENT
+        value: production
+    volumes:
+      - notifuse-notifuse-data:/app/data

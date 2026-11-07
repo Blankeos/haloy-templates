@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "API_KEY": "base64:64",
+    "POSTGRES_PASSWORD": "password"
+  },
+  "derived": {
+    "EVOLUTIONGO_EVOLUTION_GO__POSTGRES_AUTH_DB": "postgres://postgresql:${POSTGRES_PASSWORD}@evolutiongo-evolution-postgres:5432/evogo_auth?sslmode=disable",
+    "EVOLUTIONGO_EVOLUTION_GO__POSTGRES_USERS_DB": "postgres://postgresql:${POSTGRES_PASSWORD}@evolutiongo-evolution-postgres:5432/evogo_users?sslmode=disable"
+  }
+}

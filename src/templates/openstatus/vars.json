@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "AUTH_SECRET": "base64:32",
+    "CRON_SECRET": "password:32",
+    "SUPER_ADMIN_TOKEN": "password:32"
+  },
+  "derived": {}
+}

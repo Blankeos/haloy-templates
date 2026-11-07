@@ -1,0 +1,13 @@
+name: palmr
+server: localhost
+targets:
+  palmr:
+    image: kyantech/palmr:latest
+    port: "5487"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ENABLE_S3
+        value: "false"
+    volumes:
+      - palmr-palmr-data:/app/server

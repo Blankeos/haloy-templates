@@ -1,0 +1,27 @@
+name: certmate
+server: localhost
+targets:
+  certmate:
+    health_check_path: /health
+    image: fabriziosalmi/certmate:2.21.3
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: FLASK_ENV
+        value: production
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: API_BEARER_TOKEN
+        from:
+          env: API_BEARER_TOKEN
+      - name: BEHIND_PROXY
+        value: "true"
+      - name: LOG_LEVEL
+        value: INFO
+    volumes:
+      - certmate-certmate-certificates:/app/certificates
+      - certmate-certmate-data:/app/data
+      - certmate-certmate-logs:/app/logs
+      - certmate-certmate-backups:/app/backups

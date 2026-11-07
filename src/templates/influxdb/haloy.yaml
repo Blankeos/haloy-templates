@@ -1,0 +1,12 @@
+name: influxdb
+server: localhost
+targets:
+  influxdb:
+    preset: database
+    image: influxdb:2.7.10
+    port: "8086"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - influxdb-influxdb2-data:/var/lib/influxdb2
+      - influxdb-influxdb2-config:/etc/influxdb2

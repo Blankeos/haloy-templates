@@ -1,0 +1,13 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:16",
+    "DB_ROOT_PASSWORD": "password:16",
+    "REDIS_PASSWORD": "password:16",
+    "INLINE_BASE64_32": "base64:32"
+  },
+  "derived": {
+    "BILLMORA_APP__APP_KEY": "base64:${INLINE_BASE64_32}",
+    "BILLMORA_WORKER__APP_KEY": "base64:${INLINE_BASE64_32}",
+    "BILLMORA_SCHEDULER__APP_KEY": "base64:${INLINE_BASE64_32}"
+  }
+}

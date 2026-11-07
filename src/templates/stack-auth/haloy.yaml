@@ -1,0 +1,51 @@
+name: stack-auth
+server: localhost
+targets:
+  stack-auth-db:
+    preset: database
+    image: postgres:17
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: stackframe
+    volumes:
+      - stack-auth-stack-auth-db-data:/var/lib/postgresql/data
+  stack-auth:
+    image: stackauth/server:latest
+    port: "8102"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: stackframe
+      - name: NEXT_PUBLIC_STACK_API_URL
+        value: http://app.example.com
+      - name: NEXT_PUBLIC_STACK_DASHBOARD_URL
+        value: http://app.example.com
+      - name: STACK_DATABASE_CONNECTION_STRING
+        from:
+          env: STACK_AUTH__STACK_DATABASE_CONNECTION_STRING
+      - name: STACK_DIRECT_DATABASE_CONNECTION_STRING
+        from:
+          env: STACK_AUTH__STACK_DIRECT_DATABASE_CONNECTION_STRING
+      - name: STACK_SERVER_SECRET
+        from:
+          env: INLINE_PASSWORD_64
+      - name: STACK_SEED_INTERNAL_PROJECT_ALLOW_LOCALHOST
+        value: "true"
+      - name: STACK_SEED_INTERNAL_PROJECT_SIGN_UP_ENABLED
+        value: "true"
+      - name: STACK_RUN_MIGRATIONS
+        value: "true"
+      - name: STACK_RUN_SEED_SCRIPT
+        value: "true"

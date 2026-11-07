@@ -1,0 +1,36 @@
+name: tolgee
+server: localhost
+targets:
+  tolgee-app:
+    image: tolgee/tolgee:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TOLGEE_AUTHENTICATION_ENABLED
+        value: "true"
+      - name: TOLGEE_AUTHENTICATION_INITIAL_PASSWORD
+        value: admin
+      - name: TOLGEE_AUTHENTICATION_INITIAL_USERNAME
+        value: admin
+      - name: TOLGEE_AUTHENTICATION_JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: TOLGEE_MACHINE_TRANSLATION_GOOGLE_API_KEY
+        value: my_google_api_key
+      - name: TOLGEE_SMTP_AUTH
+        value: "true"
+      - name: TOLGEE_SMTP_FROM
+        value: Tolgee <no-reply@mydomain.com>
+      - name: TOLGEE_SMTP_HOST
+        value: email-smtp.regional-region.amazonaws.com
+      - name: TOLGEE_SMTP_PASSWORD
+        value: omg/my/password
+      - name: TOLGEE_SMTP_PORT
+        value: "465"
+      - name: TOLGEE_SMTP_SSL_ENABLED
+        value: "true"
+      - name: TOLGEE_SMTP_USERNAME
+        value: user@company.com
+    volumes:
+      - tolgee-data:/data

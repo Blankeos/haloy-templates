@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:32"
+  },
+  "derived": {
+    "GOATCOUNTER__GOATCOUNTER_DB": "postgresql+postgresql://goatcounter:${DB_PASSWORD}@goatcounter-postgres:5432/goatcounter?sslmode=disable"
+  }
+}

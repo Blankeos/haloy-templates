@@ -1,0 +1,190 @@
+name: frappe-lms
+server: localhost
+targets:
+  frappe-lms-backend:
+    preset: service
+    image:
+      repository: frappe-lms-backend
+      tag: latest
+      build_config:
+        context: ./frappe-lms-backend
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lms-sites:/home/frappe/frappe-bench/sites
+  frappe-lms-frontend:
+    image:
+      repository: frappe-lms-frontend
+      tag: latest
+      build_config:
+        context: ./frappe-lms-frontend
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BACKEND
+        value: frappe-lms-backend:8000
+      - name: SOCKETIO
+        value: frappe-lms-websocket:9000
+      - name: UPSTREAM_REAL_IP_ADDRESS
+        value: 127.0.0.1
+      - name: UPSTREAM_REAL_IP_HEADER
+        value: X-Forwarded-For
+      - name: UPSTREAM_REAL_IP_RECURSIVE
+        value: off
+    volumes:
+      - frappe-lms-sites:/home/frappe/frappe-bench/sites
+  frappe-lms-queue-default:
+    preset: service
+    image:
+      repository: frappe-lms-queue-default
+      tag: latest
+      build_config:
+        context: ./frappe-lms-queue-default
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lms-sites:/home/frappe/frappe-bench/sites
+  frappe-lms-queue-long:
+    preset: service
+    image:
+      repository: frappe-lms-queue-long
+      tag: latest
+      build_config:
+        context: ./frappe-lms-queue-long
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lms-sites:/home/frappe/frappe-bench/sites
+  frappe-lms-queue-short:
+    preset: service
+    image:
+      repository: frappe-lms-queue-short
+      tag: latest
+      build_config:
+        context: ./frappe-lms-queue-short
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lms-sites:/home/frappe/frappe-bench/sites
+  frappe-lms-scheduler:
+    preset: service
+    image:
+      repository: frappe-lms-scheduler
+      tag: latest
+      build_config:
+        context: ./frappe-lms-scheduler
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lms-sites:/home/frappe/frappe-bench/sites
+  frappe-lms-websocket:
+    preset: service
+    image:
+      repository: frappe-lms-websocket
+      tag: latest
+      build_config:
+        context: ./frappe-lms-websocket
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lms-sites:/home/frappe/frappe-bench/sites
+  frappe-lms-configurator:
+    preset: service
+    image:
+      repository: frappe-lms-configurator
+      tag: latest
+      build_config:
+        context: ./frappe-lms-configurator
+        push: server
+    port: "8080"
+    env:
+      - name: DB_HOST
+        value: frappe-lms-db
+      - name: DB_PORT
+        value: "3306"
+      - name: REDIS_CACHE
+        value: frappe-lms-redis-cache:6379
+      - name: REDIS_QUEUE
+        value: frappe-lms-redis-queue:6379
+      - name: REDIS_SOCKETIO
+        value: frappe-lms-redis-socketio:6379
+      - name: SOCKETIO_PORT
+        value: "9000"
+      - name: REGENERATE_APPS_TXT
+        value: "1"
+    volumes:
+      - frappe-lms-sites:/home/frappe/frappe-bench/sites
+  frappe-lms-create-site:
+    preset: service
+    image:
+      repository: frappe-lms-create-site
+      tag: latest
+      build_config:
+        context: ./frappe-lms-create-site
+        push: server
+    port: "8080"
+    env:
+      - name: SITE_NAME
+        value: app.example.com
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: DB_HOST
+        value: frappe-lms-db
+      - name: DB_PORT
+        value: "3306"
+      - name: DB_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: INSTALL_APP_ARGS
+        value: --install-app lms
+      - name: ENABLE_SCHEDULER
+        value: "1"
+    volumes:
+      - frappe-lms-sites:/home/frappe/frappe-bench/sites
+  frappe-lms-migration:
+    preset: service
+    image:
+      repository: frappe-lms-migration
+      tag: latest
+      build_config:
+        context: ./frappe-lms-migration
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lms-sites:/home/frappe/frappe-bench/sites
+  frappe-lms-db:
+    preset: database
+    image:
+      repository: frappe-lms-db
+      tag: latest
+      build_config:
+        context: ./frappe-lms-db
+        push: server
+    port: "3306"
+    env:
+      - name: MARIADB_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+    volumes:
+      - frappe-lms-db-data:/var/lib/mysql
+  frappe-lms-redis-cache:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - frappe-lms-redis-cache-data:/data
+  frappe-lms-redis-queue:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - frappe-lms-redis-queue-data:/data
+  frappe-lms-redis-socketio:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - frappe-lms-redis-socketio-data:/data

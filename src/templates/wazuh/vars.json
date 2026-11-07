@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "INDEXER_PASSWORD": "password:32",
+    "DASHBOARD_PASSWORD": "password:32",
+    "API_PASSWORD": "password:24"
+  },
+  "derived": {}
+}

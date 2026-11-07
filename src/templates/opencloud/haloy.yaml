@@ -1,0 +1,34 @@
+name: opencloud
+server: localhost
+targets:
+  opencloud:
+    health_check_path: /healthz
+    image:
+      repository: opencloud
+      tag: latest
+      build_config:
+        context: ./opencloud
+        push: server
+    port: "9200"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: OC_URL
+        value: https://app.example.com
+      - name: INITIAL_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: IDM_ADMIN_PASSWORD
+        from:
+          env: OPENCLOUD__IDM_ADMIN_PASSWORD
+      - name: PROXY_HTTP_ADDR
+        value: 0.0.0.0:9200
+      - name: PROXY_TLS
+        value: "false"
+      - name: OC_INSECURE
+        value: "false"
+      - name: OC_LOG_LEVEL
+        value: info
+    volumes:
+      - opencloud-opencloud-config:/etc/opencloud
+      - opencloud-opencloud-data:/var/lib/opencloud

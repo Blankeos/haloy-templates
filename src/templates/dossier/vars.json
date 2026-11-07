@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "hash:48",
+    "DOSSIER_SECRET": "hash:64",
+    "ADMIN_PASSWORD": "password:24"
+  },
+  "derived": {
+    "DOSSIER__DATABASE_URL": "postgresql://dossier:${POSTGRES_PASSWORD}@dossier-postgres:5432/dossier"
+  }
+}

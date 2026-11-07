@@ -1,0 +1,261 @@
+name: nebulynk
+server: localhost
+targets:
+  nebulynk-frontend:
+    image: nebulynk-frontend
+    port: "8080"
+    domains:
+      - domain: app.example.com
+  nebulynk-postgres:
+    preset: service
+    image: ${NEBULYNK_POSTGRES_IMAGE:-postgres:17-alpine3.24@sha256:742f40ea20b9ff2ff31db5458d127452988a2164df9e17441e191f3b72252193}
+    port: "8080"
+    env:
+      - name: POSTGRES_DB
+        value: nebulynk
+      - name: POSTGRES_USER
+        value: nebulynk
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - nebulynk-nebulynk-postgres-data:/var/lib/postgresql/data
+  nebulynk-redis:
+    preset: service
+    image: ${NEBULYNK_REDIS_IMAGE:-redis:7.4.7-alpine3.21}
+    port: "8080"
+    volumes:
+      - nebulynk-nebulynk-redis-data:/data
+  nebulynk-garage-volume-init:
+    preset: service
+    image:
+      repository: nebulynk-garage-volume-init
+      tag: latest
+      build_config:
+        context: ./nebulynk-garage-volume-init
+        push: server
+    port: "8080"
+    volumes:
+      - nebulynk-nebulynk-garage-meta:/var/lib/garage/meta
+      - nebulynk-nebulynk-garage-data:/var/lib/garage/data
+  nebulynk-garage:
+    image:
+      repository: nebulynk-garage
+      tag: latest
+      build_config:
+        context: ./nebulynk-garage
+        push: server
+    port: "3900"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: GARAGE_RPC_SECRET
+        from:
+          env: GARAGE_RPC_SECRET
+      - name: GARAGE_DEFAULT_ACCESS_KEY
+        from:
+          env: STORAGE_S3_ACCESS_KEY
+      - name: GARAGE_DEFAULT_SECRET_KEY
+        from:
+          env: STORAGE_S3_SECRET_KEY
+      - name: GARAGE_DEFAULT_BUCKET
+        value: nebulynk-files
+    volumes:
+      - nebulynk-nebulynk-garage-meta:/var/lib/garage/meta
+      - nebulynk-nebulynk-garage-data:/var/lib/garage/data
+  nebulynk-livekit:
+    image:
+      repository: nebulynk-livekit
+      tag: latest
+      build_config:
+        context: ./nebulynk-livekit
+        push: server
+    port: "7880"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LIVEKIT_KEYS
+        from:
+          env: NEBULYNK_LIVEKIT__LIVEKIT_KEYS
+  nebulynk-livekit-egress:
+    preset: service
+    image:
+      repository: nebulynk-livekit-egress
+      tag: latest
+      build_config:
+        context: ./nebulynk-livekit-egress
+        push: server
+    port: "8080"
+    env:
+      - name: EGRESS_CONFIG_FILE
+        value: /livekit-egress.yaml
+      - name: LIVEKIT_API_KEY
+        from:
+          env: LIVEKIT_API_KEY
+      - name: LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: LIVEKIT_WS_URL
+        value: ws://nebulynk-livekit:7880
+      - name: AWS_ACCESS_KEY_ID
+        from:
+          env: STORAGE_S3_ACCESS_KEY
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: STORAGE_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1}
+  nebulynk-backend:
+    health_check_path: /
+    image: nebulynk-backend
+    port: "3030"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: development
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: AI_SECRET_KEY
+        from:
+          env: AI_SECRET_KEY
+      - name: AUTH_2FA_SECRET_KEY
+        from:
+          env: AUTH_2FA_SECRET_KEY
+      - name: BACKEND_PORT
+        value: "3030"
+      - name: LOG_LEVEL
+        value: info
+      - name: MAX_FILE_SIZE
+        value: "26214400"
+      - name: AUTH_BROWSER_ACCESS_TOKEN_TTL
+        value: 15m
+      - name: AUTH_REFRESH_TOKEN_TTL
+        value: 1d
+      - name: AUTH_REMEMBER_REFRESH_TOKEN_TTL
+        value: 30d
+      - name: AUTH_REFRESH_COOKIE_NAME
+        value: nebulynk_refresh_session
+      - name: AUTH_CSRF_COOKIE_NAME
+        value: nebulynk_csrf_token
+      - name: RATE_LIMIT_DRIVER
+        value: redis
+      - name: PASSKEY_RP_ID
+        value: app.example.com
+      - name: POSTGRES_HOST
+        value: nebulynk-postgres
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_DB
+        value: nebulynk
+      - name: POSTGRES_USER
+        value: nebulynk
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: REDIS_HOST
+        value: nebulynk-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: STORAGE_S3_ENDPOINT
+        value: http://nebulynk-garage:3900
+      - name: STORAGE_S3_PUBLIC_ENDPOINT
+        value: http://app.example.com
+      - name: STORAGE_S3_ACCESS_KEY
+        from:
+          env: STORAGE_S3_ACCESS_KEY
+      - name: STORAGE_S3_SECRET_KEY
+        from:
+          env: STORAGE_S3_SECRET_KEY
+      - name: STORAGE_S3_BUCKET
+        value: nebulynk-files
+      - name: STORAGE_S3_REGION
+        value: us-east-1}
+      - name: MEETING_RECORDINGS_PREFIX
+        value: meeting-recordings
+      - name: MEETING_RECORDINGS_BUCKET
+        value: nebulynk-files
+      - name: MEETING_RECORDINGS_S3_ENDPOINT
+        value: http://nebulynk-garage:3900
+      - name: MEETING_RECORDINGS_EGRESS_S3_ENDPOINT
+        value: http://nebulynk-garage:3900
+      - name: MEETING_RECORDINGS_S3_REGION
+        value: ${STORAGE_S3_REGION:-us-east-1}
+      - name: MEETING_TRANSCRIPT_WAIT_TIMEOUT_MS
+        value: "1800000"
+      - name: LIVEKIT_HOST
+        value: http://nebulynk-livekit:7880
+      - name: LIVEKIT_PUBLIC_URL
+        value: http://app.example.com
+      - name: LIVEKIT_API_KEY
+        from:
+          env: LIVEKIT_API_KEY
+      - name: LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: SMTP_PORT
+        value: "587"
+      - name: SMTP_SECURE
+        value: "false"
+      - name: SMTP_IGNORE_TLS
+        value: "false"
+      - name: SMTP_FROM_NAME
+        value: Nebulynk
+      - name: FRONTEND_URL
+        value: http://app.example.com
+      - name: TRUST_PROXY
+        value: "true"
+  nebulynk-transcription-worker:
+    preset: service
+    image:
+      repository: nebulynk-transcription-worker
+      tag: latest
+      build_config:
+        context: ./nebulynk-transcription-worker
+        push: server
+    port: "8080"
+    env:
+      - name: NODE_ENV
+        value: development
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: AI_SECRET_KEY
+        from:
+          env: AI_SECRET_KEY
+      - name: LOG_LEVEL
+        value: info
+      - name: POSTGRES_HOST
+        value: nebulynk-postgres
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_DB
+        value: nebulynk
+      - name: POSTGRES_USER
+        value: nebulynk
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: STORAGE_S3_ENDPOINT
+        value: http://nebulynk-garage:3900
+      - name: STORAGE_S3_ACCESS_KEY
+        from:
+          env: STORAGE_S3_ACCESS_KEY
+      - name: STORAGE_S3_SECRET_KEY
+        from:
+          env: STORAGE_S3_SECRET_KEY
+      - name: STORAGE_S3_BUCKET
+        value: nebulynk-files
+      - name: STORAGE_S3_REGION
+        value: us-east-1}
+      - name: MEETING_RECORDINGS_BUCKET
+        value: nebulynk-files
+      - name: MEETING_RECORDINGS_S3_ENDPOINT
+        value: http://nebulynk-garage:3900
+      - name: MEETING_RECORDINGS_S3_REGION
+        value: ${STORAGE_S3_REGION:-us-east-1}
+      - name: MEETING_TRANSCRIPT_WAIT_TIMEOUT_MS
+        value: "1800000"
+      - name: TRANSCRIPTION_MAX_TEMP_BYTES
+        value: "2147483648"

@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:32",
+    "ENCRYPTION_KEY": "password:32"
+  },
+  "derived": {
+    "HOPPSCOTCH__DATABASE_URL": "postgresql://hoppscotch:${DB_PASSWORD}@hoppscotch-postgres:5432/hoppscotch",
+    "HOPPSCOTCH_MIGRATE__DATABASE_URL": "postgresql://hoppscotch:${DB_PASSWORD}@hoppscotch-postgres:5432/hoppscotch"
+  }
+}

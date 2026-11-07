@@ -1,0 +1,82 @@
+name: affinepro
+server: localhost
+targets:
+  affinepro:
+    image: ghcr.io/toeverything/affine:stable
+    port: "3010"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: REDIS_SERVER_HOST
+        value: affinepro-redis
+      - name: REDIS_SERVER_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: DATABASE_URL
+        from:
+          env: AFFINEPRO__DATABASE_URL
+      - name: AFFINE_INDEXER_ENABLED
+        value: "false"
+      - name: AFFINE_SERVER_HOST
+        value: app.example.com
+      - name: MAILER_PORT
+        value: "587"
+    volumes:
+      - affinepro-affine-storage:/root/.affine/storage
+      - affinepro-affine-config:/root/.affine/config
+  affinepro-migration:
+    preset: service
+    image:
+      repository: affinepro-migration
+      tag: latest
+      build_config:
+        context: ./affinepro-migration
+        push: server
+    port: "8080"
+    env:
+      - name: REDIS_SERVER_HOST
+        value: affinepro-redis
+      - name: REDIS_SERVER_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: DATABASE_URL
+        from:
+          env: AFFINEPRO_MIGRATION__DATABASE_URL
+      - name: AFFINE_INDEXER_ENABLED
+        value: "false"
+      - name: AFFINE_SERVER_HOST
+        value: app.example.com
+      - name: MAILER_PORT
+        value: "587"
+    volumes:
+      - affinepro-affine-storage:/root/.affine/storage
+      - affinepro-affine-config:/root/.affine/config
+  affinepro-db:
+    preset: database
+    image: pgvector/pgvector:pg16
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: affinepro
+      - name: POSTGRES_INITDB_ARGS
+        value: --data-checksums
+    volumes:
+      - affinepro-postgres-data:/var/lib/postgresql/data
+  affinepro-redis:
+    preset: database
+    image:
+      repository: affinepro-redis
+      tag: latest
+      build_config:
+        context: ./affinepro-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - affinepro-redis-data:/data

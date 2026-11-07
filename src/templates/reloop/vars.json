@@ -1,0 +1,42 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "REDIS_PASSWORD": "password:32",
+    "INLINE_PASSWORD_64": "password:64",
+    "INLINE_HASH_64": "hash:64",
+    "INLINE_PASSWORD_32": "password:32"
+  },
+  "derived": {
+    "RELOOP_MIGRATE__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_AUTH__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_AUTH__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_DOMAIN__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_DOMAIN__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_API_KEY__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_API_KEY__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_WEBHOOK__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_WEBHOOK__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_CONTACTS__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_CONTACTS__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_MAIL__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_MAIL__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_LOGS__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_LOGS__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_WORKFLOW__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_WORKFLOW__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_UPLOAD__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_UPLOAD__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_TEMPLATE__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_TEMPLATE__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_CAMPAIGNS__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_CAMPAIGNS__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_INBOX__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_INBOX__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_EMAIL__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_EMAIL__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_SMTP__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_SMTP__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379",
+    "RELOOP_INBOUND__PG_URL": "postgresql://reloop:${POSTGRES_PASSWORD}@reloop-postgres:5432/reloop",
+    "RELOOP_INBOUND__REDIS_URL": "redis://:${REDIS_PASSWORD}@reloop-redis:6379"
+  }
+}

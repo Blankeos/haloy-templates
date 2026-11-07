@@ -1,0 +1,3 @@
+FROM ghcr.io/noveum/orbit-bucket:2026.09.24
+ENTRYPOINT ["/bin/sh","-c"]
+CMD ["set -eu\nuntil mc alias set orbit http://orbit-storage:9000 orbit \"$MINIO_PASSWORD\" --api S3v4; do sleep 2; done\nuntil mc mb --ignore-existing orbit/orbit-uploads; do sleep 2; done\nprintf '<CORSConfiguration><CORSRule><AllowedOrigin>%s</AllowedOrigin><AllowedMethod>GET</AllowedMethod><AllowedMethod>PUT</AllowedMethod><AllowedMethod>HEAD</AllowedMethod><AllowedHeader>*</AllowedHeader><ExposeHeader>ETag</ExposeHeader><MaxAgeSeconds>3600</MaxAgeSeconds></CORSRule></CORSConfiguration>' \"$ORBIT_APP_URL\" > /tmp/cors.xml\nuntil mc cors set orbit/orbit-uploads /tmp/cors.xml; do sleep 2; done\ntouch /tmp/initialized\nexec tail -f /dev/null\n"]

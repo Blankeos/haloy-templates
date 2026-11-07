@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "HULY_SECRET": "base64:64"
+  },
+  "derived": {}
+}

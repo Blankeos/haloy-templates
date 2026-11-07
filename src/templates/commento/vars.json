@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:16"
+  },
+  "derived": {
+    "COMMENTO__COMMENTO_POSTGRES": "postgres://postgres:${POSTGRES_PASSWORD}@commento-postgres:5432/postgres?sslmode=disable"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "MAIL_PASSWORD": "password:32",
+    "MONGO_KEY": "base64:756",
+    "MONGO_ADMIN_PASSWORD": "password",
+    "MONGO_HABITICA_PASSWORD": "password"
+  },
+  "derived": {
+    "HABITICA_SERVER__NODE_DB_URI": "mongodb://habitica:${MONGO_HABITICA_PASSWORD}@habitica-mongo/habitica?authSource=habitica"
+  }
+}

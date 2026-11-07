@@ -1,0 +1,40 @@
+name: picsur
+server: localhost
+targets:
+  picsur:
+    image: ghcr.io/caramelfur/picsur:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PICSUR_DB_HOST
+        value: picsur-postgres
+      - name: PICSUR_DB_PORT
+        value: "5432"
+      - name: PICSUR_DB_USERNAME
+        value: picsur
+      - name: PICSUR_DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: PICSUR_DB_DATABASE
+        value: picsur
+      - name: PICSUR_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: PICSUR_JWT_SECRET
+        from:
+          env: JWT_SECRET
+  picsur-postgres:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: picsur
+      - name: POSTGRES_USER
+        value: picsur
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - picsur-picsur-data:/var/lib/postgresql/data

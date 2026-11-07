@@ -1,0 +1,18 @@
+name: collabora-office
+server: localhost
+targets:
+  collabora-office-collabora:
+    image: collabora/code:latest
+    port: "9980"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: domain
+        value: app.example.com
+      - name: username
+        value: user
+      - name: password
+        from:
+          env: PASSWORD
+      - name: extra_params
+        value: --o:ssl.enable=false

@@ -1,0 +1,13 @@
+name: browserless
+server: localhost
+targets:
+  browserless:
+    health_check_path: /docs
+    image: ghcr.io/browserless/chromium:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TOKEN
+        from:
+          env: BROWSERLESS_TOKEN

@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "SALT": "password:32",
+    "MONGO_PASSWORD": "password:16"
+  },
+  "derived": {
+    "COCKPIT__COCKPIT_DATABASE_SERVER": "mongodb://mongo:${MONGO_PASSWORD}@cockpit-mongo:27017"
+  }
+}

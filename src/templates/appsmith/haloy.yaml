@@ -1,0 +1,10 @@
+name: appsmith
+server: localhost
+targets:
+  appsmith:
+    image: appsmith/appsmith-ee:v1.94
+    port: "80"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - appsmith-appsmith-data:/appsmith-stacks

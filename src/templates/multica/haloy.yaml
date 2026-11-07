@@ -1,0 +1,52 @@
+name: multica
+server: localhost
+targets:
+  multica-postgres:
+    preset: database
+    image: pgvector/pgvector:pg17
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: multica
+      - name: POSTGRES_USER
+        value: multica
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - multica-pgdata:/var/lib/postgresql/data
+  multica-backend:
+    preset: service
+    image: multica-backend
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: MULTICA_BACKEND__DATABASE_URL
+      - name: PORT
+        value: "8080"
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: FRONTEND_ORIGIN
+        value: https://app.example.com
+      - name: ALLOWED_ORIGINS
+        value: https://app.example.com
+      - name: MULTICA_APP_URL
+        value: https://app.example.com
+      - name: RESEND_FROM_EMAIL
+        value: noreply@multica.ai
+      - name: GOOGLE_REDIRECT_URI
+        value: https://app.example.com/auth/callback
+      - name: S3_REGION
+        value: us-west-2
+    volumes:
+      - multica-backend-uploads:/app/data/uploads
+  multica-frontend:
+    image: multica-frontend
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: HOSTNAME
+        value: 0.0.0.0

@@ -1,0 +1,16 @@
+name: dockroute
+server: localhost
+targets:
+  dockroute:
+    preset: service
+    image: ghcr.io/dockroute/dockroute:0.2.0
+    port: "8080"
+    env:
+      - name: DOCKROUTE_PROVIDER
+        value: log
+      - name: DOCKROUTE_OWNER_ID
+        value: default
+      - name: DOCKROUTE_POLICY
+        value: sync
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro

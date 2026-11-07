@@ -1,0 +1,13 @@
+{
+  "secrets": {
+    "INLINE_PASSWORD_16": "password:16",
+    "INLINE_PASSWORD_64": "password:64",
+    "INLINE_PASSWORD_32": "password:32"
+  },
+  "derived": {
+    "APPFLOWY_GOTRUE__DATABASE_URL": "postgres://appflowy:${INLINE_PASSWORD_64}@appflowy-postgres:5432/appflowy?search_path=auth",
+    "APPFLOWY_CLOUD__APPFLOWY_DATABASE_URL": "postgres://appflowy:${INLINE_PASSWORD_64}@appflowy-postgres:5432/appflowy",
+    "APPFLOWY_AI__AI_DATABASE_URL": "postgres://appflowy:${INLINE_PASSWORD_64}@appflowy-postgres:5432/appflowy",
+    "APPFLOWY_WORKER__APPFLOWY_WORKER_DATABASE_URL": "postgres://appflowy:${INLINE_PASSWORD_64}@appflowy-postgres:5432/appflowy"
+  }
+}

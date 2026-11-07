@@ -1,0 +1,33 @@
+name: peppermint
+server: localhost
+targets:
+  peppermint-postgres:
+    preset: database
+    image: postgres:latest
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: peppermint
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: peppermint
+    volumes:
+      - peppermint-peppermint-postgres-data:/var/lib/postgresql/data
+  peppermint-app:
+    image: pepperlabs/peppermint:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DB_USERNAME
+        value: peppermint
+      - name: DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DB_HOST
+        value: peppermint-postgres
+      - name: SECRET
+        from:
+          env: SECRET

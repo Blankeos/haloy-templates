@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "BETTER_AUTH_SECRET": "password:64"
+  },
+  "derived": {
+    "PAPERCLIP__DATABASE_URL": "postgres://paperclip:${POSTGRES_PASSWORD}@paperclip-postgres:5432/paperclip"
+  }
+}

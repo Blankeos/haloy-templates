@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "COOKIE_PASSWORD": "password:32"
+  },
+  "derived": {
+    "MARKUP__DATABASE_URL": "postgresql://markup:${POSTGRES_PASSWORD}@markup-db:5432/markup"
+  }
+}

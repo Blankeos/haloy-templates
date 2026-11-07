@@ -1,0 +1,41 @@
+name: onetimesecret
+server: localhost
+targets:
+  onetimesecret-redis:
+    preset: database
+    image:
+      repository: onetimesecret-redis
+      tag: latest
+      build_config:
+        context: ./onetimesecret-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+  onetimesecret:
+    health_check_path: /
+    image: onetimesecret/onetimesecret:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: AUTH_AUTOVERIFY
+        value: "true"
+      - name: AUTH_SIGNUP
+        value: "true"
+      - name: COLONEL
+        value: admin@example.com
+      - name: HOST
+        value: app.example.com
+      - name: RACK_ENV
+        value: production
+      - name: REDIS_URL
+        from:
+          env: ONETIMESECRET__REDIS_URL
+      - name: SECRET
+        from:
+          env: SECRET
+      - name: SSL
+        value: "true"

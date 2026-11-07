@@ -1,0 +1,46 @@
+name: azuracast
+server: localhost
+targets:
+  azuracast:
+    image: ghcr.io/azuracast/azuracast:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LANG
+        value: en_US.UTF-8
+      - name: AZURACAST_DC_REVISION
+        value: "1"
+      - name: MYSQL_HOST
+        value: azuracast-mariadb
+      - name: MYSQL_PORT
+        value: "3306"
+      - name: MYSQL_USER
+        value: azuracast
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+      - name: MYSQL_DATABASE
+        value: azuracast
+    volumes:
+      - azuracast-azuracast-station-data:/var/azuracast/stations
+      - azuracast-azuracast-data:/var/azuracast/www_tmp
+      - azuracast-azuracast-uploads:/var/azuracast/uploads
+      - azuracast-azuracast-backups:/var/azuracast/backups
+  azuracast-mariadb:
+    preset: database
+    image: mariadb:11.4
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: azuracast
+      - name: MYSQL_USER
+        value: azuracast
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+    volumes:
+      - azuracast-mariadb-data:/var/lib/mysql

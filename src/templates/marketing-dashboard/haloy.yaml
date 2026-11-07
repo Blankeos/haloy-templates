@@ -1,0 +1,53 @@
+name: marketing-dashboard
+server: localhost
+targets:
+  marketing-dashboard:
+    health_check_path: /api/health
+    image: ghcr.io/abel-yelin/marketing-dashboard:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: MARKETING_DASHBOARD__DATABASE_URL
+      - name: DIRECT_URL
+        from:
+          env: MARKETING_DASHBOARD__DIRECT_URL
+      - name: MARKETING_APP_URL
+        value: https://app.example.com
+      - name: MARKETING_COLLECTOR_UPSTREAM_URL
+        value: https://app.example.com/api/ingest/browser
+      - name: MARKETING_SESSION_TIMEOUT_MINUTES
+        value: "30"
+      - name: MARKETING_PROXY_TIMEOUT_MS
+        value: "4000"
+      - name: MARKETING_INGEST_MAX_BODY_BYTES
+        value: "65536"
+      - name: MARKETING_INGEST_IP_RATE_LIMIT
+        value: "300"
+      - name: MARKETING_INGEST_CLIENT_RATE_LIMIT
+        value: "1200"
+      - name: MARKETING_INGEST_RATE_LIMIT_WINDOW_MS
+        value: "60000"
+      - name: MARKETING_ENABLE_PILOT_API
+        value: "false"
+      - name: MARKETING_DASHBOARD_ADMIN_USER
+        value: admin
+      - name: MARKETING_DASHBOARD_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+  marketing-dashboard-postgres:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: marketing_dashboard
+      - name: POSTGRES_USER
+        value: marketing_dashboard
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - marketing-dashboard-marketing-dashboard-postgres:/var/lib/postgresql/data

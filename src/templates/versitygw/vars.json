@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "ROOT_ACCESS_KEY": "hash:16",
+    "ROOT_SECRET_KEY": "password:32"
+  },
+  "derived": {}
+}

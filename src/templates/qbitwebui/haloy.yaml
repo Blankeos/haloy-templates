@@ -1,0 +1,21 @@
+name: qbitwebui
+server: localhost
+targets:
+  qbitwebui:
+    health_check_path: /
+    image: ghcr.io/maciejonos/qbitwebui:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: PORT
+        value: "3000"
+      - name: DATABASE_PATH
+        value: /data/qbitwebui.db
+      - name: SALT_PATH
+        value: /data/.salt
+    volumes:
+      - qbitwebui-qbitwebui-data:/data

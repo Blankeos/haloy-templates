@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "API_KEY": "password:32",
+    "ENCRYPTION_KEY": "password:32",
+    "JWT_SECRET": "password:32",
+    "POSTGRES_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

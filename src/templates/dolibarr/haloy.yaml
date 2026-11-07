@@ -1,0 +1,45 @@
+name: dolibarr
+server: localhost
+targets:
+  dolibarr:
+    image: dolibarr/dolibarr:21.0.0
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DOLI_DB_HOST
+        value: dolibarr-db
+      - name: DOLI_DB_NAME
+        value: dolibarr
+      - name: DOLI_DB_USER
+        value: dolibarr
+      - name: DOLI_DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DOLI_URL_ROOT
+        value: app.example.com
+      - name: DOLI_ADMIN_LOGIN
+        value: admin
+      - name: DOLI_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+    volumes:
+      - dolibarr-dolibarr-documents:/var/www/documents
+      - dolibarr-dolibarr-html:/var/www/html
+  dolibarr-db:
+    preset: database
+    image: mariadb:10.11
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: dolibarr
+      - name: MYSQL_USER
+        value: dolibarr
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - dolibarr-db-data:/var/lib/mysql

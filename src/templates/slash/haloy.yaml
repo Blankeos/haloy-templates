@@ -1,0 +1,30 @@
+name: slash
+server: localhost
+targets:
+  slash-app:
+    image: yourselfhosted/slash:latest
+    port: "5231"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SLASH_DRIVER
+        value: postgres
+      - name: SLASH_DSN
+        from:
+          env: SLASH_APP__SLASH_DSN
+    volumes:
+      - slash-slash-app-data:/var/opt/slash
+  slash-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: slash
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: slash
+    volumes:
+      - slash-slash-postgres-data:/var/lib/postgresql/data

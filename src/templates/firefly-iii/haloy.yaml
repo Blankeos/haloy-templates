@@ -1,0 +1,73 @@
+name: firefly-iii
+server: localhost
+targets:
+  firefly-iii:
+    image: fireflyiii/core:version-6.6.3
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_URL
+        value: https://app.example.com
+      - name: TRUSTED_PROXIES
+        value: "**"
+      - name: TZ
+        value: UTC
+      - name: SITE_OWNER
+        value: admin@app.example.com
+      - name: DEFAULT_LANGUAGE
+        value: en_US
+      - name: DEFAULT_LOCALE
+        value: equal
+      - name: DB_CONNECTION
+        value: mysql
+      - name: DB_HOST
+        value: firefly-iii-db
+      - name: DB_PORT
+        value: "3306"
+      - name: DB_DATABASE
+        value: firefly
+      - name: DB_USERNAME
+        value: firefly
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: STATIC_CRON_TOKEN
+        from:
+          env: CRON_TOKEN
+    volumes:
+      - firefly-iii-firefly-iii-upload:/var/www/html/storage/upload
+  firefly-iii-db:
+    preset: database
+    image: mariadb:11.8
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: firefly
+      - name: MYSQL_USER
+        value: firefly
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MYSQL_RANDOM_ROOT_PASSWORD
+        value: yes
+    volumes:
+      - firefly-iii-firefly-iii-db:/var/lib/mysql
+  firefly-iii-cron:
+    preset: service
+    image:
+      repository: firefly-iii-cron
+      tag: latest
+      build_config:
+        context: ./firefly-iii-cron
+        push: server
+    port: "8080"
+    env:
+      - name: TZ
+        value: UTC
+      - name: STATIC_CRON_TOKEN
+        from:
+          env: CRON_TOKEN

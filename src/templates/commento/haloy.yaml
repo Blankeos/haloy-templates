@@ -1,0 +1,24 @@
+name: commento
+server: localhost
+targets:
+  commento:
+    image: registry.gitlab.com/commento/commento:v1.8.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: COMMENTO_ORIGIN
+        value: http://app.example.com
+      - name: COMMENTO_POSTGRES
+        from:
+          env: COMMENTO__COMMENTO_POSTGRES
+  commento-postgres:
+    preset: database
+    image: postgres:11
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - commento-postgres-data:/var/lib/postgresql/data

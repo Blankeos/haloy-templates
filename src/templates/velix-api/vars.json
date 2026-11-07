@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:32",
+    "JWT_SECRET": "password:64"
+  },
+  "derived": {
+    "VELIX_API__DATABASE_URL": "postgres://postgres:${DB_PASSWORD}@velix-api-postgres:5432/velix?sslmode=disable"
+  }
+}

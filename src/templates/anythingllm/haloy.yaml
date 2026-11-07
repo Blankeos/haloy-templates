@@ -1,0 +1,13 @@
+name: anythingllm
+server: localhost
+targets:
+  anythingllm:
+    image: mintplexlabs/anythingllm:latest
+    port: "3001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: STORAGE_DIR
+        value: /app/server/storage
+    volumes:
+      - anythingllm-storage:/app/server/storage

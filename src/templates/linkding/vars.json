@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "SUPERUSER_PASSWORD": "password:32",
+    "DB_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

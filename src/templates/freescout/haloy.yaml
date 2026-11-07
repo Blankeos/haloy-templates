@@ -1,0 +1,64 @@
+name: freescout
+server: localhost
+targets:
+  freescout-db:
+    preset: database
+    image: mariadb:10.6
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: freescout
+      - name: MYSQL_USER
+        value: freescout_user
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASS
+    volumes:
+      - freescout-freescout-db-data:/var/lib/mysql
+  freescout:
+    image: tiredofit/freescout:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: ADMIN_PASS
+        from:
+          env: ADMIN_PASSWORD
+      - name: ADMIN_FIRST_NAME
+        value: Admin
+      - name: ADMIN_LAST_NAME
+        value: User
+      - name: SITE_URL
+        value: http://app.example.com
+      - name: DB_HOST
+        value: freescout-db
+      - name: DB_PORT
+        value: "3306"
+      - name: DB_TYPE
+        value: mysql
+      - name: DB_NAME
+        value: freescout
+      - name: DB_USER
+        value: freescout_user
+      - name: DB_PASS
+        from:
+          env: DB_PASS
+      - name: APPLICATION_NAME
+        value: Customer Support
+      - name: SETUP_TYPE
+        value: AUTO
+      - name: ENABLE_AUTO_UPDATE
+        value: "TRUE"
+      - name: DISPLAY_ERRORS
+        value: "FALSE"
+      - name: APP_TRUSTED_PROXIES
+        value: 172.16.0.0/12,192.168.0.0/16,10.0.0.0/8
+    volumes:
+      - freescout-freescout-data:/data
+      - freescout-freescout-html:/www/html
+      - freescout-freescout-logs:/www/logs

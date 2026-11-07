@@ -1,0 +1,18 @@
+name: drizzle-gateway
+server: localhost
+targets:
+  drizzle-gateway:
+    image: ghcr.io/drizzle-team/gateway:latest
+    port: "4983"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PORT
+        value: "4983"
+      - name: STORE_PATH
+        value: /app
+      - name: MASTERPASS
+        from:
+          env: MASTERPASS
+    volumes:
+      - drizzle-gateway-drizzle-gateway:/app

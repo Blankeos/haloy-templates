@@ -1,0 +1,62 @@
+name: discourse
+server: localhost
+targets:
+  discourse-db:
+    preset: database
+    image: pgvector/pgvector:pg16
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: discourse
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: discourse
+    volumes:
+      - discourse-discourse-postgresql-data:/var/lib/postgresql/data
+  discourse-redis:
+    preset: database
+    image:
+      repository: discourse-redis
+      tag: latest
+      build_config:
+        context: ./discourse-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - discourse-discourse-redis-data:/data
+  discourse-app:
+    image: discourse/discourse:2026.1.4
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DISCOURSE_HOSTNAME
+        value: app.example.com
+      - name: DISCOURSE_DB_HOST
+        value: discourse-db
+      - name: DISCOURSE_DB_PORT
+        value: "5432"
+      - name: DISCOURSE_DB_USERNAME
+        value: discourse
+      - name: DISCOURSE_DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DISCOURSE_DB_NAME
+        value: discourse
+      - name: DISCOURSE_REDIS_HOST
+        value: discourse-redis
+      - name: DISCOURSE_REDIS_PORT
+        value: "6379"
+      - name: DISCOURSE_REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: DISCOURSE_DEVELOPER_EMAILS
+        value: admin@app.example.com
+    volumes:
+      - discourse-discourse-data:/shared

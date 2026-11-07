@@ -1,0 +1,42 @@
+name: postgres-pgadmin
+server: localhost
+targets:
+  postgres-pgadmin-postgres:
+    preset: database
+    image: postgres:18-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: admin
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: postgres
+    volumes:
+      - postgres-pgadmin-postgres-data:/var/lib/postgresql
+  postgres-pgadmin-pgadmin:
+    image:
+      repository: postgres-pgadmin-pgadmin
+      tag: latest
+      build_config:
+        context: ./postgres-pgadmin-pgadmin
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PGADMIN_DEFAULT_EMAIL
+        value: admin@app.example.com
+      - name: PGADMIN_DEFAULT_PASSWORD
+        from:
+          env: PGADMIN_PASSWORD
+      - name: PGADMIN_CONFIG_SERVER_MODE
+        value: "False"
+      - name: PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED
+        value: "False"
+      - name: PGADMIN_SERVER_JSON_FILE
+        value: /pgadmin4/servers.json
+    volumes:
+      - postgres-pgadmin-pgadmin-data:/var/lib/pgadmin
+      - postgres-pgadmin-pgpass:/pgadmin4/pgpass:ro

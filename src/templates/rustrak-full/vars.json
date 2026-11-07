@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "SESSION_SECRET_KEY": "password:64",
+    "ADMIN_PASSWORD": "password:16"
+  },
+  "derived": {
+    "RUSTRAK_FULL_RUSTRAK_SERVER__DATABASE_URL": "postgres://rustrak:${POSTGRES_PASSWORD}@rustrak-full-postgres:5432/rustrak",
+    "RUSTRAK_FULL_RUSTRAK_SERVER__CREATE_SUPERUSER": "admin@app.example.com:${ADMIN_PASSWORD}"
+  }
+}

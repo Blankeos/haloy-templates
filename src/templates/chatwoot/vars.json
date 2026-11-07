@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "SECRET_KEY_BASE": "hash:64",
+    "POSTGRES_PASSWORD": "password",
+    "REDIS_PASSWORD": "password"
+  },
+  "derived": {
+    "CHATWOOT__REDIS_URL": "redis://:${REDIS_PASSWORD}@chatwoot-redis:6379",
+    "CHATWOOT_WORKER__REDIS_URL": "redis://:${REDIS_PASSWORD}@chatwoot-redis:6379"
+  }
+}

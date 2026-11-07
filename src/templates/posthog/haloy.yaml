@@ -1,0 +1,618 @@
+name: posthog
+server: localhost
+targets:
+  posthog-init-assets:
+    preset: service
+    image:
+      repository: posthog-init-assets
+      tag: latest
+      build_config:
+        context: ./posthog-init-assets
+        push: server
+    port: "8080"
+    volumes:
+      - posthog-posthog-assets:/assets
+      - posthog-geoip-data:/share
+  posthog-db:
+    preset: database
+    image: postgres:15.12-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: posthog
+      - name: POSTGRES_DB
+        value: posthog
+      - name: POSTGRES_PASSWORD
+        value: posthog
+    volumes:
+      - posthog-postgres-data:/var/lib/postgresql/data
+      - posthog-db-init:/docker-entrypoint-initdb.d:ro
+  posthog-redis7:
+    preset: database
+    image:
+      repository: posthog-redis7
+      tag: latest
+      build_config:
+        context: ./posthog-redis7
+        push: server
+    port: "6379"
+    volumes:
+      - posthog-redis-data:/data
+  posthog-zookeeper:
+    preset: service
+    image: zookeeper:3.7.0
+    port: "8080"
+    env:
+      - name: ZOO_AUTOPURGE_PURGEINTERVAL
+        value: "1"
+      - name: ZOO_AUTOPURGE_SNAPRETAINCOUNT
+        value: "3"
+    volumes:
+      - posthog-zookeeper-data:/data
+      - posthog-zookeeper-datalog:/datalog
+  posthog-kafka:
+    health_check_path: /v1/status/ready
+    preset: service
+    image:
+      repository: posthog-kafka
+      tag: latest
+      build_config:
+        context: ./posthog-kafka
+        push: server
+    port: "8080"
+    volumes:
+      - posthog-redpanda-data:/var/lib/redpanda/data
+  posthog-kafka-init:
+    preset: service
+    image:
+      repository: posthog-kafka-init
+      tag: latest
+      build_config:
+        context: ./posthog-kafka-init
+        push: server
+    port: "8080"
+  posthog-clickhouse:
+    health_check_path: /ping
+    preset: database
+    image:
+      repository: posthog-clickhouse
+      tag: latest
+      build_config:
+        context: ./posthog-clickhouse
+        push: server
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_SKIP_USER_SETUP
+        value: "1"
+      - name: KAFKA_HOSTS
+        value: posthog-kafka:9092
+    volumes:
+      - posthog-posthog-assets:/assets:ro
+      - posthog-clickhouse-data:/var/lib/clickhouse
+  posthog-web:
+    health_check_path: /_health
+    preset: service
+    image:
+      repository: posthog-web
+      tag: latest
+      build_config:
+        context: ./posthog-web
+        push: server
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: PGHOST
+        value: posthog-db
+      - name: PGUSER
+        value: posthog
+      - name: PGPASSWORD
+        value: posthog
+      - name: PERSONS_DB_WRITER_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: PERSONS_DB_READER_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: CLICKHOUSE_HOST
+        value: posthog-clickhouse
+      - name: CLICKHOUSE_DATABASE
+        value: posthog
+      - name: CLICKHOUSE_SECURE
+        value: "false"
+      - name: CLICKHOUSE_VERIFY
+        value: "false"
+      - name: CLICKHOUSE_API_USER
+        value: api
+      - name: CLICKHOUSE_API_PASSWORD
+        value: apipass
+      - name: CLICKHOUSE_APP_USER
+        value: app
+      - name: CLICKHOUSE_APP_PASSWORD
+        value: apppass
+      - name: CLICKHOUSE_LOGS_CLUSTER_HOST
+        value: posthog-clickhouse
+      - name: CLICKHOUSE_LOGS_CLUSTER_SECURE
+        value: "false"
+      - name: REDIS_URL
+        value: redis://posthog-redis7:6379/
+      - name: KAFKA_HOSTS
+        value: posthog-kafka:9092
+      - name: FLAGS_REDIS_ENABLED
+        value: "false"
+      - name: OBJECT_STORAGE_ENABLED
+        value: "true"
+      - name: OBJECT_STORAGE_ENDPOINT
+        value: http://posthog-objectstorage:19000
+      - name: OBJECT_STORAGE_PUBLIC_ENDPOINT
+        value: http://app.example.com
+      - name: OBJECT_STORAGE_ACCESS_KEY_ID
+        value: object_storage_root_user
+      - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
+        value: object_storage_root_password
+      - name: OBJECT_STORAGE_FORCE_PATH_STYLE
+        value: "true"
+      - name: SESSION_RECORDING_V2_S3_ENDPOINT
+        value: http://posthog-objectstorage:19000
+      - name: SESSION_RECORDING_V2_S3_ACCESS_KEY_ID
+        value: object_storage_root_user
+      - name: SESSION_RECORDING_V2_S3_SECRET_ACCESS_KEY
+        value: object_storage_root_password
+      - name: RECORDING_API_URL
+        value: http://posthog-recording-api:6738
+      - name: SITE_URL
+        value: http://app.example.com
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: ENCRYPTION_SALT_KEYS
+        from:
+          env: SALT_KEYS
+      - name: DEPLOYMENT
+        value: hobby
+      - name: IS_BEHIND_PROXY
+        value: "true"
+      - name: DISABLE_SECURE_SSL_REDIRECT
+        value: "true"
+      - name: SECURE_COOKIES
+        value: "false"
+      - name: CDP_API_URL
+        value: http://posthog-plugins:6738
+      - name: FEATURE_FLAGS_SERVICE_URL
+        value: http://posthog-feature-flags:3001
+      - name: LIVESTREAM_HOST
+        value: http://app.example.com/livestream
+      - name: API_QUERIES_PER_TEAM
+        value: '{"1": 100}'
+      - name: OTEL_SDK_DISABLED
+        value: "true"
+      - name: NGINX_UNIT_APP_PROCESSES
+        value: "2"
+  posthog-worker:
+    preset: service
+    image:
+      repository: posthog-worker
+      tag: latest
+      build_config:
+        context: ./posthog-worker
+        push: server
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: PGHOST
+        value: posthog-db
+      - name: PGUSER
+        value: posthog
+      - name: PGPASSWORD
+        value: posthog
+      - name: PERSONS_DB_WRITER_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: PERSONS_DB_READER_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: CLICKHOUSE_HOST
+        value: posthog-clickhouse
+      - name: CLICKHOUSE_DATABASE
+        value: posthog
+      - name: CLICKHOUSE_SECURE
+        value: "false"
+      - name: CLICKHOUSE_VERIFY
+        value: "false"
+      - name: CLICKHOUSE_API_USER
+        value: api
+      - name: CLICKHOUSE_API_PASSWORD
+        value: apipass
+      - name: CLICKHOUSE_APP_USER
+        value: app
+      - name: CLICKHOUSE_APP_PASSWORD
+        value: apppass
+      - name: CLICKHOUSE_LOGS_CLUSTER_HOST
+        value: posthog-clickhouse
+      - name: CLICKHOUSE_LOGS_CLUSTER_SECURE
+        value: "false"
+      - name: REDIS_URL
+        value: redis://posthog-redis7:6379/
+      - name: KAFKA_HOSTS
+        value: posthog-kafka:9092
+      - name: FLAGS_REDIS_ENABLED
+        value: "false"
+      - name: OBJECT_STORAGE_ENABLED
+        value: "true"
+      - name: OBJECT_STORAGE_ENDPOINT
+        value: http://posthog-objectstorage:19000
+      - name: OBJECT_STORAGE_PUBLIC_ENDPOINT
+        value: http://app.example.com
+      - name: OBJECT_STORAGE_ACCESS_KEY_ID
+        value: object_storage_root_user
+      - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
+        value: object_storage_root_password
+      - name: OBJECT_STORAGE_FORCE_PATH_STYLE
+        value: "true"
+      - name: SESSION_RECORDING_V2_S3_ENDPOINT
+        value: http://posthog-objectstorage:19000
+      - name: SESSION_RECORDING_V2_S3_ACCESS_KEY_ID
+        value: object_storage_root_user
+      - name: SESSION_RECORDING_V2_S3_SECRET_ACCESS_KEY
+        value: object_storage_root_password
+      - name: RECORDING_API_URL
+        value: http://posthog-recording-api:6738
+      - name: SITE_URL
+        value: http://app.example.com
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: ENCRYPTION_SALT_KEYS
+        from:
+          env: SALT_KEYS
+      - name: DEPLOYMENT
+        value: hobby
+      - name: IS_BEHIND_PROXY
+        value: "true"
+      - name: DISABLE_SECURE_SSL_REDIRECT
+        value: "true"
+      - name: SECURE_COOKIES
+        value: "false"
+      - name: CDP_API_URL
+        value: http://posthog-plugins:6738
+      - name: FEATURE_FLAGS_SERVICE_URL
+        value: http://posthog-feature-flags:3001
+      - name: LIVESTREAM_HOST
+        value: http://app.example.com/livestream
+      - name: API_QUERIES_PER_TEAM
+        value: '{"1": 100}'
+      - name: OTEL_SDK_DISABLED
+        value: "true"
+      - name: POSTHOG_SKIP_MIGRATION_CHECKS
+        value: "1"
+      - name: WEB_CONCURRENCY
+        value: "2"
+  posthog-plugins:
+    preset: service
+    image: posthog/posthog-node:${POSTHOG_NODE_VERSION}
+    port: "8080"
+    env:
+      - name: NODEJS_CAPABILITY_GROUPS
+        value: cdp_workflows,realtime_cohorts,feature_flags
+      - name: SITE_URL
+        value: http://app.example.com
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: ENCRYPTION_SALT_KEYS
+        from:
+          env: SALT_KEYS
+      - name: DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: PERSONS_DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: BEHAVIORAL_COHORTS_DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: CYCLOTRON_DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: KAFKA_HOSTS
+        value: posthog-kafka:9092
+      - name: REDIS_URL
+        value: redis://posthog-redis7:6379/
+      - name: CDP_REDIS_HOST
+        value: posthog-redis7
+      - name: CDP_REDIS_PORT
+        value: "6379"
+      - name: LOGS_REDIS_HOST
+        value: posthog-redis7
+      - name: LOGS_REDIS_TLS
+        value: "false"
+      - name: TRACES_REDIS_HOST
+        value: posthog-redis7
+      - name: TRACES_REDIS_TLS
+        value: "false"
+      - name: COOKIELESS_REDIS_HOST
+        value: posthog-redis7
+      - name: COOKIELESS_REDIS_PORT
+        value: "6379"
+      - name: CLICKHOUSE_HOST
+        value: posthog-clickhouse
+      - name: CLICKHOUSE_DATABASE
+        value: posthog
+      - name: CLICKHOUSE_SECURE
+        value: "false"
+      - name: CLICKHOUSE_VERIFY
+        value: "false"
+      - name: OBJECT_STORAGE_ENABLED
+        value: "true"
+      - name: OBJECT_STORAGE_ENDPOINT
+        value: http://posthog-objectstorage:19000
+      - name: OBJECT_STORAGE_PUBLIC_ENDPOINT
+        value: http://app.example.com
+      - name: OBJECT_STORAGE_ACCESS_KEY_ID
+        value: object_storage_root_user
+      - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
+        value: object_storage_root_password
+    volumes:
+      - posthog-geoip-data:/share:ro
+  posthog-ingestion-general:
+    preset: service
+    image: posthog/posthog-node:${POSTHOG_NODE_VERSION}
+    port: "8080"
+    env:
+      - name: PLUGIN_SERVER_MODE
+        value: ingestion-v2-combined
+      - name: ENCRYPTION_SALT_KEYS
+        from:
+          env: SALT_KEYS
+      - name: DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: PERSONS_DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: BEHAVIORAL_COHORTS_DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: KAFKA_HOSTS
+        value: posthog-kafka:9092
+      - name: REDIS_URL
+        value: redis://posthog-redis7:6379/
+      - name: COOKIELESS_REDIS_HOST
+        value: posthog-redis7
+      - name: COOKIELESS_REDIS_PORT
+        value: "6379"
+      - name: CDP_REDIS_HOST
+        value: posthog-redis7
+      - name: LOGS_REDIS_HOST
+        value: posthog-redis7
+      - name: LOGS_REDIS_TLS
+        value: "false"
+      - name: TRACES_REDIS_HOST
+        value: posthog-redis7
+      - name: TRACES_REDIS_TLS
+        value: "false"
+      - name: CLICKHOUSE_HOST
+        value: posthog-clickhouse
+      - name: CLICKHOUSE_DATABASE
+        value: posthog
+      - name: CLICKHOUSE_SECURE
+        value: "false"
+      - name: CLICKHOUSE_VERIFY
+        value: "false"
+    volumes:
+      - posthog-geoip-data:/share:ro
+  posthog-ingestion-sessionreplay:
+    preset: service
+    image: posthog/posthog-node:${POSTHOG_NODE_VERSION}
+    port: "8080"
+    env:
+      - name: PLUGIN_SERVER_MODE
+        value: recordings-blob-ingestion-v2
+      - name: ENCRYPTION_SALT_KEYS
+        from:
+          env: SALT_KEYS
+      - name: DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: KAFKA_HOSTS
+        value: posthog-kafka:9092
+      - name: REDIS_URL
+        value: redis://posthog-redis7:6379/
+      - name: SESSION_RECORDING_V2_S3_ENDPOINT
+        value: http://posthog-objectstorage:19000
+      - name: SESSION_RECORDING_V2_S3_ACCESS_KEY_ID
+        value: object_storage_root_user
+      - name: SESSION_RECORDING_V2_S3_SECRET_ACCESS_KEY
+        value: object_storage_root_password
+      - name: SESSION_RECORDING_V2_S3_TIMEOUT_MS
+        value: "120000"
+  posthog-recording-api:
+    preset: service
+    image: posthog/posthog-node:${POSTHOG_NODE_VERSION}
+    port: "8080"
+    env:
+      - name: PLUGIN_SERVER_MODE
+        value: posthog-recording-api
+      - name: ENCRYPTION_SALT_KEYS
+        from:
+          env: SALT_KEYS
+      - name: DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: REDIS_URL
+        value: redis://posthog-redis7:6379/
+      - name: SESSION_RECORDING_API_REDIS_HOST
+        value: posthog-redis7
+      - name: SESSION_RECORDING_API_REDIS_PORT
+        value: "6379"
+      - name: CLICKHOUSE_HOST
+        value: posthog-clickhouse
+      - name: CLICKHOUSE_DATABASE
+        value: posthog
+      - name: CLICKHOUSE_SECURE
+        value: "false"
+      - name: CLICKHOUSE_VERIFY
+        value: "false"
+      - name: SESSION_RECORDING_V2_S3_ENDPOINT
+        value: http://posthog-objectstorage:19000
+      - name: SESSION_RECORDING_V2_S3_ACCESS_KEY_ID
+        value: object_storage_root_user
+      - name: SESSION_RECORDING_V2_S3_SECRET_ACCESS_KEY
+        value: object_storage_root_password
+  posthog-capture:
+    preset: service
+    image: ghcr.io/posthog/posthog/capture:master
+    port: "8080"
+    env:
+      - name: ADDRESS
+        value: 0.0.0.0:3000
+      - name: KAFKA_TOPIC
+        value: events_plugin_ingestion
+      - name: KAFKA_HOSTS
+        value: posthog-kafka:9092
+      - name: REDIS_URL
+        value: redis://posthog-redis7:6379/
+      - name: CAPTURE_MODE
+        value: events
+      - name: RUST_LOG
+        value: info,rdkafka=warn
+      - name: CAPTURE_V1_SINKS
+        value: msk
+      - name: CAPTURE_V1_SINK_MSK_KAFKA_HOSTS
+        value: posthog-kafka:9092
+      - name: CAPTURE_V1_SINK_MSK_KAFKA_TOPIC_MAIN
+        value: events_plugin_ingestion
+      - name: CAPTURE_V1_SINK_MSK_KAFKA_TOPIC_HISTORICAL
+        value: events_plugin_ingestion_historical
+      - name: CAPTURE_V1_SINK_MSK_KAFKA_TOPIC_OVERFLOW
+        value: events_plugin_ingestion_overflow
+      - name: CAPTURE_V1_SINK_MSK_KAFKA_TOPIC_DLQ
+        value: events_plugin_ingestion_dlq
+      - name: CAPTURE_V1_SINK_MSK_KAFKA_TOPIC_EXCEPTION
+        value: ingestion-errortracking-main
+      - name: CAPTURE_V1_SINK_MSK_KAFKA_TOPIC_HEATMAP
+        value: heatmaps_ingestion
+      - name: CAPTURE_V1_SINK_MSK_KAFKA_TOPIC_CLIENT_INGESTION_WARNING
+        value: ingestion-clientwarnings-main-1
+  posthog-replay-capture:
+    preset: service
+    image: ghcr.io/posthog/posthog/capture:master
+    port: "8080"
+    env:
+      - name: ADDRESS
+        value: 0.0.0.0:3000
+      - name: KAFKA_TOPIC
+        value: session_recording_snapshot_item_events
+      - name: KAFKA_HOSTS
+        value: posthog-kafka:9092
+      - name: REDIS_URL
+        value: redis://posthog-redis7:6379/
+      - name: CAPTURE_MODE
+        value: recordings
+  posthog-feature-flags:
+    preset: service
+    image: ghcr.io/posthog/posthog/feature-flags:master
+    port: "8080"
+    env:
+      - name: WRITE_DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: READ_DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: PERSONS_WRITE_DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: PERSONS_READ_DATABASE_URL
+        value: postgres://posthog:posthog@posthog-db:5432/posthog
+      - name: MAXMIND_DB_PATH
+        value: /share/GeoLite2-City.mmdb
+      - name: REDIS_URL
+        value: redis://posthog-redis7:6379/
+      - name: ADDRESS
+        value: 0.0.0.0:3001
+      - name: RUST_LOG
+        value: info
+      - name: COOKIELESS_REDIS_HOST
+        value: posthog-redis7
+      - name: COOKIELESS_REDIS_PORT
+        value: "6379"
+    volumes:
+      - posthog-geoip-data:/share:ro
+  posthog-hypercache-server:
+    preset: service
+    image: ghcr.io/posthog/posthog/hypercache-server:master
+    port: "8080"
+    env:
+      - name: REDIS_URL
+        value: redis://posthog-redis7:6379/
+      - name: ADDRESS
+        value: 0.0.0.0:3002
+      - name: RUST_LOG
+        value: info
+  posthog-livestream:
+    preset: service
+    image: ghcr.io/posthog/posthog/livestream:master
+    port: "8080"
+    env:
+      - name: LIVESTREAM_JWT_SECRET
+        from:
+          env: SECRET_KEY
+  posthog-objectstorage:
+    preset: service
+    image:
+      repository: posthog-objectstorage
+      tag: latest
+      build_config:
+        context: ./posthog-objectstorage
+        push: server
+    port: "8080"
+    env:
+      - name: MINIO_ROOT_USER
+        value: object_storage_root_user
+      - name: MINIO_ROOT_PASSWORD
+        value: object_storage_root_password
+    volumes:
+      - posthog-objectstorage-data:/data
+  posthog-proxy:
+    image:
+      repository: posthog-proxy
+      tag: latest
+      build_config:
+        context: ./posthog-proxy
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CADDYFILE
+        value: |
+          {
+              auto_https off
+          }
+          :80 {
+              @capture path /e /e/ /e/* /i/v0 /i/v0/ /i/v0/* /i/v1/analytics/events /i/v1/analytics/events/ /batch /batch/ /batch/* /capture /capture/ /capture/*
+              @replay-capture path /s /s/ /s/*
+              @flags path /flags /flags/ /flags/* /api/feature_flag/local_evaluation /api/feature_flag/local_evaluation/ /api/feature_flag/local_evaluation/*
+              @surveys path /surveys /surveys/ /api/surveys /api/surveys/
+              @remote-config path /array/*
+              @webhooks path /public/webhooks /public/webhooks/ /public/webhooks/* /public/m/ /public/m/*
+              @livestream path /livestream /livestream/ /livestream/*
+              @objectstorage path /posthog /posthog/ /posthog/*
+
+              handle @capture {
+                  reverse_proxy posthog-capture:3000
+              }
+              handle @replay-capture {
+                  reverse_proxy posthog-replay-capture:3000
+              }
+              handle @flags {
+                  reverse_proxy posthog-feature-flags:3001
+              }
+              handle @surveys {
+                  reverse_proxy posthog-hypercache-server:3002
+              }
+              handle @remote-config {
+                  reverse_proxy posthog-hypercache-server:3002
+              }
+              handle @webhooks {
+                  reverse_proxy posthog-plugins:6738
+              }
+              handle @livestream {
+                  uri strip_prefix /livestream
+                  reverse_proxy posthog-livestream:8080 {
+                      flush_interval -1
+                  }
+              }
+              handle @objectstorage {
+                  reverse_proxy posthog-objectstorage:19000
+              }
+              handle {
+                  reverse_proxy posthog-web:8000
+              }
+          }

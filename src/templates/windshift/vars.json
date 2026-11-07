@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "SSO_SECRET": "hash:64",
+    "DB_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

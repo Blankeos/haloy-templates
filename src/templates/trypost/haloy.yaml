@@ -1,0 +1,125 @@
+name: trypost
+server: localhost
+targets:
+  trypost:
+    health_check_path: /up
+    image:
+      repository: trypost
+      tag: latest
+      build_config:
+        context: ./trypost
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_ENV
+        value: production
+      - name: APP_DEBUG
+        value: "false"
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_URL
+        value: http://app.example.com
+      - name: SELF_HOSTED
+        value: "true"
+      - name: TRYPOST_TARGET
+        value: production
+      - name: DB_CONNECTION
+        value: pgsql
+      - name: DB_HOST
+        value: trypost-postgres
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_DATABASE
+        value: trypost
+      - name: DB_USERNAME
+        value: trypost
+      - name: DB_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: REDIS_HOST
+        value: trypost-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: QUEUE_CONNECTION
+        value: redis
+      - name: CACHE_STORE
+        value: redis
+      - name: SESSION_DRIVER
+        value: database
+      - name: SESSION_SECURE_COOKIE
+        value: "false"
+      - name: BROADCAST_CONNECTION
+        value: reverb
+      - name: REVERB_APP_ID
+        from:
+          env: REVERB_APP_ID
+      - name: REVERB_APP_KEY
+        from:
+          env: REVERB_KEY
+      - name: REVERB_APP_SECRET
+        from:
+          env: REVERB_SECRET
+      - name: REVERB_HOST
+        value: 127.0.0.1
+      - name: REVERB_PORT
+        value: "8080"
+      - name: REVERB_SCHEME
+        value: http
+      - name: PASSPORT_PRIVATE_KEY
+        value: file:///var/www/html/storage/oauth-private.key
+      - name: PASSPORT_PUBLIC_KEY
+        value: file:///var/www/html/storage/oauth-public.key
+      - name: FILESYSTEM_DISK
+        value: public
+      - name: MAIL_MAILER
+        value: log
+      - name: LOG_CHANNEL
+        value: stderr
+      - name: LOG_LEVEL
+        value: info
+      - name: NIGHTWATCH_ENABLED
+        value: "false"
+      - name: TELESCOPE_ENABLED
+        value: "false"
+      - name: POSTHOG_ENABLED
+        value: "false"
+    volumes:
+      - trypost-trypost-storage:/var/www/html/storage
+  trypost-postgres:
+    preset: database
+    image: postgres:18.6-bookworm
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: trypost
+      - name: POSTGRES_USER
+        value: trypost
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+    volumes:
+      - trypost-trypost-postgres:/var/lib/postgresql
+  trypost-redis:
+    preset: database
+    image:
+      repository: trypost-redis
+      tag: latest
+      build_config:
+        context: ./trypost-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: REDISCLI_AUTH
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - trypost-trypost-redis:/data

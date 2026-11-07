@@ -1,0 +1,33 @@
+name: focalboard
+server: localhost
+targets:
+  focalboard:
+    image: mattermost/focalboard:7.11.4
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: VIRTUAL_HOST
+        value: app.example.com
+      - name: VIRTUAL_PORT
+        value: "8000 # Do Not Alter"
+      - name: DB_TYPE
+        value: postgres
+      - name: DB_CONFIG
+        value: postgres://focalboard:@focalboard-postgres:5432/?sslmode=disable
+    volumes:
+      - focalboard-focalboarddata:/opt/focalboard/data
+  focalboard-postgres:
+    preset: database
+    image: postgres:17
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: focalboard
+      - name: POSTGRES_PASSWORD
+        from:
+          env: INLINE_PASSWORD_32
+      - name: POSTGRES_DB
+        value: focalboard
+    volumes:
+      - focalboard-postgres-data:/var/lib/postgresql/data

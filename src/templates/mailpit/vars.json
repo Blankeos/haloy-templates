@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "DEFAULT_PASSWORD": "password"
+  },
+  "derived": {}
+}

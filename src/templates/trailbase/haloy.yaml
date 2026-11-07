@@ -1,0 +1,11 @@
+name: trailbase
+server: localhost
+targets:
+  trailbase:
+    health_check_path: /api/healthcheck
+    image: trailbase/trailbase:latest
+    port: "4000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - trailbase-trailbase-data:/app/traildepot

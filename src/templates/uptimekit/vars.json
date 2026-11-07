@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "SECRET_BASE": "base64:64",
+    "DB_PASSWORD": "password:32",
+    "CLICKHOUSE_PASSWORD": "password:32"
+  },
+  "derived": {
+    "UPTIMEKIT_DASH__DATABASE_URL": "postgresql://postgres:${DB_PASSWORD}@uptimekit-db:5432/uptimekit"
+  }
+}

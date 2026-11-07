@@ -1,0 +1,48 @@
+name: tandoor-recipes
+server: localhost
+targets:
+  tandoor-recipes-tandoor-db:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: tandoor
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: tandoor
+    volumes:
+      - tandoor-recipes-tandoor-db-data:/var/lib/postgresql/data
+  tandoor-recipes:
+    image: vabene1111/recipes:2.6.11
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: TANDOOR_PORT
+        value: "8080"
+      - name: DB_ENGINE
+        value: django.db.backends.postgresql
+      - name: POSTGRES_HOST
+        value: tandoor-recipes-tandoor-db
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_USER
+        value: tandoor
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: tandoor
+      - name: ALLOWED_HOSTS
+        value: app.example.com
+      - name: CSRF_TRUSTED_ORIGINS
+        value: https://app.example.com
+    volumes:
+      - tandoor-recipes-tandoor-staticfiles:/opt/recipes/staticfiles
+      - tandoor-recipes-tandoor-mediafiles:/opt/recipes/mediafiles

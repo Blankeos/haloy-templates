@@ -1,0 +1,37 @@
+name: classicpress
+server: localhost
+targets:
+  classicpress:
+    image: classicpress/classicpress:php8.3-apache
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: WORDPRESS_DB_HOST
+        value: classicpress-db
+      - name: WORDPRESS_DB_USER
+        value: wordpress
+      - name: WORDPRESS_DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: WORDPRESS_DB_NAME
+        value: wordpress
+    volumes:
+      - classicpress-wordpress-data:/var/www/html
+  classicpress-db:
+    preset: database
+    image: mariadb:10.6
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: wordpress
+      - name: MYSQL_USER
+        value: wordpress
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+    volumes:
+      - classicpress-db-data:/var/lib/mysql

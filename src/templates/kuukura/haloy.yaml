@@ -1,0 +1,24 @@
+name: kuukura
+server: localhost
+targets:
+  kuukura:
+    image: ghcr.io/victorlunam/kuukura:2026.10.13
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: VAULT_DOMAIN
+        value: app.example.com
+      - name: VAULT_STORAGE
+        value: sqlite
+      - name: VAULT_SQLITE_PATH
+        value: /data/kuukura.db
+      - name: VAULT_KEY_PROVIDER
+        value: manual
+      - name: VAULT_MASTER_KEY_FILE
+        value: /keys/master_key
+      - name: VAULT_MASTER_KEY_GENERATE
+        value: "true"
+    volumes:
+      - kuukura-kuukura-data:/data
+      - kuukura-kuukura-keys:/keys

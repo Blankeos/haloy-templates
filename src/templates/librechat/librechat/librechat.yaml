@@ -1,0 +1,19 @@
+### librechat.yaml configs ###
+
+version: 1.2.8
+cache: true
+endpoints:
+  custom:
+    - name: "OpenRouter"
+      apiKey: "${OPENROUTER_KEY}"
+      baseURL: "https://openrouter.ai/api/v1"
+      models:
+        default: ["meta-llama/llama-3.3-70b-instruct:free"]
+        fetch: true
+      titleConvo: true
+      titleModel: "current_model"
+      summarize: false
+      summaryModel: "current_model"
+      forcePrompt: false
+      dropParams: ["stop"]
+      modelDisplayLabel: "OpenRouter"

@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "MASTER_KEY": "base64:32"
+  },
+  "derived": {}
+}

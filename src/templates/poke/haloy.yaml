@@ -1,0 +1,8 @@
+name: poke
+server: localhost
+targets:
+  poke:
+    image: codeberg.org/poketube/poke:amd64
+    port: "6003"
+    domains:
+      - domain: app.example.com

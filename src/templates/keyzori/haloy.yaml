@@ -1,0 +1,43 @@
+name: keyzori
+server: localhost
+targets:
+  keyzori:
+    health_check_path: /ready
+    image: ghcr.io/keyzori/keyzori:93b5d75ac8e5a4cd0740bfe1a46b5663674767fb
+    port: "6284"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: KEYZORI_ADMIN_KEY
+        from:
+          env: ADMIN_KEY
+      - name: KEYZORI_DATABASE_URL
+        from:
+          env: KEYZORI__KEYZORI_DATABASE_URL
+      - name: KEYZORI_REDIS_URL
+        value: redis://keyzori-redis:6379
+  keyzori-postgres:
+    preset: database
+    image: postgres:18.3-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: keyzori
+      - name: POSTGRES_DB
+        value: keyzori
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - keyzori-postgres-data:/var/lib/postgresql
+  keyzori-redis:
+    preset: database
+    image:
+      repository: keyzori-redis
+      tag: latest
+      build_config:
+        context: ./keyzori-redis
+        push: server
+    port: "6379"
+    volumes:
+      - keyzori-redis-data:/data

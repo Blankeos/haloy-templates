@@ -1,0 +1,47 @@
+name: 9router
+server: localhost
+targets:
+  9router:
+    health_check_path: /api/health
+    image: decolua/9router:0.5.59
+    port: "20128"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATA_DIR
+        value: /app/data
+      - name: PORT
+        value: "20128"
+      - name: HOSTNAME
+        value: 0.0.0.0
+      - name: NODE_ENV
+        value: production
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: INITIAL_PASSWORD
+        from:
+          env: INITIAL_PASSWORD
+      - name: API_KEY_SECRET
+        from:
+          env: API_KEY_SECRET
+      - name: MACHINE_ID_SALT
+        from:
+          env: MACHINE_ID_SALT
+      - name: BASE_URL
+        value: https://app.example.com
+      - name: NEXT_PUBLIC_BASE_URL
+        value: https://app.example.com
+      - name: HEADROOM_URL
+        value: http://9router-headroom:8787
+      - name: AUTH_COOKIE_SECURE
+        value: "true"
+      - name: REQUIRE_API_KEY
+        value: "true"
+    volumes:
+      - 9router-9router-data:/app/data
+  9router-headroom:
+    health_check_path: /health
+    preset: service
+    image: ghcr.io/chopratejas/headroom:0.6.7
+    port: "8080"

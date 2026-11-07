@@ -1,0 +1,51 @@
+name: listmonk
+server: localhost
+targets:
+  listmonk-db:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: listmonk
+      - name: POSTGRES_PASSWORD
+        value: listmonk
+      - name: POSTGRES_DB
+        value: listmonk
+    volumes:
+      - listmonk-listmonk-data:/var/lib/postgresql/data
+  listmonk-app:
+    image:
+      repository: listmonk-app
+      tag: latest
+      build_config:
+        context: ./listmonk-app
+        push: server
+    port: "9000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LISTMONK_app__address
+        value: 0.0.0.0:9000
+      - name: LISTMONK_db__user
+        value: listmonk
+      - name: LISTMONK_db__password
+        value: listmonk
+      - name: LISTMONK_db__database
+        value: listmonk
+      - name: LISTMONK_db__host
+        value: listmonk-db
+      - name: LISTMONK_db__port
+        value: "5432"
+      - name: LISTMONK_db__ssl_mode
+        value: disable
+      - name: LISTMONK_db__max_open
+        value: "25"
+      - name: LISTMONK_db__max_idle
+        value: "25"
+      - name: LISTMONK_db__max_lifetime
+        value: 300s
+      - name: TZ
+        value: Etc/UTC
+    volumes:
+      - listmonk-listmonk-uploads:/listmonk/uploads

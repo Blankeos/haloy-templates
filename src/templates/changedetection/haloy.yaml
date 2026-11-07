@@ -1,0 +1,10 @@
+name: changedetection
+server: localhost
+targets:
+  changedetection:
+    image: ghcr.io/dgtlmoon/changedetection.io:0.49
+    port: "5000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - changedetection-datastore:/datastore

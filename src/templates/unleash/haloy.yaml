@@ -1,0 +1,31 @@
+name: unleash
+server: localhost
+targets:
+  unleash:
+    health_check_path: /health
+    image: unleashorg/unleash-server:7.4.0
+    port: "4242"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: UNLEASH__DATABASE_URL
+      - name: DATABASE_SSL
+        value: "false"
+      - name: LOG_LEVEL
+        value: warn
+  unleash-db:
+    preset: database
+    image: postgres:15
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: unleash
+      - name: POSTGRES_USER
+        value: unleash
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - unleash-db-data:/var/lib/postgresql/data

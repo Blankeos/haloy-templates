@@ -1,0 +1,25 @@
+name: rustrak
+server: localhost
+targets:
+  rustrak:
+    image: rustrak/rustrak-server:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: HOST
+        value: 0.0.0.0
+      - name: PORT
+        value: "8080"
+      - name: RUST_LOG
+        value: info
+      - name: SSL_PROXY
+        value: "true"
+      - name: SESSION_SECRET_KEY
+        from:
+          env: SESSION_SECRET_KEY
+      - name: CREATE_SUPERUSER
+        from:
+          env: RUSTRAK__CREATE_SUPERUSER
+    volumes:
+      - rustrak-rustrak-data:/data

@@ -1,0 +1,35 @@
+name: codex-docs
+server: localhost
+targets:
+  codex-docs-codex:
+    image: ghcr.io/codex-team/codex.docs:v2.2
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_CONFIG_database_driver
+        value: mongodb
+      - name: APP_CONFIG_database_mongodb_uri
+        from:
+          env: CODEX_DOCS_CODEX__APP_CONFIG_database_mongodb_uri
+      - name: APP_CONFIG_auth_password
+        from:
+          env: AUTH_PASSWORD
+      - name: APP_CONFIG_auth_secret
+        from:
+          env: AUTH_SECRET
+    volumes:
+      - codex-docs-uploads:/usr/src/app/uploads
+      - codex-docs-db:/usr/src/app/db
+  codex-docs-mongo:
+    preset: database
+    image: mongo:4
+    port: "27017"
+    env:
+      - name: MONGO_INITDB_ROOT_PASSWORD
+        from:
+          env: MONGO_PASSWORD
+      - name: MONGO_INITDB_ROOT_USERNAME
+        value: mongo
+    volumes:
+      - codex-docs-mongo-data:/data/db

@@ -1,0 +1,15 @@
+name: victoriametrics
+server: localhost
+targets:
+  victoriametrics:
+    image:
+      repository: victoriametrics
+      tag: latest
+      build_config:
+        context: ./victoriametrics
+        push: server
+    port: "8428"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - victoriametrics-vm-data:/storage

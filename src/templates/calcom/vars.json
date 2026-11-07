@@ -1,0 +1,16 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "NEXTAUTH_SECRET": "base64:32",
+    "CALENDSO_ENCRYPTION_KEY": "base64:24",
+    "CALCOM_CREDENTIAL_SYNC_SECRET": "base64:32",
+    "CALCOM_APP_CREDENTIAL_ENCRYPTION_KEY": "base64:24",
+    "CALCOM_SERVICE_ACCOUNT_ENCRYPTION_KEY": "base64:24",
+    "CAL_VIDEO_RECORDING_TOKEN_SECRET": "base64:32",
+    "CRON_API_KEY": "hash:32"
+  },
+  "derived": {
+    "CALCOM__DATABASE_URL": "postgresql://calcom:${POSTGRES_PASSWORD}@calcom-postgres:5432/calendso",
+    "CALCOM__DATABASE_DIRECT_URL": "postgresql://calcom:${POSTGRES_PASSWORD}@calcom-postgres:5432/calendso"
+  }
+}

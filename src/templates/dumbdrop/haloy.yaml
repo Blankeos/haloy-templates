@@ -1,0 +1,10 @@
+name: dumbdrop
+server: localhost
+targets:
+  dumbdrop:
+    image: dumbwareio/dumbdrop:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - dumbdrop-dumbdrop-uploads:/app/uploads

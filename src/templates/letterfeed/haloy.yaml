@@ -1,0 +1,42 @@
+name: letterfeed
+server: localhost
+targets:
+  letterfeed-backend:
+    preset: service
+    image: ghcr.io/leonmuscoden/letterfeed-backend:latest
+    port: "8080"
+    env:
+      - name: LETTERFEED_APP_BASE_URL
+        value: https://app.example.com
+      - name: LETTERFEED_BACKEND_URL
+        value: http://letterfeed-backend:8000
+      - name: LETTERFEED_DATABASE_URL
+        value: sqlite:////data/letterfeed.db
+      - name: LETTERFEED_SEARCH_FOLDER
+        value: INBOX
+      - name: LETTERFEED_MARK_AS_READ
+        value: "true"
+      - name: LETTERFEED_EMAIL_CHECK_INTERVAL
+        value: "15"
+      - name: LETTERFEED_AUTO_ADD_NEW_SENDERS
+        value: "false"
+      - name: LETTERFEED_SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: LETTERFEED_AUTH_USERNAME
+        value: admin
+      - name: LETTERFEED_AUTH_PASSWORD
+        from:
+          env: AUTH_PASSWORD
+    volumes:
+      - letterfeed-letterfeed-data:/data
+  letterfeed-frontend:
+    image: ghcr.io/leonmuscoden/letterfeed-frontend:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LETTERFEED_APP_BASE_URL
+        value: https://app.example.com
+      - name: LETTERFEED_BACKEND_URL
+        value: http://letterfeed-backend:8000

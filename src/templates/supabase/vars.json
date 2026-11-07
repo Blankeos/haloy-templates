@@ -1,0 +1,37 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "DASHBOARD_PASSWORD": "password:32",
+    "PG_META_CRYPTO_KEY": "password:32",
+    "S3_PROTOCOL_ACCESS_KEY_ID": "password:24",
+    "S3_PROTOCOL_ACCESS_KEY_SECRET": "password:48",
+    "SECRET_KEY_BASE": "password:64",
+    "VAULT_ENC_KEY": "password:32",
+    "REALTIME_DB_ENC_KEY": "hash:16",
+    "JWT_SECRET": "password:32",
+    "POOLER_TENANT_ID": "uuid",
+    "ANON_KEY": "jwt:jwt_secret:anon_key_payload",
+    "SERVICE_ROLE_KEY": "jwt:jwt_secret:service_role_key_payload",
+    "INLINE_HASH_22": "hash:22",
+    "INLINE_HASH_8": "hash:8"
+  },
+  "derived": {
+    "SUPABASE_STUDIO__SUPABASE_ANON_KEY": "${ANON_KEY}}",
+    "SUPABASE_STUDIO__SUPABASE_SERVICE_KEY": "${SERVICE_ROLE_KEY}}",
+    "SUPABASE_STUDIO__SUPABASE_PUBLISHABLE_KEY": "sb_publishable_${INLINE_HASH_22}_${INLINE_HASH_8}",
+    "SUPABASE_STUDIO__SUPABASE_SECRET_KEY": "sb_secret_${INLINE_HASH_22}_${INLINE_HASH_8}",
+    "SUPABASE_API_GW__SUPABASE_PUBLISHABLE_KEY": "sb_publishable_${INLINE_HASH_22}_${INLINE_HASH_8}",
+    "SUPABASE_API_GW__SUPABASE_SECRET_KEY": "sb_secret_${INLINE_HASH_22}_${INLINE_HASH_8}",
+    "SUPABASE_AUTH__GOTRUE_DB_DATABASE_URL": "postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@supabase-db:5432/postgres",
+    "SUPABASE_REST__PGRST_DB_URI": "postgres://authenticator:${POSTGRES_PASSWORD}@supabase-db:5432/postgres",
+    "SUPABASE_STORAGE__ANON_KEY": "${ANON_KEY}}",
+    "SUPABASE_STORAGE__SERVICE_KEY": "${SERVICE_ROLE_KEY}}",
+    "SUPABASE_STORAGE__DATABASE_URL": "postgres://supabase_storage_admin:${POSTGRES_PASSWORD}@supabase-db:5432/postgres",
+    "SUPABASE_FUNCTIONS__SUPABASE_ANON_KEY": "${ANON_KEY}}",
+    "SUPABASE_FUNCTIONS__SUPABASE_SERVICE_ROLE_KEY": "${SERVICE_ROLE_KEY}}",
+    "SUPABASE_FUNCTIONS__SUPABASE_PUBLISHABLE_KEYS": "{\"default\":\"sb_publishable_${INLINE_HASH_22}_${INLINE_HASH_8}\"}",
+    "SUPABASE_FUNCTIONS__SUPABASE_SECRET_KEYS": "{\"default\":\"sb_secret_${INLINE_HASH_22}_${INLINE_HASH_8}\"}",
+    "SUPABASE_FUNCTIONS__SUPABASE_DB_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@supabase-db:5432/postgres",
+    "SUPABASE_SUPAVISOR__DATABASE_URL": "ecto://supabase_admin:${POSTGRES_PASSWORD}@supabase-db:5432/_supabase"
+  }
+}

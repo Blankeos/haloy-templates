@@ -1,0 +1,21 @@
+name: agentdvr
+server: localhost
+targets:
+  agentdvr:
+    image: mekayelanik/ispyagentdvr:latest
+    port: "8090"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: America/New_York
+      - name: AGENTDVR_WEBUI_PORT
+        value: "8090"
+    volumes:
+      - agentdvr-agentdvr-config:/AgentDVR/Media/XML/
+      - agentdvr-agentdvr-media:/AgentDVR/Media/WebServerRoot/Media/
+      - agentdvr-agentdvr-commands:/AgentDVR/Commands/

@@ -1,0 +1,127 @@
+name: wazuh
+server: localhost
+targets:
+  wazuh-certs:
+    preset: service
+    image:
+      repository: wazuh-certs
+      tag: latest
+      build_config:
+        context: ./wazuh-certs
+        push: server
+    port: "8080"
+    env:
+      - name: CERT_TOOL_VERSION
+        value: "4.14"
+    volumes:
+      - wazuh-wazuh-certs:/certificates
+  wazuh-indexer-init:
+    preset: service
+    image:
+      repository: wazuh-indexer-init
+      tag: latest
+      build_config:
+        context: ./wazuh-indexer-init
+        push: server
+    port: "8080"
+    env:
+      - name: INDEXER_PASSWORD
+        from:
+          env: INDEXER_PASSWORD
+      - name: DASHBOARD_PASSWORD
+        from:
+          env: DASHBOARD_PASSWORD
+    volumes:
+      - wazuh-wazuh-indexer-security:/usr/share/wazuh-indexer/config/opensearch-security
+  wazuh-indexer:
+    health_check_path: /
+    preset: service
+    image:
+      repository: wazuh-indexer
+      tag: latest
+      build_config:
+        context: ./wazuh-indexer
+        push: server
+    port: "9200"
+    env:
+      - name: OPENSEARCH_JAVA_OPTS
+        value: -Xms1g -Xmx1g
+    volumes:
+      - wazuh-wazuh-indexer-data:/var/lib/wazuh-indexer
+      - wazuh-wazuh-certs:/usr/share/wazuh-indexer/config/certs
+      - wazuh-wazuh-indexer-security:/usr/share/wazuh-indexer/config/opensearch-security
+  wazuh-manager:
+    preset: service
+    image:
+      repository: wazuh-manager
+      tag: latest
+      build_config:
+        context: ./wazuh-manager
+        push: server
+    port: "55000"
+    env:
+      - name: INDEXER_URL
+        value: https://wazuh-indexer:9200
+      - name: INDEXER_USERNAME
+        value: admin
+      - name: INDEXER_PASSWORD
+        from:
+          env: INDEXER_PASSWORD
+      - name: FILEBEAT_SSL_VERIFICATION_MODE
+        value: full
+      - name: SSL_CERTIFICATE_AUTHORITIES
+        value: /etc/ssl/wazuh/root-ca-manager.pem
+      - name: SSL_CERTIFICATE
+        value: /etc/ssl/wazuh/wazuh.manager.pem
+      - name: SSL_KEY
+        value: /etc/ssl/wazuh/wazuh.manager-key.pem
+      - name: API_USERNAME
+        value: wazuh-wui
+      - name: API_PASSWORD
+        from:
+          env: API_PASSWORD
+    volumes:
+      - wazuh-wazuh-api-configuration:/var/ossec/api/configuration
+      - wazuh-wazuh-etc:/var/ossec/etc
+      - wazuh-wazuh-logs:/var/ossec/logs
+      - wazuh-wazuh-queue:/var/ossec/queue
+      - wazuh-wazuh-var-multigroups:/var/ossec/var/multigroups
+      - wazuh-wazuh-integrations:/var/ossec/integrations
+      - wazuh-wazuh-active-response:/var/ossec/active-response/bin
+      - wazuh-wazuh-agentless:/var/ossec/agentless
+      - wazuh-wazuh-wodles:/var/ossec/wodles
+      - wazuh-filebeat-etc:/etc/filebeat
+      - wazuh-filebeat-var:/var/lib/filebeat
+      - wazuh-wazuh-certs:/etc/ssl/wazuh
+  wazuh:
+    image:
+      repository: wazuh
+      tag: latest
+      build_config:
+        context: ./wazuh
+        push: server
+    port: "5601"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: INDEXER_USERNAME
+        value: admin
+      - name: INDEXER_PASSWORD
+        from:
+          env: INDEXER_PASSWORD
+      - name: WAZUH_API_URL
+        value: https://wazuh-manager
+      - name: DASHBOARD_USERNAME
+        value: kibanaserver
+      - name: DASHBOARD_PASSWORD
+        from:
+          env: DASHBOARD_PASSWORD
+      - name: API_USERNAME
+        value: wazuh-wui
+      - name: API_PASSWORD
+        from:
+          env: API_PASSWORD
+    volumes:
+      - wazuh-wazuh-certs:/usr/share/wazuh-dashboard/certs
+      - wazuh-wazuh-dashboard-config:/usr/share/wazuh-dashboard/data/wazuh/config
+      - wazuh-wazuh-dashboard-custom:/usr/share/wazuh-dashboard/plugins/wazuh/public/assets/custom

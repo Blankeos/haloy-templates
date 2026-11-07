@@ -1,0 +1,52 @@
+name: kimai
+server: localhost
+targets:
+  kimai-app:
+    image: kimai/kimai2:apache-2.31.0
+    port: "8001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_ENV
+        value: prod
+      - name: DATABASE_URL
+        from:
+          env: KIMAI_APP__DATABASE_URL
+      - name: TRUSTED_PROXIES
+        value: localhost
+      - name: APP_SECRET
+        from:
+          env: APP_SECRET
+      - name: MAILER_FROM
+        value: admin@kimai.local
+      - name: MAILER_URL
+        value: null://null
+      - name: ADMINMAIL
+        value: admin@kimai.local
+      - name: ADMINPASS
+        from:
+          env: ADMIN_PASSWORD
+    volumes:
+      - kimai-kimai-data:/opt/kimai/var
+  kimai-db:
+    preset: database
+    image:
+      repository: kimai-db
+      tag: latest
+      build_config:
+        context: ./kimai-db
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: kimai
+      - name: MYSQL_USER
+        value: kimai
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+    volumes:
+      - kimai-mysql-data:/var/lib/mysql

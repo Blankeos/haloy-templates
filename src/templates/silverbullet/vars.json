@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "INLINE_PASSWORD_16": "password:16"
+  },
+  "derived": {
+    "SILVERBULLET__SB_USER": "admin:${INLINE_PASSWORD_16}"
+  }
+}

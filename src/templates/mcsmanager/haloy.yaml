@@ -1,0 +1,24 @@
+name: mcsmanager
+server: localhost
+targets:
+  mcsmanager-web:
+    image: githubyumao/mcsmanager-web:latest
+    port: "23333"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - mcsmanager-mcsmanager-web-data:/opt/mcsmanager/web/data
+      - mcsmanager-mcsmanager-web-logs:/opt/mcsmanager/web/logs
+  mcsmanager-daemon:
+    preset: service
+    image: githubyumao/mcsmanager-daemon:latest
+    port: "24444"
+    env:
+      - name: MCSM_DOCKER_WORKSPACE_PATH
+        value: /opt/mcsmanager/daemon/data/InstanceData
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - mcsmanager-mcsmanager-daemon-data:/opt/mcsmanager/daemon/data
+      - mcsmanager-mcsmanager-daemon-logs:/opt/mcsmanager/daemon/logs
+      - /var/run/docker.sock:/var/run/docker.sock

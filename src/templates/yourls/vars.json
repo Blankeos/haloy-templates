@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "MYSQL_PASSWORD": "password",
+    "MYSQL_ROOT_PASSWORD": "password",
+    "ADMIN_PASSWORD": "password"
+  },
+  "derived": {}
+}

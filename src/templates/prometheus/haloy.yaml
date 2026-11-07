@@ -1,0 +1,15 @@
+name: prometheus
+server: localhost
+targets:
+  prometheus:
+    image:
+      repository: prometheus
+      tag: latest
+      build_config:
+        context: ./prometheus
+        push: server
+    port: "9090"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - prometheus-prometheus-data:/prometheus

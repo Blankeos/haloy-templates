@@ -1,0 +1,52 @@
+name: hi-events
+server: localhost
+targets:
+  hi-events-all-in-one:
+    image: daveearley/hi.events-all-in-one:v1.9.0-beta
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: VITE_FRONTEND_URL
+        value: https://app.example.com
+      - name: APP_FRONTEND_URL
+        value: https://app.example.com
+      - name: VITE_API_URL_CLIENT
+        value: https://app.example.com/api
+      - name: VITE_API_URL_SERVER
+        value: http://localhost:80/api
+      - name: LOG_CHANNEL
+        value: stderr
+      - name: QUEUE_CONNECTION
+        value: sync
+      - name: MAIL_MAILER
+        value: array
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: FILESYSTEM_PUBLIC_DISK
+        value: public
+      - name: FILESYSTEM_PRIVATE_DISK
+        value: local
+      - name: APP_CDN_URL
+        value: https://app.example.com/storage
+      - name: DATABASE_URL
+        from:
+          env: HI_EVENTS_ALL_IN_ONE__DATABASE_URL
+  hi-events-postgres:
+    preset: database
+    image: elestio/postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: hievents
+      - name: POSTGRES_USER
+        value: hievents
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - hi-events-pg-hi-events-data:/var/lib/postgresql/data

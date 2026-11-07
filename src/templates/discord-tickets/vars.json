@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "MYSQL_PASSWORD": "password",
+    "MYSQL_ROOT_PASSWORD": "password",
+    "ENCRYPTION_KEY": "password:48"
+  },
+  "derived": {
+    "DISCORD_TICKETS_TICKETS_APP__DB_CONNECTION_URL": "mysql://tickets:${MYSQL_PASSWORD}@discord-tickets-tickets-postgres/tickets"
+  }
+}

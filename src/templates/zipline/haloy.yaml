@@ -1,0 +1,42 @@
+name: zipline
+server: localhost
+targets:
+  zipline-postgres:
+    preset: database
+    image: postgres:15
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        value: postgres
+      - name: POSTGRES_DATABASE
+        value: postgres
+    volumes:
+      - zipline-pg-data:/var/lib/postgresql/data
+  zipline:
+    image: ghcr.io/diced/zipline:v4
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CORE_RETURN_HTTPS
+        value: "false"
+      - name: CORE_SECRET
+        from:
+          env: SECRET_BASE
+      - name: CORE_HOSTNAME
+        value: 0.0.0.0
+      - name: CORE_PORT
+        value: "3000"
+      - name: DATABASE_URL
+        value: postgres://postgres:postgres@zipline-postgres/postgres
+      - name: CORE_LOGGER
+        value: "true"
+      - name: DATASOURCE_TYPE
+        value: local
+      - name: DATASOURCE_LOCAL_DIRECTORY
+        value: ./uploads
+    volumes:
+      - zipline-uploads:/zipline/uploads
+      - zipline-public:/zipline/public

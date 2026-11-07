@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password"
+  },
+  "derived": {
+    "CODER__CODER_PG_CONNECTION_URL": "postgresql://coder:${POSTGRES_PASSWORD}@coder-db/coder?sslmode=disable"
+  }
+}

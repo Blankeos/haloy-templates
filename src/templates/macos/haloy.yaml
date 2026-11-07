@@ -1,0 +1,13 @@
+name: macos
+server: localhost
+targets:
+  macos:
+    image: dockurr/macos:1.14
+    port: "8006"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: VERSION
+        value: "15"
+    volumes:
+      - macos-macos-storage:/storage

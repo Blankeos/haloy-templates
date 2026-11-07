@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "BETTER_AUTH_SECRET": "password:64"
+  },
+  "derived": {}
+}

@@ -1,0 +1,91 @@
+name: evolutionapi
+server: localhost
+targets:
+  evolutionapi-evolution-api:
+    image: evoapicloud/evolution-api:v2.3.7
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SERVER_URL
+        value: https://app.example.com
+      - name: AUTHENTICATION_TYPE
+        value: apikey
+      - name: AUTHENTICATION_API_KEY
+        from:
+          env: API_KEY
+      - name: AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES
+        value: "true"
+      - name: LANGUAGE
+        value: en
+      - name: CONFIG_SESSION_PHONE_CLIENT
+        value: Evolution API
+      - name: CONFIG_SESSION_PHONE_NAME
+        value: Chrome
+      - name: TELEMETRY
+        value: "false"
+      - name: DATABASE_ENABLED
+        value: "true"
+      - name: DATABASE_PROVIDER
+        value: postgresql
+      - name: DATABASE_CONNECTION_URI
+        from:
+          env: EVOLUTIONAPI_EVOLUTION_API__DATABASE_CONNECTION_URI
+      - name: DATABASE_SAVE_DATA_INSTANCE
+        value: "true"
+      - name: DATABASE_SAVE_DATA_NEW_MESSAGE
+        value: "true"
+      - name: DATABASE_SAVE_MESSAGE_UPDATE
+        value: "true"
+      - name: DATABASE_SAVE_DATA_CONTACTS
+        value: "true"
+      - name: DATABASE_SAVE_DATA_CHATS
+        value: "true"
+      - name: DATABASE_SAVE_DATA_LABELS
+        value: "true"
+      - name: DATABASE_SAVE_DATA_HISTORIC
+        value: "true"
+      - name: CACHE_REDIS_ENABLED
+        value: "true"
+      - name: CACHE_REDIS_URI
+        value: redis://evolutionapi-evolution-redis:6379
+      - name: CACHE_REDIS_PREFIX_KEY
+        value: evolution
+      - name: CACHE_REDIS_SAVE_INSTANCES
+        value: "true"
+      - name: TYPEBOT_ENABLED
+        value: "true"
+      - name: TYPEBOT_API_VERSION
+        value: latest
+      - name: CHATWOOT_ENABLED
+        value: "true"
+      - name: OPENAI_ENABLED
+        value: "true"
+      - name: DIFY_ENABLED
+        value: "true"
+      - name: N8N_ENABLED
+        value: "true"
+      - name: EVOAI_ENABLED
+        value: "true"
+    volumes:
+      - evolutionapi-evolution-instances:/evolution/instances
+  evolutionapi-evolution-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: evolution
+      - name: POSTGRES_USER
+        value: postgresql
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - evolutionapi-evolution-postgres-data:/var/lib/postgresql/data
+  evolutionapi-evolution-redis:
+    preset: database
+    image: redis:alpine
+    port: "6379"
+    volumes:
+      - evolutionapi-evolution-redis-data:/data

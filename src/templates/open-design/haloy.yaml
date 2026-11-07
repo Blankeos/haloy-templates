@@ -1,0 +1,27 @@
+name: open-design
+server: localhost
+targets:
+  open-design:
+    health_check_path: /api/health
+    image: ghcr.io/nexu-io/od:0.16.1
+    port: "7456"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: NODE_OPTIONS
+        value: --max-old-space-size=192
+      - name: OD_BIND_HOST
+        value: 0.0.0.0
+      - name: OD_PORT
+        value: "7456"
+      - name: OD_API_TOKEN
+        from:
+          env: API_TOKEN
+      - name: OD_ALLOWED_ORIGINS
+        value: https://app.example.com,http://app.example.com
+      - name: OD_DISABLE_API_AUTH
+        value: "1"
+    volumes:
+      - open-design-open-design-data:/app/.od

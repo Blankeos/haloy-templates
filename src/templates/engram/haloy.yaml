@@ -1,0 +1,44 @@
+name: engram
+server: localhost
+targets:
+  engram-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: engram
+      - name: POSTGRES_PASSWORD
+        value: engram
+      - name: POSTGRES_DB
+        value: engram_cloud
+    volumes:
+      - engram-engram-postgres:/var/lib/postgresql/data
+  engram:
+    image:
+      repository: engram
+      tag: latest
+      build_config:
+        context: ./engram
+        push: server
+    port: "8080"
+    domains:
+      - domain: dashboard.app.example.com
+    env:
+      - name: ENGRAM_DATABASE_URL
+        value: postgres://engram:engram@engram-postgres:5432/engram_cloud?sslmode=disable
+      - name: ENGRAM_JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: ENGRAM_CLOUD_TOKEN
+        from:
+          env: CLOUD_TOKEN
+      - name: ENGRAM_CLOUD_ADMIN
+        from:
+          env: ADMIN_TOKEN
+      - name: ENGRAM_CLOUD_ALLOWED_PROJECTS
+        value: "*"
+      - name: ENGRAM_CLOUD_HOST
+        value: 0.0.0.0
+      - name: ENGRAM_PORT
+        value: "8080"

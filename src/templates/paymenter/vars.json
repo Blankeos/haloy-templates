@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "APP_KEY": "base64:32",
+    "MYSQL_PASSWORD": "password:16",
+    "MYSQL_ROOT_PASSWORD": "password:20"
+  },
+  "derived": {}
+}

@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "JWT_SECRET": "password:64",
+    "ENCRYPTION_KEY": "password:32",
+    "WEBHOOK_VERIFY_TOKEN": "password:32"
+  },
+  "derived": {}
+}

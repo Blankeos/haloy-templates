@@ -1,0 +1,235 @@
+name: huly
+server: localhost
+targets:
+  huly-nginx:
+    image: nginx:1.21.3
+    port: "80"
+    domains:
+      - domain: app.example.com
+  huly-mongodb:
+    preset: database
+    image: mongo:7-jammy
+    port: "27017"
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+    volumes:
+      - huly-db:/data/db
+  huly-minio:
+    preset: service
+    image:
+      repository: huly-minio
+      tag: latest
+      build_config:
+        context: ./huly-minio
+        push: server
+    port: "8080"
+    volumes:
+      - huly-files:/data
+  huly-elastic:
+    health_check_path: /_cluster/health
+    preset: database
+    image:
+      repository: huly-elastic
+      tag: latest
+      build_config:
+        context: ./huly-elastic
+        push: server
+    port: "9200"
+    env:
+      - name: ELASTICSEARCH_PORT_NUMBER
+        value: "9200"
+      - name: BITNAMI_DEBUG
+        value: "true"
+      - name: discovery.type
+        value: single-node
+      - name: ES_JAVA_OPTS
+        value: -Xms1024m -Xmx1024m
+      - name: http.cors.enabled
+        value: "true"
+      - name: http.cors.allow-origin
+        value: http://localhost:8082
+    volumes:
+      - huly-elastic:/usr/share/elasticsearch/data
+  huly-rekoni:
+    preset: service
+    image: hardcoreeng/rekoni-service:${HULY_VERSION}
+    port: "8080"
+    env:
+      - name: SECRET
+        from:
+          env: HULY_SECRET
+  huly-transactor:
+    preset: service
+    image: hardcoreeng/transactor:${HULY_VERSION}
+    port: "8080"
+    env:
+      - name: SERVER_PORT
+        value: "3333"
+      - name: SERVER_SECRET
+        from:
+          env: HULY_SECRET
+      - name: SERVER_CURSOR_MAXTIMEMS
+        value: "30000"
+      - name: DB_URL
+        value: mongodb://huly-mongodb:27017
+      - name: MONGO_URL
+        value: mongodb://huly-mongodb:27017
+      - name: STORAGE_CONFIG
+        value: minio|minio?accessKey=minioadmin&secretKey=minioadmin
+      - name: FRONT_URL
+        value: http://localhost:8087
+      - name: ACCOUNTS_URL
+        value: http://huly-account:3000
+      - name: FULLTEXT_URL
+        value: http://huly-fulltext:4700
+      - name: STATS_URL
+        value: http://huly-stats:4900
+      - name: LAST_NAME_FIRST
+        value: "true"
+  huly-collaborator:
+    preset: service
+    image: hardcoreeng/collaborator:${HULY_VERSION}
+    port: "8080"
+    env:
+      - name: COLLABORATOR_PORT
+        value: "3078"
+      - name: SECRET
+        from:
+          env: HULY_SECRET
+      - name: ACCOUNTS_URL
+        value: http://huly-account:3000
+      - name: DB_URL
+        value: mongodb://huly-mongodb:27017
+      - name: STATS_URL
+        value: http://huly-stats:4900
+      - name: STORAGE_CONFIG
+        value: minio|minio?accessKey=minioadmin&secretKey=minioadmin
+  huly-account:
+    preset: service
+    image: hardcoreeng/account:${HULY_VERSION}
+    port: "8080"
+    env:
+      - name: SERVER_PORT
+        value: "3000"
+      - name: SERVER_SECRET
+        from:
+          env: HULY_SECRET
+      - name: DB_URL
+        value: mongodb://huly-mongodb:27017
+      - name: MONGO_URL
+        value: mongodb://huly-mongodb:27017
+      - name: TRANSACTOR_URL
+        value: ws://huly-transactor:3333;ws://app.example.com/_transactor
+      - name: STORAGE_CONFIG
+        value: minio|minio?accessKey=minioadmin&secretKey=minioadmin
+      - name: FRONT_URL
+        value: http://huly-front:8080
+      - name: STATS_URL
+        value: http://huly-stats:4900
+      - name: MODEL_ENABLED
+        value: "*"
+      - name: ACCOUNTS_URL
+        value: http://localhost:3000
+      - name: ACCOUNT_PORT
+        value: "3000"
+  huly-workspace:
+    preset: service
+    image: hardcoreeng/workspace:${HULY_VERSION}
+    port: "8080"
+    env:
+      - name: SERVER_SECRET
+        from:
+          env: HULY_SECRET
+      - name: DB_URL
+        value: mongodb://huly-mongodb:27017
+      - name: MONGO_URL
+        value: mongodb://huly-mongodb:27017
+      - name: TRANSACTOR_URL
+        value: ws://huly-transactor:3333;ws://app.example.com/_transactor
+      - name: STORAGE_CONFIG
+        value: minio|minio?accessKey=minioadmin&secretKey=minioadmin
+      - name: MODEL_ENABLED
+        value: "*"
+      - name: ACCOUNTS_URL
+        value: http://huly-account:3000
+      - name: STATS_URL
+        value: http://huly-stats:4900
+  huly-front:
+    preset: service
+    image: hardcoreeng/front:${HULY_VERSION}
+    port: "8080"
+    env:
+      - name: SERVER_PORT
+        value: "8080"
+      - name: SERVER_SECRET
+        from:
+          env: HULY_SECRET
+      - name: LOVE_ENDPOINT
+        value: http://app.example.com/_love
+      - name: ACCOUNTS_URL
+        value: http://app.example.com/_accounts
+      - name: REKONI_URL
+        value: http://app.example.com/_rekoni
+      - name: CALENDAR_URL
+        value: http://app.example.com/_calendar
+      - name: GMAIL_URL
+        value: http://app.example.com/_gmail
+      - name: TELEGRAM_URL
+        value: http://app.example.com/_telegram
+      - name: STATS_URL
+        value: http://app.example.com/_stats
+      - name: UPLOAD_URL
+        value: /files
+      - name: ELASTIC_URL
+        value: http://huly-elastic:9200
+      - name: COLLABORATOR_URL
+        value: ws://app.example.com/_collaborator
+      - name: STORAGE_CONFIG
+        value: minio|minio?accessKey=minioadmin&secretKey=minioadmin
+      - name: DB_URL
+        value: mongodb://huly-mongodb:27017
+      - name: MONGO_URL
+        value: mongodb://huly-mongodb:27017
+      - name: TITLE
+        value: Huly
+      - name: DEFAULT_LANGUAGE
+        value: en
+      - name: LAST_NAME_FIRST
+        value: "true"
+      - name: DESKTOP_UPDATES_CHANNEL
+        value: selfhost
+  huly-fulltext:
+    preset: service
+    image: hardcoreeng/fulltext:${HULY_VERSION}
+    port: "8080"
+    env:
+      - name: SERVER_SECRET
+        from:
+          env: HULY_SECRET
+      - name: DB_URL
+        value: mongodb://huly-mongodb:27017
+      - name: FULLTEXT_DB_URL
+        value: http://huly-elastic:9200
+      - name: ELASTIC_INDEX_NAME
+        value: huly_storage_index
+      - name: STORAGE_CONFIG
+        value: minio|minio?accessKey=minioadmin&secretKey=minioadmin
+      - name: REKONI_URL
+        value: http://huly-rekoni:4004
+      - name: ACCOUNTS_URL
+        value: http://huly-account:3000
+      - name: STATS_URL
+        value: http://huly-stats:4900
+  huly-stats:
+    preset: service
+    image: hardcoreeng/stats:${HULY_VERSION}
+    port: "8080"
+    env:
+      - name: PORT
+        value: "4900"
+      - name: SERVER_SECRET
+        from:
+          env: HULY_SECRET

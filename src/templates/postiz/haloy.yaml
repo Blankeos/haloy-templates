@@ -1,0 +1,119 @@
+name: postiz
+server: localhost
+targets:
+  postiz-app:
+    image: ghcr.io/gitroomhq/postiz-app:latest
+    port: "5000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MAIN_URL
+        value: https://app.example.com
+      - name: FRONTEND_URL
+        value: https://app.example.com
+      - name: NEXT_PUBLIC_BACKEND_URL
+        value: https://app.example.com/api
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: DATABASE_URL
+        from:
+          env: POSTIZ_APP__DATABASE_URL
+      - name: REDIS_URL
+        value: redis://postiz-redis:6379
+      - name: BACKEND_INTERNAL_URL
+        value: http://127.0.0.1:3000
+      - name: TEMPORAL_ADDRESS
+        value: postiz-temporal:7233
+      - name: IS_GENERAL
+        value: "true"
+      - name: DISABLE_REGISTRATION
+        value: "false"
+      - name: RUN_CRON
+        value: "true"
+      - name: STORAGE_PROVIDER
+        value: local
+      - name: UPLOAD_DIRECTORY
+        value: /uploads
+      - name: NEXT_PUBLIC_UPLOAD_DIRECTORY
+        value: /uploads
+    volumes:
+      - postiz-postiz-config:/config/
+      - postiz-postiz-uploads:/uploads/
+  postiz-postgres:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_USER
+        value: postiz
+      - name: POSTGRES_DB
+        value: postiz
+    volumes:
+      - postiz-postgres-volume:/var/lib/postgresql/data
+  postiz-redis:
+    preset: database
+    image: redis:7.2
+    port: "6379"
+    volumes:
+      - postiz-postiz-redis-data:/data
+  postiz-temporal-elasticsearch:
+    preset: database
+    image: elasticsearch:7.17.27
+    port: "9200"
+    env:
+      - name: cluster.routing.allocation.disk.threshold_enabled
+        value: "true"
+      - name: cluster.routing.allocation.disk.watermark.low
+        value: 512mb
+      - name: cluster.routing.allocation.disk.watermark.high
+        value: 256mb
+      - name: cluster.routing.allocation.disk.watermark.flood_stage
+        value: 128mb
+      - name: discovery.type
+        value: single-node
+      - name: ES_JAVA_OPTS
+        value: -Xms256m -Xmx256m
+      - name: xpack.security.enabled
+        value: "false"
+    volumes:
+      - postiz-temporal-es-data:/usr/share/elasticsearch/data
+  postiz-temporal-postgresql:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: TEMPORAL_PASSWORD
+      - name: POSTGRES_USER
+        value: temporal
+    volumes:
+      - postiz-temporal-pg-data:/var/lib/postgresql/data
+  postiz-temporal:
+    preset: service
+    image: temporalio/auto-setup:1.28.1
+    port: "8080"
+    env:
+      - name: DB
+        value: postgres12
+      - name: DB_PORT
+        value: "5432"
+      - name: POSTGRES_USER
+        value: temporal
+      - name: POSTGRES_PWD
+        from:
+          env: TEMPORAL_PASSWORD
+      - name: POSTGRES_SEEDS
+        value: temporal-postgresql
+      - name: ENABLE_ES
+        value: "true"
+      - name: ES_SEEDS
+        value: temporal-elasticsearch
+      - name: ES_VERSION
+        value: v7
+      - name: TEMPORAL_NAMESPACE
+        value: default

@@ -1,0 +1,722 @@
+name: grovs
+server: localhost
+targets:
+  grovs-postgres:
+    preset: database
+    image:
+      repository: grovs-postgres
+      tag: latest
+      build_config:
+        context: ./grovs-postgres
+        push: server
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: grovs
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: grovs_production
+    volumes:
+      - grovs-pg-data:/var/lib/postgresql/data
+  grovs-redis:
+    preset: database
+    image:
+      repository: grovs-redis
+      tag: latest
+      build_config:
+        context: ./grovs-redis
+        push: server
+    port: "6379"
+    volumes:
+      - grovs-redis-data:/data
+  grovs-clickhouse:
+    health_check_path: /ping
+    preset: database
+    image: clickhouse/clickhouse-server:25.3.6.56
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_DB
+        value: grovs_production
+      - name: CLICKHOUSE_USER
+        value: grovs
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+    volumes:
+      - grovs-clickhouse-data:/var/lib/clickhouse
+  grovs-migrate:
+    preset: service
+    image:
+      repository: grovs-migrate
+      tag: latest
+      build_config:
+        context: ./grovs-migrate
+        push: server
+    port: "8080"
+    env:
+      - name: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+      - name: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+      - name: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+      - name: ACTIVE_STORAGE_SERVICE
+        value: local
+      - name: ADMIN_API_KEY
+        from:
+          env: ADMIN_API_KEY
+      - name: API_HOST
+        value: api.app.example.com
+      - name: BOOTSTRAP_ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: BOOTSTRAP_ADMIN_PASSWORD
+        from:
+          env: BOOTSTRAP_ADMIN_PASSWORD
+      - name: CLICKHOUSE_ANALYTICS_ROLLUPS_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_ATTRIBUTION_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_DATABASE
+        value: grovs_production
+      - name: CLICKHOUSE_LINK_DIMENSIONS_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+      - name: CLICKHOUSE_PRIMARY
+        value: "true"
+      - name: CLICKHOUSE_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_ROLLUP_FAST_LANE
+        value: "true"
+      - name: CLICKHOUSE_URL
+        from:
+          env: GROVS_MIGRATE__CLICKHOUSE_URL
+      - name: CLICKHOUSE_WRITE_ENABLED
+        value: "true"
+      - name: DASHBOARD_CACHE_TTL_SECONDS
+        value: "60"
+      - name: DASHBOARD_HOST
+        value: dashboard.app.example.com
+      - name: DATABASE_URL
+        from:
+          env: GROVS_MIGRATE__DATABASE_URL
+      - name: DEFAULT_LINK_SUBTITLE
+        value: Dynamic links, attributions, and referrals across mobile and web platforms.
+      - name: DEFAULT_LINK_TITLE
+        value: grovs
+      - name: DEFAULT_LOGO_URL
+        value: https://appssemble-assets.s3.eu-north-1.amazonaws.com/linksquared/logo-square-new.svg
+      - name: DEFAULT_SOCIAL_PREVIEW_URL
+        value: https://appssemble-assets.s3.eu-north-1.amazonaws.com/linksquared/social-media-placeholder.jpg
+      - name: DIAGNOSTICS_API_KEY
+        from:
+          env: DIAGNOSTICS_API_KEY
+      - name: DOMAIN_LIVE
+        value: app.example.com
+      - name: DOMAIN_TEST
+        value: test.app.example.com
+      - name: GO_HOST
+        value: go.app.example.com
+      - name: GROVS_EE
+        value: "false"
+      - name: GROVS_SELF_HOSTED
+        value: "true"
+      - name: LINKS_PROD_HOST
+        value: links.app.example.com
+      - name: LINKS_TEST_HOST
+        value: links.test.app.example.com
+      - name: MAILER_FROM
+        value: Grovs <noreply@app.example.com>
+      - name: MCP_CONSENT_URL
+        value: http://dashboard.app.example.com/mcp/authorize
+      - name: MCP_HOST
+        value: mcp.app.example.com
+      - name: OAUTH_CLIENT_SECRET
+        from:
+          env: OAUTH_CLIENT_SECRET
+      - name: OAUTH_CLIENT_UID
+        from:
+          env: OAUTH_CLIENT_UID
+      - name: PG_SHADOW_WRITES
+        value: "false"
+      - name: POSTGRES_DB
+        value: grovs_production
+      - name: POSTGRES_MAX_CONNECTIONS
+        value: "200"
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        value: grovs
+      - name: PREVIEW_BASE_URL
+        value: http://preview.app.example.com
+      - name: PREVIEW_HOST
+        value: preview.app.example.com
+      - name: PUBLIC_GO_PROJECT_IDENTIFIER
+        value: go-self-hosted
+      - name: RAILS_DB_POOL
+        value: "10"
+      - name: RAILS_ENV
+        value: production
+      - name: RAILS_LOG_TO_STDOUT
+        value: "true"
+      - name: RAILS_MAX_THREADS
+        value: "5"
+      - name: RAILS_SERVE_STATIC_FILES
+        value: "true"
+      - name: REACT_HOST
+        value: dashboard.app.example.com
+      - name: REACT_HOST_PROTOCOL
+        value: http://
+      - name: REDIS_URL
+        value: redis://grovs-redis:6379/0
+      - name: REVENUE_READS_FROM_LEDGER
+        value: "true"
+      - name: S3_ASSET_PREFIX
+        value: http://api.app.example.com
+      - name: SDK_HOST
+        value: sdk.app.example.com
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: SENT_QUOTAS_WEBHOOK_KEY
+        from:
+          env: SENT_QUOTAS_WEBHOOK_KEY
+      - name: SERVER_HOST
+        value: app.example.com
+      - name: SERVER_HOST_PROTOCOL
+        value: http://
+      - name: SIDEKIQ_EVENTS_CONCURRENCY
+        value: "10"
+      - name: SMTP_ADDRESS
+        value: smtp.example.com
+      - name: SMTP_AUTHENTICATION
+        value: plain
+      - name: SMTP_DOMAIN
+        value: app.example.com
+      - name: SMTP_ENABLE_STARTTLS_AUTO
+        value: "true"
+      - name: SMTP_PORT
+        value: "587"
+      - name: WEB_CONCURRENCY
+        value: "2"
+    volumes:
+      - grovs-storage:/app/storage
+  grovs-web:
+    health_check_path: /up
+    image:
+      repository: grovs-web
+      tag: latest
+      build_config:
+        context: ./grovs-web
+        push: server
+    port: "3000"
+    domains:
+      - domain: api.app.example.com
+      - domain: sdk.app.example.com
+      - domain: mcp.app.example.com
+      - domain: go.app.example.com
+      - domain: preview.app.example.com
+      - domain: links.app.example.com
+      - domain: links.test.app.example.com
+    env:
+      - name: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+      - name: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+      - name: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+      - name: ACTIVE_STORAGE_SERVICE
+        value: local
+      - name: ADMIN_API_KEY
+        from:
+          env: ADMIN_API_KEY
+      - name: API_HOST
+        value: api.app.example.com
+      - name: BOOTSTRAP_ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: BOOTSTRAP_ADMIN_PASSWORD
+        from:
+          env: BOOTSTRAP_ADMIN_PASSWORD
+      - name: CLICKHOUSE_ANALYTICS_ROLLUPS_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_ATTRIBUTION_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_DATABASE
+        value: grovs_production
+      - name: CLICKHOUSE_LINK_DIMENSIONS_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+      - name: CLICKHOUSE_PRIMARY
+        value: "true"
+      - name: CLICKHOUSE_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_ROLLUP_FAST_LANE
+        value: "true"
+      - name: CLICKHOUSE_URL
+        from:
+          env: GROVS_WEB__CLICKHOUSE_URL
+      - name: CLICKHOUSE_WRITE_ENABLED
+        value: "true"
+      - name: DASHBOARD_CACHE_TTL_SECONDS
+        value: "60"
+      - name: DASHBOARD_HOST
+        value: dashboard.app.example.com
+      - name: DATABASE_URL
+        from:
+          env: GROVS_WEB__DATABASE_URL
+      - name: DEFAULT_LINK_SUBTITLE
+        value: Dynamic links, attributions, and referrals across mobile and web platforms.
+      - name: DEFAULT_LINK_TITLE
+        value: grovs
+      - name: DEFAULT_LOGO_URL
+        value: https://appssemble-assets.s3.eu-north-1.amazonaws.com/linksquared/logo-square-new.svg
+      - name: DEFAULT_SOCIAL_PREVIEW_URL
+        value: https://appssemble-assets.s3.eu-north-1.amazonaws.com/linksquared/social-media-placeholder.jpg
+      - name: DIAGNOSTICS_API_KEY
+        from:
+          env: DIAGNOSTICS_API_KEY
+      - name: DOMAIN_LIVE
+        value: app.example.com
+      - name: DOMAIN_TEST
+        value: test.app.example.com
+      - name: GO_HOST
+        value: go.app.example.com
+      - name: GROVS_EE
+        value: "false"
+      - name: GROVS_SELF_HOSTED
+        value: "true"
+      - name: LINKS_PROD_HOST
+        value: links.app.example.com
+      - name: LINKS_TEST_HOST
+        value: links.test.app.example.com
+      - name: MAILER_FROM
+        value: Grovs <noreply@app.example.com>
+      - name: MCP_CONSENT_URL
+        value: http://dashboard.app.example.com/mcp/authorize
+      - name: MCP_HOST
+        value: mcp.app.example.com
+      - name: OAUTH_CLIENT_SECRET
+        from:
+          env: OAUTH_CLIENT_SECRET
+      - name: OAUTH_CLIENT_UID
+        from:
+          env: OAUTH_CLIENT_UID
+      - name: PG_SHADOW_WRITES
+        value: "false"
+      - name: POSTGRES_DB
+        value: grovs_production
+      - name: POSTGRES_MAX_CONNECTIONS
+        value: "200"
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        value: grovs
+      - name: PREVIEW_BASE_URL
+        value: http://preview.app.example.com
+      - name: PREVIEW_HOST
+        value: preview.app.example.com
+      - name: PUBLIC_GO_PROJECT_IDENTIFIER
+        value: go-self-hosted
+      - name: RAILS_DB_POOL
+        value: "10"
+      - name: RAILS_ENV
+        value: production
+      - name: RAILS_LOG_TO_STDOUT
+        value: "true"
+      - name: RAILS_MAX_THREADS
+        value: "5"
+      - name: RAILS_SERVE_STATIC_FILES
+        value: "true"
+      - name: REACT_HOST
+        value: dashboard.app.example.com
+      - name: REACT_HOST_PROTOCOL
+        value: http://
+      - name: REDIS_URL
+        value: redis://grovs-redis:6379/0
+      - name: REVENUE_READS_FROM_LEDGER
+        value: "true"
+      - name: S3_ASSET_PREFIX
+        value: http://api.app.example.com
+      - name: SDK_HOST
+        value: sdk.app.example.com
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: SENT_QUOTAS_WEBHOOK_KEY
+        from:
+          env: SENT_QUOTAS_WEBHOOK_KEY
+      - name: SERVER_HOST
+        value: app.example.com
+      - name: SERVER_HOST_PROTOCOL
+        value: http://
+      - name: SIDEKIQ_EVENTS_CONCURRENCY
+        value: "10"
+      - name: SMTP_ADDRESS
+        value: smtp.example.com
+      - name: SMTP_AUTHENTICATION
+        value: plain
+      - name: SMTP_DOMAIN
+        value: app.example.com
+      - name: SMTP_ENABLE_STARTTLS_AUTO
+        value: "true"
+      - name: SMTP_PORT
+        value: "587"
+      - name: WEB_CONCURRENCY
+        value: "2"
+    volumes:
+      - grovs-storage:/app/storage
+  grovs-worker-1:
+    preset: service
+    image:
+      repository: grovs-worker-1
+      tag: latest
+      build_config:
+        context: ./grovs-worker-1
+        push: server
+    port: "8080"
+    env:
+      - name: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+      - name: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+      - name: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+      - name: ACTIVE_STORAGE_SERVICE
+        value: local
+      - name: ADMIN_API_KEY
+        from:
+          env: ADMIN_API_KEY
+      - name: API_HOST
+        value: api.app.example.com
+      - name: BOOTSTRAP_ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: BOOTSTRAP_ADMIN_PASSWORD
+        from:
+          env: BOOTSTRAP_ADMIN_PASSWORD
+      - name: CLICKHOUSE_ANALYTICS_ROLLUPS_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_ATTRIBUTION_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_DATABASE
+        value: grovs_production
+      - name: CLICKHOUSE_LINK_DIMENSIONS_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+      - name: CLICKHOUSE_PRIMARY
+        value: "true"
+      - name: CLICKHOUSE_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_ROLLUP_FAST_LANE
+        value: "true"
+      - name: CLICKHOUSE_URL
+        from:
+          env: GROVS_WORKER_1__CLICKHOUSE_URL
+      - name: CLICKHOUSE_WRITE_ENABLED
+        value: "true"
+      - name: DASHBOARD_CACHE_TTL_SECONDS
+        value: "60"
+      - name: DASHBOARD_HOST
+        value: dashboard.app.example.com
+      - name: DATABASE_URL
+        from:
+          env: GROVS_WORKER_1__DATABASE_URL
+      - name: DEFAULT_LINK_SUBTITLE
+        value: Dynamic links, attributions, and referrals across mobile and web platforms.
+      - name: DEFAULT_LINK_TITLE
+        value: grovs
+      - name: DEFAULT_LOGO_URL
+        value: https://appssemble-assets.s3.eu-north-1.amazonaws.com/linksquared/logo-square-new.svg
+      - name: DEFAULT_SOCIAL_PREVIEW_URL
+        value: https://appssemble-assets.s3.eu-north-1.amazonaws.com/linksquared/social-media-placeholder.jpg
+      - name: DIAGNOSTICS_API_KEY
+        from:
+          env: DIAGNOSTICS_API_KEY
+      - name: DOMAIN_LIVE
+        value: app.example.com
+      - name: DOMAIN_TEST
+        value: test.app.example.com
+      - name: GO_HOST
+        value: go.app.example.com
+      - name: GROVS_EE
+        value: "false"
+      - name: GROVS_SELF_HOSTED
+        value: "true"
+      - name: LINKS_PROD_HOST
+        value: links.app.example.com
+      - name: LINKS_TEST_HOST
+        value: links.test.app.example.com
+      - name: MAILER_FROM
+        value: Grovs <noreply@app.example.com>
+      - name: MCP_CONSENT_URL
+        value: http://dashboard.app.example.com/mcp/authorize
+      - name: MCP_HOST
+        value: mcp.app.example.com
+      - name: OAUTH_CLIENT_SECRET
+        from:
+          env: OAUTH_CLIENT_SECRET
+      - name: OAUTH_CLIENT_UID
+        from:
+          env: OAUTH_CLIENT_UID
+      - name: PG_SHADOW_WRITES
+        value: "false"
+      - name: POSTGRES_DB
+        value: grovs_production
+      - name: POSTGRES_MAX_CONNECTIONS
+        value: "200"
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        value: grovs
+      - name: PREVIEW_BASE_URL
+        value: http://preview.app.example.com
+      - name: PREVIEW_HOST
+        value: preview.app.example.com
+      - name: PUBLIC_GO_PROJECT_IDENTIFIER
+        value: go-self-hosted
+      - name: RAILS_DB_POOL
+        value: "10"
+      - name: RAILS_ENV
+        value: production
+      - name: RAILS_LOG_TO_STDOUT
+        value: "true"
+      - name: RAILS_MAX_THREADS
+        value: "5"
+      - name: RAILS_SERVE_STATIC_FILES
+        value: "true"
+      - name: REACT_HOST
+        value: dashboard.app.example.com
+      - name: REACT_HOST_PROTOCOL
+        value: http://
+      - name: REDIS_URL
+        value: redis://grovs-redis:6379/0
+      - name: REVENUE_READS_FROM_LEDGER
+        value: "true"
+      - name: S3_ASSET_PREFIX
+        value: http://api.app.example.com
+      - name: SDK_HOST
+        value: sdk.app.example.com
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: SENT_QUOTAS_WEBHOOK_KEY
+        from:
+          env: SENT_QUOTAS_WEBHOOK_KEY
+      - name: SERVER_HOST
+        value: app.example.com
+      - name: SERVER_HOST_PROTOCOL
+        value: http://
+      - name: SIDEKIQ_EVENTS_CONCURRENCY
+        value: "10"
+      - name: SMTP_ADDRESS
+        value: smtp.example.com
+      - name: SMTP_AUTHENTICATION
+        value: plain
+      - name: SMTP_DOMAIN
+        value: app.example.com
+      - name: SMTP_ENABLE_STARTTLS_AUTO
+        value: "true"
+      - name: SMTP_PORT
+        value: "587"
+      - name: WEB_CONCURRENCY
+        value: "2"
+    volumes:
+      - grovs-storage:/app/storage
+  grovs-worker-2:
+    preset: service
+    image:
+      repository: grovs-worker-2
+      tag: latest
+      build_config:
+        context: ./grovs-worker-2
+        push: server
+    port: "8080"
+    env:
+      - name: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+      - name: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+      - name: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+        from:
+          env: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+      - name: ACTIVE_STORAGE_SERVICE
+        value: local
+      - name: ADMIN_API_KEY
+        from:
+          env: ADMIN_API_KEY
+      - name: API_HOST
+        value: api.app.example.com
+      - name: BOOTSTRAP_ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: BOOTSTRAP_ADMIN_PASSWORD
+        from:
+          env: BOOTSTRAP_ADMIN_PASSWORD
+      - name: CLICKHOUSE_ANALYTICS_ROLLUPS_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_ATTRIBUTION_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_DATABASE
+        value: grovs_production
+      - name: CLICKHOUSE_LINK_DIMENSIONS_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+      - name: CLICKHOUSE_PRIMARY
+        value: "true"
+      - name: CLICKHOUSE_READ_ENABLED
+        value: "true"
+      - name: CLICKHOUSE_ROLLUP_FAST_LANE
+        value: "true"
+      - name: CLICKHOUSE_URL
+        from:
+          env: GROVS_WORKER_2__CLICKHOUSE_URL
+      - name: CLICKHOUSE_WRITE_ENABLED
+        value: "true"
+      - name: DASHBOARD_CACHE_TTL_SECONDS
+        value: "60"
+      - name: DASHBOARD_HOST
+        value: dashboard.app.example.com
+      - name: DATABASE_URL
+        from:
+          env: GROVS_WORKER_2__DATABASE_URL
+      - name: DEFAULT_LINK_SUBTITLE
+        value: Dynamic links, attributions, and referrals across mobile and web platforms.
+      - name: DEFAULT_LINK_TITLE
+        value: grovs
+      - name: DEFAULT_LOGO_URL
+        value: https://appssemble-assets.s3.eu-north-1.amazonaws.com/linksquared/logo-square-new.svg
+      - name: DEFAULT_SOCIAL_PREVIEW_URL
+        value: https://appssemble-assets.s3.eu-north-1.amazonaws.com/linksquared/social-media-placeholder.jpg
+      - name: DIAGNOSTICS_API_KEY
+        from:
+          env: DIAGNOSTICS_API_KEY
+      - name: DOMAIN_LIVE
+        value: app.example.com
+      - name: DOMAIN_TEST
+        value: test.app.example.com
+      - name: GO_HOST
+        value: go.app.example.com
+      - name: GROVS_EE
+        value: "false"
+      - name: GROVS_SELF_HOSTED
+        value: "true"
+      - name: LINKS_PROD_HOST
+        value: links.app.example.com
+      - name: LINKS_TEST_HOST
+        value: links.test.app.example.com
+      - name: MAILER_FROM
+        value: Grovs <noreply@app.example.com>
+      - name: MCP_CONSENT_URL
+        value: http://dashboard.app.example.com/mcp/authorize
+      - name: MCP_HOST
+        value: mcp.app.example.com
+      - name: OAUTH_CLIENT_SECRET
+        from:
+          env: OAUTH_CLIENT_SECRET
+      - name: OAUTH_CLIENT_UID
+        from:
+          env: OAUTH_CLIENT_UID
+      - name: PG_SHADOW_WRITES
+        value: "false"
+      - name: POSTGRES_DB
+        value: grovs_production
+      - name: POSTGRES_MAX_CONNECTIONS
+        value: "200"
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        value: grovs
+      - name: PREVIEW_BASE_URL
+        value: http://preview.app.example.com
+      - name: PREVIEW_HOST
+        value: preview.app.example.com
+      - name: PUBLIC_GO_PROJECT_IDENTIFIER
+        value: go-self-hosted
+      - name: RAILS_DB_POOL
+        value: "10"
+      - name: RAILS_ENV
+        value: production
+      - name: RAILS_LOG_TO_STDOUT
+        value: "true"
+      - name: RAILS_MAX_THREADS
+        value: "5"
+      - name: RAILS_SERVE_STATIC_FILES
+        value: "true"
+      - name: REACT_HOST
+        value: dashboard.app.example.com
+      - name: REACT_HOST_PROTOCOL
+        value: http://
+      - name: REDIS_URL
+        value: redis://grovs-redis:6379/0
+      - name: REVENUE_READS_FROM_LEDGER
+        value: "true"
+      - name: S3_ASSET_PREFIX
+        value: http://api.app.example.com
+      - name: SDK_HOST
+        value: sdk.app.example.com
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: SENT_QUOTAS_WEBHOOK_KEY
+        from:
+          env: SENT_QUOTAS_WEBHOOK_KEY
+      - name: SERVER_HOST
+        value: app.example.com
+      - name: SERVER_HOST_PROTOCOL
+        value: http://
+      - name: SIDEKIQ_EVENTS_CONCURRENCY
+        value: "10"
+      - name: SMTP_ADDRESS
+        value: smtp.example.com
+      - name: SMTP_AUTHENTICATION
+        value: plain
+      - name: SMTP_DOMAIN
+        value: app.example.com
+      - name: SMTP_ENABLE_STARTTLS_AUTO
+        value: "true"
+      - name: SMTP_PORT
+        value: "587"
+      - name: WEB_CONCURRENCY
+        value: "2"
+    volumes:
+      - grovs-storage:/app/storage
+  grovs-dashboard:
+    image: ghcr.io/grovs-io/dashboard:2.3.1
+    port: "3000"
+    domains:
+      - domain: dashboard.app.example.com
+    env:
+      - name: API_URL
+        value: http://api.app.example.com
+      - name: OAUTH_CLIENT_UID
+        from:
+          env: OAUTH_CLIENT_UID
+      - name: OAUTH_CLIENT_SECRET
+        from:
+          env: OAUTH_CLIENT_SECRET
+      - name: HOSTNAME
+        value: 0.0.0.0
+      - name: PORT
+        value: "3000"

@@ -1,0 +1,6 @@
+# macos
+
+Status: **manual**
+
+- [manual] `macos` unsupported-devices: device passthrough has no Haloy equivalent
+- [manual] `macos` unsupported-cap_add: extra capabilities has no Haloy equivalent

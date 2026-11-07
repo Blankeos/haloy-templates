@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "PG_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

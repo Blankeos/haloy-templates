@@ -1,0 +1,22 @@
+name: streamflow
+server: localhost
+targets:
+  streamflow:
+    image: streamflow-streamflow
+    port: "7575"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PORT
+        value: "7575"
+      - name: SESSION_SECRET
+        from:
+          env: SESSION_SECRET
+      - name: NODE_ENV
+        value: production
+      - name: TZ
+        value: Asia/Jakarta
+    volumes:
+      - streamflow-streamflow-db:/app/db
+      - streamflow-streamflow-logs:/app/logs
+      - streamflow-streamflow-uploads:/app/public/uploads

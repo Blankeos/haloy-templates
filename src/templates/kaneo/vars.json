@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "AUTH_SECRET": "hash:64"
+  },
+  "derived": {
+    "KANEO__DATABASE_URL": "postgresql://kaneo:${POSTGRES_PASSWORD}@kaneo-postgres:5432/kaneo"
+  }
+}

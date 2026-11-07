@@ -1,0 +1,91 @@
+name: glitchtip
+server: localhost
+targets:
+  glitchtip-postgres:
+    preset: database
+    image: postgres:18
+    port: "5432"
+    env:
+      - name: POSTGRES_HOST_AUTH_METHOD
+        value: trust
+    volumes:
+      - glitchtip-pg-data:/var/lib/postgresql/data
+  glitchtip-valkey:
+    preset: database
+    image: valkey/valkey:9
+    port: "6379"
+  glitchtip-web:
+    image: glitchtip/glitchtip:6.1.0
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        value: postgres://postgres:postgres@glitchtip-postgres:5432/postgres
+      - name: VALKEY_URL
+        value: redis://glitchtip-valkey:6379
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: PORT
+        value: "8000"
+      - name: EMAIL_URL
+        value: consolemail://
+      - name: GLITCHTIP_DOMAIN
+        value: https://app.example.com
+      - name: DEFAULT_FROM_EMAIL
+        value: admin@app.example.com
+    volumes:
+      - glitchtip-uploads:/code/uploads
+  glitchtip-worker:
+    preset: service
+    image:
+      repository: glitchtip-worker
+      tag: latest
+      build_config:
+        context: ./glitchtip-worker
+        push: server
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        value: postgres://postgres:postgres@glitchtip-postgres:5432/postgres
+      - name: VALKEY_URL
+        value: redis://glitchtip-valkey:6379
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: PORT
+        value: "8000"
+      - name: EMAIL_URL
+        value: consolemail://
+      - name: GLITCHTIP_DOMAIN
+        value: https://app.example.com
+      - name: DEFAULT_FROM_EMAIL
+        value: admin@app.example.com
+    volumes:
+      - glitchtip-uploads:/code/uploads
+  glitchtip-migrate:
+    preset: service
+    image:
+      repository: glitchtip-migrate
+      tag: latest
+      build_config:
+        context: ./glitchtip-migrate
+        push: server
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        value: postgres://postgres:postgres@glitchtip-postgres:5432/postgres
+      - name: VALKEY_URL
+        value: redis://glitchtip-valkey:6379
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: PORT
+        value: "8000"
+      - name: EMAIL_URL
+        value: consolemail://
+      - name: GLITCHTIP_DOMAIN
+        value: https://app.example.com
+      - name: DEFAULT_FROM_EMAIL
+        value: admin@app.example.com

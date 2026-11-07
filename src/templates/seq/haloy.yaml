@@ -1,0 +1,18 @@
+name: seq
+server: localhost
+targets:
+  seq:
+    image: datalust/seq:2025.2
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ACCEPT_EULA
+        value: Y
+      - name: SEQ_API_CANONICALURI
+        value: https://app.example.com
+      - name: SEQ_FIRSTRUN_ADMINPASSWORD
+        from:
+          env: ADMIN_PASSWORD
+    volumes:
+      - seq-seq-data:/data

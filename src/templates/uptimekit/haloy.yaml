@@ -1,0 +1,59 @@
+name: uptimekit
+server: localhost
+targets:
+  uptimekit-dash:
+    image: ghcr.io/uptimekit/dash:5.2.1
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: UPTIMEKIT_DASH__DATABASE_URL
+      - name: TIMESERIES_BACKEND
+        value: clickhouse
+      - name: CLICKHOUSE_URL
+        value: http://uptimekit-clickhouse:8123
+      - name: CLICKHOUSE_USER
+        value: default
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+      - name: REDIS_URL
+        value: redis://uptimekit-redis:6379
+  uptimekit-db:
+    preset: database
+    image: postgres:18-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: uptimekit
+    volumes:
+      - uptimekit-db-data:/var/lib/postgresql
+  uptimekit-redis:
+    preset: database
+    image: redis:8.0-alpine
+    port: "6379"
+    volumes:
+      - uptimekit-redis-data:/data
+  uptimekit-clickhouse:
+    preset: database
+    image: clickhouse/clickhouse-server:26.8-alpine
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_DB
+        value: uptimekit
+      - name: CLICKHOUSE_USER
+        value: default
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+      - name: CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT
+        value: "1"
+    volumes:
+      - uptimekit-clickhouse-data:/var/lib/clickhouse

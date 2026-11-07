@@ -1,0 +1,11 @@
+name: glance
+server: localhost
+targets:
+  glance:
+    image: glanceapp/glance
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - glance-app-config:/app/config
+      - glance-app-assets:/app/assets

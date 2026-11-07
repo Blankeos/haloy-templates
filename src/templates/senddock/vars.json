@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "JWT_SECRET": "password:64"
+  },
+  "derived": {
+    "SENDDOCK__DATABASE_URL": "postgres://senddock:${POSTGRES_PASSWORD}@senddock-postgres:5432/senddock?sslmode=disable"
+  }
+}

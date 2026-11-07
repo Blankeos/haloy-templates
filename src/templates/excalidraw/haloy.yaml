@@ -1,0 +1,9 @@
+name: excalidraw
+server: localhost
+targets:
+  excalidraw:
+    health_check_path: /
+    image: excalidraw/excalidraw:latest
+    port: "80"
+    domains:
+      - domain: app.example.com

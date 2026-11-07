@@ -1,0 +1,26 @@
+name: bytestash
+server: localhost
+targets:
+  bytestash:
+    image: ghcr.io/jordan-dalby/bytestash:1.5.6
+    port: "5000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: TOKEN_EXPIRY
+        value: 24h
+      - name: ALLOW_NEW_ACCOUNTS
+        value: "true"
+      - name: DEBUG
+        value: "true"
+      - name: DISABLE_ACCOUNTS
+        value: "false"
+      - name: DISABLE_INTERNAL_ACCOUNTS
+        value: "false"
+      - name: OIDC_ENABLED
+        value: "false"
+    volumes:
+      - bytestash-snippets:/data/snippets

@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { parse } from "yaml";
+import { buildEnv } from "../src/secrets";
 import { translate } from "../src/translate";
 
 const load = (id: string) => ({
@@ -8,7 +9,6 @@ const load = (id: string) => ({
   compose: readFileSync(`test/fixtures/${id}/docker-compose.yml`, "utf8"),
   templateToml: readFileSync(`test/fixtures/${id}/template.toml`, "utf8"),
   domain: "app.example.com",
-  secretFor: (n: string) => `secret-${n}`,
 });
 const yaml = (r: ReturnType<typeof translate>) => parse(r.files["haloy.yaml"]);
 
@@ -46,13 +46,23 @@ test("service names used as hostnames are rewritten to target names", () => {
   expect(env.find((e: any) => e.name === "CLICKHOUSE_HOST").value).toBe("http://rybbit-clickhouse:8123");
 });
 
-test("secrets are kept out of haloy.yaml; composed secrets become derived env vars", () => {
+test("secrets are never in the output; vars.json holds recipes and derived strings", () => {
   const r = translate(load("ackee"));
-  expect(r.files["haloy.yaml"]).not.toContain("secret-");
-  expect(r.files[".env"]).toContain("secret-");
-  const mongo = yaml(r).targets.ackee.env.find((e: any) => e.name === "ACKEE_MONGODB");
-  expect(mongo.from.env).toBe("ACKEE__ACKEE_MONGODB");
-  expect(r.files[".env"]).toMatch(/ACKEE__ACKEE_MONGODB='mongodb:\/\/mongo:secret-/);
+  const vars = JSON.parse(r.files["vars.json"]);
+  expect(vars.secrets.MONGO_INITDB_ROOT_PASSWORD).toMatch(/^password:\d+$/);
+  expect(vars.derived.ACKEE__ACKEE_MONGODB).toBe("mongodb://mongo:${MONGO_INITDB_ROOT_PASSWORD}@ackee-mongo:27017");
+  expect(yaml(r).targets.ackee.env.find((e: any) => e.name === "ACKEE_MONGODB").from.env).toBe("ACKEE__ACKEE_MONGODB");
+  expect(r.files[".env"]).toBeUndefined();
+});
+
+test("buildEnv generates secrets and fills derived strings", () => {
+  const env = buildEnv({ secrets: { PW: "password:8" }, derived: { URL: "db://u:${PW}@h" } }, () => "abc");
+  expect(env).toContain("PW='abc'");
+  expect(env).toContain("URL='db://u:abc@h'");
+});
+
+test("output is deterministic", () => {
+  expect(translate(load("rybbit")).files).toEqual(translate(load("rybbit")).files);
 });
 
 test("multi-service chatwoot template: command survives in a Dockerfile", () => {

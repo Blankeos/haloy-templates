@@ -1,0 +1,202 @@
+name: taiga
+server: localhost
+targets:
+  taiga-db:
+    preset: database
+    image: postgres:12.3
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: taiga
+      - name: POSTGRES_USER
+        value: taiga
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - taiga-taiga-db-data:/var/lib/postgresql/data
+  taiga-back:
+    preset: service
+    image: taigaio/taiga-back:latest
+    port: "8080"
+    env:
+      - name: POSTGRES_DB
+        value: taiga
+      - name: POSTGRES_USER
+        value: taiga
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_HOST
+        value: taiga-db
+      - name: TAIGA_SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: TAIGA_SITES_SCHEME
+        value: https
+      - name: TAIGA_SITES_DOMAIN
+        value: app.example.com
+      - name: EMAIL_BACKEND
+        value: django.core.mail.backends.console.EmailBackend
+      - name: DEFAULT_FROM_EMAIL
+        value: changeme@example.com
+      - name: EMAIL_USE_TLS
+        value: "False"
+      - name: EMAIL_USE_SSL
+        value: "False"
+      - name: EMAIL_HOST
+        value: smtp.example.com
+      - name: EMAIL_PORT
+        value: "587"
+      - name: EMAIL_HOST_USER
+        value: user
+      - name: EMAIL_HOST_PASSWORD
+        value: password
+      - name: RABBITMQ_USER
+        value: taiga
+      - name: RABBITMQ_PASS
+        from:
+          env: RABBITMQ_PASSWORD
+      - name: RABBITMQ_VHOST
+        value: taiga
+      - name: ENABLE_TELEMETRY
+        value: "False"
+      - name: PUBLIC_REGISTER_ENABLED
+        value: "False"
+    volumes:
+      - taiga-taiga-static-data:/taiga-back/static
+      - taiga-taiga-media-data:/taiga-back/media
+  taiga-async:
+    preset: service
+    image:
+      repository: taiga-async
+      tag: latest
+      build_config:
+        context: ./taiga-async
+        push: server
+    port: "8080"
+    env:
+      - name: POSTGRES_DB
+        value: taiga
+      - name: POSTGRES_USER
+        value: taiga
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_HOST
+        value: taiga-db
+      - name: TAIGA_SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: TAIGA_SITES_SCHEME
+        value: https
+      - name: TAIGA_SITES_DOMAIN
+        value: app.example.com
+      - name: EMAIL_BACKEND
+        value: django.core.mail.backends.console.EmailBackend
+      - name: DEFAULT_FROM_EMAIL
+        value: changeme@example.com
+      - name: EMAIL_USE_TLS
+        value: "False"
+      - name: EMAIL_USE_SSL
+        value: "False"
+      - name: EMAIL_HOST
+        value: smtp.example.com
+      - name: EMAIL_PORT
+        value: "587"
+      - name: EMAIL_HOST_USER
+        value: user
+      - name: EMAIL_HOST_PASSWORD
+        value: password
+      - name: RABBITMQ_USER
+        value: taiga
+      - name: RABBITMQ_PASS
+        from:
+          env: RABBITMQ_PASSWORD
+      - name: RABBITMQ_VHOST
+        value: taiga
+      - name: ENABLE_TELEMETRY
+        value: "False"
+      - name: PUBLIC_REGISTER_ENABLED
+        value: "False"
+    volumes:
+      - taiga-taiga-static-data:/taiga-back/static
+      - taiga-taiga-media-data:/taiga-back/media
+  taiga-async-rabbitmq:
+    preset: database
+    image: rabbitmq:3.8-management-alpine
+    port: "5672"
+    env:
+      - name: RABBITMQ_ERLANG_COOKIE
+        from:
+          env: RABBITMQ_ERLANG_COOKIE
+      - name: RABBITMQ_DEFAULT_USER
+        value: taiga
+      - name: RABBITMQ_DEFAULT_PASS
+        from:
+          env: RABBITMQ_PASSWORD
+      - name: RABBITMQ_DEFAULT_VHOST
+        value: taiga
+    volumes:
+      - taiga-taiga-async-rabbitmq-data:/var/lib/rabbitmq
+  taiga-front:
+    preset: service
+    image: taigaio/taiga-front:latest
+    port: "8080"
+    env:
+      - name: TAIGA_URL
+        value: https://app.example.com
+      - name: TAIGA_WEBSOCKETS_URL
+        value: wss://app.example.com
+      - name: PUBLIC_REGISTER_ENABLED
+        value: "false"
+  taiga-events:
+    preset: service
+    image: taigaio/taiga-events:latest
+    port: "8080"
+    env:
+      - name: RABBITMQ_USER
+        value: taiga
+      - name: RABBITMQ_PASS
+        from:
+          env: RABBITMQ_PASSWORD
+      - name: RABBITMQ_VHOST
+        value: taiga
+      - name: TAIGA_SECRET_KEY
+        from:
+          env: SECRET_KEY
+  taiga-events-rabbitmq:
+    preset: database
+    image: rabbitmq:3.8-management-alpine
+    port: "5672"
+    env:
+      - name: RABBITMQ_ERLANG_COOKIE
+        from:
+          env: RABBITMQ_ERLANG_COOKIE
+      - name: RABBITMQ_DEFAULT_USER
+        value: taiga
+      - name: RABBITMQ_DEFAULT_PASS
+        from:
+          env: RABBITMQ_PASSWORD
+      - name: RABBITMQ_DEFAULT_VHOST
+        value: taiga
+    volumes:
+      - taiga-taiga-events-rabbitmq-data:/var/lib/rabbitmq
+  taiga-protected:
+    preset: service
+    image: taigaio/taiga-protected:latest
+    port: "8080"
+    env:
+      - name: MAX_AGE
+        value: "360"
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+  taiga-gateway:
+    image: nginx:1.19-alpine
+    port: "80"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - taiga-taiga-static-data:/taiga/static:ro
+      - taiga-taiga-media-data:/taiga/media:ro

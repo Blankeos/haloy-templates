@@ -1,0 +1,38 @@
+name: bugsink
+server: localhost
+targets:
+  bugsink-db:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: bugsinkuser
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: bugsink
+    volumes:
+      - bugsink-db-data:/var/lib/postgresql/data
+  bugsink-web:
+    health_check_path: /
+    image: bugsink/bugsink:latest
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: CREATE_SUPERUSER
+        value: admin:admin
+      - name: PORT
+        value: "8000"
+      - name: DATABASE_URL
+        from:
+          env: BUGSINK_WEB__DATABASE_URL
+      - name: BEHIND_HTTPS_PROXY
+        value: "false"
+      - name: BASE_URL
+        value: https://app.example.com

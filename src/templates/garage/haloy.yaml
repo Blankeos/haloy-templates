@@ -1,0 +1,16 @@
+name: garage
+server: localhost
+targets:
+  garage:
+    image:
+      repository: garage
+      tag: latest
+      build_config:
+        context: ./garage
+        push: server
+    port: "3900"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - garage-garage-storage:/var/lib/garage
+      - garage-garage-storage:/var/lib/garage

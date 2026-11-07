@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:32"
+  },
+  "derived": {
+    "UNLEASH__DATABASE_URL": "postgres://unleash:${DB_PASSWORD}@unleash-db/unleash"
+  }
+}

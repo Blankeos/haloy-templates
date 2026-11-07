@@ -1,0 +1,32 @@
+name: kaneo
+server: localhost
+targets:
+  kaneo-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: kaneo
+      - name: POSTGRES_USER
+        value: kaneo
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - kaneo-postgres-data:/var/lib/postgresql/data
+  kaneo:
+    health_check_path: /api/health
+    image: ghcr.io/usekaneo/kaneo:2.35.0
+    port: "5173"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: KANEO_CLIENT_URL
+        value: http://app.example.com
+      - name: AUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: DATABASE_URL
+        from:
+          env: KANEO__DATABASE_URL

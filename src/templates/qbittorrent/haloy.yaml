@@ -1,0 +1,20 @@
+name: qbittorrent
+server: localhost
+targets:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: WEBUI_PORT
+        value: "8080"
+      - name: TORRENTING_PORT
+        value: "6881"
+    volumes:
+      - qbittorrent-qb-config:/config
+      - qbittorrent-qb-downloads:/downloads

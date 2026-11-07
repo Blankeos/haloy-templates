@@ -1,0 +1,25 @@
+{
+  "secrets": {
+    "APP_POSTGRES_PASSWORD": "hash:32",
+    "NUQ_POSTGRES_PASSWORD": "hash:32",
+    "REDIS_PASSWORD": "hash:32",
+    "RABBITMQ_PASSWORD": "hash:32",
+    "BULL_AUTH_KEY": "hash:32",
+    "FIRECRAWL_ORG_ID": "uuid",
+    "FIRECRAWL_TEAM_ID": "uuid",
+    "FIRECRAWL_API_KEY_A": "hash:12",
+    "FIRECRAWL_API_KEY_B": "hash:3",
+    "FIRECRAWL_API_KEY_C": "hash:15",
+    "SELF_HOSTED_WEBHOOK_HMAC_SECRET": "hash:32"
+  },
+  "derived": {
+    "FIRECRAWL_DB_SEED__FIRECRAWL_API_KEY": "fc-${FIRECRAWL_API_KEY_A}4${FIRECRAWL_API_KEY_B}8${FIRECRAWL_API_KEY_C}",
+    "FIRECRAWL__DATABASE_URL": "postgresql://postgres:${APP_POSTGRES_PASSWORD}@firecrawl-db:5432/firecrawl",
+    "FIRECRAWL__DATABASE_REPLICA_URL": "postgresql://postgres:${APP_POSTGRES_PASSWORD}@firecrawl-db:5432/firecrawl",
+    "FIRECRAWL__REDIS_URL": "redis://:${REDIS_PASSWORD}@firecrawl-redis:6379",
+    "FIRECRAWL__REDIS_RATE_LIMIT_URL": "redis://:${REDIS_PASSWORD}@firecrawl-redis:6379",
+    "FIRECRAWL__NUQ_DATABASE_URL": "postgresql://postgres:${NUQ_POSTGRES_PASSWORD}@firecrawl-nuq-postgres:5432/postgres",
+    "FIRECRAWL__NUQ_DATABASE_URL_LISTEN": "postgresql://postgres:${NUQ_POSTGRES_PASSWORD}@firecrawl-nuq-postgres:5432/postgres",
+    "FIRECRAWL__NUQ_RABBITMQ_URL": "amqp://firecrawl:${RABBITMQ_PASSWORD}@firecrawl-rabbitmq:5672"
+  }
+}

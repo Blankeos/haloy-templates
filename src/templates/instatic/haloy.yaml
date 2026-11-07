@@ -1,0 +1,21 @@
+name: instatic
+server: localhost
+targets:
+  instatic-init:
+    preset: service
+    image:
+      repository: instatic-init
+      tag: latest
+      build_config:
+        context: ./instatic-init
+        push: server
+    port: "8080"
+    volumes:
+      - instatic-instatic-storage:/app/storage
+  instatic:
+    image: ghcr.io/corebunch/instatic:0.0.18
+    port: "3001"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - instatic-instatic-storage:/app/storage

@@ -1,0 +1,8 @@
+name: flaresolverr
+server: localhost
+targets:
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    port: "8191"
+    domains:
+      - domain: app.example.com

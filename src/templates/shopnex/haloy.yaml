@@ -1,0 +1,56 @@
+name: shopnex
+server: localhost
+targets:
+  shopnex-db:
+    preset: database
+    image: postgres:17
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: shopnex
+      - name: POSTGRES_PASSWORD
+        value: shopnex
+      - name: POSTGRES_DB
+        value: shopnex
+    volumes:
+      - shopnex-db:/var/lib/postgresql/data
+  shopnex:
+    image: ghcr.io/shopnex-ai/shopnex:${SHOPNEX_VERSION:-v0.13.1}
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        value: postgres://shopnex:shopnex@shopnex-db:5432/shopnex
+      - name: APP_URL
+        value: https://app.example.com
+      - name: BETTER_AUTH_URL
+        value: https://app.example.com
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: SHOPNEX_SECRET
+        from:
+          env: SHOPNEX_SECRET
+      - name: TENANCY_MODE
+        value: single
+      - name: DEFAULT_SHOP_NAME
+        value: My Shop
+      - name: SHOPNEX_BUNDLED_APPS
+        value: docker
+    volumes:
+      - shopnex-shopnex-data:/data
+  shopnex-stripe:
+    image: ghcr.io/shopnex-ai/shopnex-stripe:${SHOPNEX_VERSION:-v0.13.1}
+    port: "4600"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: STRIPE_APP_URL
+        value: https://app.example.com
+      - name: SHOPNEX_INTERNAL_URL
+        value: http://shopnex:3000
+      - name: DATA_DIR
+        value: /data
+    volumes:
+      - shopnex-stripe-data:/data

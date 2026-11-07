@@ -1,0 +1,70 @@
+name: quant-ux
+server: localhost
+targets:
+  quant-ux-mongo:
+    preset: database
+    image: mongo
+    port: "27017"
+    volumes:
+      - quant-ux-mongo-data:/data/db
+  quant-ux-qux-fe:
+    image: klausenschaefersinho/quant-ux
+    port: "8082"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: QUX_PROXY_URL
+        value: http://quant-ux-backend:8080
+      - name: QUX_AUTH
+        value: qux
+      - name: QUX_WS_URL
+        value: wss://app.example.com
+  quant-ux-qux-be:
+    preset: service
+    image: klausenschaefersinho/quant-ux-backend
+    port: "8080"
+    env:
+      - name: QUX_HTTP_HOST
+        value: https://app.example.com
+      - name: QUX_HTTP_PORT
+        value: "8080"
+      - name: QUX_MONGO_DB_NAME
+        value: quantux
+      - name: QUX_MONGO_TABLE_PREFIX
+        value: quantux
+      - name: QUX_MONGO_CONNECTION_STRING
+        value: mongodb://quant-ux-mongo:27017
+      - name: QUX_MAIL_USER
+        value: admin@app.example.com
+      - name: QUX_MAIL_PASSWORD
+        from:
+          env: QUX_MAIL_PASSWORD
+      - name: QUX_MAIL_HOST
+        value: mail.example.com
+      - name: QUX_JWT_PASSWORD
+        from:
+          env: QUX_JWT_PASSWORD
+      - name: QUX_IMAGE_FOLDER_USER
+        value: /app-data/qux-images
+      - name: QUX_IMAGE_FOLDER_APPS
+        value: /app-data/qux-image-apps
+      - name: TZ
+        value: America/Chicago
+      - name: QUX_AUTH_SERVICE
+        value: qux
+      - name: QUX_USER_ALLOW_SIGNUP
+        value: "true"
+      - name: QUX_USER_ALLOWED_DOMAINS
+        value: "*"
+    volumes:
+      - quant-ux-quant-ux-data:/app-data
+  quant-ux-qux-ws:
+    image: klausenschaefersinho/quant-ux-websocket
+    port: "8086"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: QUX_SERVER
+        value: http://quant-ux-backend:8080/
+      - name: QUX_SERVER_PORT
+        value: "8086"

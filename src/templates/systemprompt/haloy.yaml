@@ -1,0 +1,37 @@
+name: systemprompt
+server: localhost
+targets:
+  systemprompt:
+    health_check_path: /api/v1/health
+    image: ghcr.io/systempromptio/systemprompt-template:0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: SYSTEMPROMPT__DATABASE_URL
+      - name: EXTERNAL_URL
+        value: https://app.example.com
+      - name: HOST
+        value: 0.0.0.0
+      - name: PORT
+        value: "8080"
+    volumes:
+      - systemprompt-systemprompt-web:/app/web
+      - systemprompt-systemprompt-storage:/app/storage/data
+      - systemprompt-systemprompt-profiles:/app/services/profiles/docker
+  systemprompt-postgres:
+    preset: database
+    image: postgres:18-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: systemprompt
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: systemprompt
+    volumes:
+      - systemprompt-postgres-data:/var/lib/postgresql

@@ -1,0 +1,46 @@
+name: cloudreve
+server: localhost
+targets:
+  cloudreve:
+    image: cloudreve/cloudreve:4.10.1
+    port: "5212"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CR_CONF_Database.Type
+        value: postgres
+      - name: CR_CONF_Database.Host
+        value: cloudreve-postgresql
+      - name: CR_CONF_Database.User
+        value: cloudreve
+      - name: CR_CONF_Database.Password
+        from:
+          env: DB_PASSWORD
+      - name: CR_CONF_Database.Name
+        value: cloudreve
+      - name: CR_CONF_Database.Port
+        value: "5432"
+      - name: CR_CONF_Redis.Server
+        value: cloudreve-redis:6379
+    volumes:
+      - cloudreve-cloudreve-data:/cloudreve/data
+  cloudreve-postgresql:
+    preset: database
+    image: postgres:17
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: cloudreve
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: cloudreve
+    volumes:
+      - cloudreve-postgres-data:/var/lib/postgresql/data
+  cloudreve-redis:
+    preset: database
+    image: redis:8.4.0
+    port: "6379"
+    volumes:
+      - cloudreve-redis-data:/data

@@ -1,0 +1,8 @@
+name: cyberchef
+server: localhost
+targets:
+  cyberchef:
+    image: ghcr.io/gchq/cyberchef:latest
+    port: "80"
+    domains:
+      - domain: app.example.com

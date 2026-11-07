@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "TOKEN_SECRET": "password:32",
+    "INLINE_PASSWORD_16": "password:16"
+  },
+  "derived": {}
+}

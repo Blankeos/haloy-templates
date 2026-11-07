@@ -1,0 +1,28 @@
+name: navi-music
+server: localhost
+targets:
+  navi-music:
+    preset: service
+    image:
+      repository: navi-music
+      tag: latest
+      build_config:
+        context: ./navi-music
+        push: server
+    port: "8080"
+    env:
+      - name: YOUTUBE_CIPHER_URL
+        value: http://navi-music-yt-cipher:8001
+      - name: YOUTUBE_CIPHER_PASSWORD
+        from:
+          env: INLINE_PASSWORD_32
+  navi-music-yt-cipher:
+    preset: service
+    image: ghcr.io/kikkia/yt-cipher:master@sha256:4c5ec381ff57336cfc24822d2b526a5ad7cd0171f61065a1bbc87bb736842449
+    port: "8080"
+    env:
+      - name: OVERRIDE_PLAYER_VARIANT
+        value: IAS
+      - name: API_TOKEN
+        from:
+          env: INLINE_PASSWORD_32

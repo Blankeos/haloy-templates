@@ -1,0 +1,32 @@
+name: ghost
+server: localhost
+targets:
+  ghost:
+    image: ghost:6-alpine
+    port: "2368"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: database__client
+        value: mysql
+      - name: database__connection__host
+        value: ghost-db
+      - name: database__connection__user
+        value: root
+      - name: database__connection__password
+        value: example
+      - name: database__connection__database
+        value: ghost
+      - name: url
+        value: http://app.example.com
+    volumes:
+      - ghost-ghost:/var/lib/ghost/content
+  ghost-db:
+    preset: database
+    image: mysql:8.0
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        value: example
+    volumes:
+      - ghost-db:/var/lib/mysql

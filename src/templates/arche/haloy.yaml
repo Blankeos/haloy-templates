@@ -1,0 +1,95 @@
+name: arche
+server: localhost
+targets:
+  arche-web:
+    image: ${ARCHE_WEB_IMAGE:-ghcr.io/peaberry-studio/arche/web:latest}
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ARCHE_DOMAIN
+        value: app.example.com
+      - name: DATABASE_URL
+        from:
+          env: ARCHE_WEB__DATABASE_URL
+      - name: ARCHE_SESSION_PEPPER
+        from:
+          env: SESSION_PEPPER
+      - name: ARCHE_ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: ARCHE_INTERNAL_TOKEN
+        from:
+          env: INTERNAL_TOKEN
+      - name: ARCHE_GATEWAY_TOKEN_SECRET
+        from:
+          env: GATEWAY_TOKEN_SECRET
+      - name: ARCHE_CONNECTOR_OAUTH_STATE_SECRET
+        from:
+          env: CONNECTOR_OAUTH_STATE_SECRET
+      - name: ARCHE_GATEWAY_TOKEN_TTL_SECONDS
+        value: "86400"
+      - name: ARCHE_GATEWAY_BASE_URL
+        value: http://arche-web:3000
+      - name: ARCHE_PUBLIC_BASE_URL
+        value: https://app.example.com
+      - name: ARCHE_SESSION_TTL_DAYS
+        value: "7"
+      - name: ARCHE_COOKIE_SECURE
+        value: "true"
+      - name: ARCHE_SEED_ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: ARCHE_SEED_ADMIN_PASSWORD
+        from:
+          env: SEED_ADMIN_PASSWORD
+      - name: ARCHE_SEED_ADMIN_SLUG
+        value: admin
+      - name: CONTAINER_PROXY_HOST
+        value: arche-docker-socket-proxy
+      - name: CONTAINER_PROXY_PORT
+        value: "2375"
+      - name: OPENCODE_IMAGE
+        value: ghcr.io/peaberry-studio/arche/workspace:latest
+      - name: KB_CONTENT_HOST_PATH
+        value: /opt/arche/kb-content
+      - name: KB_CONFIG_HOST_PATH
+        value: /opt/arche/kb-config
+      - name: ARCHE_USERS_PATH
+        value: /opt/arche/users
+    volumes:
+      - /opt/arche/kb-content:/kb-content
+      - /opt/arche/kb-config:/kb-config
+      - /opt/arche/users:/opt/arche/users
+  arche-postgres:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: arche
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - arche-postgres-data:/var/lib/postgresql/data
+  arche-docker-socket-proxy:
+    preset: service
+    image: ghcr.io/tecnativa/docker-socket-proxy:master
+    port: "8080"
+    env:
+      - name: CONTAINERS
+        value: "1"
+      - name: NETWORKS
+        value: "1"
+      - name: IMAGES
+        value: "1"
+      - name: INFO
+        value: "1"
+      - name: POST
+        value: "1"
+      - name: VOLUMES
+        value: "1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro

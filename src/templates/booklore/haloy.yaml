@@ -1,0 +1,42 @@
+name: booklore
+server: localhost
+targets:
+  booklore:
+    image: ghcr.io/booklore-app/booklore:${BOOKLORE_IMAGE_TAG}
+    port: "6060"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        value: jdbc:mariadb://booklore-mariadb:3306/booklore
+      - name: DATABASE_USERNAME
+        value: booklore
+      - name: DATABASE_PASSWORD
+        from:
+          env: APP_PASSWORD
+    volumes:
+      - booklore-booklore-data:/app/data
+      - booklore-booklore-books:/books
+  booklore-mariadb:
+    preset: database
+    image: lscr.io/linuxserver/mariadb:latest
+    port: "3306"
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: Etc/UTC
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: booklore
+      - name: MYSQL_USER
+        value: booklore
+      - name: MYSQL_PASSWORD
+        from:
+          env: APP_PASSWORD
+    volumes:
+      - booklore-mariadb-config:/config

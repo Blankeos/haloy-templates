@@ -1,0 +1,71 @@
+name: zitadel
+server: localhost
+targets:
+  zitadel:
+    image:
+      repository: zitadel
+      tag: latest
+      build_config:
+        context: ./zitadel
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ZITADEL_DATABASE_POSTGRES_HOST
+        value: zitadel-db
+      - name: ZITADEL_DATABASE_POSTGRES_PORT
+        value: "5432"
+      - name: ZITADEL_DATABASE_POSTGRES_DATABASE
+        value: zitadel
+      - name: ZITADEL_DATABASE_POSTGRES_USER_USERNAME
+        value: zitadel
+      - name: ZITADEL_DATABASE_POSTGRES_USER_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE
+        value: disable
+      - name: ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME
+        value: postgres
+      - name: ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE
+        value: disable
+      - name: ZITADEL_EXTERNALDOMAIN
+        value: app.example.com
+      - name: ZITADEL_EXTERNALPORT
+        value: "80"
+      - name: ZITADEL_EXTERNALSECURE
+        value: "false"
+      - name: ZITADEL_TLS_ENABLED
+        value: "false"
+      - name: ZITADEL_FIRSTINSTANCE_ORG_HUMAN_USERNAME
+        value: admin
+      - name: ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORD
+        value: AdminPassword123!
+      - name: ZITADEL_FIRSTINSTANCE_ORG_HUMAN_EMAIL_ADDRESS
+        value: admin@app.example.com
+      - name: ZITADEL_FIRSTINSTANCE_ORG_HUMAN_FIRSTNAME
+        value: Admin
+      - name: ZITADEL_FIRSTINSTANCE_ORG_HUMAN_LASTNAME
+        value: User
+      - name: ZITADEL_DEFAULTINSTANCE_FEATURES_LOGINV2_REQUIRED
+        value: "false"
+      - name: ZITADEL_MASTERKEY
+        from:
+          env: ZITADEL_MASTERKEY
+  zitadel-db:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: PGUSER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: zitadel
+    volumes:
+      - zitadel-postgres-data:/var/lib/postgresql/data

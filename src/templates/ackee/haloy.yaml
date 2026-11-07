@@ -1,0 +1,29 @@
+name: ackee
+server: localhost
+targets:
+  ackee:
+    image: electerious/ackee:3.4.2
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ACKEE_USERNAME
+        value: default
+      - name: ACKEE_PASSWORD
+        from:
+          env: ACKEE_PASSWORD
+      - name: ACKEE_MONGODB
+        from:
+          env: ACKEE__ACKEE_MONGODB
+  ackee-mongo:
+    preset: database
+    image: mongo:4
+    port: "27017"
+    env:
+      - name: MONGO_INITDB_ROOT_PASSWORD
+        from:
+          env: MONGO_INITDB_ROOT_PASSWORD
+      - name: MONGO_INITDB_ROOT_USERNAME
+        value: mongo
+    volumes:
+      - ackee-mongo-data:/data/db

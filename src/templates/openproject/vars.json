@@ -1,0 +1,12 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "SECRET_KEY_BASE": "base64:64"
+  },
+  "derived": {
+    "OPENPROJECT_WEB__DATABASE_URL": "postgres://openproject:${POSTGRES_PASSWORD}@openproject-db:5432/openproject?pool=20&encoding=unicode&reconnect=true",
+    "OPENPROJECT_SEEDER__DATABASE_URL": "postgres://openproject:${POSTGRES_PASSWORD}@openproject-db:5432/openproject?pool=20&encoding=unicode&reconnect=true",
+    "OPENPROJECT_WORKER__DATABASE_URL": "postgres://openproject:${POSTGRES_PASSWORD}@openproject-db:5432/openproject?pool=20&encoding=unicode&reconnect=true",
+    "OPENPROJECT_CRON__DATABASE_URL": "postgres://openproject:${POSTGRES_PASSWORD}@openproject-db:5432/openproject?pool=20&encoding=unicode&reconnect=true"
+  }
+}

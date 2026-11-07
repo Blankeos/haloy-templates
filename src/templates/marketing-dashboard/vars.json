@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "ADMIN_PASSWORD": "password:32"
+  },
+  "derived": {
+    "MARKETING_DASHBOARD__DATABASE_URL": "postgresql://marketing_dashboard:${POSTGRES_PASSWORD}@marketing-dashboard-postgres:5432/marketing_dashboard?schema=public",
+    "MARKETING_DASHBOARD__DIRECT_URL": "postgresql://marketing_dashboard:${POSTGRES_PASSWORD}@marketing-dashboard-postgres:5432/marketing_dashboard?schema=public"
+  }
+}

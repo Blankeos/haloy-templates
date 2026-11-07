@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:16",
+    "REDIS_PASSWORD": "password:16"
+  },
+  "derived": {
+    "AFFINEPRO__DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@affinepro-db:5432/affinepro",
+    "AFFINEPRO_MIGRATION__DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@affinepro-db:5432/affinepro"
+  }
+}

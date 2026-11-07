@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "SECRET": "password:30",
+    "REDIS_PASSWORD": "password:30"
+  },
+  "derived": {
+    "ONETIMESECRET__REDIS_URL": "redis://:${REDIS_PASSWORD}@onetimesecret-redis:6379/0"
+  }
+}

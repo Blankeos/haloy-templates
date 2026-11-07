@@ -1,0 +1,15 @@
+name: jellyfin
+server: localhost
+targets:
+  jellyfin:
+    image: jellyfin/jellyfin:10
+    port: "8096"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: JELLYFIN_PublishedServerUrl
+        value: http://app.example.com
+    volumes:
+      - jellyfin-config:/config
+      - jellyfin-cache:/cache
+      - jellyfin-media:/media

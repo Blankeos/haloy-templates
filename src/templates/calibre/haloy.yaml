@@ -1,0 +1,21 @@
+name: calibre
+server: localhost
+targets:
+  calibre:
+    image: linuxserver/calibre:7.26.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PASSWORD
+        from:
+          env: PASSWORD
+      - name: TZ
+        value: Etc/UTC
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+    volumes:
+      - calibre-books:/books
+      - calibre-data:/config

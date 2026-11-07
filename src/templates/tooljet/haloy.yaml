@@ -1,0 +1,30 @@
+name: tooljet
+server: localhost
+targets:
+  tooljet:
+    image:
+      repository: tooljet
+      tag: latest
+      build_config:
+        context: ./tooljet
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SERVE_CLIENT
+        value: "true"
+      - name: PORT
+        value: "80"
+  tooljet-postgres:
+    preset: database
+    image: postgres:13
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: PG_PASS
+    volumes:
+      - tooljet-postgres:/var/lib/postgresql/data

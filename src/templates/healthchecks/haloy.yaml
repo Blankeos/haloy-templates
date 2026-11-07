@@ -1,0 +1,57 @@
+name: healthchecks
+server: localhost
+targets:
+  healthchecks:
+    image: healthchecks/healthchecks:v4.4
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DEBUG
+        value: "False"
+      - name: DB
+        value: postgres
+      - name: DB_HOST
+        value: healthchecks-db
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_NAME
+        value: healthchecks
+      - name: DB_USER
+        value: healthchecks
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: SITE_ROOT
+        value: https://app.example.com
+      - name: SITE_NAME
+        value: Healthchecks
+      - name: ALLOWED_HOSTS
+        value: app.example.com
+      - name: PING_ENDPOINT
+        value: https://app.example.com/ping/
+      - name: REGISTRATION_OPEN
+        value: "False"
+      - name: DEFAULT_FROM_EMAIL
+        value: healthchecks@app.example.com
+      - name: EMAIL_PORT
+        value: "587"
+      - name: EMAIL_USE_TLS
+        value: "True"
+  healthchecks-db:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: healthchecks
+      - name: POSTGRES_USER
+        value: healthchecks
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - healthchecks-healthchecks-db:/var/lib/postgresql/data

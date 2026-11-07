@@ -1,0 +1,26 @@
+redis:
+    address: ${redis_address}
+    username: ""
+    password: ${redis_password}
+    db: 0
+    use_tls: false
+    sentinel_master_name: ""
+    sentinel_username: ""
+    sentinel_password: ""
+    sentinel_addresses: []
+    cluster_addresses: []
+    max_redirects: null
+api_key: ${api_key}
+api_secret: ${api_secret}
+ws_url: wss://${main_domain}
+rtmp_port: ${rtmp_port}
+whip_port: ${whip_port}
+http_relay_port: ${http_relay_port}
+logging:
+    json: false
+    level: ""
+development: false
+rtc_config:
+    udp_port: ${ingress_udp_port}
+    use_external_ip: true
+    enable_loopback_candidate: false

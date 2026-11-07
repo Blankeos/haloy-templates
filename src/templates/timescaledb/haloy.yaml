@@ -1,0 +1,24 @@
+name: timescaledb
+server: localhost
+targets:
+  timescaledb:
+    preset: database
+    image:
+      repository: timescaledb
+      tag: latest
+      build_config:
+        context: ./timescaledb
+        push: server
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: admin
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: timescaledb
+      - name: TIMESCALEDB_TELEMETRY
+        value: off
+    volumes:
+      - timescaledb-timescaledb-data:/var/lib/postgresql/data

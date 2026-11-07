@@ -1,0 +1,28 @@
+name: moltbot
+server: localhost
+targets:
+  moltbot-gateway:
+    image:
+      repository: moltbot-gateway
+      tag: latest
+      build_config:
+        context: ./moltbot-gateway
+        push: server
+    port: "18789"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: HOME
+        value: /home/node
+      - name: TERM
+        value: xterm-256color
+      - name: CLAWDBOT_GATEWAY_TOKEN
+        from:
+          env: GATEWAY_TOKEN
+      - name: CLAWDBOT_GATEWAY_URL
+        value: ws://0.0.0.0:18789
+      - name: OPENROUTER_API_KEY
+        value: YOUR-API-KEY
+    volumes:
+      - moltbot-moltbot-config:/home/node/.clawdbot
+      - moltbot-moltbot-workspace:/home/node/clawd

@@ -1,0 +1,10 @@
+name: plark
+server: localhost
+targets:
+  plark:
+    image: plarkinc/plark:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - plark-plark-data:/var/data

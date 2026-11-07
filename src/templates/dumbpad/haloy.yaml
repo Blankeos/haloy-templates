@@ -1,0 +1,10 @@
+name: dumbpad
+server: localhost
+targets:
+  dumbpad:
+    image: dumbwareio/dumbpad:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - dumbpad-dumbpad-data:/app/data

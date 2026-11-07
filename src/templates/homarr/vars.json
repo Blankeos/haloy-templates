@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "SECRET_KEY": "hash:64"
+  },
+  "derived": {}
+}

@@ -1,0 +1,21 @@
+name: blender
+server: localhost
+targets:
+  blender:
+    image: lscr.io/linuxserver/blender:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NVIDIA_VISIBLE_DEVICES
+        value: all
+      - name: NVIDIA_DRIVER_CAPABILITIES
+        value: all
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: Etc/UTC
+      - name: SUBFOLDER
+        value: /

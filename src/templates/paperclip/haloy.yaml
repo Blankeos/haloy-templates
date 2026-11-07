@@ -1,0 +1,49 @@
+name: paperclip
+server: localhost
+targets:
+  paperclip-postgres:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: paperclip
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: paperclip
+    volumes:
+      - paperclip-postgres-data:/var/lib/postgresql/data
+  paperclip:
+    image: ghcr.io/paperclipai/paperclip:latest
+    port: "3100"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: HOST
+        value: 0.0.0.0
+      - name: PORT
+        value: "3100"
+      - name: SERVE_UI
+        value: "true"
+      - name: DATABASE_URL
+        from:
+          env: PAPERCLIP__DATABASE_URL
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: BETTER_AUTH_SECRET
+      - name: PAPERCLIP_HOME
+        value: /paperclip
+      - name: PAPERCLIP_INSTANCE_ID
+        value: default
+      - name: PAPERCLIP_CONFIG
+        value: /paperclip/instances/default/config.json
+      - name: PAPERCLIP_DEPLOYMENT_MODE
+        value: authenticated
+      - name: PAPERCLIP_DEPLOYMENT_EXPOSURE
+        value: private
+      - name: PAPERCLIP_PUBLIC_URL
+        value: https://app.example.com
+    volumes:
+      - paperclip-paperclip-data:/paperclip

@@ -1,0 +1,11 @@
+name: scrutiny
+server: localhost
+targets:
+  scrutiny:
+    preset: service
+    image: ghcr.io/analogj/scrutiny:v0.8.3-omnibus
+    port: "8080"
+    volumes:
+      - /run/udev:/run/udev:ro
+      - scrutiny-config:/opt/scrutiny/config
+      - scrutiny-influxdb:/opt/scrutiny/influxdb

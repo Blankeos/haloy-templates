@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32"
+  },
+  "derived": {
+    "NOCODB__NC_DB": "pg://nocodb-root-db:5432?u=postgres&p=${POSTGRES_PASSWORD}&d=root_db"
+  }
+}

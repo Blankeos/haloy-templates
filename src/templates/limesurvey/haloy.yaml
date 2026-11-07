@@ -1,0 +1,58 @@
+name: limesurvey
+server: localhost
+targets:
+  limesurvey-db:
+    preset: database
+    image: mariadb:10.11
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: limesurvey
+      - name: MYSQL_USER
+        value: limesurvey
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_USER_PASSWORD
+    volumes:
+      - limesurvey-db-data:/var/lib/mysql
+  limesurvey:
+    image: martialblog/limesurvey:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: ADMIN_NAME
+        value: Admin
+      - name: ADMIN_USER
+        value: admin
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: DB_HOST
+        value: limesurvey-db
+      - name: DB_MYSQL_ENGINE
+        value: InnoDB
+      - name: DB_NAME
+        value: limesurvey
+      - name: DB_PASSWORD
+        from:
+          env: MYSQL_USER_PASSWORD
+      - name: DB_USERNAME
+        value: limesurvey
+      - name: DEBUG
+        value: "0"
+      - name: DEBUG_SQL
+        value: "0"
+      - name: PUBLIC_URL
+        value: http://app.example.com
+      - name: SHOW_SCRIPT_NAME
+        value: "false"
+      - name: URL_FORMAT
+        value: path
+    volumes:
+      - limesurvey-limesurvey-upload:/var/www/html/upload

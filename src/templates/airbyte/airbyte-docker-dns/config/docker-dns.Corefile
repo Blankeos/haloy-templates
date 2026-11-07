@@ -1,0 +1,6 @@
+.:53 {
+    bind eth0
+    errors
+    cache 30
+    forward . 127.0.0.11
+}

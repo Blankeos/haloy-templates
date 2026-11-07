@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "PULSE_AUTH_PASS": "password:32"
+  },
+  "derived": {}
+}

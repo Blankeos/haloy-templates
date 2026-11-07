@@ -1,0 +1,14 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "SESSION_PEPPER": "base64:32",
+    "ENCRYPTION_KEY": "base64:32",
+    "INTERNAL_TOKEN": "base64:32",
+    "GATEWAY_TOKEN_SECRET": "base64:32",
+    "CONNECTOR_OAUTH_STATE_SECRET": "base64:32",
+    "SEED_ADMIN_PASSWORD": "password:16"
+  },
+  "derived": {
+    "ARCHE_WEB__DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@arche-postgres:5432/arche?schema=public"
+  }
+}

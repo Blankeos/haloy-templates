@@ -1,0 +1,24 @@
+name: babybuddy
+server: localhost
+targets:
+  babybuddy:
+    image: linuxserver/babybuddy:2.7.0
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: UTC
+      - name: CSRF_TRUSTED_ORIGINS
+        value: https://app.example.com
+      - name: TIME_ZONE
+        value: America/New_York
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+    volumes:
+      - babybuddy-config:/config

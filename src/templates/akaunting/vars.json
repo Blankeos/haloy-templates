@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "MYSQL_PASSWORD": "password:24",
+    "ADMIN_PASSWORD": "password:24",
+    "INLINE_HASH_3": "hash:3"
+  },
+  "derived": {
+    "AKAUNTING__DB_PREFIX": "${INLINE_HASH_3}_"
+  }
+}

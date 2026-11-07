@@ -1,0 +1,42 @@
+name: rocketchat
+server: localhost
+targets:
+  rocketchat:
+    image: registry.rocket.chat/rocketchat/rocket.chat:6.9.2
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MONGO_URL
+        value: mongodb://rocketchat-mongodb:27017/rocketchat?replicaSet=rs0
+      - name: MONGO_OPLOG_URL
+        value: mongodb://rocketchat-mongodb:27017/local?replicaSet=rs0
+      - name: ROOT_URL
+        value: http://${ROCKETCHAT_HOST:3000}
+      - name: PORT
+        value: "3000"
+      - name: DEPLOY_METHOD
+        value: docker
+  rocketchat-mongodb:
+    preset: service
+    image: docker.io/bitnami/mongodb:5.0
+    port: "8080"
+    env:
+      - name: MONGODB_REPLICA_SET_MODE
+        value: primary
+      - name: MONGODB_REPLICA_SET_NAME
+        value: rs0
+      - name: MONGODB_PORT_NUMBER
+        value: "27017"
+      - name: MONGODB_INITIAL_PRIMARY_HOST
+        value: rocketchat-mongodb
+      - name: MONGODB_INITIAL_PRIMARY_PORT_NUMBER
+        value: "27017"
+      - name: MONGODB_ADVERTISED_HOSTNAME
+        value: rocketchat-mongodb
+      - name: MONGODB_ENABLE_JOURNAL
+        value: "true"
+      - name: ALLOW_EMPTY_PASSWORD
+        value: yes
+    volumes:
+      - rocketchat-mongodb-data:/bitnami/mongodb

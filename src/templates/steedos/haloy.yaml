@@ -1,0 +1,13 @@
+name: steedos
+server: localhost
+targets:
+  steedos:
+    image: steedos/steedos-community:3.0.14
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ROOT_URL
+        value: http://app.example.com
+    volumes:
+      - steedos-steedos-data:/steedos-storage

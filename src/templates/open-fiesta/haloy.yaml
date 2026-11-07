@@ -1,0 +1,11 @@
+name: open-fiesta
+server: localhost
+targets:
+  open-fiesta-ai-fiesta:
+    image: ghcr.io/jaainil/open-fiesta-ghcr:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production

@@ -1,0 +1,39 @@
+name: libredesk
+server: localhost
+targets:
+  libredesk:
+    image:
+      repository: libredesk
+      tag: latest
+      build_config:
+        context: ./libredesk
+        push: server
+    port: "9000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LIBREDESK_SYSTEM_USER_PASSWORD
+        from:
+          env: LIBREDESK_SYSTEM_USER_PASSWORD
+    volumes:
+      - libredesk-uploads:/libredesk/uploads
+  libredesk-db:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: admin
+      - name: POSTGRES_PASSWORD
+        from:
+          env: PG_PASSWORD
+      - name: POSTGRES_DB
+        value: libredesk
+    volumes:
+      - libredesk-postgres-data:/var/lib/postgresql/data
+  libredesk-redis:
+    preset: database
+    image: redis:7-alpine
+    port: "6379"
+    volumes:
+      - libredesk-redis-data:/data

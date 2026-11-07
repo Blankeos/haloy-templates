@@ -1,0 +1,24 @@
+name: librespeed
+server: localhost
+targets:
+  librespeed:
+    image: lscr.io/linuxserver/librespeed:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: UTC
+      - name: PASSWORD
+        from:
+          env: PASSWORD
+      - name: CUSTOM_RESULTS
+        value: "false"
+      - name: DB_TYPE
+        value: sqlite
+    volumes:
+      - librespeed-librespeed-config:/config

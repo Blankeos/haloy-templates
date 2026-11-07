@@ -1,0 +1,15 @@
+name: statping-ng
+server: localhost
+targets:
+  statping-ng:
+    image: adamboutcher/statping-ng:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: UTC
+      - name: DB_CONN
+        value: sqlite
+    volumes:
+      - statping-ng-statping-ng:/app

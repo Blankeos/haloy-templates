@@ -1,0 +1,16 @@
+{
+  "secrets": {
+    "API_KEY": "password:32",
+    "ENCRYPTION_KEY": "password:32",
+    "JWT_SECRET": "password:32",
+    "COUCHDB_PASSWORD": "password:32",
+    "REDIS_PASSWORD": "password:32",
+    "MINIO_ACCESS_KEY": "password:32",
+    "MINIO_SECRET_KEY": "password:32",
+    "WATCHTOWER_PASSWORD": "password:32"
+  },
+  "derived": {
+    "BUDIBASE_APPS__COUCH_DB_URL": "http://budibase:${COUCHDB_PASSWORD}@budibase-couchdb:5984",
+    "BUDIBASE_WORKER__COUCH_DB_URL": "http://budibase:${COUCHDB_PASSWORD}@budibase-couchdb:5984"
+  }
+}

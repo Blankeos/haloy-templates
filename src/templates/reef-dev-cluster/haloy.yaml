@@ -1,0 +1,39 @@
+name: reef-dev-cluster
+server: localhost
+targets:
+  reef-dev-cluster:
+    image:
+      repository: reef-dev-cluster
+      tag: latest
+      build_config:
+        context: ./reef-dev-cluster
+        push: server
+    port: "8001"
+    domains:
+      - domain: app.example.com
+      - domain: spec.app.example.com
+      - domain: ws.app.example.com
+      - domain: faucet.app.example.com
+    env:
+      - name: DEFAULT_AMOUNT
+        value: "2000"
+      - name: MAX_AMOUNT
+        value: "2000"
+    volumes:
+      - reef-dev-cluster-reef-dev-cluster-state:/workspace/state
+      - reef-dev-cluster-reef-dev-cluster-download:/workspace/download
+  reef-dev-cluster-eth-rpc:
+    image:
+      repository: reef-dev-cluster-eth-rpc
+      tag: latest
+      build_config:
+        context: ./reef-dev-cluster-eth-rpc
+        push: server
+    port: "8545"
+    domains:
+      - domain: eth.app.example.com
+    env:
+      - name: NODE_RPC_URL
+        value: ws://reef-dev-cluster:9945
+      - name: PORT
+        value: "8545"

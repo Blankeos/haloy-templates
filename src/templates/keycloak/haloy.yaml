@@ -1,0 +1,50 @@
+name: keycloak
+server: localhost
+targets:
+  keycloak-postgres:
+    preset: database
+    image: postgres:16.2
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: keycloak
+      - name: POSTGRES_USER
+        value: keycloakuser
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - keycloak-postgres-data:/var/lib/postgresql/data
+  keycloak:
+    image:
+      repository: keycloak
+      tag: latest
+      build_config:
+        context: ./keycloak
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: KC_DB
+        value: postgres
+      - name: KC_DB_URL
+        value: jdbc:postgresql://keycloak-postgres:5432/keycloak
+      - name: KC_DB_USERNAME
+        value: keycloakuser
+      - name: KC_DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: KC_BOOTSTRAP_ADMIN_USERNAME
+        value: admin
+      - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+        from:
+          env: KEYCLOAK_ADMIN_PASSWORD
+      - name: KC_HOSTNAME
+        value: app.example.com
+      - name: KC_HTTP_ENABLED
+        value: "true"
+      - name: KC_HEALTH_ENABLED
+        value: "true"
+      - name: KC_PROXY_HEADERS
+        value: xforwarded

@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "EVENT_KEY": "jwt:32",
+    "SIGNING_KEY": "jwt:32",
+    "POSTGRES_PASSWORD": "password:24"
+  },
+  "derived": {
+    "INNGEST__INNGEST_POSTGRES_URI": "postgresql://inngest:${POSTGRES_PASSWORD}@inngest-postgres:5432/inngest?sslmode=disable"
+  }
+}

@@ -1,0 +1,32 @@
+name: docuseal
+server: localhost
+targets:
+  docuseal-app:
+    image: docuseal/docuseal:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        value: postgresql://postgres:postgres@docuseal-docu-postgres:5432/docuseal
+    volumes:
+      - docuseal-docuseal:/data/docuseal
+  docuseal-docu-postgres:
+    preset: database
+    image: postgres:18
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        value: postgres
+      - name: POSTGRES_DB
+        value: docuseal
+    volumes:
+      - docuseal-docuseal-db:/var/lib/postgresql
+  docuseal-docu-redis:
+    preset: database
+    image: redis:alpine
+    port: "6379"
+    volumes:
+      - docuseal-docuseal-redis-data:/data

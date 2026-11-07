@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "MONGO_PASSWORD": "password:16",
+    "AUTH_PASSWORD": "password:16",
+    "AUTH_SECRET": "password:32"
+  },
+  "derived": {
+    "CODEX_DOCS_CODEX__APP_CONFIG_database_mongodb_uri": "mongodb://mongo:${MONGO_PASSWORD}@codex-docs-mongo:27017"
+  }
+}

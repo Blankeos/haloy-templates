@@ -1,0 +1,67 @@
+name: graylog
+server: localhost
+targets:
+  graylog:
+    health_check_path: /api/system/lbstatus
+    image:
+      repository: graylog
+      tag: latest
+      build_config:
+        context: ./graylog
+        push: server
+    port: "9000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: GRAYLOG_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: GRAYLOG_PASSWORD_SECRET
+        from:
+          env: PASSWORD_SECRET
+      - name: GRAYLOG_HTTP_BIND_ADDRESS
+        value: 0.0.0.0:9000
+      - name: GRAYLOG_HTTP_EXTERNAL_URI
+        value: http://app.example.com/
+      - name: GRAYLOG_MONGODB_URI
+        value: mongodb://graylog-mongodb:27017/graylog
+      - name: GRAYLOG_ELASTICSEARCH_HOSTS
+        value: http://graylog-opensearch:9200
+      - name: GRAYLOG_NODE_ID_FILE
+        value: /usr/share/graylog/data/data/node-id
+      - name: GRAYLOG_SERVER_JAVA_OPTS
+        value: -Xms512m -Xmx512m
+    volumes:
+      - graylog-graylog-data:/usr/share/graylog/data
+  graylog-mongodb:
+    preset: database
+    image:
+      repository: graylog-mongodb
+      tag: latest
+      build_config:
+        context: ./graylog-mongodb
+        push: server
+    port: "27017"
+    volumes:
+      - graylog-mongodb-data:/data/db
+      - graylog-mongodb-config:/data/configdb
+  graylog-opensearch:
+    health_check_path: /_cluster/health?wait_for_status=yellow&timeout=5s
+    preset: database
+    image: opensearchproject/opensearch:2.19.5
+    port: "9200"
+    env:
+      - name: discovery.type
+        value: single-node
+      - name: action.auto_create_index
+        value: "false"
+      - name: bootstrap.memory_lock
+        value: "true"
+      - name: OPENSEARCH_JAVA_OPTS
+        value: -Xms512m -Xmx512m
+      - name: DISABLE_INSTALL_DEMO_CONFIG
+        value: "true"
+      - name: DISABLE_SECURITY_PLUGIN
+        value: "true"
+    volumes:
+      - graylog-opensearch-data:/usr/share/opensearch/data

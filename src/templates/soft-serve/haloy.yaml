@@ -1,0 +1,29 @@
+name: soft-serve
+server: localhost
+targets:
+  soft-serve:
+    image: charmcli/soft-serve:v0.11.6
+    port: "23232"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SOFT_SERVE_NAME
+        value: Soft Serve
+      - name: SOFT_SERVE_DATA_PATH
+        value: /soft-serve
+      - name: SOFT_SERVE_SSH_LISTEN_ADDR
+        value: :23231
+      - name: SOFT_SERVE_SSH_PUBLIC_URL
+        value: ssh://app.example.com:23231
+      - name: SOFT_SERVE_HTTP_LISTEN_ADDR
+        value: :23232
+      - name: SOFT_SERVE_HTTP_PUBLIC_URL
+        value: http://app.example.com
+      - name: SOFT_SERVE_GIT_LISTEN_ADDR
+        value: :9418
+      - name: SOFT_SERVE_STATS_LISTEN_ADDR
+        value: :23233
+      - name: SOFT_SERVE_LOG_LEVEL
+        value: info
+    volumes:
+      - soft-serve-soft-serve-data:/soft-serve

@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password",
+    "APP_SECRET": "base64:32"
+  },
+  "derived": {
+    "TWENTY_SERVER__PG_DATABASE_URL": "postgres://twenty:${DB_PASSWORD}@twenty-postgres:5432/twenty",
+    "TWENTY_WORKER__PG_DATABASE_URL": "postgres://twenty:${DB_PASSWORD}@twenty-postgres:5432/twenty"
+  }
+}

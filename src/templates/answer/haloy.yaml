@@ -1,0 +1,23 @@
+name: answer
+server: localhost
+targets:
+  answer:
+    image: apache/answer:1.4.1
+    port: "9080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - answer-answer-data:/data
+  answer-db:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: answer
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        value: postgres
+    volumes:
+      - answer-db-data:/var/lib/postgresql/data

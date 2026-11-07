@@ -1,0 +1,37 @@
+name: alarik
+server: localhost
+targets:
+  alarik:
+    image: ghcr.io/achtungsoftware/alarik:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: API_BASE_URL
+        value: http://app.example.com
+      - name: CONSOLE_BASE_URL
+        value: http://app.example.com
+      - name: ADMIN_USERNAME
+        value: alarik
+      - name: ADMIN_PASSWORD
+        from:
+          env: INLINE_PASSWORD_16
+      - name: JWT
+        from:
+          env: INLINE_BASE64_64
+      - name: ALLOW_ACCOUNT_CREATION
+        value: "false"
+    volumes:
+      - alarik-alarik-storage:/app/Storage
+  alarik-console:
+    image: ghcr.io/achtungsoftware/alarik-console:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NUXT_PUBLIC_API_BASE_URL
+        value: http://app.example.com
+      - name: NUXT_PUBLIC_CONSOLE_BASE_URL
+        value: http://app.example.com
+      - name: NUXT_PUBLIC_ALLOW_ACCOUNT_CREATION
+        value: "false"

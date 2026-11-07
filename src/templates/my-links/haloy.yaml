@@ -1,0 +1,48 @@
+name: my-links
+server: localhost
+targets:
+  my-links:
+    health_check_path: /
+    image: sonny93/my-links:5.3.0
+    port: "3333"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_URL
+        value: http://app.example.com
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DB_HOST
+        value: my-links-postgres
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_USER
+        value: mylinks
+      - name: DB_DATABASE
+        value: mylinks
+      - name: HOST
+        value: 0.0.0.0
+      - name: PORT
+        value: "3333"
+      - name: NODE_ENV
+        value: production
+      - name: LOG_LEVEL
+        value: info
+  my-links-postgres:
+    preset: database
+    image: postgres:18-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: mylinks
+      - name: POSTGRES_DB
+        value: mylinks
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - my-links-postgres-data:/var/lib/postgresql

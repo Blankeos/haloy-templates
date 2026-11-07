@@ -1,0 +1,94 @@
+name: struxa
+server: localhost
+targets:
+  struxa-mysql:
+    preset: database
+    image: mysql:8.4
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: struxa
+      - name: MYSQL_USER
+        value: struxa
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+    volumes:
+      - struxa-struxa-mysql:/var/lib/mysql
+  struxa-minio:
+    health_check_path: /minio/health/live
+    preset: service
+    image:
+      repository: struxa-minio
+      tag: latest
+      build_config:
+        context: ./struxa-minio
+        push: server
+    port: "8080"
+    env:
+      - name: MINIO_ROOT_USER
+        value: admin
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_SECRET_KEY
+    volumes:
+      - struxa-struxa-minio:/data
+  struxa-migrate:
+    preset: service
+    image: ghcr.io/struxadotcloud/migrate:${IMAGE_TAG}
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: STRUXA_MIGRATE__DATABASE_URL
+  struxa:
+    image:
+      repository: struxa
+      tag: latest
+      build_config:
+        context: ./struxa
+        push: server
+    port: "3001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: STRUXA__DATABASE_URL
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: BETTER_AUTH_SECRET
+      - name: BETTER_AUTH_URL
+        value: http://app.example.com
+      - name: CORS_ORIGIN
+        value: http://app.example.com
+      - name: APP_URL
+        value: http://app.example.com
+      - name: DATABASE_ENCRYPTION_KEY
+        from:
+          env: DB_ENCRYPTION_KEY
+      - name: MINIO_ENDPOINT
+        value: http://struxa-minio:9000
+      - name: MINIO_ACCESS_KEY
+        value: admin
+      - name: MINIO_SECRET_KEY
+        from:
+          env: MINIO_SECRET_KEY
+      - name: MINIO_BUCKET
+        value: struxa
+      - name: NODE_ENV
+        value: production
+  struxa-watchkeeper:
+    preset: service
+    image: ghcr.io/struxadotcloud/watchkeeper:${IMAGE_TAG}
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: STRUXA_WATCHKEEPER__DATABASE_URL
+      - name: DATABASE_ENCRYPTION_KEY
+        from:
+          env: DB_ENCRYPTION_KEY

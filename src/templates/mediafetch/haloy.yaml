@@ -1,0 +1,27 @@
+name: mediafetch
+server: localhost
+targets:
+  mediafetch:
+    image: lukedunsmoto/mediafetch:1.3.5
+    port: "3002"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PORT
+        value: "3002"
+      - name: BASIC_AUTH_USER
+        value: admin
+      - name: BASIC_AUTH_PASS
+        value: changeme
+      - name: PUBLIC_BASE_URL
+        value: https://app.example.com
+      - name: OUTPUT_DIR
+        value: /data/downloads
+      - name: MAX_CONCURRENT_JOBS
+        value: "2"
+      - name: JOB_TIMEOUT_MS
+        value: "600000"
+      - name: VERSION_CHECK_TTL_MS
+        value: "21600000"
+    volumes:
+      - mediafetch-mediafetch-data:/data/downloads

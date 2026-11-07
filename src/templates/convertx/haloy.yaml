@@ -1,0 +1,26 @@
+name: convertx
+server: localhost
+targets:
+  convertx:
+    image: ghcr.io/c4illin/convertx
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: ACCOUNT_REGISTRATION
+        value: "false"
+      - name: HTTP_ALLOWED
+        value: "true"
+      - name: ALLOW_UNAUTHENTICATED
+        value: "false"
+      - name: AUTO_DELETE_EVERY_N_HOURS
+        value: "24"
+      - name: HIDE_HISTORY
+        value: "false"
+      - name: LANGUAGE
+        value: en
+    volumes:
+      - convertx-data:/app/data

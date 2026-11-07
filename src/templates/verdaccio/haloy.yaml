@@ -1,0 +1,15 @@
+name: verdaccio
+server: localhost
+targets:
+  verdaccio:
+    image: verdaccio/verdaccio:6
+    port: "4873"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: VERDACCIO_PORT
+        value: "4873"
+    volumes:
+      - verdaccio-verdaccio-storage:/verdaccio/storage
+      - verdaccio-verdaccio-plugins:/verdaccio/plugins
+      - verdaccio-conf:/verdaccio/conf

@@ -1,0 +1,53 @@
+name: windshift
+server: localhost
+targets:
+  windshift:
+    image: ghcr.io/windshiftapp/windshift:v0.9.3
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BASE_URL
+        value: https://app.example.com
+      - name: PORT
+        value: "8080"
+      - name: USE_PROXY
+        value: "true"
+      - name: SSO_SECRET
+        from:
+          env: SSO_SECRET
+      - name: ATTACHMENT_PATH
+        value: /data/attachments
+      - name: DB_TYPE
+        value: postgres
+      - name: POSTGRES_HOST
+        value: windshift-db
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_USER
+        value: windshift
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: windshift
+      - name: LOG_LEVEL
+        value: info
+      - name: LOG_FORMAT
+        value: json
+    volumes:
+      - windshift-windshift-data:/data
+  windshift-db:
+    preset: database
+    image: postgres:17.4
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: windshift
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: windshift
+    volumes:
+      - windshift-postgres-data:/var/lib/postgresql/data

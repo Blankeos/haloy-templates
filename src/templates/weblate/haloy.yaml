@@ -1,0 +1,73 @@
+name: weblate
+server: localhost
+targets:
+  weblate:
+    image: weblate/weblate:2026.7.1.1
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: WEBLATE_SITE_DOMAIN
+        value: app.example.com
+      - name: WEBLATE_SITE_TITLE
+        value: Weblate
+      - name: WEBLATE_ADMIN_NAME
+        value: Weblate Admin
+      - name: WEBLATE_ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: WEBLATE_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: WEBLATE_SERVER_EMAIL
+        value: weblate@app.example.com
+      - name: WEBLATE_DEFAULT_FROM_EMAIL
+        value: weblate@app.example.com
+      - name: WEBLATE_ENABLE_HTTPS
+        value: "0"
+      - name: WEBLATE_ALLOWED_HOSTS
+        value: "*"
+      - name: WEBLATE_REGISTRATION_OPEN
+        value: "1"
+      - name: POSTGRES_HOST
+        value: weblate-database
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_USER
+        value: weblate
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: weblate
+      - name: REDIS_HOST
+        value: weblate-cache
+      - name: REDIS_PORT
+        value: "6379"
+    volumes:
+      - weblate-weblate-data:/app/data
+      - weblate-weblate-cache:/app/cache
+  weblate-database:
+    preset: database
+    image: postgres:18-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: weblate
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: weblate
+    volumes:
+      - weblate-weblate-postgres-data:/var/lib/postgresql
+  weblate-cache:
+    preset: database
+    image:
+      repository: weblate-cache
+      tag: latest
+      build_config:
+        context: ./weblate-cache
+        push: server
+    port: "6379"
+    volumes:
+      - weblate-weblate-redis-data:/data

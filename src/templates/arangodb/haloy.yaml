@@ -1,0 +1,14 @@
+name: arangodb
+server: localhost
+targets:
+  arangodb:
+    image: arangodb:3.12.4
+    port: "8529"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ARANGO_ROOT_PASSWORD
+        from:
+          env: ARANGO_PASSWORD
+    volumes:
+      - arangodb-data:/var/lib/arangodb3

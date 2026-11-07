@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password",
+    "ADMIN_PASSWORD": "password"
+  },
+  "derived": {}
+}

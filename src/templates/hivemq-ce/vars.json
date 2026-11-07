@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "MQTT_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

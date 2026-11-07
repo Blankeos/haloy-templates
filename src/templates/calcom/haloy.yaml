@@ -1,0 +1,130 @@
+name: calcom
+server: localhost
+targets:
+  calcom-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: calcom
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: calendso
+    volumes:
+      - calcom-calcom-data:/var/lib/postgresql/data
+  calcom:
+    image: calcom/cal.com:v6.2.0
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: CALCOM__DATABASE_URL
+      - name: DATABASE_DIRECT_URL
+        from:
+          env: CALCOM__DATABASE_DIRECT_URL
+      - name: NEXT_PUBLIC_WEBAPP_URL
+        value: http://app.example.com
+      - name: NEXT_PUBLIC_WEBSITE_URL
+        value: http://app.example.com
+      - name: NEXT_PUBLIC_EMBED_LIB_URL
+        value: http://app.example.com/embed/embed.js
+      - name: ALLOWED_HOSTNAMES
+        value: '"app.example.com"'
+      - name: RESERVED_SUBDOMAINS
+        value: '"app","auth","docs","design","console","go","status","api","saml","www","matrix","developer","cal","my","team","support","security","blog","learn","admin"'
+      - name: NEXTAUTH_URL
+        value: http://app.example.com
+      - name: NEXTAUTH_SECRET
+        from:
+          env: NEXTAUTH_SECRET
+      - name: CALCOM_TELEMETRY_DISABLED
+        value: "1"
+      - name: CRON_API_KEY
+        from:
+          env: CRON_API_KEY
+      - name: CRON_ENABLE_APP_SYNC
+        value: "false"
+      - name: CALENDSO_ENCRYPTION_KEY
+        from:
+          env: CALENDSO_ENCRYPTION_KEY
+      - name: OUTLOOK_LOGIN_ENABLED
+        value: "false"
+      - name: GOOGLE_LOGIN_ENABLED
+        value: "false"
+      - name: NEXT_PUBLIC_FORMBRICKS_HOST_URL
+        value: https://app.formbricks.com
+      - name: NEXT_PUBLIC_IS_PREMIUM_NEW_PLAN
+        value: "0"
+      - name: API_KEY_PREFIX
+        value: cal_
+      - name: EMAIL_FROM
+        value: notifications@app.example.com
+      - name: EMAIL_FROM_NAME
+        value: Cal.com
+      - name: EMAIL_SERVER_PORT
+        value: "587"
+      - name: NEXT_PUBLIC_VERCEL_USE_BOTID_IN_BOOKER
+        value: "0"
+      - name: NEXT_PUBLIC_APP_NAME
+        value: Cal.com
+      - name: NEXT_PUBLIC_SUPPORT_MAIL_ADDRESS
+        value: help@cal.com
+      - name: NEXT_PUBLIC_COMPANY_NAME
+        value: Cal.com, Inc.
+      - name: NEXT_PUBLIC_DISABLE_SIGNUP
+        value: "false"
+      - name: NEXT_PUBLIC_MINUTES_TO_BOOK
+        value: "5"
+      - name: NEXT_PUBLIC_BOOKER_NUMBER_OF_DAYS_TO_LOAD
+        value: "0"
+      - name: NEXT_PUBLIC_INVALIDATE_AVAILABLE_SLOTS_ON_BOOKING_FORM
+        value: "0"
+      - name: NEXT_PUBLIC_QUICK_AVAILABILITY_ROLLOUT
+        value: "10"
+      - name: NEXT_PUBLIC_ORGANIZATIONS_MIN_SELF_SERVE_SEATS
+        value: "30"
+      - name: NEXT_PUBLIC_ORGANIZATIONS_SELF_SERVE_PRICE_NEW
+        value: "37"
+      - name: CALCOM_CREDENTIAL_SYNC_SECRET
+        from:
+          env: CALCOM_CREDENTIAL_SYNC_SECRET
+      - name: CALCOM_CREDENTIAL_SYNC_HEADER_NAME
+        value: calcom-credential-sync-secret
+      - name: CALCOM_APP_CREDENTIAL_ENCRYPTION_KEY
+        from:
+          env: CALCOM_APP_CREDENTIAL_ENCRYPTION_KEY
+      - name: CALCOM_SERVICE_ACCOUNT_ENCRYPTION_KEY
+        from:
+          env: CALCOM_SERVICE_ACCOUNT_ENCRYPTION_KEY
+      - name: TASKER_ENABLE_WEBHOOKS
+        value: "0"
+      - name: TASKER_ENABLE_EMAILS
+        value: "0"
+      - name: ENABLE_ASYNC_TASKER
+        value: "false"
+      - name: TRIGGER_API_URL
+        value: https://api.trigger.dev
+      - name: RETELL_AI_TEST_MODE
+        value: "false"
+      - name: CAL_AI_CALL_RATE_PER_MINUTE
+        value: "0.29"
+      - name: CAL_VIDEO_RECORDING_TOKEN_SECRET
+        from:
+          env: CAL_VIDEO_RECORDING_TOKEN_SECRET
+      - name: SALESFORCE_GRAPHQL_DELAY_MS
+        value: "500"
+      - name: SALESFORCE_GRAPHQL_MAX_DELAY_MS
+        value: "2000"
+      - name: SALESFORCE_GRAPHQL_MAX_RETRIES
+        value: "3"
+      - name: TZ
+        value: UTC
+      - name: GOOGLE_ADS_ENABLED
+        value: "0"
+      - name: LINKEDIN_ADS_ENABLED
+        value: "0"

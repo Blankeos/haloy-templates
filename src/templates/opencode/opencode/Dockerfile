@@ -1,0 +1,3 @@
+FROM ghcr.io/anomalyco/opencode:1.18.32
+ENTRYPOINT []
+CMD ["sh","-c","set -e\napk add --no-cache ${TOOLCHAIN_PACKAGES} >/dev/null 2>&1 || true\nif [ -n \"${GIT_TOKEN}\" ] && [ -n \"${GIT_REPO_URL}\" ]; then\n  host=$(printf '%s' \"${GIT_REPO_URL}\" | sed -E 's#^https?://([^/]+)/.*#\\1#')\n  git config --global credential.helper store\n  printf 'https://x-access-token:%s@%s\\n' \"${GIT_TOKEN}\" \"$host\" > /root/.git-credentials\nfi\nif [ -n \"${GIT_REPO_URL}\" ]; then\n  dir=\"/workspace/$(basename \"${GIT_REPO_URL}\" .git)\"\n  [ -d \"$dir/.git\" ] || git clone \"${GIT_REPO_URL}\" \"$dir\" || true\nfi\nexec opencode serve --hostname 0.0.0.0 --port 4096\n"]

@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "COOKIE_SECRET": "hash:64",
+    "CORE_SECRET": "hash:64",
+    "ASSETS_SECRET": "hash:64"
+  },
+  "derived": {}
+}

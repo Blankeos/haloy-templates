@@ -1,0 +1,63 @@
+name: wud
+server: localhost
+targets:
+  wud:
+    health_check_path: /health
+    image: ghcr.io/getwud/wud:9.5.0
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: WUD_AUTH_ADMIN_USER
+        value: admin
+      - name: WUD_AUTH_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: WUD_SERVER_PORT
+        value: "3000"
+      - name: WUD_SERVER_TLS_ENABLED
+        value: "false"
+      - name: WUD_STORE_PATH
+        value: /store
+      - name: WUD_STORE_FILE
+        value: wud.sqlite
+      - name: WUD_WATCHER_DOCKER_LOCAL_HOST
+        value: wud-socket-proxy
+      - name: WUD_WATCHER_DOCKER_LOCAL_PORT
+        value: "2375"
+      - name: WUD_WATCHER_DOCKER_LOCAL_WATCHBYDEFAULT
+        value: "true"
+      - name: WUD_WATCHER_DOCKER_LOCAL_WATCHALL
+        value: "false"
+      - name: WUD_WATCHER_DOCKER_LOCAL_WATCHATSTART
+        value: "true"
+      - name: WUD_WATCHER_DOCKER_LOCAL_CRON
+        value: 0 * * * *
+      - name: WUD_LOG_LEVEL
+        value: info
+      - name: WUD_LOG_FORMAT
+        value: json
+      - name: TZ
+        value: UTC
+    volumes:
+      - wud-wud-data:/store
+  wud-socket-proxy:
+    health_check_path: /_ping
+    preset: service
+    image: ghcr.io/tecnativa/docker-socket-proxy:v0.5.0
+    port: "2375"
+    env:
+      - name: CONTAINERS
+        value: "1"
+      - name: IMAGES
+        value: "1"
+      - name: EVENTS
+        value: "1"
+      - name: PING
+        value: "1"
+      - name: VERSION
+        value: "1"
+      - name: POST
+        value: "0"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

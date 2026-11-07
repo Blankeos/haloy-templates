@@ -1,0 +1,37 @@
+name: maintenant
+server: localhost
+targets:
+  maintenant:
+    image:
+      repository: maintenant
+      tag: latest
+      build_config:
+        context: ./maintenant
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: AUTH_USER
+        value: admin
+      - name: AUTH_PASSWORD
+        from:
+          env: AUTH_PASSWORD
+  maintenant-app:
+    preset: service
+    image: ghcr.io/kolapsis/maintenant:1.10.1
+    port: "8080"
+    env:
+      - name: MAINTENANT_ADDR
+        value: 0.0.0.0:8080
+      - name: MAINTENANT_DB
+        value: /data/maintenant.db
+      - name: MAINTENANT_BASE_URL
+        value: https://app.example.com
+      - name: MAINTENANT_TRUSTED_PROXIES
+        value: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+    volumes:
+      - maintenant-maintenant-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc:/host/proc:ro
+      - /etc/os-release:/host/etc/os-release:ro

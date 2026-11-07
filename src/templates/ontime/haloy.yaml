@@ -1,0 +1,13 @@
+name: ontime
+server: localhost
+targets:
+  ontime:
+    image: getontime/ontime:v3.8.0
+    port: "4001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: UTC
+    volumes:
+      - ontime-ontime-data:/data/

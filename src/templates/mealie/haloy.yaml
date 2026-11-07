@@ -1,0 +1,39 @@
+name: mealie
+server: localhost
+targets:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:latest
+    port: "9000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: BASE_URL
+        value: https://app.example.com
+      - name: API_DOCS
+        value: "False"
+      - name: ALLOW_SIGNUP
+        value: "false"
+      - name: DEFAULT_GROUP
+        value: Home
+      - name: DEFAULT_HOUSEHOLD
+        value: Family
+      - name: TZ
+        value: Europe/London
+      - name: SECURITY_MAX_LOGIN_ATTEMPTS
+        value: "10"
+      - name: SECURITY_USER_LOCKOUT_TIME
+        value: "24"
+      - name: DAILY_SCHEDULE_TIME
+        value: 01:00
+      - name: SMTP_PORT
+        value: "587"
+      - name: SMTP_AUTH_STRATEGY
+        value: TLS
+      - name: SMTP_FROM_NAME
+        value: Mealie
+    volumes:
+      - mealie-mealie-data:/app/data/

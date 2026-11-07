@@ -1,0 +1,23 @@
+name: minio
+server: localhost
+targets:
+  minio:
+    image:
+      repository: minio
+      tag: latest
+      build_config:
+        context: ./minio
+        push: server
+    port: "9001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MINIO_ROOT_USER
+        value: minioadmin
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: INLINE_PASSWORD_16
+      - name: MINIO_BROWSER_REDIRECT_URL
+        value: http://app.example.com
+    volumes:
+      - minio-minio-data:/data

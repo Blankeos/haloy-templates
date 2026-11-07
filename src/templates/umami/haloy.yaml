@@ -1,0 +1,32 @@
+name: umami
+server: localhost
+targets:
+  umami:
+    health_check_path: /api/heartbeat
+    image: ghcr.io/umami-software/umami:3.4.1
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: UMAMI__DATABASE_URL
+      - name: DATABASE_TYPE
+        value: postgresql
+      - name: APP_SECRET
+        from:
+          env: INLINE_BASE64_64
+  umami-db:
+    preset: database
+    image: postgres:15-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: umami
+      - name: POSTGRES_USER
+        value: umami
+      - name: POSTGRES_PASSWORD
+        from:
+          env: INLINE_PASSWORD_32
+    volumes:
+      - umami-db-data:/var/lib/postgresql/data

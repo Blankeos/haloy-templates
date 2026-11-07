@@ -1,0 +1,41 @@
+name: unifi
+server: localhost
+targets:
+  unifi-network-application:
+    preset: service
+    image: lscr.io/linuxserver/unifi-network-application:latest
+    port: "8443"
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: Etc/UTC
+      - name: MONGO_HOST
+        value: unifi-db
+      - name: MONGO_USER
+        value: unifi
+      - name: MONGO_PASS
+        value: unifi_password
+      - name: MONGO_PORT
+        value: "27017"
+      - name: MONGO_DBNAME
+        value: unifi
+      - name: MEM_LIMIT
+        value: "1024"
+      - name: MEM_STARTUP
+        value: "1024"
+    volumes:
+      - unifi-config:/config
+  unifi-db:
+    preset: database
+    image:
+      repository: unifi-db
+      tag: latest
+      build_config:
+        context: ./unifi-db
+        push: server
+    port: "27017"
+    volumes:
+      - unifi-db-data:/data/db

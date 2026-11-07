@@ -1,0 +1,62 @@
+name: ihatemoney
+server: localhost
+targets:
+  ihatemoney:
+    image: ihatemoney/ihatemoney:latest
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DEBUG
+        value: "False"
+      - name: ACTIVATE_DEMO_PROJECT
+        value: "True"
+      - name: ACTIVATE_ADMIN_DASHBOARD
+        value: "False"
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: ALLOW_PUBLIC_PROJECT_CREATION
+        value: "True"
+      - name: BABEL_DEFAULT_TIMEZONE
+        value: UTC
+      - name: GREENLET_TEST_CPP
+        value: no
+      - name: MAIL_DEFAULT_SENDER
+        value: Budget manager <admin@example.com>
+      - name: MAIL_PASSWORD
+        from:
+          env: MAIL_PASSWORD
+      - name: MAIL_PORT
+        value: "25"
+      - name: MAIL_SERVER
+        value: localhost
+      - name: MAIL_USE_SSL
+        value: "False"
+      - name: MAIL_USE_TLS
+        value: "False"
+      - name: MAIL_USERNAME
+        value: admin
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: SESSION_COOKIE_SECURE
+        value: "True"
+      - name: SHOW_ADMIN_EMAIL
+        value: "True"
+      - name: SQLALCHEMY_DATABASE_URI
+        value: sqlite:////database/ihatemoney.db
+      - name: SQLALCHEMY_TRACK_MODIFICATIONS
+        value: "False"
+      - name: APPLICATION_ROOT
+        value: /
+      - name: ENABLE_CAPTCHA
+        value: "False"
+      - name: PORT
+        value: "8000"
+      - name: PUID
+        value: "0"
+      - name: PGID
+        value: "0"
+    volumes:
+      - ihatemoney-sqlite-db:/database

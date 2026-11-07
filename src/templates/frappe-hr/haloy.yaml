@@ -1,0 +1,184 @@
+name: frappe-hr
+server: localhost
+targets:
+  frappe-hr-backend:
+    preset: service
+    image: ${IMAGE_NAME:-ghcr.io/frappe/hrms}:${VERSION:-version-15}
+    port: "8080"
+    volumes:
+      - frappe-hr-sites:/home/frappe/frappe-bench/sites
+  frappe-hr-frontend:
+    image:
+      repository: frappe-hr-frontend
+      tag: latest
+      build_config:
+        context: ./frappe-hr-frontend
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BACKEND
+        value: frappe-hr-backend:8000
+      - name: SOCKETIO
+        value: frappe-hr-websocket:9000
+      - name: UPSTREAM_REAL_IP_ADDRESS
+        value: 127.0.0.1
+      - name: UPSTREAM_REAL_IP_HEADER
+        value: X-Forwarded-For
+      - name: UPSTREAM_REAL_IP_RECURSIVE
+        value: off
+    volumes:
+      - frappe-hr-sites:/home/frappe/frappe-bench/sites
+  frappe-hr-queue-default:
+    preset: service
+    image:
+      repository: frappe-hr-queue-default
+      tag: latest
+      build_config:
+        context: ./frappe-hr-queue-default
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-hr-sites:/home/frappe/frappe-bench/sites
+  frappe-hr-queue-long:
+    preset: service
+    image:
+      repository: frappe-hr-queue-long
+      tag: latest
+      build_config:
+        context: ./frappe-hr-queue-long
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-hr-sites:/home/frappe/frappe-bench/sites
+  frappe-hr-queue-short:
+    preset: service
+    image:
+      repository: frappe-hr-queue-short
+      tag: latest
+      build_config:
+        context: ./frappe-hr-queue-short
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-hr-sites:/home/frappe/frappe-bench/sites
+  frappe-hr-scheduler:
+    preset: service
+    image:
+      repository: frappe-hr-scheduler
+      tag: latest
+      build_config:
+        context: ./frappe-hr-scheduler
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-hr-sites:/home/frappe/frappe-bench/sites
+  frappe-hr-websocket:
+    preset: service
+    image:
+      repository: frappe-hr-websocket
+      tag: latest
+      build_config:
+        context: ./frappe-hr-websocket
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-hr-sites:/home/frappe/frappe-bench/sites
+  frappe-hr-configurator:
+    preset: service
+    image:
+      repository: frappe-hr-configurator
+      tag: latest
+      build_config:
+        context: ./frappe-hr-configurator
+        push: server
+    port: "8080"
+    env:
+      - name: DB_HOST
+        value: frappe-hr-db
+      - name: DB_PORT
+        value: "3306"
+      - name: REDIS_CACHE
+        value: frappe-hr-redis-cache:6379
+      - name: REDIS_QUEUE
+        value: frappe-hr-redis-queue:6379
+      - name: SOCKETIO_PORT
+        value: "9000"
+      - name: REGENERATE_APPS_TXT
+        value: "1"
+    volumes:
+      - frappe-hr-sites:/home/frappe/frappe-bench/sites
+  frappe-hr-create-site:
+    preset: service
+    image:
+      repository: frappe-hr-create-site
+      tag: latest
+      build_config:
+        context: ./frappe-hr-create-site
+        push: server
+    port: "8080"
+    env:
+      - name: SITE_NAME
+        value: app.example.com
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: DB_HOST
+        value: frappe-hr-db
+      - name: DB_PORT
+        value: "3306"
+      - name: DB_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: INSTALL_APP_ARGS
+        value: --install-app hrms
+    volumes:
+      - frappe-hr-sites:/home/frappe/frappe-bench/sites
+  frappe-hr-migration:
+    preset: service
+    image:
+      repository: frappe-hr-migration
+      tag: latest
+      build_config:
+        context: ./frappe-hr-migration
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-hr-sites:/home/frappe/frappe-bench/sites
+  frappe-hr-db:
+    preset: database
+    image:
+      repository: frappe-hr-db
+      tag: latest
+      build_config:
+        context: ./frappe-hr-db
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: MARIADB_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+    volumes:
+      - frappe-hr-db-data:/var/lib/mysql
+  frappe-hr-redis-cache:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - frappe-hr-redis-cache-data:/data
+  frappe-hr-redis-queue:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - frappe-hr-redis-queue-data:/data
+  frappe-hr-redis-socketio:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - frappe-hr-redis-socketio-data:/data

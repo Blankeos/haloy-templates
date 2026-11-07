@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "JWT_SECRET": "password:64",
+    "POSTGRES_PASSWORD": "password:32"
+  },
+  "derived": {
+    "MULTICA_BACKEND__DATABASE_URL": "postgres://multica:${POSTGRES_PASSWORD}@multica-postgres:5432/multica?sslmode=disable"
+  }
+}

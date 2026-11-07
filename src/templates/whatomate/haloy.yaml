@@ -1,0 +1,37 @@
+name: whatomate
+server: localhost
+targets:
+  whatomate:
+    image:
+      repository: whatomate
+      tag: latest
+      build_config:
+        context: ./whatomate
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: Etc/UTC
+    volumes:
+      - whatomate-whatomate-uploads:/app/uploads
+  whatomate-db:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: whatomate
+      - name: POSTGRES_PASSWORD
+        value: whatomate
+      - name: POSTGRES_DB
+        value: whatomate
+    volumes:
+      - whatomate-whatomate-postgres-data:/var/lib/postgresql/data
+  whatomate-redis:
+    preset: database
+    image: redis:7-alpine
+    port: "6379"
+    volumes:
+      - whatomate-whatomate-redis-data:/data

@@ -1,0 +1,52 @@
+name: discord-tickets
+server: localhost
+targets:
+  discord-tickets-tickets-postgres:
+    preset: database
+    image: mysql:8
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: tickets
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+      - name: MYSQL_USER
+        value: tickets
+    volumes:
+      - discord-tickets-tickets-mysql-data:/var/lib/mysql
+  discord-tickets-tickets-app:
+    image: eartharoid/discord-tickets:4.0.21
+    port: "8169"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DB_CONNECTION_URL
+        from:
+          env: DISCORD_TICKETS_TICKETS_APP__DB_CONNECTION_URL
+      - name: ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: DB_PROVIDER
+        value: mysql
+      - name: HTTP_EXTERNAL
+        value: https://app.example.com
+      - name: HTTP_HOST
+        value: 0.0.0.0
+      - name: HTTP_PORT
+        value: "8169"
+      - name: HTTP_TRUST_PROXY
+        value: "true"
+      - name: PUBLIC_BOT
+        value: "false"
+      - name: PUBLISH_COMMANDS
+        value: "true"
+      - name: SUPER
+        value: YOUR_DISCORD_USER_ID
+    volumes:
+      - discord-tickets-tickets-app-data:/home/container/user
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro

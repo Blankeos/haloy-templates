@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "OWNER_TOKEN": "password:48",
+    "BROWSER_SECRET": "password:48"
+  },
+  "derived": {}
+}

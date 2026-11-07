@@ -1,0 +1,16 @@
+name: libretranslate
+server: localhost
+targets:
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    port: "5000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LT_API_KEYS
+        value: "true"
+      - name: LT_API_KEYS_DB_PATH
+        value: /app/db/api_keys.db
+    volumes:
+      - libretranslate-libretranslate-models:/home/libretranslate/.local
+      - libretranslate-libretranslate-api-keys:/app/db

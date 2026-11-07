@@ -1,0 +1,64 @@
+name: adventurelog
+server: localhost
+targets:
+  adventurelog-web:
+    image: ghcr.io/seanmorley15/adventurelog-frontend:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUBLIC_SERVER_URL
+        value: app.example.com
+      - name: ORIGIN
+        value: http://app.example.com
+      - name: BODY_SIZE_LIMIT
+        value: Infinity
+  adventurelog-db:
+    preset: service
+    image: postgis/postgis:16-3.5
+    port: "8080"
+    env:
+      - name: POSTGRES_DB
+        value: adventure
+      - name: POSTGRES_USER
+        value: adventure
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - adventurelog-postgres-data:/var/lib/postgresql/data/
+  adventurelog-server:
+    image: ghcr.io/seanmorley15/adventurelog-backend:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PGHOST
+        value: adventurelog-db
+      - name: POSTGRES_DB
+        value: adventure
+      - name: POSTGRES_USER
+        value: adventure
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: DJANGO_ADMIN_USERNAME
+        value: admin
+      - name: DJANGO_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: DJANGO_ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: DEBUG
+        value: "False"
+      - name: CSRF_TRUSTED_ORIGINS
+        value: http://app.example.com,http://app.example.com
+      - name: FRONTEND_URL
+        value: http://app.example.com
+      - name: PUBLIC_URL
+        value: http://app.example.com
+    volumes:
+      - adventurelog-adventurelog-media:/code/media/

@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "ADMIN_PASSWORD": "password:32",
+    "JWT_SECRET": "jwt:32",
+    "ROTATION_KEY": "jwt:32"
+  },
+  "derived": {}
+}

@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "DJANGO_SECRET_KEY": "password:8",
+    "DATABASE_PASSWORD": "password:16"
+  },
+  "derived": {
+    "FLAGSMITH__DATABASE_URL": "postgresql://postgres:${DATABASE_PASSWORD}@flagsmith-postgres:5432/flagsmith",
+    "FLAGSMITH_TASK_PROCESSOR__DATABASE_URL": "postgresql://postgres:${DATABASE_PASSWORD}@flagsmith-postgres:5432/flagsmith"
+  }
+}

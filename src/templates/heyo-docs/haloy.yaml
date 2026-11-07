@@ -1,0 +1,9 @@
+name: heyo-docs
+server: localhost
+targets:
+  heyo-docs:
+    health_check_path: /
+    image: heyo-docs-heyo-docs
+    port: "3000"
+    domains:
+      - domain: app.example.com

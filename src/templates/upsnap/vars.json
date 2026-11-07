@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "UPSNAP_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

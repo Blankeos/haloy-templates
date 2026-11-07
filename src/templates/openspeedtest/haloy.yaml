@@ -1,0 +1,8 @@
+name: openspeedtest
+server: localhost
+targets:
+  openspeedtest:
+    image: openspeedtest/latest:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com

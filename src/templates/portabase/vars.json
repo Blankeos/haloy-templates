@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "PROJECT_SECRET": "password:64"
+  },
+  "derived": {
+    "PORTABASE__DATABASE_URL": "postgresql://portabase:${POSTGRES_PASSWORD}@portabase-db:5432/portabase?schema=public"
+  }
+}

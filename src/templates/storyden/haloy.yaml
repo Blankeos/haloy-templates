@@ -1,0 +1,15 @@
+name: storyden
+server: localhost
+targets:
+  storyden:
+    image: ghcr.io/southclaws/storyden:latest
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUBLIC_WEB_ADDRESS
+        value: http://app.example.com
+      - name: PUBLIC_API_ADDRESS
+        value: http://app.example.com
+    volumes:
+      - storyden-storyden-data:/storyden/data

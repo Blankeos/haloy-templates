@@ -1,0 +1,98 @@
+name: reactive-resume
+server: localhost
+targets:
+  reactive-resume-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: postgres
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - reactive-resume-postgres-data:/var/lib/postgresql/data
+  reactive-resume-minio:
+    image:
+      repository: reactive-resume-minio
+      tag: latest
+      build_config:
+        context: ./reactive-resume-minio
+        push: server
+    port: "9000"
+    domains:
+      - domain: default.app.example.com
+    env:
+      - name: MINIO_ROOT_USER
+        value: minioadmin
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_PASSWORD
+    volumes:
+      - reactive-resume-minio-data:/data
+  reactive-resume-chrome:
+    preset: service
+    image: ghcr.io/browserless/chromium:v2.18.0
+    port: "8080"
+    env:
+      - name: TIMEOUT
+        value: "10000"
+      - name: CONCURRENT
+        value: "10"
+      - name: TOKEN
+        from:
+          env: CHROME_TOKEN
+      - name: EXIT_ON_HEALTH_FAILURE
+        value: "true"
+      - name: PRE_REQUEST_HEALTH_CHECK
+        value: "true"
+  reactive-resume-app:
+    image: amruthpillai/reactive-resume:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PORT
+        value: "3000"
+      - name: NODE_ENV
+        value: production
+      - name: PUBLIC_URL
+        value: https://app.example.com
+      - name: STORAGE_URL
+        value: https://app.example.com/default
+      - name: CHROME_TOKEN
+        from:
+          env: CHROME_TOKEN
+      - name: CHROME_URL
+        value: ws://reactive-resume-chrome:3000
+      - name: DATABASE_URL
+        from:
+          env: REACTIVE_RESUME_APP__DATABASE_URL
+      - name: ACCESS_TOKEN_SECRET
+        from:
+          env: ACCESS_TOKEN_SECRET
+      - name: REFRESH_TOKEN_SECRET
+        from:
+          env: REFRESH_TOKEN_SECRET
+      - name: MAIL_FROM
+        value: noreply@app.example.com
+      - name: STORAGE_ENDPOINT
+        value: reactive-resume-minio
+      - name: STORAGE_PORT
+        value: "9000"
+      - name: STORAGE_REGION
+        value: us-east-1
+      - name: STORAGE_BUCKET
+        value: default
+      - name: STORAGE_ACCESS_KEY
+        value: minioadmin
+      - name: STORAGE_SECRET_KEY
+        from:
+          env: MINIO_PASSWORD
+      - name: STORAGE_USE_SSL
+        value: "false"
+      - name: STORAGE_SKIP_BUCKET_CHECK
+        value: "false"

@@ -1,0 +1,16 @@
+name: carbone
+server: localhost
+targets:
+  carbone:
+    image: carbone/carbone-ee:full-4.25.5
+    port: "4000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CARBONE_EE_LICENSE
+        from:
+          env: CARBONE_KEY
+      - name: CARBONE_EE_STUDIO
+        value: "true"
+    volumes:
+      - carbone-template:/app/template

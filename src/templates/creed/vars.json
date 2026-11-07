@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "CREED_ENCRYPTION_SECRET": "base64:32"
+  },
+  "derived": {}
+}

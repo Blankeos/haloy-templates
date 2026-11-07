@@ -1,0 +1,13 @@
+name: databasus
+server: localhost
+targets:
+  databasus:
+    image: databasus/databasus:latest
+    port: "4005"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: UTC
+    volumes:
+      - databasus-databasus-data:/databasus-data

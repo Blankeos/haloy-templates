@@ -1,0 +1,190 @@
+name: ethora-core
+server: localhost
+targets:
+  ethora-core-config:
+    preset: service
+    image:
+      repository: ethora-core-config
+      tag: latest
+      build_config:
+        context: ./ethora-core-config
+        push: server
+    port: "8080"
+    env:
+      - name: ROOT_DOMAIN
+        value: app.example.com
+      - name: API_DOMAIN
+        value: api.${ROOT_DOMAIN}
+      - name: WEB_DOMAIN
+        value: app.${ROOT_DOMAIN}
+      - name: XMPP_DOMAIN
+        value: xmpp.${ROOT_DOMAIN}
+      - name: FILES_DOMAIN
+        value: files.${ROOT_DOMAIN}
+    volumes:
+      - ethora-core-config:/out/config
+      - ethora-core-mysql-initdb:/out/mysql-initdb
+      - ethora-core-scripts:/ethora/scripts:ro
+      - ethora-core-templates:/ethora/templates:ro
+  ethora-core-mongo:
+    preset: database
+    image:
+      repository: ethora-core-mongo
+      tag: latest
+      build_config:
+        context: ./ethora-core-mongo
+        push: server
+    port: "27017"
+    volumes:
+      - ethora-core-mongo:/data/db
+      - ethora-core-mongo-config:/data/configdb
+  ethora-core-mongo-init:
+    preset: database
+    image:
+      repository: ethora-core-mongo-init
+      tag: latest
+      build_config:
+        context: ./ethora-core-mongo-init
+        push: server
+    port: "27017"
+    volumes:
+      - ethora-core-scripts:/ethora/scripts:ro
+  ethora-core-mysql:
+    preset: database
+    image:
+      repository: ethora-core-mysql
+      tag: latest
+      build_config:
+        context: ./ethora-core-mysql
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+      - name: MYSQL_ROOT_HOST
+        value: "%"
+    volumes:
+      - ethora-core-mysql:/var/lib/mysql
+      - ethora-core-mysql-initdb:/docker-entrypoint-initdb.d:ro
+  ethora-core-redis:
+    preset: database
+    image: redis:7.4-alpine
+    port: "6379"
+    volumes:
+      - ethora-core-redis:/data
+  ethora-core-minio:
+    health_check_path: /minio/health/live
+    image:
+      repository: ethora-core-minio
+      tag: latest
+      build_config:
+        context: ./ethora-core-minio
+        push: server
+    port: "9000"
+    domains:
+      - domain: files.app.example.com
+    env:
+      - name: MINIO_ROOT_USER
+        from:
+          env: ETHORA_CORE_MINIO__MINIO_ROOT_USER
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_ROOT_PASSWORD
+    volumes:
+      - ethora-core-minio:/data
+  ethora-core-centrifugo:
+    health_check_path: /health
+    image:
+      repository: ethora-core-centrifugo
+      tag: latest
+      build_config:
+        context: ./ethora-core-centrifugo
+        push: server
+    port: "8000"
+    domains:
+      - domain: connection-websocket.app.app.example.com
+    volumes:
+      - ethora-core-config:/ethora/config:ro
+  ethora-core-xmpp:
+    image:
+      repository: ethora-core-xmpp
+      tag: latest
+      build_config:
+        context: ./ethora-core-xmpp
+        push: server
+    port: "5280"
+    domains:
+      - domain: ws.xmpp.app.example.com
+      - domain: bosh.xmpp.app.example.com
+    env:
+      - name: XMPP_DOMAIN
+        value: xmpp.${ROOT_DOMAIN}
+      - name: XMPP_ADMIN_PASSWORD
+        from:
+          env: XMPP_ADMIN_PASSWORD
+    volumes:
+      - ethora-core-config:/ethora/config:ro
+      - ethora-core-scripts:/ethora/scripts:ro
+  ethora-core-api:
+    image:
+      repository: ethora-core-api
+      tag: latest
+      build_config:
+        context: ./ethora-core-api
+        push: server
+    port: "8080"
+    domains:
+      - domain: api.app.example.com
+    volumes:
+      - ethora-core-config:/ethora/config:ro
+      - ethora-core-scripts:/ethora/scripts:ro
+  ethora-core-jobs:
+    preset: service
+    image:
+      repository: ethora-core-jobs
+      tag: latest
+      build_config:
+        context: ./ethora-core-jobs
+        push: server
+    port: "8080"
+    volumes:
+      - ethora-core-config:/ethora/config:ro
+      - ethora-core-scripts:/ethora/scripts:ro
+  ethora-core-init:
+    preset: service
+    image:
+      repository: ethora-core-init
+      tag: latest
+      build_config:
+        context: ./ethora-core-init
+        push: server
+    port: "8080"
+    volumes:
+      - ethora-core-config:/ethora/config:ro
+      - ethora-core-scripts:/ethora/scripts:ro
+  ethora-core-verify:
+    preset: service
+    image:
+      repository: ethora-core-verify
+      tag: latest
+      build_config:
+        context: ./ethora-core-verify
+        push: server
+    port: "8080"
+    volumes:
+      - ethora-core-config:/ethora/config:ro
+      - ethora-core-scripts:/ethora/scripts:ro
+  ethora-core-frontend:
+    image:
+      repository: ethora-core-frontend
+      tag: latest
+      build_config:
+        context: ./ethora-core-frontend
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.app.example.com
+    volumes:
+      - ethora-core-config:/ethora/config:ro
+      - ethora-core-scripts:/ethora/scripts:ro

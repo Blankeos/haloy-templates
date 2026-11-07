@@ -1,0 +1,67 @@
+name: nextcloud-aio
+server: localhost
+targets:
+  nextcloud-aio-nextcloud:
+    image:
+      repository: nextcloud-aio-nextcloud
+      tag: latest
+      build_config:
+        context: ./nextcloud-aio-nextcloud
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MYSQL_HOST
+        value: nextcloud-aio-nextcloud-db
+      - name: MYSQL_DATABASE
+        value: nextcloud
+      - name: MYSQL_USER
+        value: nextcloud
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - nextcloud-aio-nextcloud-data:/var/www/html
+  nextcloud-aio-nextcloud-cron:
+    preset: service
+    image:
+      repository: nextcloud-aio-nextcloud-cron
+      tag: latest
+      build_config:
+        context: ./nextcloud-aio-nextcloud-cron
+        push: server
+    port: "8080"
+    env:
+      - name: MYSQL_HOST
+        value: nextcloud-aio-nextcloud-db
+      - name: MYSQL_DATABASE
+        value: nextcloud
+      - name: MYSQL_USER
+        value: nextcloud
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - nextcloud-aio-nextcloud-data:/var/www/html
+  nextcloud-aio-nextcloud-db:
+    preset: database
+    image: mariadb:10.11
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: nextcloud
+      - name: MYSQL_USER
+        value: nextcloud
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - nextcloud-aio-nextcloud-db-data:/var/lib/mysql
+  nextcloud-aio-nextcloud-redis:
+    preset: database
+    image: redis:alpine
+    port: "6379"

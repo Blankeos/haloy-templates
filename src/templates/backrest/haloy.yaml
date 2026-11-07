@@ -1,0 +1,24 @@
+name: backrest
+server: localhost
+targets:
+  backrest:
+    image: garethgeorge/backrest:v1.7.3
+    port: "9898"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BACKREST_PORT
+        value: "9898"
+      - name: BACKREST_DATA
+        value: /data
+      - name: BACKREST_CONFIG
+        value: /config/config.json
+      - name: XDG_CACHE_HOME
+        value: /cache
+      - name: TZ
+        value: Europe/Paris
+    volumes:
+      - backrest-backrest-data:/data
+      - backrest-backrest-config:/config
+      - backrest-backrest-config:/cache
+      - /:/userdata:ro

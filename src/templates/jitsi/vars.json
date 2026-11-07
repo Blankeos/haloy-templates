@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "JICOFO_AUTH_PASSWORD": "password:32",
+    "JVB_AUTH_PASSWORD": "password:32",
+    "JICOFO_COMPONENT_SECRET": "password:32"
+  },
+  "derived": {}
+}

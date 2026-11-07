@@ -1,0 +1,44 @@
+name: senddock
+server: localhost
+targets:
+  senddock-postgres:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: senddock
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: senddock
+    volumes:
+      - senddock-pgdata:/var/lib/postgresql/data
+  senddock-redis:
+    preset: database
+    image: redis:7-alpine
+    port: "6379"
+    volumes:
+      - senddock-redisdata:/data
+  senddock:
+    health_check_path: /health
+    image: ghcr.io/arkhe-systems/senddock:0.8.3
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: SENDDOCK__DATABASE_URL
+      - name: REDIS_URL
+        value: redis://senddock-redis:6379
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: PUBLIC_URL
+        value: https://app.example.com
+      - name: FRONTEND_URL
+        value: https://app.example.com
+      - name: PORT
+        value: "8080"

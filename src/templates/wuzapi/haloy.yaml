@@ -1,0 +1,42 @@
+name: wuzapi
+server: localhost
+targets:
+  wuzapi-server:
+    image: asternic/wuzapi:sha-30c1805
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: WUZAPI_ADMIN_TOKEN
+        from:
+          env: ADMIN_TOKEN
+      - name: WUZAPI_GLOBAL_ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: DB_USER
+        value: wuzapi
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DB_NAME
+        value: wuzapi
+      - name: DB_HOST
+        value: wuzapi-db
+      - name: DB_PORT
+        value: "5432"
+      - name: TZ
+        value: UTC
+  wuzapi-db:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: wuzapi
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: wuzapi
+    volumes:
+      - wuzapi-db-data:/var/lib/postgresql/data

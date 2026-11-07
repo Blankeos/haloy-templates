@@ -1,0 +1,25 @@
+name: gitea-mirror
+server: localhost
+targets:
+  gitea-mirror:
+    health_check_path: /api/health
+    image: ghcr.io/raylabshq/gitea-mirror:latest
+    port: "4321"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: INLINE_BASE64_64
+      - name: BETTER_AUTH_URL
+        value: https://app.example.com
+      - name: NODE_ENV
+        value: production
+      - name: DATABASE_URL
+        value: file:data/gitea-mirror.db
+      - name: HOST
+        value: 0.0.0.0
+      - name: PORT
+        value: "4321"
+    volumes:
+      - gitea-mirror-gitea-mirror-data:/app/data

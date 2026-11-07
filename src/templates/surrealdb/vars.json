@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "SURREALDB_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

@@ -1,0 +1,31 @@
+name: tianji
+server: localhost
+targets:
+  tianji:
+    image: moonrailgun/tianji
+    port: "12345"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        value: postgresql://tianji:tianji@tianji-postgres:5432/tianji
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: ALLOW_REGISTER
+        value: "false"
+      - name: ALLOW_OPENAPI
+        value: "true"
+  tianji-postgres:
+    preset: database
+    image: postgres:15.4-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: tianji
+      - name: POSTGRES_USER
+        value: tianji
+      - name: POSTGRES_PASSWORD
+        value: tianji
+    volumes:
+      - tianji-tianji-db-data:/var/lib/postgresql/data

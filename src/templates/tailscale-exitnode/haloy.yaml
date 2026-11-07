@@ -1,0 +1,16 @@
+name: tailscale-exitnode
+server: localhost
+targets:
+  tailscale-exitnode:
+    preset: service
+    image: tailscale/tailscale:latest
+    port: "8080"
+    env:
+      - name: TS_EXTRA_ARGS
+        value: --advertise-exit-node
+      - name: TS_STATE_DIR
+        value: /var/lib/tailscale
+      - name: TS_USERSPACE
+        value: "true"
+    volumes:
+      - tailscale-exitnode-tailscale-exitnode-data:/var/lib/tailscale

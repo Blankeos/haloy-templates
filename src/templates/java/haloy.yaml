@@ -1,0 +1,17 @@
+name: java
+server: localhost
+targets:
+  java-app:
+    image: ghcr.io/pterodactyl/yolks:java_${JAVA_VERSION}
+    port: "25565"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: STARTUP
+        value: java -Xmx1024M -Xms512M -jar server.jar nogui
+      - name: SERVER_JARFILE
+        value: server.jar
+      - name: JAVA_VERSION
+        value: "21"
+    volumes:
+      - java-app-data:/home/container

@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password",
+    "APP_SECRET": "password"
+  },
+  "derived": {
+    "DOCMOST__DATABASE_URL": "postgresql://docmost:${POSTGRES_PASSWORD}@docmost-db:5432/docmost?schema=public"
+  }
+}

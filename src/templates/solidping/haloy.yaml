@@ -1,0 +1,10 @@
+name: solidping
+server: localhost
+targets:
+  solidping:
+    image: ghcr.io/fclairamb/solidping:0.41.0
+    port: "4000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - solidping-solidping-data:/data

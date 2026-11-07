@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "ENCRYPTION_PASSWORD": "password:32",
+    "ENCRYPTION_SALT": "password:32",
+    "API_SECRET": "password:32"
+  },
+  "derived": {}
+}

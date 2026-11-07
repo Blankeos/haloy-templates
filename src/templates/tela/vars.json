@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "PG_PASSWORD": "password:32",
+    "SHARE_SECRET": "password:64",
+    "API_KEY_SECRET": "password:64"
+  },
+  "derived": {
+    "TELA_BACKEND__TELA_DATABASE_URL": "postgres://tela:${PG_PASSWORD}@tela-postgres:5432/tela?sslmode=disable"
+  }
+}

@@ -1,0 +1,11 @@
+name: sftpgo
+server: localhost
+targets:
+  sftpgo:
+    image: drakkan/sftpgo:v2.7.3
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - sftpgo-sftpgo-data:/srv/sftpgo
+      - sftpgo-sftpgo-home:/var/lib/sftpgo

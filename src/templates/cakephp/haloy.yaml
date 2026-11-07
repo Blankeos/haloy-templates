@@ -1,0 +1,34 @@
+name: cakephp
+server: localhost
+targets:
+  cakephp:
+    image: ghcr.io/themusicdev/cakephp-hello:1.0.0
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DEBUG
+        value: "false"
+      - name: SECURITY_SALT
+        from:
+          env: SECURITY_SALT
+      - name: DATABASE_URL
+        from:
+          env: CAKEPHP__DATABASE_URL
+  cakephp-mariadb:
+    preset: database
+    image: mariadb:11
+    port: "3306"
+    env:
+      - name: MARIADB_ROOT_PASSWORD
+        from:
+          env: ROOT_PASSWORD
+      - name: MARIADB_DATABASE
+        value: cakephp
+      - name: MARIADB_USER
+        value: ${username:8}
+      - name: MARIADB_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+    volumes:
+      - cakephp-mariadb-data:/var/lib/mysql

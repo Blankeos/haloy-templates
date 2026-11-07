@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "SECRET_KEY": "password:30",
+    "POSTGRES_PASSWORD": "password:30",
+    "REDIS_PASSWORD": "password:30"
+  },
+  "derived": {}
+}

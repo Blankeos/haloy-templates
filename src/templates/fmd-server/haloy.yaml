@@ -1,0 +1,20 @@
+name: fmd-server
+server: localhost
+targets:
+  fmd-server:
+    image: registry.gitlab.com/fmd-foss/fmd-server:0.16.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: FMD_REGISTRATIONTOKEN
+        from:
+          env: REGISTRATION_TOKEN
+      - name: FMD_USERIDLENGTH
+        value: "5"
+      - name: FMD_MAXSAVEDLOC
+        value: "1000"
+      - name: FMD_MAXSAVEDPIC
+        value: "10"
+    volumes:
+      - fmd-server-fmd-server-data:/var/lib/fmd-server/db/

@@ -1,0 +1,25 @@
+name: rustdesk
+server: localhost
+targets:
+  rustdesk-hbbs:
+    preset: service
+    image:
+      repository: rustdesk-hbbs
+      tag: latest
+      build_config:
+        context: ./rustdesk-hbbs
+        push: server
+    port: "21115"
+    volumes:
+      - rustdesk-rustdesk-data:/root
+  rustdesk-hbbr:
+    preset: service
+    image:
+      repository: rustdesk-hbbr
+      tag: latest
+      build_config:
+        context: ./rustdesk-hbbr
+        push: server
+    port: "21117"
+    volumes:
+      - rustdesk-rustdesk-data:/root

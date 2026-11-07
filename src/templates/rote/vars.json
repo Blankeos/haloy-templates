@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32"
+  },
+  "derived": {
+    "ROTE_BACKEND__POSTGRESQL_URL": "postgresql://rote:${POSTGRES_PASSWORD}@rote-postgres:5432/rote"
+  }
+}

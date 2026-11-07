@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "SETUP_TOKEN": "password:32"
+  },
+  "derived": {}
+}

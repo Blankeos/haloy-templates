@@ -1,0 +1,124 @@
+name: datalens
+server: localhost
+targets:
+  datalens-pg-compeng:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        value: postgres
+      - name: POSTGRES_DB
+        value: postgres
+      - name: POSTGRES_USER
+        value: postgres
+  datalens-control-api:
+    preset: service
+    image: ghcr.io/datalens-tech/datalens-control-api:0.2192.0
+    port: "8080"
+    env:
+      - name: BI_API_UWSGI_WORKERS_COUNT
+        value: "4"
+      - name: CONNECTOR_AVAILABILITY_VISIBLE
+        value: clickhouse,postgres,chyt,ydb,mysql,greenplum,mssql,appmetrica_api,metrika_api
+      - name: RQE_FORCE_OFF
+        value: "1"
+      - name: DL_CRY_ACTUAL_KEY_ID
+        value: key_1
+      - name: DL_CRY_KEY_VAL_ID_key_1
+        value: h1ZpilcYLYRdWp7Nk8X1M1kBPiUi8rdjz9oBfHyUKIk=
+      - name: US_HOST
+        value: http://datalens-us:8083
+      - name: US_MASTER_TOKEN
+        value: fake-us-master-token
+  datalens-data-api:
+    preset: service
+    image: ghcr.io/datalens-tech/datalens-data-api:0.2192.0
+    port: "8080"
+    env:
+      - name: GUNICORN_WORKERS_COUNT
+        value: "5"
+      - name: RQE_FORCE_OFF
+        value: "1"
+      - name: CACHES_ON
+        value: "0"
+      - name: MUTATIONS_CACHES_ON
+        value: "0"
+      - name: DL_CRY_ACTUAL_KEY_ID
+        value: key_1
+      - name: DL_CRY_KEY_VAL_ID_key_1
+        value: h1ZpilcYLYRdWp7Nk8X1M1kBPiUi8rdjz9oBfHyUKIk=
+      - name: BI_COMPENG_PG_ON
+        value: "1"
+      - name: BI_COMPENG_PG_URL
+        value: postgresql://postgres:postgres@datalens-pg-compeng:5432/postgres
+      - name: US_HOST
+        value: http://datalens-us:8083
+      - name: US_MASTER_TOKEN
+        value: fake-us-master-token
+  datalens-pg-us:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: us-db-ci_purgeable
+      - name: POSTGRES_USER
+        value: us
+      - name: POSTGRES_PASSWORD
+        value: us
+    volumes:
+      - datalens-metadata:/var/lib/postgresql/data
+  datalens-us:
+    preset: service
+    image: ghcr.io/datalens-tech/datalens-us:0.310.0
+    port: "8080"
+    env:
+      - name: APP_INSTALLATION
+        value: opensource
+      - name: APP_ENV
+        value: prod
+      - name: MASTER_TOKEN
+        value: fake-us-master-token
+      - name: POSTGRES_DSN_LIST
+        value: postgres://us:us@datalens-pg-us:5432/us-db-ci_purgeable
+      - name: SKIP_INSTALL_DB_EXTENSIONS
+        value: "0"
+      - name: USE_DEMO_DATA
+        value: "0"
+      - name: HC
+        value: "1"
+      - name: NODE_EXTRA_CA_CERTS
+        value: /certs/root.crt
+    volumes:
+      - datalens-certs:/certs
+  datalens:
+    image: ghcr.io/datalens-tech/datalens-ui:0.2601.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_MODE
+        value: full
+      - name: APP_ENV
+        value: production
+      - name: APP_INSTALLATION
+        value: opensource
+      - name: AUTH_POLICY
+        value: disabled
+      - name: US_ENDPOINT
+        value: http://datalens-us:8083
+      - name: BI_API_ENDPOINT
+        value: http://datalens-control-api:8080
+      - name: BI_DATA_ENDPOINT
+        value: http://datalens-data-api:8080
+      - name: US_MASTER_TOKEN
+        value: fake-us-master-token
+      - name: NODE_EXTRA_CA_CERTS
+        value: /usr/local/share/ca-certificates/cert.pem
+      - name: HC
+        value: "1"
+      - name: YANDEX_MAP_ENABLED
+        value: "0"
+      - name: YANDEX_MAP_TOKEN
+        value: "0"

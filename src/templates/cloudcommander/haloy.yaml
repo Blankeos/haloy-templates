@@ -1,0 +1,21 @@
+name: cloudcommander
+server: localhost
+targets:
+  cloudcommander-cloudcmd:
+    image: coderaiser/cloudcmd:18.5.1
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CLOUDCMD_ROOT
+        value: /mnt/fs
+      - name: CLOUDCMD_AUTH
+        value: "true"
+      - name: CLOUDCMD_USERNAME
+        value: user
+      - name: CLOUDCMD_PASSWORD
+        from:
+          env: PASSWORD
+    volumes:
+      - /root:/root
+      - /:/mnt/fs

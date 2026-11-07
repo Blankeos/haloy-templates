@@ -1,0 +1,14 @@
+name: filebrowser
+server: localhost
+targets:
+  filebrowser:
+    image: hurlenko/filebrowser
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: FB_BASEURL
+        value: /filebrowser
+    volumes:
+      - filebrowser-filebrowser-data:/data
+      - filebrowser-filebrowser-config:/config

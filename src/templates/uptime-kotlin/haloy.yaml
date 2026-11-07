@@ -1,0 +1,37 @@
+name: uptime-kotlin
+server: localhost
+targets:
+  uptime-kotlin:
+    image: ghcr.io/theomeunier/uptime-kotlin:1.5.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: Europe/Paris
+      - name: QUARKUS_DATASOURCE_USERNAME
+        value: uptime-kotlin
+      - name: QUARKUS_DATASOURCE_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: QUARKUS_DATASOURCE_JDBC_URL
+        value: jdbc:postgresql://uptime-kotlin-postgres:5432/uptime-kotlin
+      - name: ENCRYPTION_MASTER_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: MP_JWT_VERIFY_ISSUER
+        value: https://app.example.com/
+  uptime-kotlin-postgres:
+    preset: database
+    image: postgres:18.6-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: uptime-kotlin
+      - name: POSTGRES_USER
+        value: uptime-kotlin
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - uptime-kotlin-uptime-kotlin-db:/var/lib/postgresql

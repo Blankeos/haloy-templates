@@ -1,0 +1,38 @@
+name: litellm
+server: localhost
+targets:
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    port: "4000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: LITELLM__DATABASE_URL
+      - name: LITELLM_MASTER_KEY
+        from:
+          env: LITELLM_MASTER_KEY
+      - name: UI_USERNAME
+        value: admin
+      - name: UI_PASSWORD
+        from:
+          env: UI_PASSWORD
+      - name: STORE_MODEL_IN_DB
+        value: "True"
+      - name: OR_APP_NAME
+        value: LiteLLM Example app
+  litellm-db:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: litellm
+      - name: POSTGRES_USER
+        value: litellm
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - litellm-litellm-db:/var/lib/postgresql/data

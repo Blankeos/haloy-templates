@@ -1,0 +1,10 @@
+name: dashy
+server: localhost
+targets:
+  dashy:
+    image: lissy93/dashy:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - dashy-dashy-config:/app/user-data

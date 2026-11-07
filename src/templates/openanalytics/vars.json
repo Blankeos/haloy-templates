@@ -1,0 +1,28 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "CLICKHOUSE_INGEST_PASSWORD": "password:32",
+    "CLICKHOUSE_READ_PASSWORD": "password:32",
+    "CLICKHOUSE_MAINTENANCE_PASSWORD": "password:32",
+    "CLICKHOUSE_MIGRATION_PASSWORD": "password:32",
+    "VALKEY_QUEUE_PASSWORD": "password:32",
+    "VALKEY_REALTIME_PASSWORD": "password:32",
+    "AUTH_SECRET": "base64:64",
+    "TRIAL_IDENTITY_SECRET": "base64:64",
+    "CREDENTIAL_SOURCE_SECRET": "base64:64",
+    "ANONYMOUS_IDENTITY_SECRET": "base64:64"
+  },
+  "derived": {
+    "OPENANALYTICS_MIGRATE__POSTGRES_MIGRATION_URL": "postgres://openanalytics:${POSTGRES_PASSWORD}@openanalytics-postgres:5432/openanalytics",
+    "OPENANALYTICS_GATEWAY__REALTIME_CACHE_REDIS_URL": "redis://:${VALKEY_REALTIME_PASSWORD}@openanalytics-valkey-realtime:6379",
+    "OPENANALYTICS_API__DATABASE_URL": "postgres://openanalytics:${POSTGRES_PASSWORD}@openanalytics-postgres:5432/openanalytics",
+    "OPENANALYTICS_API__REALTIME_CACHE_REDIS_URL": "redis://:${VALKEY_REALTIME_PASSWORD}@openanalytics-valkey-realtime:6379",
+    "OPENANALYTICS_COLLECTOR__DATABASE_URL": "postgres://openanalytics:${POSTGRES_PASSWORD}@openanalytics-postgres:5432/openanalytics",
+    "OPENANALYTICS_COLLECTOR__EVENT_STREAM_REDIS_URL": "redis://:${VALKEY_QUEUE_PASSWORD}@openanalytics-valkey-queue:6379",
+    "OPENANALYTICS_COLLECTOR__REALTIME_CACHE_REDIS_URL": "redis://:${VALKEY_REALTIME_PASSWORD}@openanalytics-valkey-realtime:6379",
+    "OPENANALYTICS_REALTIME__REALTIME_CACHE_REDIS_URL": "redis://:${VALKEY_REALTIME_PASSWORD}@openanalytics-valkey-realtime:6379",
+    "OPENANALYTICS_WORKER__DATABASE_URL": "postgres://openanalytics:${POSTGRES_PASSWORD}@openanalytics-postgres:5432/openanalytics",
+    "OPENANALYTICS_WORKER__EVENT_STREAM_REDIS_URL": "redis://:${VALKEY_QUEUE_PASSWORD}@openanalytics-valkey-queue:6379",
+    "OPENANALYTICS_WORKER__REALTIME_CACHE_REDIS_URL": "redis://:${VALKEY_REALTIME_PASSWORD}@openanalytics-valkey-realtime:6379"
+  }
+}

@@ -1,0 +1,70 @@
+name: hydrodactyl
+server: localhost
+targets:
+  hydrodactyl-database:
+    preset: database
+    image: mariadb:11.4
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: panel
+      - name: MYSQL_USER
+        value: pterodactyl
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+    volumes:
+      - hydrodactyl-mariadb-data:/var/lib/mysql
+  hydrodactyl-cache:
+    preset: database
+    image: redis:7-alpine
+    port: "6379"
+  hydrodactyl-panel:
+    image: ghcr.io/blueprintframework/hydrodactyl:v6.4.1
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_URL
+        value: https://app.example.com
+      - name: APP_TIMEZONE
+        value: UTC
+      - name: APP_ENV
+        value: production
+      - name: APP_ENVIRONMENT_ONLY
+        value: "false"
+      - name: APP_SERVICE_AUTHOR
+        value: admin@app.example.com
+      - name: APP_SECRET
+        from:
+          env: APP_SECRET
+      - name: DB_CONNECTION
+        value: mysql
+      - name: DB_HOST
+        value: hydrodactyl-database
+      - name: DB_PORT
+        value: "3306"
+      - name: DB_DATABASE
+        value: panel
+      - name: DB_USERNAME
+        value: pterodactyl
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: CACHE_DRIVER
+        value: redis
+      - name: SESSION_DRIVER
+        value: redis
+      - name: QUEUE_DRIVER
+        value: redis
+      - name: REDIS_HOST
+        value: hydrodactyl-cache
+    volumes:
+      - hydrodactyl-panel-var:/app/var/
+      - hydrodactyl-panel-nginx:/etc/nginx/http.d/
+      - hydrodactyl-panel-certs:/etc/letsencrypt/
+      - hydrodactyl-panel-logs:/app/storage/logs
+      - hydrodactyl-panel-storage:/app/storage/app/public

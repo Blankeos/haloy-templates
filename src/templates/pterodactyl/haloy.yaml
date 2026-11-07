@@ -1,0 +1,67 @@
+name: pterodactyl
+server: localhost
+targets:
+  pterodactyl-database:
+    preset: database
+    image:
+      repository: pterodactyl-database
+      tag: latest
+      build_config:
+        context: ./pterodactyl-database
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: panel
+      - name: MYSQL_USER
+        value: pterodactyl
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+    volumes:
+      - pterodactyl-pterodb:/var/lib/mysql
+  pterodactyl-cache:
+    preset: database
+    image: redis:alpine
+    port: "6379"
+  pterodactyl-panel:
+    image: ghcr.io/pterodactyl/panel:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_ENV
+        value: production
+      - name: APP_ENVIRONMENT_ONLY
+        value: "false"
+      - name: CACHE_DRIVER
+        value: redis
+      - name: SESSION_DRIVER
+        value: redis
+      - name: QUEUE_DRIVER
+        value: redis
+      - name: REDIS_HOST
+        value: pterodactyl-cache
+      - name: DB_HOST
+        value: pterodactyl-database
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DB_PORT
+        value: "3306"
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: DB_CONNECTION
+        value: mysql
+    volumes:
+      - pterodactyl-pterovar:/app/var/
+      - pterodactyl-pteronginx:/etc/nginx/http.d/
+      - pterodactyl-pterocerts:/etc/letsencrypt/
+      - pterodactyl-pterologs:/app/storage/logs

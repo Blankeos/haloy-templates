@@ -1,0 +1,10 @@
+name: homepage
+server: localhost
+targets:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:v1.13.1
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - homepage-homepage-config:/app/config

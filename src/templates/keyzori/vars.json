@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "ADMIN_KEY": "hash:32",
+    "POSTGRES_PASSWORD": "hash:32"
+  },
+  "derived": {
+    "KEYZORI__KEYZORI_DATABASE_URL": "postgresql://keyzori:${POSTGRES_PASSWORD}@keyzori-postgres:5432/keyzori"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "INITIAL_API_KEY": "password:30"
+  },
+  "derived": {}
+}

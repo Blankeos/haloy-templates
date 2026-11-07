@@ -1,0 +1,2 @@
+FROM docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+CMD ["bash","-c","echo \"Setting kibana_system password\"\n\nescaped_password=\"$(printf '%s' \"$KIBANA_PASSWORD\" | sed 's/\\\\/\\\\\\\\/g; s/\"/\\\\\"/g')\"\n\nuntil curl -fsS \\\n  -X POST \\\n  -u \"elastic:$ELASTIC_PASSWORD\" \\\n  -H \"Content-Type: application/json\" \\\n  http://elastic-search-elasticsearch:9200/_security/user/kibana_system/_password \\\n  --data-binary \"{\\\"password\\\":\\\"$escaped_password\\\"}\" \\\n  | grep -q \"^{}\"\ndo\n  sleep 5\ndone\n\necho \"kibana_system password configured\"\n"]

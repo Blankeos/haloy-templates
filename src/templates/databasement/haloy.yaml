@@ -1,0 +1,29 @@
+name: databasement
+server: localhost
+targets:
+  databasement:
+    health_check_path: /health
+    image: davidcrty/databasement:1.8.4
+    port: "2226"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_URL
+        value: https://app.example.com
+      - name: DB_CONNECTION
+        value: sqlite
+      - name: DB_DATABASE
+        value: /data/database.sqlite
+      - name: ENABLE_QUEUE_WORKER
+        value: "true"
+      - name: TRUSTED_PROXIES
+        value: "*"
+      - name: LOG_CHANNEL
+        value: stderr
+      - name: APP_DISPLAY_TIMEZONE
+        value: UTC
+    volumes:
+      - databasement-databasement-data:/data

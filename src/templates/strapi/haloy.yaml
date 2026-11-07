@@ -1,0 +1,53 @@
+name: strapi
+server: localhost
+targets:
+  strapi:
+    health_check_path: /
+    image: elestio/strapi-production:v5.33.0
+    port: "1337"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: STRAPI_TELEMETRY_DISABLED
+        value: "true"
+      - name: STRAPI_PLUGIN_I18N_INIT_LOCALE_CODE
+        value: en
+      - name: FAST_REFRESH
+        value: "true"
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: ADMIN_JWT_SECRET
+        from:
+          env: ADMIN_JWT_SECRET
+      - name: DATABASE_CLIENT
+        value: postgres
+      - name: DATABASE_HOST
+        value: strapi-postgres
+      - name: DATABASE_PORT
+        value: "5432"
+      - name: DATABASE_NAME
+        value: strapi
+      - name: DATABASE_USERNAME
+        value: strapi
+      - name: DATABASE_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - strapi-strapi-data:/srv/app
+  strapi-postgres:
+    preset: database
+    image: postgres:18
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: strapi
+      - name: POSTGRES_USER
+        value: strapi
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - strapi-strapi-postgres-data:/var/lib/postgresql

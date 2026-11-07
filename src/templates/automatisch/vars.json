@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:16",
+    "REDIS_PASSWORD": "password:16",
+    "ENCRYPTION_KEY": "password:32",
+    "WEBHOOK_SECRET_KEY": "password:32",
+    "APP_SECRET_KEY": "password:32"
+  },
+  "derived": {}
+}

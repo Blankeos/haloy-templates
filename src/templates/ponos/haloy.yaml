@@ -1,0 +1,27 @@
+name: ponos
+server: localhost
+targets:
+  ponos:
+    health_check_path: /healthz
+    image: ghcr.io/hermez-agency/ponos:0.2.0
+    port: "8787"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PONOS_WEB_EMAIL
+        value: admin@app.example.com
+      - name: PONOS_WEB_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: PONOS_WEB_TOKEN
+        from:
+          env: API_TOKEN
+      - name: PONOS_LANGUAGE
+        value: en
+      - name: TZ
+        value: UTC
+    volumes:
+      - ponos-ponos-data:/data
+      - ponos-ponos-workspace:/workspace
+      - ponos-ponos-claude:/home/ponos/.claude
+      - ponos-ponos-gh:/home/ponos/.config/gh

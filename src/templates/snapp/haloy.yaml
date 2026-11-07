@@ -1,0 +1,47 @@
+name: snapp
+server: localhost
+targets:
+  snapp:
+    image: uraniadev/snapp:0.9-rc-020
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        value: file:./db.sqlite
+      - name: DATABASE_PROVIDER
+        value: sqlite
+      - name: TOKEN_SECRET
+        from:
+          env: TOKEN_SECRET
+      - name: ORIGIN
+        value: http://app.example.com
+      - name: DISABLED_EMAIL_AND_PASSWORD
+        value: "false"
+      - name: LOG_LEVEL
+        value: debug
+      - name: PORT
+        value: "3000"
+      - name: ADMIN_USERNAME
+        value: admin
+      - name: ADMIN_EMAIL
+        value: info@example.org
+      - name: ADMIN_PASSWORD
+        from:
+          env: INLINE_PASSWORD_16
+      - name: ENABLE_SIGNUP
+        value: "true"
+      - name: ENABLED_MFA
+        value: "false"
+      - name: PUBLIC_URL
+        value: app.example.com
+      - name: APPNAME
+        value: Snapp
+      - name: PUBLIC_EXTRA_GROUPS_EDITABLE
+        value: "true"
+      - name: URLS_VIA_GROUPS_ONLY
+        value: "false"
+      - name: HOST
+        value: 0.0.0.0
+    volumes:
+      - snapp-snapp-db:/app/db.sqlite

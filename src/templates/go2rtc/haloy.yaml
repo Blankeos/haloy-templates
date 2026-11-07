@@ -1,0 +1,10 @@
+name: go2rtc
+server: localhost
+targets:
+  go2rtc:
+    image: alexxit/go2rtc:1.9.14
+    port: "1984"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - go2rtc-go2rtc-config:/config

@@ -1,0 +1,15 @@
+name: gatus
+server: localhost
+targets:
+  gatus:
+    image:
+      repository: gatus
+      tag: latest
+      build_config:
+        context: ./gatus
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - gatus-gatus-data:/data

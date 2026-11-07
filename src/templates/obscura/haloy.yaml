@@ -1,0 +1,43 @@
+name: obscura
+server: localhost
+targets:
+  obscura-cdp:
+    preset: service
+    image:
+      repository: obscura-cdp
+      tag: latest
+      build_config:
+        context: ./obscura-cdp
+        push: server
+    port: "9222"
+    volumes:
+      - obscura-obscura-data:/data
+  obscura-mcp:
+    preset: service
+    image:
+      repository: obscura-mcp
+      tag: latest
+      build_config:
+        context: ./obscura-mcp
+        push: server
+    port: "3000"
+    env:
+      - name: OBSCURA_MCP_ALLOWED_ORIGINS
+        value: https://app.example.com
+  obscura-caddy:
+    health_check_path: /config/
+    image:
+      repository: obscura-caddy
+      tag: latest
+      build_config:
+        context: ./obscura-caddy
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: OBSCURA_HOST
+        value: app.example.com
+      - name: OBSCURA_API_TOKEN
+        from:
+          env: API_TOKEN

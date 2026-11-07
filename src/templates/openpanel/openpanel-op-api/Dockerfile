@@ -1,0 +1,2 @@
+FROM lindesvard/openpanel-api:2.2.1
+CMD ["sh","-c","sh -c \"\n  echo 'Waiting for PostgreSQL to be ready...'\n  while ! nc -z op-db 5432; do\n    sleep 1\n  done\n  echo 'PostgreSQL is ready'\n\n  echo 'Waiting for ClickHouse to be ready...'\n  while ! nc -z op-ch 8123; do\n    sleep 1\n  done\n  echo 'ClickHouse is ready'\n\n  echo 'Running migrations...'\n\n  CI=true pnpm -r run migrate:deploy\n\n  pnpm start\n\"\n"]

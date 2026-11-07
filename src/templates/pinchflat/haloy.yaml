@@ -1,0 +1,11 @@
+name: pinchflat
+server: localhost
+targets:
+  pinchflat:
+    image: ghcr.io/kieraneglin/pinchflat:latest
+    port: "8945"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - pinchflat-config:/config
+      - pinchflat-downloads:/downloads

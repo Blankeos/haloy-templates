@@ -1,0 +1,52 @@
+name: reelsaw
+server: localhost
+targets:
+  reelsaw:
+    health_check_path: /api/health
+    image: ghcr.io/osbytes/reelsaw:0.18.2
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PORT
+        value: "3000"
+      - name: DATA_DIR
+        value: /data
+      - name: LOG_FILE
+        value: /data/logs/reelsaw.log
+      - name: RUN_HTTP
+        value: "true"
+      - name: RUN_WORKERS
+        value: "true"
+      - name: TRUST_PROXY
+        value: "true"
+      - name: DATABASE_URL
+        from:
+          env: REELSAW__DATABASE_URL
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: INLINE_BASE64_48
+      - name: APP_URL
+        value: https://app.example.com
+      - name: SIGNUP_MODE
+        value: open
+      - name: AI_MODEL
+        value: openai:gpt-4o-mini
+      - name: TRANSCRIPTION_MODEL
+        value: openai:whisper-1
+    volumes:
+      - reelsaw-data:/data
+  reelsaw-db:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: reelsaw
+      - name: POSTGRES_PASSWORD
+        from:
+          env: INLINE_PASSWORD_32
+      - name: POSTGRES_DB
+        value: reelsaw
+    volumes:
+      - reelsaw-pgdata:/var/lib/postgresql/data

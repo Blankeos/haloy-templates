@@ -1,0 +1,39 @@
+name: versitygw
+server: localhost
+targets:
+  versitygw:
+    image: versity/versitygw:v1.8.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ROOT_ACCESS_KEY
+        from:
+          env: ROOT_ACCESS_KEY
+      - name: ROOT_SECRET_KEY
+        from:
+          env: ROOT_SECRET_KEY
+      - name: VGW_BACKEND
+        value: posix
+      - name: VGW_PORT
+        value: :7070
+      - name: VGW_BACKEND_ARGS
+        value: /data/s3
+      - name: VGW_IAM_DIR
+        value: /data/iam
+      - name: VGW_VERSIONING_DIR
+        value: /data/versioning
+      - name: VGW_ADMIN_PORT
+        value: :7071
+      - name: VGW_WEBUI_PORT
+        value: :8080
+      - name: VGW_WEBUI_NO_TLS
+        value: "true"
+      - name: VGW_WEBUI_GATEWAYS
+        value: http://localhost:7070
+      - name: VGW_WEBUI_ADMIN_GATEWAYS
+        value: http://localhost:7071
+    volumes:
+      - versitygw-versitygw-s3:/data/s3
+      - versitygw-versitygw-versioning:/data/versioning
+      - versitygw-versitygw-iam:/data/iam

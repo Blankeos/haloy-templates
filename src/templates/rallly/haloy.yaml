@@ -1,0 +1,87 @@
+name: rallly
+server: localhost
+targets:
+  rallly:
+    image: lukevella/rallly:4.11.1
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NEXT_PUBLIC_BASE_URL
+        value: https://app.example.com
+      - name: DATABASE_URL
+        from:
+          env: RALLLY__DATABASE_URL
+      - name: SECRET_PASSWORD
+        from:
+          env: SECRET_PASSWORD
+      - name: SUPPORT_EMAIL
+        value: admin@app.example.com
+      - name: NOREPLY_EMAIL
+        value: admin@app.example.com
+      - name: SMTP_HOST
+        value: smtp.example.com
+      - name: SMTP_PORT
+        value: "587"
+      - name: SMTP_USER
+        value: change-me
+      - name: SMTP_PWD
+        from:
+          env: SMTP_PASSWORD
+      - name: SMTP_SECURE
+        value: "false"
+      - name: S3_ENDPOINT
+        value: http://rallly-minio:9000
+      - name: S3_BUCKET_NAME
+        value: rallly
+      - name: S3_REGION
+        value: us-east-1
+      - name: S3_ACCESS_KEY_ID
+        value: rallly
+      - name: S3_SECRET_ACCESS_KEY
+        from:
+          env: S3_SECRET_ACCESS_KEY
+      - name: INITIAL_ADMIN_EMAIL
+        value: admin@app.example.com
+  rallly-db:
+    preset: database
+    image: postgres:14-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: rallly
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - rallly-rallly-db:/var/lib/postgresql/data
+  rallly-minio:
+    preset: service
+    image:
+      repository: rallly-minio
+      tag: latest
+      build_config:
+        context: ./rallly-minio
+        push: server
+    port: "8080"
+    env:
+      - name: MINIO_ROOT_USER
+        value: rallly
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: S3_SECRET_ACCESS_KEY
+    volumes:
+      - rallly-rallly-minio:/data
+  rallly-minio-init:
+    preset: service
+    image:
+      repository: rallly-minio-init
+      tag: latest
+      build_config:
+        context: ./rallly-minio-init
+        push: server
+    port: "8080"
+    env:
+      - name: S3_SECRET_ACCESS_KEY
+        from:
+          env: S3_SECRET_ACCESS_KEY

@@ -1,0 +1,75 @@
+name: elastic-search
+server: localhost
+targets:
+  elastic-search-elasticsearch:
+    health_check_path: /
+    preset: database
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+    port: "9200"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ELASTIC_PASSWORD
+        from:
+          env: ELASTIC_PASSWORD
+      - name: discovery.type
+        value: single-node
+      - name: xpack.security.enabled
+        value: "true"
+      - name: xpack.security.http.ssl.enabled
+        value: "false"
+      - name: node.store.allow_mmap
+        value: "false"
+      - name: xpack.ml.enabled
+        value: "false"
+      - name: ES_JAVA_OPTS
+        value: -Xms512m -Xmx512m
+    volumes:
+      - elastic-search-es-data:/usr/share/elasticsearch/data
+  elastic-search-kibana:
+    health_check_path: /
+    image: docker.elastic.co/kibana/kibana:9.5.3
+    port: "5601"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ELASTICSEARCH_HOSTS
+        value: http://elastic-search-elasticsearch:9200
+      - name: ELASTICSEARCH_USERNAME
+        value: kibana_system
+      - name: ELASTICSEARCH_PASSWORD
+        from:
+          env: KIBANA_PASSWORD
+      - name: ELASTICSEARCH_PUBLICBASEURL
+        value: https://app.example.com
+      - name: SERVER_PUBLICBASEURL
+        value: https://app.example.com
+      - name: XPACK_SECURITY_SECURECOOKIES
+        value: "true"
+      - name: XPACK_SECURITY_ENCRYPTIONKEY
+        from:
+          env: KIBANA_SECURITY_ENCRYPTION_KEY
+      - name: XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY
+        from:
+          env: KIBANA_SAVED_OBJECTS_ENCRYPTION_KEY
+      - name: XPACK_REPORTING_ENCRYPTIONKEY
+        from:
+          env: KIBANA_REPORTING_ENCRYPTION_KEY
+    volumes:
+      - elastic-search-kibana-data:/usr/share/kibana/data
+  elastic-search-setup:
+    preset: database
+    image:
+      repository: elastic-search-setup
+      tag: latest
+      build_config:
+        context: ./elastic-search-setup
+        push: server
+    port: "9200"
+    env:
+      - name: ELASTIC_PASSWORD
+        from:
+          env: ELASTIC_PASSWORD
+      - name: KIBANA_PASSWORD
+        from:
+          env: KIBANA_PASSWORD

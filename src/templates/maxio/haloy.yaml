@@ -1,0 +1,17 @@
+name: maxio
+server: localhost
+targets:
+  maxio:
+    image: ghcr.io/coollabsio/maxio:0.2.1
+    port: "9000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MAXIO_ACCESS_KEY
+        from:
+          env: INLINE_PASSWORD_20
+      - name: MAXIO_SECRET_KEY
+        from:
+          env: INLINE_PASSWORD_20
+    volumes:
+      - maxio-maxio-data:/data

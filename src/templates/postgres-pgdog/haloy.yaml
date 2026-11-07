@@ -1,0 +1,29 @@
+name: postgres-pgdog
+server: localhost
+targets:
+  postgres-pgdog:
+    preset: service
+    image:
+      repository: postgres-pgdog
+      tag: latest
+      build_config:
+        context: ./postgres-pgdog
+        push: server
+    port: "8080"
+    env:
+      - name: RUST_LOG
+        value: info
+  postgres-pgdog-postgres:
+    preset: service
+    image: ${POSTGRES_IMAGE}
+    port: "8080"
+    env:
+      - name: POSTGRES_USER
+        value: admin
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: postgres
+    volumes:
+      - postgres-pgdog-postgres-data:/var/lib/postgresql

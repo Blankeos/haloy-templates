@@ -1,0 +1,21 @@
+name: openhabittracker
+server: localhost
+targets:
+  openhabittracker:
+    image: jinjinov/openhabittracker:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: AppSettings__UserName
+        value: admin
+      - name: AppSettings__Email
+        value: admin@example.com
+      - name: AppSettings__Password
+        from:
+          env: ADMIN_PASSWORD
+      - name: AppSettings__JwtSecret
+        from:
+          env: JWT_SECRET
+    volumes:
+      - openhabittracker-openhabittracker-data:/app/.OpenHabitTracker

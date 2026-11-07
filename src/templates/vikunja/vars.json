@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:32",
+    "JWT_SECRET": "jwt:db_password"
+  },
+  "derived": {}
+}

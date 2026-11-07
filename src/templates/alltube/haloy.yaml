@@ -1,0 +1,17 @@
+name: alltube
+server: localhost
+targets:
+  alltube:
+    image: dnomd343/alltube:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TITLE
+        value: My AllTube Site
+      - name: CONVERT
+        value: "true"
+      - name: STREAM
+        value: "true"
+      - name: REMUX
+        value: "true"

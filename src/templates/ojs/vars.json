@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "OJS_PASSWORD": "password:16",
+    "MYSQL_ROOT_PASSWORD": "password:16",
+    "OJS_DB_PASSWORD": "password:16"
+  },
+  "derived": {}
+}

@@ -1,0 +1,14 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "AUTH_SECRET": "base64:32",
+    "ENCRYPTION_KEY": "base64:32",
+    "S3_SECRET_KEY": "password:32"
+  },
+  "derived": {
+    "ITSAPLAN_MIGRATE__DATABASE_URL": "postgres://itsaplan:${POSTGRES_PASSWORD}@itsaplan-postgres:5432/itsaplan",
+    "ITSAPLAN_API__DATABASE_URL": "postgres://itsaplan:${POSTGRES_PASSWORD}@itsaplan-postgres:5432/itsaplan",
+    "ITSAPLAN_WORKER__DATABASE_URL": "postgres://itsaplan:${POSTGRES_PASSWORD}@itsaplan-postgres:5432/itsaplan",
+    "ITSAPLAN_BOT__DATABASE_URL": "postgres://itsaplan:${POSTGRES_PASSWORD}@itsaplan-postgres:5432/itsaplan"
+  }
+}

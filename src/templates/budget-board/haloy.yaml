@@ -1,0 +1,47 @@
+name: budget-board
+server: localhost
+targets:
+  budget-board-server:
+    preset: service
+    image: ghcr.io/teelur/budget-board/server:release
+    port: "8080"
+    env:
+      - name: Logging__LogLevel__Default
+        value: Information
+      - name: CLIENT_URL
+        value: http://budget-board-client:6253
+      - name: POSTGRES_HOST
+        value: budget-board-db
+      - name: POSTGRES_DATABASE
+        value: budgetboard
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: AUTO_UPDATE_DB
+        value: "true"
+  budget-board-client:
+    image: ghcr.io/teelur/budget-board/client:release
+    port: "6253"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: VITE_API_URL
+        value: http://budget-board-server
+      - name: PORT
+        value: "6253"
+  budget-board-db:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: budgetboard
+    volumes:
+      - budget-board-db-data:/var/lib/postgresql/data

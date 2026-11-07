@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "SECRET_KEY_BASE": "password:64",
+    "SIGNING_SALT": "password:32",
+    "ENCRYPTION_SALT": "password:32",
+    "RELEASE_COOKIE": "password:32",
+    "POSTGRES_PASSWORD": "password:32",
+    "MEILI_MASTER_KEY": "password:32"
+  },
+  "derived": {}
+}

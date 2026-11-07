@@ -1,0 +1,95 @@
+name: twenty
+server: localhost
+targets:
+  twenty-change-vol-ownership:
+    preset: service
+    image:
+      repository: twenty-change-vol-ownership
+      tag: latest
+      build_config:
+        context: ./twenty-change-vol-ownership
+        push: server
+    port: "8080"
+    volumes:
+      - twenty-twenty-server-local-data:/tmp/server-local-data
+      - twenty-twenty-docker-data:/tmp/docker-data
+  twenty-server:
+    health_check_path: /healthz
+    image: twentycrm/twenty:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PORT
+        value: "3000"
+      - name: SERVER_URL
+        value: http://app.example.com
+      - name: FRONT_BASE_URL
+        value: http://app.example.com
+      - name: PG_DATABASE_URL
+        from:
+          env: TWENTY_SERVER__PG_DATABASE_URL
+      - name: ENABLE_DB_MIGRATIONS
+        value: "true"
+      - name: REDIS_URL
+        value: redis://twenty-redis:6379
+      - name: IS_SIGN_UP_DISABLED
+        value: "false"
+      - name: SIGN_IN_PREFILLED
+        value: "false"
+      - name: IS_CONFIG_VARIABLES_IN_DB_ENABLED
+        value: "true"
+      - name: STORAGE_TYPE
+        value: local
+      - name: APP_SECRET
+        from:
+          env: APP_SECRET
+    volumes:
+      - twenty-twenty-server-local-data:/app/packages/twenty-server/.local-storage
+      - twenty-twenty-docker-data:/app/docker-data
+  twenty-worker:
+    preset: service
+    image:
+      repository: twenty-worker
+      tag: latest
+      build_config:
+        context: ./twenty-worker
+        push: server
+    port: "8080"
+    env:
+      - name: PG_DATABASE_URL
+        from:
+          env: TWENTY_WORKER__PG_DATABASE_URL
+      - name: SERVER_URL
+        value: http://app.example.com
+      - name: FRONT_BASE_URL
+        value: http://app.example.com
+      - name: REDIS_URL
+        value: redis://twenty-redis:6379
+      - name: ENABLE_DB_MIGRATIONS
+        value: "false"
+      - name: STORAGE_TYPE
+        value: local
+      - name: APP_SECRET
+        from:
+          env: APP_SECRET
+  twenty-postgres:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: twenty
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: twenty
+    volumes:
+      - twenty-twenty-postgres-data:/var/lib/postgresql/data
+  twenty-redis:
+    preset: database
+    image: redis:latest
+    port: "6379"
+    volumes:
+      - twenty-twenty-redis-data:/data

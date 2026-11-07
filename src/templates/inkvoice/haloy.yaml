@@ -1,0 +1,27 @@
+name: inkvoice
+server: localhost
+targets:
+  inkvoice:
+    image: ghcr.io/pigontech/inkvoice:0.3.0
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ADMIN_USER
+        value: admin
+      - name: ADMIN_PASS
+        from:
+          env: ADMIN_PASS
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: DATABASE_PATH
+        value: /app/data/invoice.db
+      - name: PORT
+        value: "3000"
+      - name: HOST
+        value: 0.0.0.0
+      - name: COOKIE_SECURE
+        value: "false"
+    volumes:
+      - inkvoice-inkvoice-data:/app/data

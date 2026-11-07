@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "ADMIN_PASSWORD": "password:16",
+    "JWT_SECRET": "password:64"
+  },
+  "derived": {}
+}

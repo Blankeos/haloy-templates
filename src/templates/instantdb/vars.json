@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32"
+  },
+  "derived": {
+    "INSTANTDB_SERVER__DATABASE_URL": "postgresql://instant:${POSTGRES_PASSWORD}@instantdb-postgres:5432/instant"
+  }
+}

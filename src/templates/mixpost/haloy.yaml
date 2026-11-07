@@ -1,0 +1,54 @@
+name: mixpost
+server: localhost
+targets:
+  mixpost:
+    image: inovector/mixpost:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_NAME
+        value: Mixpost
+      - name: APP_KEY
+        value: base64:ygtEUxD0fB3vUchihbUYqUzN57rfNi9ER5alJ98dWiA=
+      - name: APP_DEBUG
+        value: "false"
+      - name: APP_DOMAIN
+        value: app.example.com
+      - name: APP_URL
+        value: http://app.example.com
+      - name: DB_DATABASE
+        value: mixpost_db
+      - name: DB_USERNAME
+        value: mixpost_user
+      - name: DB_PASSWORD
+        from:
+          env: MX_PASSWORD
+    volumes:
+      - mixpost-storage:/var/www/html/storage/app
+      - mixpost-logs:/var/www/html/storage/logs
+  mixpost-mysql:
+    preset: service
+    image: mysql/mysql-server:8.0
+    port: "8080"
+    env:
+      - name: MYSQL_DATABASE
+        value: mixpost_db
+      - name: MYSQL_USER
+        value: mixpost_user
+      - name: MYSQL_PASSWORD
+        from:
+          env: MX_PASSWORD
+    volumes:
+      - mixpost-mysql:/var/lib/mysql
+  mixpost-redis:
+    preset: database
+    image:
+      repository: mixpost-redis
+      tag: latest
+      build_config:
+        context: ./mixpost-redis
+        push: server
+    port: "6379"
+    volumes:
+      - mixpost-redis:/data

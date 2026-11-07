@@ -1,0 +1,14 @@
+{
+  "secrets": {
+    "BETTER_AUTH_SECRET": "password:32",
+    "ENCRYPTION_KEY": "hash:64",
+    "API_ENCRYPTION_KEY": "hash:64",
+    "INTERNAL_API_SECRET": "password:32",
+    "POSTGRES_PASSWORD": "password:32"
+  },
+  "derived": {
+    "SIMSTUDIO__DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@sim-db:5432/simstudio",
+    "SIM_REALTIME__DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@sim-db:5432/simstudio",
+    "SIM_MIGRATIONS__DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@sim-db:5432/simstudio"
+  }
+}

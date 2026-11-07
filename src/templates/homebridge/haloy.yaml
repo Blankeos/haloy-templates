@@ -1,0 +1,10 @@
+name: homebridge
+server: localhost
+targets:
+  homebridge:
+    image: homebridge/homebridge:latest
+    port: "8581"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - homebridge-volumes-homebridge:/homebridge

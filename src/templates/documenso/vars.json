@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "NEXTAUTH_SECRET": "base64:32",
+    "ENCRYPTION_KEY": "password:32",
+    "SECONDARY_ENCRYPTION_KEY": "password:64"
+  },
+  "derived": {}
+}

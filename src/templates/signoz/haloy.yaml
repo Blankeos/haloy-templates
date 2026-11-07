@@ -1,0 +1,100 @@
+name: signoz
+server: localhost
+targets:
+  signoz-init-clickhouse:
+    preset: database
+    image:
+      repository: signoz-init-clickhouse
+      tag: latest
+      build_config:
+        context: ./signoz-init-clickhouse
+        push: server
+    port: "8123"
+    volumes:
+      - signoz-clickhouse-user-scripts:/var/lib/clickhouse/user_scripts/
+  signoz-zookeeper-1:
+    health_check_path: /commands/ruok
+    preset: service
+    image: signoz/zookeeper:3.7.1
+    port: "8080"
+    env:
+      - name: ZOO_SERVER_ID
+        value: "1"
+      - name: ALLOW_ANONYMOUS_LOGIN
+        value: yes
+      - name: ZOO_AUTOPURGE_INTERVAL
+        value: "1"
+      - name: ZOO_ENABLE_PROMETHEUS_METRICS
+        value: yes
+      - name: ZOO_PROMETHEUS_METRICS_PORT_NUMBER
+        value: "9141"
+    volumes:
+      - signoz-zookeeper-1:/bitnami/zookeeper
+  signoz-clickhouse:
+    preset: database
+    image: clickhouse/clickhouse-server:25.5.6
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_SKIP_USER_SETUP
+        value: "1"
+    volumes:
+      - signoz-clickhouse-user-scripts:/var/lib/clickhouse/user_scripts/
+      - signoz-clickhouse:/var/lib/clickhouse/
+  signoz:
+    image:
+      repository: signoz
+      tag: latest
+      build_config:
+        context: ./signoz
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SIGNOZ_ALERTMANAGER_PROVIDER
+        value: signoz
+      - name: SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN
+        value: tcp://signoz-clickhouse:9000
+      - name: SIGNOZ_SQLSTORE_SQLITE_PATH
+        value: /var/lib/signoz/signoz.db
+      - name: STORAGE
+        value: clickhouse
+      - name: TELEMETRY_ENABLED
+        value: "true"
+      - name: DEPLOYMENT_TYPE
+        value: docker-standalone-amd
+      - name: DOT_METRICS_ENABLED
+        value: "true"
+      - name: SIGNOZ_JWT_SECRET
+        from:
+          env: JWT_SECRET
+    volumes:
+      - signoz-sqlite:/var/lib/signoz/
+  signoz-otel-collector:
+    image:
+      repository: signoz-otel-collector
+      tag: latest
+      build_config:
+        context: ./signoz-otel-collector
+        push: server
+    port: "4318"
+    domains:
+      - domain: app.example.com
+  signoz-schema-migrator-sync:
+    preset: service
+    image:
+      repository: signoz-schema-migrator-sync
+      tag: latest
+      build_config:
+        context: ./signoz-schema-migrator-sync
+        push: server
+    port: "8080"
+  signoz-schema-migrator-async:
+    preset: service
+    image:
+      repository: signoz-schema-migrator-async
+      tag: latest
+      build_config:
+        context: ./signoz-schema-migrator-async
+        push: server
+    port: "8080"

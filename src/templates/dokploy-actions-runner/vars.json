@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "INLINE_UUID": "uuid"
+  },
+  "derived": {
+    "DOKPLOY_ACTIONS_RUNNER__RUNNER_NAME": "dokploy-${INLINE_UUID}"
+  }
+}

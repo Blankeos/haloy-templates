@@ -1,0 +1,15 @@
+name: lobe-chat
+server: localhost
+targets:
+  lobe-chat:
+    image: lobehub/lobe-chat:v1.26.1
+    port: "3210"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: OPENAI_API_KEY
+        value: sk-xxxx
+      - name: OPENAI_PROXY_URL
+        value: https://api-proxy.com/v1
+      - name: ACCESS_CODE
+        value: lobe66

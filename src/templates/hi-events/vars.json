@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password",
+    "JWT_SECRET": "password",
+    "APP_KEY": "password"
+  },
+  "derived": {
+    "HI_EVENTS_ALL_IN_ONE__DATABASE_URL": "postgresql://hievents:${POSTGRES_PASSWORD}@hi-events-postgres:5432/hievents"
+  }
+}

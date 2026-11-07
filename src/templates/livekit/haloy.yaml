@@ -1,0 +1,49 @@
+name: livekit
+server: localhost
+targets:
+  livekit:
+    health_check_path: /
+    image:
+      repository: livekit
+      tag: latest
+      build_config:
+        context: ./livekit
+        push: server
+    port: "7880"
+    domains:
+      - domain: livekit.app.example.com
+      - domain: livekit-turn.app.example.com
+  livekit-redis:
+    preset: database
+    image:
+      repository: livekit-redis
+      tag: latest
+      build_config:
+        context: ./livekit-redis
+        push: server
+    port: "6379"
+  livekit-egress:
+    preset: service
+    image:
+      repository: livekit-egress
+      tag: latest
+      build_config:
+        context: ./livekit-egress
+        push: server
+    port: "8080"
+    env:
+      - name: EGRESS_CONFIG_FILE
+        value: /etc/egress.yaml
+  livekit-ingress:
+    image:
+      repository: livekit-ingress
+      tag: latest
+      build_config:
+        context: ./livekit-ingress
+        push: server
+    port: "8080"
+    domains:
+      - domain: livekit-whip.app.example.com
+    env:
+      - name: INGRESS_CONFIG_FILE
+        value: /etc/ingress.yaml

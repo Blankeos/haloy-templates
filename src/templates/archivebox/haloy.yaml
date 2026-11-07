@@ -1,0 +1,22 @@
+name: archivebox
+server: localhost
+targets:
+  archivebox:
+    image:
+      repository: archivebox
+      tag: latest
+      build_config:
+        context: ./archivebox
+        push: server
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ALLOWED_HOSTS
+        value: "*"
+      - name: PUBLIC_INDEX
+        value: "True"
+      - name: PUBLIC_SNAPSHOTS
+        value: "True"
+    volumes:
+      - archivebox-archivebox-data:/data

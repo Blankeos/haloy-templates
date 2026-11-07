@@ -1,0 +1,19 @@
+name: go-whatsapp-web-multidevice
+server: localhost
+targets:
+  go-whatsapp-web-multidevice-whatsapp:
+    image:
+      repository: go-whatsapp-web-multidevice-whatsapp
+      tag: latest
+      build_config:
+        context: ./go-whatsapp-web-multidevice-whatsapp
+        push: server
+    port: "3080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: WA_PASSWORD
+        from:
+          env: WA_PASSWORD
+    volumes:
+      - go-whatsapp-web-multidevice-whatsapp:/app/storages

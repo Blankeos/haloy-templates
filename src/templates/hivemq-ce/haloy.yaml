@@ -1,0 +1,37 @@
+name: hivemq-ce
+server: localhost
+targets:
+  hivemq-ce-init:
+    preset: service
+    image:
+      repository: hivemq-ce-init
+      tag: latest
+      build_config:
+        context: ./hivemq-ce-init
+        push: server
+    port: "8080"
+    env:
+      - name: MQTT_USERNAME
+        value: mqtt
+      - name: MQTT_PASSWORD
+        from:
+          env: MQTT_PASSWORD
+    volumes:
+      - hivemq-ce-hivemq-extensions:/extensions
+  hivemq-ce:
+    image:
+      repository: hivemq-ce
+      tag: latest
+      build_config:
+        context: ./hivemq-ce
+        push: server
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: HIVEMQ_ALLOW_ALL_CLIENTS
+        value: "false"
+    volumes:
+      - hivemq-ce-hivemq-data:/opt/hivemq/data
+      - hivemq-ce-hivemq-log:/opt/hivemq/log
+      - hivemq-ce-hivemq-extensions:/opt/hivemq/extensions

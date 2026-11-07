@@ -1,0 +1,12 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:32",
+    "REDIS_PASSWORD": "password:32",
+    "CLICKHOUSE_PASSWORD": "password:32",
+    "ONEUPTIME_SECRET": "password:64",
+    "ENCRYPTION_SECRET": "password:64",
+    "REGISTER_PROBE_KEY": "password:32",
+    "PROBE_KEY": "password:32"
+  },
+  "derived": {}
+}

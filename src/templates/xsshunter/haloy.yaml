@@ -1,0 +1,77 @@
+name: xsshunter
+server: localhost
+targets:
+  xsshunterexpress-db:
+    preset: database
+    image: postgres:15-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: xsshunterexpress
+      - name: POSTGRES_USER
+        value: xsshunterexpress
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: PGDATA
+        value: /var/lib/postgresql/data/pgdata
+      - name: POSTGRES_HOST_AUTH_METHOD
+        value: trust
+    volumes:
+      - xsshunter-postgres-data:/var/lib/postgresql/data/pgdata
+  xsshunterexpress-service:
+    image: xsshunter-xsshunterexpress-service
+    port: "8080"
+    domains:
+      - domain: app.example.com
+      - domain: xss.app.example.com
+    env:
+      - name: SESSION_SECRET_KEY
+        from:
+          env: SESSION_SECRET
+      - name: HOSTNAME
+        value: app.example.com
+      - name: XSS_HOSTNAME
+        value: xss.app.example.com
+      - name: PANEL_LOGIN
+        value: "true"
+      - name: PANEL_USERNAME
+        value: admin@app.example.com
+      - name: PANEL_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: ALLOW_EMPTY_USERPATH
+        value: "true"
+      - name: OAUTH_LOGIN
+        value: "false"
+      - name: EMAIL_NOTIFICATIONS_ENABLED
+        value: "false"
+      - name: DATABASE_HOST
+        value: xsshunterexpress-db
+      - name: POSTGRES_DB
+        value: xsshunterexpress
+      - name: POSTGRES_USER
+        value: xsshunterexpress
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "8080"
+      - name: CONTROL_PANEL_ENABLED
+        value: "true"
+      - name: SCREENSHOTS_DIR
+        value: /app/payload-fire-images
+      - name: TRUFFLEHOG_URL
+        value: http://xsshunterexpress-trufflehog:8000/trufflehog
+      - name: SENTRY_ENABLED
+        value: "false"
+      - name: USE_CLOUD_STORAGE
+        value: "false"
+    volumes:
+      - xsshunter-payload-images:/app/payload-fire-images
+  xsshunterexpress-trufflehog:
+    preset: service
+    image: xsshunter-xsshunterexpress-trufflehog
+    port: "8000"

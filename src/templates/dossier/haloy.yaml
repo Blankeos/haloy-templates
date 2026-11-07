@@ -1,0 +1,50 @@
+name: dossier
+server: localhost
+targets:
+  dossier:
+    health_check_path: /api/health
+    image:
+      repository: dossier
+      tag: latest
+      build_config:
+        context: ./dossier
+        push: server
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: DOSSIER__DATABASE_URL
+      - name: DOSSIER_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: DOSSIER_SECRET
+        from:
+          env: DOSSIER_SECRET
+      - name: DOSSIER_DATA_DIR
+        value: /data
+      - name: DOSSIER_TELEMETRY
+        value: off
+      - name: DOSSIER_JOBS_ARBEITSAGENTUR
+        value: off
+      - name: DOSSIER_BACKUP_RETENTION_DAYS
+        value: "14"
+      - name: TZ
+        value: UTC
+    volumes:
+      - dossier-dossier-data:/data
+  dossier-postgres:
+    preset: database
+    image: postgres:18.6-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: dossier
+      - name: POSTGRES_DB
+        value: dossier
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - dossier-dossier-postgres:/var/lib/postgresql

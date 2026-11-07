@@ -1,0 +1,52 @@
+name: hortusfox
+server: localhost
+targets:
+  hortusfox-app:
+    image: ghcr.io/danielbrendel/hortusfox-web:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: APP_ADMIN_PASSWORD
+        from:
+          env: APP_ADMIN_PASSWORD
+      - name: APP_TIMEZONE
+        value: UTC
+      - name: DB_HOST
+        value: hortusfox-db
+      - name: DB_PORT
+        value: "3306"
+      - name: DB_DATABASE
+        value: hortusfox
+      - name: DB_USERNAME
+        value: hortususer
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DB_CHARSET
+        value: utf8mb4
+    volumes:
+      - hortusfox-app-images:/var/www/html/public/img
+      - hortusfox-app-logs:/var/www/html/app/logs
+      - hortusfox-app-backup:/var/www/html/public/backup
+      - hortusfox-app-themes:/var/www/html/public/themes
+      - hortusfox-app-migrate:/var/www/html/app/migrations
+  hortusfox-db:
+    preset: database
+    image: mariadb:11
+    port: "3306"
+    env:
+      - name: MARIADB_ROOT_PASSWORD
+        from:
+          env: MARIADB_ROOT_PASSWORD
+      - name: MARIADB_DATABASE
+        value: hortusfox
+      - name: MARIADB_USER
+        value: hortususer
+      - name: MARIADB_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - hortusfox-db-data:/var/lib/mysql

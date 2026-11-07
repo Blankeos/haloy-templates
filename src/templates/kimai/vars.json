@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "ADMIN_PASSWORD": "password:32",
+    "MYSQL_PASSWORD": "password:32",
+    "MYSQL_ROOT_PASSWORD": "password:32",
+    "APP_SECRET": "password:32"
+  },
+  "derived": {
+    "KIMAI_APP__DATABASE_URL": "mysql://kimai:${MYSQL_PASSWORD}@kimai-db/kimai"
+  }
+}

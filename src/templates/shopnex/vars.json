@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "AUTH_SECRET": "base64:32",
+    "SHOPNEX_SECRET": "base64:32"
+  },
+  "derived": {}
+}

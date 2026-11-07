@@ -1,0 +1,37 @@
+name: plausible
+server: localhost
+targets:
+  plausible-db:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        value: postgres
+    volumes:
+      - plausible-db-data:/var/lib/postgresql/data
+  plausible-events-db:
+    preset: database
+    image: clickhouse/clickhouse-server:24.12-alpine
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_SKIP_USER_SETUP
+        value: "1"
+    volumes:
+      - plausible-event-data:/var/lib/clickhouse
+      - plausible-event-logs:/var/log/clickhouse-server
+  plausible:
+    image:
+      repository: plausible
+      tag: latest
+      build_config:
+        context: ./plausible
+        push: server
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TMPDIR
+        value: /var/lib/plausible/tmp
+    volumes:
+      - plausible-plausible-data:/var/lib/plausible

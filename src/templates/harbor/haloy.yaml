@@ -1,0 +1,193 @@
+name: harbor
+server: localhost
+targets:
+  harbor-init:
+    preset: service
+    image: harbor-harbor-init
+    port: "8080"
+    env:
+      - name: HARBOR_INSTANCE_ID
+        from:
+          env: HARBOR_INIT__HARBOR_INSTANCE_ID
+      - name: HARBOR_HOSTNAME
+        value: app.example.com
+      - name: HARBOR_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: HARBOR_DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DB_MAX_IDLE_CONNS
+        value: "10"
+      - name: DB_MAX_OPEN_CONNS
+        value: "100"
+      - name: POSTGRES_MAX_CONNECTIONS
+        value: "256"
+      - name: JOB_MAX_WORKERS
+        value: "5"
+      - name: HARBOR_LOG_LEVEL
+        value: info
+      - name: CACHE_ENABLED
+        value: "true"
+      - name: ALLOW_PRIVATE_NETWORK_ACCESS
+        value: "false"
+      - name: TRIVY_DB_REPOSITORY
+        value: ghcr.io/aquasecurity/trivy-db
+      - name: TRIVY_JAVA_DB_REPOSITORY
+        value: ghcr.io/aquasecurity/trivy-java-db
+      - name: PROJECT_QUOTA_GIB
+        value: "20"
+    volumes:
+      - harbor-config:/config
+      - harbor-data:/data
+      - harbor-database:/data/database
+      - harbor-registry:/data/registry
+      - harbor-redis:/data/redis
+      - harbor-jobs:/data/job_logs
+      - harbor-trivy-cache:/data/trivy-adapter/trivy
+      - harbor-trivy-reports:/data/trivy-adapter/reports
+      - harbor-control:/control
+  harbor-core:
+    preset: service
+    image:
+      repository: harbor-core
+      tag: latest
+      build_config:
+        context: ./harbor-core
+        push: server
+    port: "8080"
+    volumes:
+      - harbor-config:/etc/core
+      - harbor-control:/run/harbor-control
+      - harbor-config:/harbor_cust_cert
+      - harbor-data:/data
+  harbor-postgresql:
+    preset: service
+    image:
+      repository: harbor-postgresql
+      tag: latest
+      build_config:
+        context: ./harbor-postgresql
+        push: server
+    port: "8080"
+    env:
+      - name: POSTGRES_MAX_CONNECTIONS
+        value: "256"
+    volumes:
+      - harbor-config:/run/harbor-config
+      - harbor-control:/run/harbor-control
+      - harbor-config:/harbor_cust_cert
+      - harbor-database:/var/lib/postgresql/data
+  harbor-redis:
+    preset: service
+    image:
+      repository: harbor-redis
+      tag: latest
+      build_config:
+        context: ./harbor-redis
+        push: server
+    port: "8080"
+    volumes:
+      - harbor-config:/run/harbor-config
+      - harbor-control:/run/harbor-control
+      - harbor-config:/harbor_cust_cert
+      - harbor-redis:/var/lib/redis
+  harbor-registry:
+    preset: service
+    image:
+      repository: harbor-registry
+      tag: latest
+      build_config:
+        context: ./harbor-registry
+        push: server
+    port: "8080"
+    volumes:
+      - harbor-config:/etc/registry
+      - harbor-control:/run/harbor-control
+      - harbor-config:/harbor_cust_cert
+      - harbor-registry:/storage
+  harbor-registryctl:
+    preset: service
+    image:
+      repository: harbor-registryctl
+      tag: latest
+      build_config:
+        context: ./harbor-registryctl
+        push: server
+    port: "8080"
+    volumes:
+      - harbor-config:/etc/registryctl
+      - harbor-control:/run/harbor-control
+      - harbor-config:/harbor_cust_cert
+      - harbor-registry:/storage
+      - harbor-config:/etc/registry
+  harbor-jobservice:
+    preset: service
+    image:
+      repository: harbor-jobservice
+      tag: latest
+      build_config:
+        context: ./harbor-jobservice
+        push: server
+    port: "8080"
+    volumes:
+      - harbor-config:/etc/jobservice
+      - harbor-control:/run/harbor-control
+      - harbor-config:/harbor_cust_cert
+      - harbor-jobs:/var/log/jobs
+  harbor-portal:
+    preset: service
+    image:
+      repository: harbor-portal
+      tag: latest
+      build_config:
+        context: ./harbor-portal
+        push: server
+    port: "8080"
+    volumes:
+      - harbor-config:/run/harbor-config
+      - harbor-control:/run/harbor-control
+      - harbor-config:/harbor_cust_cert
+  harbor-proxy:
+    image:
+      repository: harbor-proxy
+      tag: latest
+      build_config:
+        context: ./harbor-proxy
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - harbor-config:/etc/nginx
+      - harbor-control:/run/harbor-control
+      - harbor-config:/harbor_cust_cert
+  harbor-trivy-adapter:
+    preset: service
+    image:
+      repository: harbor-trivy-adapter
+      tag: latest
+      build_config:
+        context: ./harbor-trivy-adapter
+        push: server
+    port: "8080"
+    volumes:
+      - harbor-config:/run/harbor-config
+      - harbor-control:/run/harbor-control
+      - harbor-config:/harbor_cust_cert
+      - harbor-trivy-cache:/home/scanner/.cache/trivy
+      - harbor-trivy-reports:/home/scanner/.cache/reports
+  harbor-exporter:
+    health_check_path: /metrics
+    preset: service
+    image:
+      repository: harbor-exporter
+      tag: latest
+      build_config:
+        context: ./harbor-exporter
+        push: server
+    port: "8080"
+    volumes:
+      - harbor-config:/run/harbor-config
+      - harbor-control:/run/harbor-control
+      - harbor-config:/harbor_cust_cert

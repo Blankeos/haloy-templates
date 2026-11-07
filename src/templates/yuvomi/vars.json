@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "SESSION_SECRET": "password:64",
+    "DB_ENCRYPTION_KEY": "password:64"
+  },
+  "derived": {}
+}

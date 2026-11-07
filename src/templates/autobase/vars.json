@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "AUTHENTICATTION_TOKEN": "base64:32"
+  },
+  "derived": {}
+}

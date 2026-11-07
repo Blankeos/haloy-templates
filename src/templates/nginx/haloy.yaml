@@ -1,0 +1,11 @@
+name: nginx
+server: localhost
+targets:
+  nginx:
+    image: nginx:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - nginx-nginx-config:/etc/nginx
+      - nginx-nginx-html:/usr/share/nginx/html

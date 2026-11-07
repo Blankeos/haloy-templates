@@ -1,0 +1,82 @@
+name: windmill
+server: localhost
+targets:
+  windmill-postgres:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: windmill
+    volumes:
+      - windmill-windmill-postgres-data:/var/lib/postgresql/data
+  windmill-server:
+    preset: service
+    image: ghcr.io/windmill-labs/windmill:main
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: WINDMILL_SERVER__DATABASE_URL
+      - name: MODE
+        value: server
+      - name: BASE_URL
+        value: http://app.example.com
+    volumes:
+      - windmill-windmill-worker-logs:/tmp/windmill/logs
+  windmill-worker:
+    preset: service
+    image: ghcr.io/windmill-labs/windmill:main
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: WINDMILL_WORKER__DATABASE_URL
+      - name: MODE
+        value: worker
+      - name: WORKER_GROUP
+        value: default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - windmill-windmill-worker-cache:/tmp/windmill/cache
+      - windmill-windmill-worker-logs:/tmp/windmill/logs
+  windmill-worker-native:
+    preset: service
+    image: ghcr.io/windmill-labs/windmill:main
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: WINDMILL_WORKER_NATIVE__DATABASE_URL
+      - name: MODE
+        value: worker
+      - name: WORKER_GROUP
+        value: native
+      - name: NUM_WORKERS
+        value: "8"
+      - name: SLEEP_QUEUE
+        value: "200"
+    volumes:
+      - windmill-windmill-worker-logs:/tmp/windmill/logs
+  windmill-lsp:
+    preset: service
+    image: ghcr.io/windmill-labs/windmill-lsp:latest
+    port: "8080"
+    volumes:
+      - windmill-windmill-lsp-cache:/root/.cache
+  windmill-caddy:
+    image:
+      repository: windmill-caddy
+      tag: latest
+      build_config:
+        context: ./windmill-caddy
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BASE_URL
+        value: '":80"'

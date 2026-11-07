@@ -1,0 +1,35 @@
+name: synapse
+server: localhost
+targets:
+  synapse:
+    health_check_path: /health
+    image:
+      repository: synapse
+      tag: latest
+      build_config:
+        context: ./synapse
+        push: server
+    port: "8008"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SYNAPSE_CONFIG_PATH
+        value: /config/homeserver.yaml
+    volumes:
+      - synapse-synapse-data:/data
+  synapse-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: synapse
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: synapse
+      - name: POSTGRES_INITDB_ARGS
+        value: --encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - synapse-postgres-data:/var/lib/postgresql/data

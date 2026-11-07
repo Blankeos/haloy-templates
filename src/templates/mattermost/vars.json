@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "INLINE_PASSWORD_32": "password:32"
+  },
+  "derived": {
+    "MATTERMOST__MM_SQLSETTINGS_DATASOURCE": "postgres://mmuser:${INLINE_PASSWORD_32}@mattermost-postgres:5432/mattermost?sslmode=disable&connect_timeout=10"
+  }
+}

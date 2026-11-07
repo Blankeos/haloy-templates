@@ -1,0 +1,25 @@
+name: rutorrent
+server: localhost
+targets:
+  rutorrent:
+    image: crazymax/rtorrent-rutorrent:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: ${PUID:-1000}
+      - name: PGID
+        value: ${PGID:-1000}
+      - name: RUTORRENT_PORT
+        value: "8080"
+      - name: XMLRPC_PORT
+        value: "8000"
+      - name: RT_DHT_PORT
+        value: ${DHT_PORT:-6881}
+      - name: RT_INC_PORT
+        value: ${INCOMING_PORT:-50000}
+    volumes:
+      - rutorrent-rutorrent-data:/data
+      - rutorrent-rutorrent-downloads:/downloads
+      - rutorrent-rutorrent-passwd:/passwd

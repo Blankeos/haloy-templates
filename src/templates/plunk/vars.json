@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "JWT_SECRET": "password:64",
+    "MINIO_ROOT_PASSWORD": "password:32"
+  },
+  "derived": {
+    "PLUNK__DATABASE_URL": "postgresql://plunk:${POSTGRES_PASSWORD}@plunk-postgres:5432/plunk",
+    "PLUNK__DIRECT_DATABASE_URL": "postgresql://plunk:${POSTGRES_PASSWORD}@plunk-postgres:5432/plunk"
+  }
+}

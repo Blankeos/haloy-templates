@@ -1,0 +1,48 @@
+name: bluesky-pds
+server: localhost
+targets:
+  bluesky-pds-pds:
+    health_check_path: /xrpc/_health
+    image:
+      repository: bluesky-pds-pds
+      tag: latest
+      build_config:
+        context: ./bluesky-pds-pds
+        push: server
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PDS_HOSTNAME
+        value: app.example.com
+      - name: PDS_JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: PDS_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX
+        from:
+          env: ROTATION_KEY
+      - name: PDS_DATA_DIRECTORY
+        value: /pds
+      - name: PDS_BLOBSTORE_DISK_LOCATION
+        value: /pds/blocks
+      - name: PDS_BLOB_UPLOAD_LIMIT
+        value: "104857600"
+      - name: PDS_DID_PLC_URL
+        value: https://plc.directory
+      - name: PDS_BSKY_APP_VIEW_URL
+        value: https://api.bsky.app
+      - name: PDS_BSKY_APP_VIEW_DID
+        value: did:web:api.bsky.app
+      - name: PDS_REPORT_SERVICE_URL
+        value: https://mod.bsky.app/xrpc/com.atproto.moderation.createReport
+      - name: PDS_REPORT_SERVICE_DID
+        value: did:plc:ar7c4by46qjdydhdevvrndac
+      - name: PDS_CRAWLERS
+        value: https://bsky.network
+      - name: LOG_ENABLED
+        value: "true"
+    volumes:
+      - bluesky-pds-pds-data:/pds

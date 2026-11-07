@@ -1,0 +1,21 @@
+name: silo
+server: localhost
+targets:
+  silo:
+    image:
+      repository: silo
+      tag: latest
+      build_config:
+        context: ./silo
+        push: server
+    port: "9000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MINIO_ROOT_USER
+        value: silo_usr
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: PASSWORD
+    volumes:
+      - silo-silo:/data

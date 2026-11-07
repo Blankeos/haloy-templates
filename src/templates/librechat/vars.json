@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "JWT_SECRET": "password:64",
+    "JWT_REFRESH_SECRET": "password:64",
+    "MEILI_MASTER_KEY": "password:32",
+    "MONGO_PASSWORD": "password:16",
+    "POSTGRESQL_PASSWORD": "password:16"
+  },
+  "derived": {}
+}

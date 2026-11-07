@@ -1,0 +1,21 @@
+{
+  "secrets": {
+    "ADMIN_PASSWORD": "password:20",
+    "JWT_SECRET": "password:64",
+    "REFRESH_SECRET": "password:64",
+    "XMPP_SECRET": "password:32",
+    "XMPP_JWT_SECRET": "password:64",
+    "XMPP_ADMIN_PASSWORD": "password:24",
+    "INTERNAL_REQUESTS_SECRET": "password:32",
+    "MYSQL_ROOT_PASSWORD": "password:32",
+    "MINIO_ROOT_PASSWORD": "password:32",
+    "CENTRIFUGO_API_KEY": "password:64",
+    "CENTRIFUGO_HMAC_SECRET": "password:64",
+    "CENTRIFUGO_ADMIN_PASSWORD": "password:24",
+    "CENTRIFUGO_ADMIN_SECRET": "password:64",
+    "INLINE_PASSWORD_12": "password:12"
+  },
+  "derived": {
+    "ETHORA_CORE_MINIO__MINIO_ROOT_USER": "ethora${INLINE_PASSWORD_12}"
+  }
+}

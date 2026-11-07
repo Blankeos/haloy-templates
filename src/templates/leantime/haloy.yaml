@@ -1,0 +1,48 @@
+name: leantime
+server: localhost
+targets:
+  leantime:
+    image: leantime/leantime:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LEAN_APP_URL
+        value: http://app.example.com
+      - name: LEAN_SESSION_PASSWORD
+        from:
+          env: SESSION_PASSWORD
+      - name: LEAN_DB_HOST
+        value: leantime-db
+      - name: LEAN_DB_USER
+        value: leantime
+      - name: LEAN_DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: LEAN_DB_DATABASE
+        value: leantime
+    volumes:
+      - leantime-leantime-files:/var/www/html/userfiles
+      - leantime-leantime-public:/var/www/html/public/userfiles
+  leantime-db:
+    preset: database
+    image:
+      repository: leantime-db
+      tag: latest
+      build_config:
+        context: ./leantime-db
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: leantime
+      - name: MYSQL_USER
+        value: leantime
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - leantime-db-data:/var/lib/mysql

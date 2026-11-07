@@ -1,0 +1,16 @@
+name: prozesswerk
+server: localhost
+targets:
+  prozesswerk:
+    image: ghcr.io/guidoesser/prozesswerk:1.0.0
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LLM_API_KEY
+        from:
+          env: LLM_API_KEY
+      - name: LLM_BASE_URL
+        value: https://api.openai.com/v1
+      - name: LLM_MODEL
+        value: gpt-4o

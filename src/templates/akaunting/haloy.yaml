@@ -1,0 +1,54 @@
+name: akaunting
+server: localhost
+targets:
+  akaunting:
+    image: docker.io/akaunting/akaunting:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_URL
+        value: app.example.com
+      - name: LOCALE
+        value: en-US
+      - name: DB_HOST
+        value: akaunting-db
+      - name: DB_PORT
+        value: "3306"
+      - name: DB_NAME
+        value: akaunting
+      - name: DB_USERNAME
+        value: admin
+      - name: DB_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+      - name: DB_PREFIX
+        from:
+          env: AKAUNTING__DB_PREFIX
+      - name: COMPANY_NAME
+        value: My Company
+      - name: COMPANY_EMAIL
+        value: admin@app.example.com
+      - name: ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+    volumes:
+      - akaunting-akaunting-data:/var/www/html
+  akaunting-db:
+    preset: database
+    image: mariadb:10.11
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: akaunting
+      - name: MYSQL_USER
+        value: admin
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+      - name: MYSQL_RANDOM_ROOT_PASSWORD
+        value: yes
+    volumes:
+      - akaunting-akaunting-db:/var/lib/mysql

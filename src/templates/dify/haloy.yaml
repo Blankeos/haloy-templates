@@ -1,0 +1,513 @@
+name: dify
+server: localhost
+targets:
+  dify-nginx:
+    image:
+      repository: dify-nginx
+      tag: latest
+      build_config:
+        context: ./dify-nginx
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+  dify-init-permissions:
+    preset: service
+    image:
+      repository: dify-init-permissions
+      tag: latest
+      build_config:
+        context: ./dify-init-permissions
+        push: server
+    port: "8080"
+    volumes:
+      - dify-dify-app-storage:/app/api/storage
+  dify-api:
+    health_check_path: /health
+    preset: service
+    image: langgenius/dify-api:1.15.0
+    port: "8080"
+    env:
+      - name: LOG_LEVEL
+        value: INFO
+      - name: DEPLOY_ENV
+        value: PRODUCTION
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: MIGRATION_ENABLED
+        value: "true"
+      - name: CONSOLE_API_URL
+        value: https://app.example.com
+      - name: CONSOLE_WEB_URL
+        value: https://app.example.com
+      - name: SERVICE_API_URL
+        value: https://app.example.com
+      - name: APP_API_URL
+        value: https://app.example.com
+      - name: APP_WEB_URL
+        value: https://app.example.com
+      - name: FILES_URL
+        value: https://app.example.com
+      - name: INTERNAL_FILES_URL
+        value: http://dify-api:5001
+      - name: TRIGGER_URL
+        value: https://app.example.com
+      - name: ENDPOINT_URL_TEMPLATE
+        value: https://app.example.com/e/{hook_id}
+      - name: ENABLE_COLLABORATION_MODE
+        value: "false"
+      - name: WEB_API_CORS_ALLOW_ORIGINS
+        value: "*"
+      - name: CONSOLE_CORS_ALLOW_ORIGINS
+        value: "*"
+      - name: DB_USERNAME
+        value: postgres
+      - name: DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DB_HOST
+        value: dify-db
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_DATABASE
+        value: dify
+      - name: REDIS_HOST
+        value: dify-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: REDIS_DB
+        value: "0"
+      - name: CELERY_BROKER_URL
+        from:
+          env: DIFY_API__CELERY_BROKER_URL
+      - name: STORAGE_TYPE
+        value: opendal
+      - name: OPENDAL_SCHEME
+        value: fs
+      - name: OPENDAL_FS_ROOT
+        value: storage
+      - name: VECTOR_STORE
+        value: pgvector
+      - name: PGVECTOR_HOST
+        value: dify-db
+      - name: PGVECTOR_PORT
+        value: "5432"
+      - name: PGVECTOR_USER
+        value: postgres
+      - name: PGVECTOR_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: PGVECTOR_DATABASE
+        value: dify
+      - name: PGVECTOR_MIN_CONNECTION
+        value: "1"
+      - name: PGVECTOR_MAX_CONNECTION
+        value: "5"
+      - name: CODE_EXECUTION_ENDPOINT
+        value: http://dify-sandbox:8194
+      - name: CODE_EXECUTION_API_KEY
+        from:
+          env: SANDBOX_API_KEY
+      - name: SSRF_PROXY_HTTP_URL
+        value: http://dify-ssrf-proxy:3128
+      - name: SSRF_PROXY_HTTPS_URL
+        value: http://dify-ssrf-proxy:3128
+      - name: PLUGIN_DAEMON_URL
+        value: http://dify-plugin-daemon:5002
+      - name: PLUGIN_DAEMON_KEY
+        from:
+          env: PLUGIN_DAEMON_KEY
+      - name: INNER_API_KEY_FOR_PLUGIN
+        from:
+          env: PLUGIN_INNER_API_KEY
+      - name: PLUGIN_MAX_PACKAGE_SIZE
+        value: "52428800"
+      - name: PLUGIN_REMOTE_INSTALL_HOST
+        value: localhost
+      - name: PLUGIN_REMOTE_INSTALL_PORT
+        value: "5003"
+      - name: MARKETPLACE_ENABLED
+        value: "true"
+      - name: MARKETPLACE_API_URL
+        value: https://marketplace.dify.ai
+      - name: MODE
+        value: api
+    volumes:
+      - dify-dify-app-storage:/app/api/storage
+  dify-worker:
+    preset: service
+    image: langgenius/dify-api:1.15.0
+    port: "8080"
+    env:
+      - name: LOG_LEVEL
+        value: INFO
+      - name: DEPLOY_ENV
+        value: PRODUCTION
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: MIGRATION_ENABLED
+        value: "true"
+      - name: CONSOLE_API_URL
+        value: https://app.example.com
+      - name: CONSOLE_WEB_URL
+        value: https://app.example.com
+      - name: SERVICE_API_URL
+        value: https://app.example.com
+      - name: APP_API_URL
+        value: https://app.example.com
+      - name: APP_WEB_URL
+        value: https://app.example.com
+      - name: FILES_URL
+        value: https://app.example.com
+      - name: INTERNAL_FILES_URL
+        value: http://dify-api:5001
+      - name: TRIGGER_URL
+        value: https://app.example.com
+      - name: ENDPOINT_URL_TEMPLATE
+        value: https://app.example.com/e/{hook_id}
+      - name: ENABLE_COLLABORATION_MODE
+        value: "false"
+      - name: WEB_API_CORS_ALLOW_ORIGINS
+        value: "*"
+      - name: CONSOLE_CORS_ALLOW_ORIGINS
+        value: "*"
+      - name: DB_USERNAME
+        value: postgres
+      - name: DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DB_HOST
+        value: dify-db
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_DATABASE
+        value: dify
+      - name: REDIS_HOST
+        value: dify-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: REDIS_DB
+        value: "0"
+      - name: CELERY_BROKER_URL
+        from:
+          env: DIFY_WORKER__CELERY_BROKER_URL
+      - name: STORAGE_TYPE
+        value: opendal
+      - name: OPENDAL_SCHEME
+        value: fs
+      - name: OPENDAL_FS_ROOT
+        value: storage
+      - name: VECTOR_STORE
+        value: pgvector
+      - name: PGVECTOR_HOST
+        value: dify-db
+      - name: PGVECTOR_PORT
+        value: "5432"
+      - name: PGVECTOR_USER
+        value: postgres
+      - name: PGVECTOR_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: PGVECTOR_DATABASE
+        value: dify
+      - name: PGVECTOR_MIN_CONNECTION
+        value: "1"
+      - name: PGVECTOR_MAX_CONNECTION
+        value: "5"
+      - name: CODE_EXECUTION_ENDPOINT
+        value: http://dify-sandbox:8194
+      - name: CODE_EXECUTION_API_KEY
+        from:
+          env: SANDBOX_API_KEY
+      - name: SSRF_PROXY_HTTP_URL
+        value: http://dify-ssrf-proxy:3128
+      - name: SSRF_PROXY_HTTPS_URL
+        value: http://dify-ssrf-proxy:3128
+      - name: PLUGIN_DAEMON_URL
+        value: http://dify-plugin-daemon:5002
+      - name: PLUGIN_DAEMON_KEY
+        from:
+          env: PLUGIN_DAEMON_KEY
+      - name: INNER_API_KEY_FOR_PLUGIN
+        from:
+          env: PLUGIN_INNER_API_KEY
+      - name: PLUGIN_MAX_PACKAGE_SIZE
+        value: "52428800"
+      - name: PLUGIN_REMOTE_INSTALL_HOST
+        value: localhost
+      - name: PLUGIN_REMOTE_INSTALL_PORT
+        value: "5003"
+      - name: MARKETPLACE_ENABLED
+        value: "true"
+      - name: MARKETPLACE_API_URL
+        value: https://marketplace.dify.ai
+      - name: MODE
+        value: worker
+    volumes:
+      - dify-dify-app-storage:/app/api/storage
+  dify-worker-beat:
+    preset: service
+    image: langgenius/dify-api:1.15.0
+    port: "8080"
+    env:
+      - name: LOG_LEVEL
+        value: INFO
+      - name: DEPLOY_ENV
+        value: PRODUCTION
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: MIGRATION_ENABLED
+        value: "true"
+      - name: CONSOLE_API_URL
+        value: https://app.example.com
+      - name: CONSOLE_WEB_URL
+        value: https://app.example.com
+      - name: SERVICE_API_URL
+        value: https://app.example.com
+      - name: APP_API_URL
+        value: https://app.example.com
+      - name: APP_WEB_URL
+        value: https://app.example.com
+      - name: FILES_URL
+        value: https://app.example.com
+      - name: INTERNAL_FILES_URL
+        value: http://dify-api:5001
+      - name: TRIGGER_URL
+        value: https://app.example.com
+      - name: ENDPOINT_URL_TEMPLATE
+        value: https://app.example.com/e/{hook_id}
+      - name: ENABLE_COLLABORATION_MODE
+        value: "false"
+      - name: WEB_API_CORS_ALLOW_ORIGINS
+        value: "*"
+      - name: CONSOLE_CORS_ALLOW_ORIGINS
+        value: "*"
+      - name: DB_USERNAME
+        value: postgres
+      - name: DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DB_HOST
+        value: dify-db
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_DATABASE
+        value: dify
+      - name: REDIS_HOST
+        value: dify-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: REDIS_DB
+        value: "0"
+      - name: CELERY_BROKER_URL
+        from:
+          env: DIFY_WORKER_BEAT__CELERY_BROKER_URL
+      - name: STORAGE_TYPE
+        value: opendal
+      - name: OPENDAL_SCHEME
+        value: fs
+      - name: OPENDAL_FS_ROOT
+        value: storage
+      - name: VECTOR_STORE
+        value: pgvector
+      - name: PGVECTOR_HOST
+        value: dify-db
+      - name: PGVECTOR_PORT
+        value: "5432"
+      - name: PGVECTOR_USER
+        value: postgres
+      - name: PGVECTOR_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: PGVECTOR_DATABASE
+        value: dify
+      - name: PGVECTOR_MIN_CONNECTION
+        value: "1"
+      - name: PGVECTOR_MAX_CONNECTION
+        value: "5"
+      - name: CODE_EXECUTION_ENDPOINT
+        value: http://dify-sandbox:8194
+      - name: CODE_EXECUTION_API_KEY
+        from:
+          env: SANDBOX_API_KEY
+      - name: SSRF_PROXY_HTTP_URL
+        value: http://dify-ssrf-proxy:3128
+      - name: SSRF_PROXY_HTTPS_URL
+        value: http://dify-ssrf-proxy:3128
+      - name: PLUGIN_DAEMON_URL
+        value: http://dify-plugin-daemon:5002
+      - name: PLUGIN_DAEMON_KEY
+        from:
+          env: PLUGIN_DAEMON_KEY
+      - name: INNER_API_KEY_FOR_PLUGIN
+        from:
+          env: PLUGIN_INNER_API_KEY
+      - name: PLUGIN_MAX_PACKAGE_SIZE
+        value: "52428800"
+      - name: PLUGIN_REMOTE_INSTALL_HOST
+        value: localhost
+      - name: PLUGIN_REMOTE_INSTALL_PORT
+        value: "5003"
+      - name: MARKETPLACE_ENABLED
+        value: "true"
+      - name: MARKETPLACE_API_URL
+        value: https://marketplace.dify.ai
+      - name: MODE
+        value: beat
+  dify-web:
+    preset: service
+    image: langgenius/dify-web:1.15.0
+    port: "8080"
+    env:
+      - name: CONSOLE_API_URL
+        value: https://app.example.com
+      - name: APP_API_URL
+        value: https://app.example.com
+      - name: SERVER_CONSOLE_API_URL
+        value: http://dify-api:5001
+      - name: ENABLE_COLLABORATION_MODE
+        value: "false"
+      - name: MARKETPLACE_API_URL
+        value: https://marketplace.dify.ai
+      - name: MARKETPLACE_URL
+        value: https://marketplace.dify.ai
+      - name: NEXT_TELEMETRY_DISABLED
+        value: "1"
+  dify-db:
+    preset: database
+    image: pgvector/pgvector:pg16
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: dify
+      - name: PGDATA
+        value: /var/lib/postgresql/data/pgdata
+    volumes:
+      - dify-dify-db-data:/var/lib/postgresql/data
+  dify-redis:
+    preset: database
+    image:
+      repository: dify-redis
+      tag: latest
+      build_config:
+        context: ./dify-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDISCLI_AUTH
+        from:
+          env: REDIS_PASSWORD
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - dify-dify-redis-data:/data
+  dify-sandbox:
+    preset: service
+    image: langgenius/dify-sandbox:0.2.15
+    port: "8080"
+    env:
+      - name: API_KEY
+        from:
+          env: SANDBOX_API_KEY
+      - name: GIN_MODE
+        value: release
+      - name: WORKER_TIMEOUT
+        value: "15"
+      - name: ENABLE_NETWORK
+        value: "true"
+      - name: HTTP_PROXY
+        value: http://dify-ssrf-proxy:3128
+      - name: HTTPS_PROXY
+        value: http://dify-ssrf-proxy:3128
+      - name: SANDBOX_PORT
+        value: "8194"
+    volumes:
+      - dify-dify-sandbox-deps:/dependencies
+  dify-ssrf-proxy:
+    preset: service
+    image:
+      repository: dify-ssrf-proxy
+      tag: latest
+      build_config:
+        context: ./dify-ssrf-proxy
+        push: server
+    port: "8080"
+  dify-plugin-daemon:
+    preset: service
+    image: langgenius/dify-plugin-daemon:0.6.3-local
+    port: "8080"
+    env:
+      - name: DB_HOST
+        value: dify-db
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_USERNAME
+        value: postgres
+      - name: DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DB_DATABASE
+        value: dify_plugin
+      - name: DB_SSL_MODE
+        value: disable
+      - name: REDIS_HOST
+        value: dify-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: SERVER_PORT
+        value: "5002"
+      - name: SERVER_KEY
+        from:
+          env: PLUGIN_DAEMON_KEY
+      - name: MAX_PLUGIN_PACKAGE_SIZE
+        value: "52428800"
+      - name: DIFY_INNER_API_URL
+        value: http://dify-api:5001
+      - name: DIFY_INNER_API_KEY
+        from:
+          env: PLUGIN_INNER_API_KEY
+      - name: PLUGIN_REMOTE_INSTALLING_HOST
+        value: 0.0.0.0
+      - name: PLUGIN_REMOTE_INSTALLING_PORT
+        value: "5003"
+      - name: PLUGIN_WORKING_PATH
+        value: /app/storage/cwd
+      - name: FORCE_VERIFYING_SIGNATURE
+        value: "true"
+      - name: PYTHON_ENV_INIT_TIMEOUT
+        value: "120"
+      - name: PLUGIN_MAX_EXECUTION_TIMEOUT
+        value: "600"
+      - name: PLUGIN_STORAGE_TYPE
+        value: local
+      - name: PLUGIN_STORAGE_LOCAL_ROOT
+        value: /app/storage
+      - name: PLUGIN_INSTALLED_PATH
+        value: plugin
+      - name: PLUGIN_PACKAGE_CACHE_PATH
+        value: plugin_packages
+      - name: PLUGIN_MEDIA_CACHE_PATH
+        value: assets
+    volumes:
+      - dify-dify-plugin-storage:/app/storage

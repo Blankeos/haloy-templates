@@ -1,0 +1,19 @@
+name: autobase
+server: localhost
+targets:
+  autobase-console:
+    image: autobase/console:2.11.0
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PG_CONSOLE_API_URL
+        value: http://app.example.com/api/v1
+      - name: PG_CONSOLE_AUTHORIZATION_TOKEN
+        from:
+          env: AUTHENTICATTION_TOKEN
+    volumes:
+      - autobase-console-postgres:/var/lib/postgresql
+      - autobase-dbdesk-studio-data:/opt/dbdesk-studio
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/ansible:/tmp/ansible

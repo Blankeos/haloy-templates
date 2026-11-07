@@ -1,0 +1,13 @@
+name: ampache
+server: localhost
+targets:
+  ampache:
+    image: ampache/ampache:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - ampache-config:/var/www/config
+      - ampache-log:/var/log/ampache
+      - ampache-mysql:/var/lib/mysql
+      - /path/to/your/media:/media

@@ -1,0 +1,29 @@
+name: kener
+server: localhost
+targets:
+  kener-redis:
+    preset: database
+    image: redis:7-alpine
+    port: "6379"
+    volumes:
+      - kener-redis-data:/data
+  kener:
+    image: rajnandan1/kener:4.1.1
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: Etc/UTC
+      - name: KENER_SECRET_KEY
+        from:
+          env: KENER_SECRET_KEY
+      - name: ORIGIN
+        value: http://localhost:3000
+      - name: REDIS_URL
+        value: redis://kener-redis:6379
+      - name: DATABASE_URL
+        value: sqlite://./database/kener.sqlite.db
+    volumes:
+      - kener-data:/app/database
+      - kener-uploads:/app/uploads

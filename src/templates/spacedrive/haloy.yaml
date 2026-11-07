@@ -1,0 +1,14 @@
+name: spacedrive
+server: localhost
+targets:
+  spacedrive-server:
+    image: ghcr.io/spacedriveapp/spacedrive/server:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SD_AUTH
+        from:
+          env: SPACEDRIVE_SERVER__SD_AUTH
+    volumes:
+      - /var/spacedrive:/var/spacedrive

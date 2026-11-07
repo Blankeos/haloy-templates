@@ -1,0 +1,36 @@
+name: odoo-19
+server: localhost
+targets:
+  odoo-19-web:
+    image:
+      repository: odoo-19-web
+      tag: latest
+      build_config:
+        context: ./odoo-19-web
+        push: server
+    port: "8069"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: HOST
+        value: odoo-19-db
+      - name: USER
+        value: odoo
+      - name: PASSWORD
+        value: odoo
+    volumes:
+      - odoo-19-odoo-web-data:/var/lib/odoo
+      - odoo-19-addons:/mnt/extra-addons
+  odoo-19-db:
+    preset: database
+    image: postgres:17
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: postgres
+      - name: POSTGRES_USER
+        value: odoo
+      - name: POSTGRES_PASSWORD
+        value: odoo
+    volumes:
+      - odoo-19-odoo-db-data:/var/lib/postgresql/data

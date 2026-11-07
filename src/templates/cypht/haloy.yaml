@@ -1,0 +1,83 @@
+name: cypht
+server: localhost
+targets:
+  cypht:
+    image: cypht/cypht:2.13.0
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: AUTH_USERNAME
+        value: admin
+      - name: AUTH_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: ADMIN_USERS
+        value: admin
+      - name: AUTH_TYPE
+        value: DB
+      - name: USER_CONFIG_TYPE
+        value: DB
+      - name: DB_CONNECTION_TYPE
+        value: host
+      - name: DB_DRIVER
+        value: mysql
+      - name: DB_HOST
+        value: cypht-db
+      - name: DB_PORT
+        value: "3306"
+      - name: DB_NAME
+        value: cypht
+      - name: DB_USER
+        value: cypht
+      - name: DB_PASS
+        from:
+          env: DB_PASSWORD
+      - name: SESSION_TYPE
+        value: REDIS
+      - name: ENABLE_REDIS
+        value: "true"
+      - name: REDIS_SERVER
+        value: cypht-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASS
+        from:
+          env: REDIS_PASSWORD
+      - name: ENABLE_MEMCACHED
+        value: "false"
+      - name: ENCRYPT_LOCAL_STORAGE
+        value: "true"
+    volumes:
+      - cypht-cypht-attachments:/var/lib/hm3/attachments
+  cypht-db:
+    preset: database
+    image: mariadb:10.11
+    port: "3306"
+    env:
+      - name: MARIADB_DATABASE
+        value: cypht
+      - name: MARIADB_USER
+        value: cypht
+      - name: MARIADB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MARIADB_RANDOM_ROOT_PASSWORD
+        value: yes
+    volumes:
+      - cypht-cypht-db:/var/lib/mysql
+  cypht-redis:
+    preset: database
+    image:
+      repository: cypht-redis
+      tag: latest
+      build_config:
+        context: ./cypht-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - cypht-cypht-redis:/data

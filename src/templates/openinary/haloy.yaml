@@ -1,0 +1,29 @@
+name: openinary
+server: localhost
+targets:
+  openinary:
+    image: openinary/openinary:${IMAGE_TAG:-latest}
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: MODE
+        value: fullstack
+      - name: NEXT_PUBLIC_API_BASE_URL
+        value: /api
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: BETTER_AUTH_SECRET
+      - name: BETTER_AUTH_URL
+        value: http://app.example.com
+      - name: ALLOWED_ORIGIN
+        value: http://app.example.com}
+      - name: DOCKER_CONTAINER
+        value: "true"
+    volumes:
+      - openinary-cache-data:/app/apps/api/cache
+      - openinary-public-files:/app/apps/api/public
+      - openinary-db-data:/app/data
+      - openinary-db-data:/app/web-standalone/data

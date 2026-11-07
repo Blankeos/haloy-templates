@@ -1,0 +1,39 @@
+name: phpmyadmin
+server: localhost
+targets:
+  phpmyadmin-db:
+    preset: database
+    image: mysql:5.7
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: phpmyadmin
+      - name: MYSQL_USER
+        value: phpmyadmin
+      - name: MYSQL_PASSWORD
+        from:
+          env: USER_PASSWORD
+    volumes:
+      - phpmyadmin-db-data:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin:5.2.3
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PMA_HOST
+        value: phpmyadmin-db
+      - name: PMA_USER
+        value: phpmyadmin
+      - name: PMA_PASSWORD
+        from:
+          env: USER_PASSWORD
+      - name: PMA_ARBITRARY
+        value: "1"
+      - name: UPLOAD_LIMIT
+        value: 512M
+      - name: MAX_EXECUTION_TIME
+        value: "600"

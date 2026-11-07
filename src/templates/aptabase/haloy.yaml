@@ -1,0 +1,41 @@
+name: aptabase
+server: localhost
+targets:
+  aptabase-db:
+    preset: database
+    image: postgres:15-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: aptabase
+      - name: POSTGRES_PASSWORD
+        value: sTr0NGp4ssw0rd
+    volumes:
+      - aptabase-db-data:/var/lib/postgresql/data
+  aptabase-events-db:
+    health_check_path: /
+    preset: database
+    image: clickhouse/clickhouse-server:23.8.16.16-alpine
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_USER
+        value: aptabase
+      - name: CLICKHOUSE_PASSWORD
+        value: sTr0NGp4ssw0rd
+    volumes:
+      - aptabase-events-db-data:/var/lib/clickhouse
+  aptabase:
+    image: ghcr.io/aptabase/aptabase:main
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BASE_URL
+        value: http://app.example.com
+      - name: AUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: DATABASE_URL
+        value: Server=aptabase_db;Port=5432;User Id=aptabase;Password=sTr0NGp4ssw0rd;Database=aptabase
+      - name: CLICKHOUSE_URL
+        value: Host=aptabase_events_db;Port=8123;Username=aptabase;Password=sTr0NGp4ssw0rd

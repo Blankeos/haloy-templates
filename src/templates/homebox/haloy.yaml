@@ -1,0 +1,16 @@
+name: homebox
+server: localhost
+targets:
+  homebox:
+    image: ghcr.io/sysadminsmedia/homebox:latest
+    port: "7745"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: Etc/UTC
+      - name: HBOX_AUTH_API_KEY_PEPPER
+        from:
+          env: API_KEY_PEPPER
+    volumes:
+      - homebox-homebox-data:/data

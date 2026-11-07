@@ -1,0 +1,10 @@
+name: privatebin
+server: localhost
+targets:
+  privatebin:
+    image: privatebin/nginx-fpm-alpine:2.0.4
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - privatebin-privatebin-data:/srv/data

@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "JWT_SECRET": "password:64",
+    "INITIAL_PASSWORD": "password:32",
+    "API_KEY_SECRET": "password:64",
+    "MACHINE_ID_SALT": "password:32"
+  },
+  "derived": {}
+}

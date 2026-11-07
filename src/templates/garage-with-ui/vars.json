@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "ADMIN_TOKEN": "base64:32",
+    "METRICS_TOKEN": "base64:32"
+  },
+  "derived": {}
+}

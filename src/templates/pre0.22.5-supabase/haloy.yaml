@@ -1,0 +1,419 @@
+name: pre0-22-5-supabase
+server: localhost
+targets:
+  pre0-22-5-supabase-studio:
+    preset: service
+    image: supabase/studio:2025.04.21-sha-173cc56
+    port: "8080"
+    env:
+      - name: STUDIO_PG_META_URL
+        value: http://pre0-22-5-supabase-meta:8080
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DEFAULT_ORGANIZATION_NAME
+        value: Default Organization
+      - name: DEFAULT_PROJECT_NAME
+        value: Default Project
+      - name: SUPABASE_URL
+        value: http://app.example.com
+      - name: SUPABASE_PUBLIC_URL
+        value: http://app.example.com
+      - name: SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      - name: SUPABASE_SERVICE_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+      - name: AUTH_JWT_SECRET
+        value: your-super-secret-jwt-token-with-at-least-32-characters-long
+      - name: LOGFLARE_API_KEY
+        from:
+          env: LOGFLARE_API_KEY
+      - name: LOGFLARE_URL
+        value: http://pre0-22-5-supabase-analytics:4000
+      - name: NEXT_PUBLIC_ENABLE_LOGS
+        value: "true"
+      - name: NEXT_ANALYTICS_BACKEND_PROVIDER
+        value: postgres
+  pre0-22-5-supabase-kong:
+    image:
+      repository: pre0-22-5-supabase-kong
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-kong
+        push: server
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: KONG_DATABASE
+        value: off
+      - name: KONG_DECLARATIVE_CONFIG
+        value: /home/kong/kong.yml
+      - name: KONG_DNS_ORDER
+        value: LAST,A,CNAME
+      - name: KONG_PLUGINS
+        value: request-transformer,cors,key-auth,acl,basic-auth
+      - name: KONG_NGINX_PROXY_PROXY_BUFFER_SIZE
+        value: 160k
+      - name: KONG_NGINX_PROXY_PROXY_BUFFERS
+        value: 64 160k
+      - name: SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      - name: SUPABASE_SERVICE_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+      - name: DASHBOARD_USERNAME
+        value: supabase
+      - name: DASHBOARD_PASSWORD
+        from:
+          env: DASHBOARD_PASSWORD
+  pre0-22-5-supabase-auth:
+    health_check_path: /health
+    preset: service
+    image: supabase/gotrue:v2.171.0
+    port: "8080"
+    env:
+      - name: GOTRUE_MAILER_EXTERNAL_HOSTS
+        value: kong,app.example.com
+      - name: GOTRUE_API_HOST
+        value: 0.0.0.0
+      - name: GOTRUE_API_PORT
+        value: "9999"
+      - name: API_EXTERNAL_URL
+        value: http://app.example.com
+      - name: GOTRUE_DB_DRIVER
+        value: postgres
+      - name: GOTRUE_DB_DATABASE_URL
+        from:
+          env: PRE0_22_5_SUPABASE_AUTH__GOTRUE_DB_DATABASE_URL
+      - name: GOTRUE_SITE_URL
+        value: http://localhost:3000
+      - name: GOTRUE_URI_ALLOW_LIST
+        value: http://app.example.com/*,http://localhost:3000/*
+      - name: GOTRUE_DISABLE_SIGNUP
+        value: "false"
+      - name: GOTRUE_JWT_ADMIN_ROLES
+        value: service_role
+      - name: GOTRUE_JWT_AUD
+        value: authenticated
+      - name: GOTRUE_JWT_DEFAULT_GROUP_NAME
+        value: authenticated
+      - name: GOTRUE_JWT_EXP
+        value: "3600"
+      - name: GOTRUE_JWT_SECRET
+        value: your-super-secret-jwt-token-with-at-least-32-characters-long
+      - name: GOTRUE_EXTERNAL_EMAIL_ENABLED
+        value: "true"
+      - name: GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED
+        value: "false"
+      - name: GOTRUE_MAILER_AUTOCONFIRM
+        value: "false"
+      - name: GOTRUE_SMTP_ADMIN_EMAIL
+        value: admin@example.com
+      - name: GOTRUE_SMTP_HOST
+        value: supabase-mail
+      - name: GOTRUE_SMTP_PORT
+        value: "2500"
+      - name: GOTRUE_SMTP_USER
+        value: fake_mail_user
+      - name: GOTRUE_SMTP_PASS
+        value: fake_mail_password
+      - name: GOTRUE_SMTP_SENDER_NAME
+        value: fake_sender
+      - name: GOTRUE_MAILER_URLPATHS_INVITE
+        value: '"/auth/v1/verify"'
+      - name: GOTRUE_MAILER_URLPATHS_CONFIRMATION
+        value: '"/auth/v1/verify"'
+      - name: GOTRUE_MAILER_URLPATHS_RECOVERY
+        value: '"/auth/v1/verify"'
+      - name: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
+        value: '"/auth/v1/verify"'
+      - name: GOTRUE_EXTERNAL_PHONE_ENABLED
+        value: "true"
+      - name: GOTRUE_SMS_AUTOCONFIRM
+        value: "true"
+  pre0-22-5-supabase-rest:
+    preset: service
+    image:
+      repository: pre0-22-5-supabase-rest
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-rest
+        push: server
+    port: "8080"
+    env:
+      - name: PGRST_DB_URI
+        from:
+          env: PRE0_22_5_SUPABASE_REST__PGRST_DB_URI
+      - name: PGRST_DB_SCHEMAS
+        value: public,storage,graphql_public
+      - name: PGRST_DB_ANON_ROLE
+        value: anon
+      - name: PGRST_JWT_SECRET
+        value: your-super-secret-jwt-token-with-at-least-32-characters-long
+      - name: PGRST_DB_USE_LEGACY_GUCS
+        value: "false"
+      - name: PGRST_APP_SETTINGS_JWT_SECRET
+        value: your-super-secret-jwt-token-with-at-least-32-characters-long
+      - name: PGRST_APP_SETTINGS_JWT_EXP
+        value: "3600"
+  pre0-22-5-supabase-realtime:
+    health_check_path: /api/tenants/realtime-dev/health
+    preset: service
+    image: supabase/realtime:v2.34.47
+    port: "8080"
+    env:
+      - name: PORT
+        value: "4000"
+      - name: DB_HOST
+        value: pre0-22-5-supabase-db
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_USER
+        value: supabase_admin
+      - name: DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DB_NAME
+        value: postgres
+      - name: DB_AFTER_CONNECT_QUERY
+        value: SET search_path TO _realtime
+      - name: DB_ENC_KEY
+        value: supabaserealtime
+      - name: API_JWT_SECRET
+        value: your-super-secret-jwt-token-with-at-least-32-characters-long
+      - name: SECRET_KEY_BASE
+        value: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
+      - name: ERL_AFLAGS
+        value: -proto_dist inet_tcp
+      - name: DNS_NODES
+        value: "''"
+      - name: RLIMIT_NOFILE
+        value: "10000"
+      - name: APP_NAME
+        value: realtime
+      - name: SEED_SELF_HOST
+        value: "true"
+      - name: RUN_JANITOR
+        value: "true"
+  pre0-22-5-supabase-storage:
+    preset: service
+    image: supabase/storage-api:v1.22.7
+    port: "8080"
+    env:
+      - name: ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      - name: SERVICE_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+      - name: POSTGREST_URL
+        value: http://pre0-22-5-supabase-rest:3000
+      - name: PGRST_JWT_SECRET
+        value: your-super-secret-jwt-token-with-at-least-32-characters-long
+      - name: DATABASE_URL
+        from:
+          env: PRE0_22_5_SUPABASE_STORAGE__DATABASE_URL
+      - name: FILE_SIZE_LIMIT
+        value: "52428800"
+      - name: STORAGE_BACKEND
+        value: file
+      - name: FILE_STORAGE_BACKEND_PATH
+        value: /var/lib/storage
+      - name: TENANT_ID
+        value: stub
+      - name: REGION
+        value: stub
+      - name: GLOBAL_S3_BUCKET
+        value: stub
+      - name: ENABLE_IMAGE_TRANSFORMATION
+        value: "true"
+      - name: IMGPROXY_URL
+        value: http://pre0-22-5-supabase-imgproxy:5001
+    volumes:
+      - pre0-22-5-supabase-volumes-storage:/var/lib/storage
+  pre0-22-5-supabase-imgproxy:
+    preset: service
+    image: darthsim/imgproxy:v3.8.0
+    port: "8080"
+    env:
+      - name: IMGPROXY_BIND
+        value: :5001
+      - name: IMGPROXY_LOCAL_FILESYSTEM_ROOT
+        value: /
+      - name: IMGPROXY_USE_ETAG
+        value: "true"
+      - name: IMGPROXY_ENABLE_WEBP_DETECTION
+        value: "true"
+    volumes:
+      - pre0-22-5-supabase-volumes-storage:/var/lib/storage
+  pre0-22-5-supabase-meta:
+    preset: service
+    image: supabase/postgres-meta:v0.88.9
+    port: "8080"
+    env:
+      - name: PG_META_PORT
+        value: "8080"
+      - name: PG_META_DB_HOST
+        value: pre0-22-5-supabase-db
+      - name: PG_META_DB_PORT
+        value: "5432"
+      - name: PG_META_DB_NAME
+        value: postgres
+      - name: PG_META_DB_USER
+        value: supabase_admin
+      - name: PG_META_DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+  pre0-22-5-supabase-functions:
+    preset: service
+    image:
+      repository: pre0-22-5-supabase-functions
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-functions
+        push: server
+    port: "8080"
+    env:
+      - name: JWT_SECRET
+        value: your-super-secret-jwt-token-with-at-least-32-characters-long
+      - name: SUPABASE_URL
+        value: http://pre0-22-5-supabase-kong:8000
+      - name: SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+      - name: SUPABASE_SERVICE_ROLE_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+      - name: SUPABASE_DB_URL
+        from:
+          env: PRE0_22_5_SUPABASE_FUNCTIONS__SUPABASE_DB_URL
+      - name: VERIFY_JWT
+        value: "false"
+    volumes:
+      - pre0-22-5-supabase-volumes-functions:/home/deno/functions
+  pre0-22-5-supabase-analytics:
+    health_check_path: /health
+    preset: service
+    image: supabase/logflare:1.12.0
+    port: "4000"
+    env:
+      - name: LOGFLARE_NODE_HOST
+        value: 127.0.0.1
+      - name: DB_USERNAME
+        value: supabase_admin
+      - name: DB_DATABASE
+        value: _supabase
+      - name: DB_HOSTNAME
+        value: pre0-22-5-supabase-db
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DB_SCHEMA
+        value: _analytics
+      - name: LOGFLARE_API_KEY
+        from:
+          env: LOGFLARE_API_KEY
+      - name: LOGFLARE_SINGLE_TENANT
+        value: "true"
+      - name: LOGFLARE_SUPABASE_MODE
+        value: "true"
+      - name: LOGFLARE_MIN_CLUSTER_SIZE
+        value: "1"
+      - name: POSTGRES_BACKEND_URL
+        from:
+          env: PRE0_22_5_SUPABASE_ANALYTICS__POSTGRES_BACKEND_URL
+      - name: POSTGRES_BACKEND_SCHEMA
+        value: _analytics
+      - name: LOGFLARE_FEATURE_FLAG_OVERRIDE
+        value: multibackend=true
+  pre0-22-5-supabase-db:
+    preset: database
+    image:
+      repository: pre0-22-5-supabase-db
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-db
+        push: server
+    port: "5432"
+    env:
+      - name: POSTGRES_HOST
+        value: /var/run/postgresql
+      - name: PGPORT
+        value: "5432"
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: PGPASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: PGDATABASE
+        value: postgres
+      - name: POSTGRES_DB
+        value: postgres
+      - name: JWT_SECRET
+        value: your-super-secret-jwt-token-with-at-least-32-characters-long
+      - name: JWT_EXP
+        value: "3600"
+    volumes:
+      - pre0-22-5-supabase-volumes-db-data:/var/lib/postgresql/data
+      - pre0-22-5-supabase-db-config:/etc/postgresql-custom
+  pre0-22-5-supabase-vector:
+    preset: service
+    image:
+      repository: pre0-22-5-supabase-vector
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-vector
+        push: server
+    port: "8080"
+    env:
+      - name: LOGFLARE_API_KEY
+        from:
+          env: LOGFLARE_API_KEY
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  pre0-22-5-supabase-supavisor:
+    health_check_path: /api/health
+    preset: service
+    image:
+      repository: pre0-22-5-supabase-supavisor
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-supavisor
+        push: server
+    port: "5432"
+    env:
+      - name: PORT
+        value: "4000"
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_DB
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DATABASE_URL
+        from:
+          env: PRE0_22_5_SUPABASE_SUPAVISOR__DATABASE_URL
+      - name: CLUSTER_POSTGRES
+        value: "true"
+      - name: SECRET_KEY_BASE
+        value: UpNVntn3cDxHJpq99YMc1T1AQgQpc8kfYTuRgBiYa15BLrx8etQoXz3gZv1/u2oq
+      - name: VAULT_ENC_KEY
+        value: your-encryption-key-32-chars-min
+      - name: API_JWT_SECRET
+        value: your-super-secret-jwt-token-with-at-least-32-characters-long
+      - name: METRICS_JWT_SECRET
+        value: your-super-secret-jwt-token-with-at-least-32-characters-long
+      - name: REGION
+        value: local
+      - name: ERL_AFLAGS
+        value: -proto_dist inet_tcp
+      - name: POOLER_TENANT_ID
+        value: your-tenant-id
+      - name: POOLER_DEFAULT_POOL_SIZE
+        value: "20"
+      - name: POOLER_MAX_CLIENT_CONN
+        value: "100"
+      - name: POOLER_POOL_MODE
+        value: transaction

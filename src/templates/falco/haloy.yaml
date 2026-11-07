@@ -1,0 +1,63 @@
+name: falco
+server: localhost
+targets:
+  falco:
+    preset: service
+    image:
+      repository: falco
+      tag: latest
+      build_config:
+        context: ./falco
+        push: server
+    port: "8080"
+    env:
+      - name: HOST_ROOT
+        value: /host
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - /proc:/host/proc
+      - /etc:/host/etc
+      - /sys/kernel/tracing:/sys/kernel/tracing
+  falcosidekick:
+    preset: service
+    image: falcosecurity/falcosidekick:2.35.0
+    port: "8080"
+    env:
+      - name: TELEGRAM_MINIMUMPRIORITY
+        value: notice
+      - name: WEBUI_URL
+        value: http://falco-ui:2802
+  falco-ui:
+    image: falcosecurity/falcosidekick-ui:2.3.1
+    port: "2802"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: FALCOSIDEKICK_UI_USER
+        from:
+          env: FALCO_UI__FALCOSIDEKICK_UI_USER
+      - name: FALCOSIDEKICK_UI_REDIS_URL
+        value: falco-redis:6379
+      - name: FALCOSIDEKICK_UI_REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: FALCOSIDEKICK_UI_TTL
+        value: 168h
+  falco-redis:
+    preset: service
+    image:
+      repository: falco-redis
+      tag: latest
+      build_config:
+        context: ./falco-redis
+        push: server
+    port: "8080"
+    env:
+      - name: REDISCLI_AUTH
+        from:
+          env: REDIS_PASSWORD
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - falco-falco-events:/data

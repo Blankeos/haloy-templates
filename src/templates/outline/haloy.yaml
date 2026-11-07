@@ -1,0 +1,92 @@
+name: outline
+server: localhost
+targets:
+  outline:
+    image: outlinewiki/outline:0.82.0
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: URL
+        value: https://app.example.com
+      - name: FORCE_HTTPS
+        value: "false"
+      - name: PROXY_HEADERS_TRUSTED
+        value: "true"
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: UTILS_SECRET
+        from:
+          env: UTILS_SECRET
+      - name: DATABASE_URL
+        from:
+          env: OUTLINE__DATABASE_URL
+      - name: PGSSLMODE
+        value: disable
+      - name: REDIS_URL
+        value: redis://outline-redis:6379
+      - name: FILE_STORAGE
+        value: local
+      - name: FILE_STORAGE_LOCAL_ROOT_DIR
+        value: /var/lib/outline/data
+      - name: OIDC_CLIENT_ID
+        value: outline
+      - name: OIDC_CLIENT_SECRET
+        from:
+          env: CLIENT_SECRET
+      - name: OIDC_AUTH_URI
+        value: https://dex-app.example.com/auth
+      - name: OIDC_TOKEN_URI
+        value: https://dex-app.example.com/token
+      - name: OIDC_USERINFO_URI
+        value: https://dex-app.example.com/userinfo
+      - name: OIDC_USERNAME_CLAIM
+        value: preferred_username
+      - name: OIDC_DISPLAY_NAME
+        value: OpenID Connect
+      - name: OIDC_SCOPES
+        value: openid profile email
+    volumes:
+      - outline-outline-data-test-outline-khufpx:/var/lib/outline/data
+  outline-dex:
+    image: nginx:1.27-alpine
+    port: "5556"
+    domains:
+      - domain: dex-app.example.com
+  outline-dex-server:
+    preset: service
+    image:
+      repository: outline-dex-server
+      tag: latest
+      build_config:
+        context: ./outline-dex-server
+        push: server
+    port: "8080"
+  outline-postgres:
+    preset: database
+    image: postgres:15
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: outline
+      - name: POSTGRES_USER
+        value: outline
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - outline-postgres-data-test-outline-khufpx:/var/lib/postgresql/data
+  outline-redis:
+    preset: database
+    image:
+      repository: outline-redis
+      tag: latest
+      build_config:
+        context: ./outline-redis
+        push: server
+    port: "6379"
+    volumes:
+      - outline-redis-data-test-outline-khufpx:/data

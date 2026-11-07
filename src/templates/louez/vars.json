@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "INLINE_PASSWORD_32": "password:32"
+  },
+  "derived": {
+    "LOUEZ__DATABASE_URL": "mysql://louez:${INLINE_PASSWORD_32}@louez-mysql:3306/louez"
+  }
+}

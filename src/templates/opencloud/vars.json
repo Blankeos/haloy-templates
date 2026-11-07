@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "ADMIN_PASSWORD": "password:32"
+  },
+  "derived": {
+    "OPENCLOUD__IDM_ADMIN_PASSWORD": "${ADMIN_PASSWORD}}"
+  }
+}

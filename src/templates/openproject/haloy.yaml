@@ -1,0 +1,287 @@
+name: openproject
+server: localhost
+targets:
+  openproject-db:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: openproject
+      - name: POSTGRES_USER
+        value: openproject
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - openproject-pgdata:/var/lib/postgresql/data
+  openproject-cache:
+    preset: database
+    image: memcached:1.6-alpine
+    port: "11211"
+  openproject-web:
+    health_check_path: /health_checks/default
+    image:
+      repository: openproject-web
+      tag: latest
+      build_config:
+        context: ./openproject-web
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: OPENPROJECT_HOST__NAME
+        value: app.example.com
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: OPENPROJECT_RAILS__CACHE__STORE
+        value: memcache
+      - name: OPENPROJECT_CACHE__EXPIRES__IN__SECONDS
+        value: "3600"
+      - name: OPENPROJECT_CACHE__MEMCACHE__SERVER
+        value: openproject-cache:11211
+      - name: DATABASE_URL
+        from:
+          env: OPENPROJECT_WEB__DATABASE_URL
+      - name: RAILS_MIN_THREADS
+        value: "4"
+      - name: RAILS_MAX_THREADS
+        value: "16"
+      - name: OPENPROJECT_HTTPS
+        value: "true"
+      - name: IMAP_ENABLED
+        value: "false"
+      - name: IMAP_PORT
+        value: "993"
+      - name: IMAP_SSL
+        value: "true"
+      - name: IMAP_FOLDER
+        value: INBOX
+      - name: IMAP_SSL_VERIFICATION
+        value: "true"
+      - name: IMAP_CHECK_INTERVAL
+        value: "600"
+      - name: IMAP_ALLOW_OVERRIDE
+        value: type,project,priority,status,responsible,assigned_to,estimated_hours,remaining_hours
+      - name: OPENPROJECT_EMAIL__DELIVERY__METHOD
+        value: smtp
+      - name: OPENPROJECT_SMTP__PORT
+        value: "587"
+      - name: OPENPROJECT_SMTP__AUTHENTICATION
+        value: login
+      - name: OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO
+        value: "true"
+      - name: OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE
+        value: peer
+      - name: OPENPROJECT_ATTACHMENTS__STORAGE
+        value: file
+      - name: OPENPROJECT_FOG_CREDENTIALS_PROVIDER
+        value: AWS
+      - name: OPENPROJECT_FOG_CREDENTIALS_PATH__STYLE
+        value: "true"
+      - name: OPENPROJECT_FOG__DOWNLOAD__URL__EXPIRES__IN
+        value: "300"
+      - name: OPENPROJECT_DIRECT__UPLOADS
+        value: "true"
+    volumes:
+      - openproject-opdata:/var/openproject/assets
+  openproject-seeder:
+    preset: service
+    image:
+      repository: openproject-seeder
+      tag: latest
+      build_config:
+        context: ./openproject-seeder
+        push: server
+    port: "8080"
+    env:
+      - name: OPENPROJECT_HOST__NAME
+        value: app.example.com
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: OPENPROJECT_RAILS__CACHE__STORE
+        value: memcache
+      - name: OPENPROJECT_CACHE__EXPIRES__IN__SECONDS
+        value: "3600"
+      - name: OPENPROJECT_CACHE__MEMCACHE__SERVER
+        value: openproject-cache:11211
+      - name: DATABASE_URL
+        from:
+          env: OPENPROJECT_SEEDER__DATABASE_URL
+      - name: RAILS_MIN_THREADS
+        value: "4"
+      - name: RAILS_MAX_THREADS
+        value: "16"
+      - name: OPENPROJECT_HTTPS
+        value: "true"
+      - name: IMAP_ENABLED
+        value: "false"
+      - name: IMAP_PORT
+        value: "993"
+      - name: IMAP_SSL
+        value: "true"
+      - name: IMAP_FOLDER
+        value: INBOX
+      - name: IMAP_SSL_VERIFICATION
+        value: "true"
+      - name: IMAP_CHECK_INTERVAL
+        value: "600"
+      - name: IMAP_ALLOW_OVERRIDE
+        value: type,project,priority,status,responsible,assigned_to,estimated_hours,remaining_hours
+      - name: OPENPROJECT_EMAIL__DELIVERY__METHOD
+        value: smtp
+      - name: OPENPROJECT_SMTP__PORT
+        value: "587"
+      - name: OPENPROJECT_SMTP__AUTHENTICATION
+        value: login
+      - name: OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO
+        value: "true"
+      - name: OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE
+        value: peer
+      - name: OPENPROJECT_ATTACHMENTS__STORAGE
+        value: file
+      - name: OPENPROJECT_FOG_CREDENTIALS_PROVIDER
+        value: AWS
+      - name: OPENPROJECT_FOG_CREDENTIALS_PATH__STYLE
+        value: "true"
+      - name: OPENPROJECT_FOG__DOWNLOAD__URL__EXPIRES__IN
+        value: "300"
+      - name: OPENPROJECT_DIRECT__UPLOADS
+        value: "true"
+    volumes:
+      - openproject-opdata:/var/openproject/assets
+  openproject-worker:
+    preset: service
+    image:
+      repository: openproject-worker
+      tag: latest
+      build_config:
+        context: ./openproject-worker
+        push: server
+    port: "8080"
+    env:
+      - name: OPENPROJECT_HOST__NAME
+        value: app.example.com
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: OPENPROJECT_RAILS__CACHE__STORE
+        value: memcache
+      - name: OPENPROJECT_CACHE__EXPIRES__IN__SECONDS
+        value: "3600"
+      - name: OPENPROJECT_CACHE__MEMCACHE__SERVER
+        value: openproject-cache:11211
+      - name: DATABASE_URL
+        from:
+          env: OPENPROJECT_WORKER__DATABASE_URL
+      - name: RAILS_MIN_THREADS
+        value: "4"
+      - name: RAILS_MAX_THREADS
+        value: "16"
+      - name: OPENPROJECT_HTTPS
+        value: "true"
+      - name: IMAP_ENABLED
+        value: "false"
+      - name: IMAP_PORT
+        value: "993"
+      - name: IMAP_SSL
+        value: "true"
+      - name: IMAP_FOLDER
+        value: INBOX
+      - name: IMAP_SSL_VERIFICATION
+        value: "true"
+      - name: IMAP_CHECK_INTERVAL
+        value: "600"
+      - name: IMAP_ALLOW_OVERRIDE
+        value: type,project,priority,status,responsible,assigned_to,estimated_hours,remaining_hours
+      - name: OPENPROJECT_EMAIL__DELIVERY__METHOD
+        value: smtp
+      - name: OPENPROJECT_SMTP__PORT
+        value: "587"
+      - name: OPENPROJECT_SMTP__AUTHENTICATION
+        value: login
+      - name: OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO
+        value: "true"
+      - name: OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE
+        value: peer
+      - name: OPENPROJECT_ATTACHMENTS__STORAGE
+        value: file
+      - name: OPENPROJECT_FOG_CREDENTIALS_PROVIDER
+        value: AWS
+      - name: OPENPROJECT_FOG_CREDENTIALS_PATH__STYLE
+        value: "true"
+      - name: OPENPROJECT_FOG__DOWNLOAD__URL__EXPIRES__IN
+        value: "300"
+      - name: OPENPROJECT_DIRECT__UPLOADS
+        value: "true"
+    volumes:
+      - openproject-opdata:/var/openproject/assets
+  openproject-cron:
+    preset: service
+    image:
+      repository: openproject-cron
+      tag: latest
+      build_config:
+        context: ./openproject-cron
+        push: server
+    port: "8080"
+    env:
+      - name: OPENPROJECT_HOST__NAME
+        value: app.example.com
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: OPENPROJECT_RAILS__CACHE__STORE
+        value: memcache
+      - name: OPENPROJECT_CACHE__EXPIRES__IN__SECONDS
+        value: "3600"
+      - name: OPENPROJECT_CACHE__MEMCACHE__SERVER
+        value: openproject-cache:11211
+      - name: DATABASE_URL
+        from:
+          env: OPENPROJECT_CRON__DATABASE_URL
+      - name: RAILS_MIN_THREADS
+        value: "4"
+      - name: RAILS_MAX_THREADS
+        value: "16"
+      - name: OPENPROJECT_HTTPS
+        value: "true"
+      - name: IMAP_ENABLED
+        value: "false"
+      - name: IMAP_PORT
+        value: "993"
+      - name: IMAP_SSL
+        value: "true"
+      - name: IMAP_FOLDER
+        value: INBOX
+      - name: IMAP_SSL_VERIFICATION
+        value: "true"
+      - name: IMAP_CHECK_INTERVAL
+        value: "600"
+      - name: IMAP_ALLOW_OVERRIDE
+        value: type,project,priority,status,responsible,assigned_to,estimated_hours,remaining_hours
+      - name: OPENPROJECT_EMAIL__DELIVERY__METHOD
+        value: smtp
+      - name: OPENPROJECT_SMTP__PORT
+        value: "587"
+      - name: OPENPROJECT_SMTP__AUTHENTICATION
+        value: login
+      - name: OPENPROJECT_SMTP__ENABLE__STARTTLS__AUTO
+        value: "true"
+      - name: OPENPROJECT_SMTP__OPENSSL__VERIFY__MODE
+        value: peer
+      - name: OPENPROJECT_ATTACHMENTS__STORAGE
+        value: file
+      - name: OPENPROJECT_FOG_CREDENTIALS_PROVIDER
+        value: AWS
+      - name: OPENPROJECT_FOG_CREDENTIALS_PATH__STYLE
+        value: "true"
+      - name: OPENPROJECT_FOG__DOWNLOAD__URL__EXPIRES__IN
+        value: "300"
+      - name: OPENPROJECT_DIRECT__UPLOADS
+        value: "true"
+    volumes:
+      - openproject-opdata:/var/openproject/assets

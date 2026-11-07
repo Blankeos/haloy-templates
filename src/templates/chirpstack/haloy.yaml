@@ -1,0 +1,88 @@
+name: chirpstack
+server: localhost
+targets:
+  chirpstack:
+    image:
+      repository: chirpstack
+      tag: latest
+      build_config:
+        context: ./chirpstack
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MQTT_BROKER_HOST
+        value: chirpstack-mosquitto
+      - name: REDIS_HOST
+        value: chirpstack-redis
+      - name: POSTGRESQL_HOST
+        value: chirpstack-postgres
+    volumes:
+      - chirpstack-chirpstack:/etc/chirpstack
+  chirpstack-gateway-bridge:
+    preset: service
+    image: chirpstack/chirpstack-gateway-bridge:4
+    port: "1700"
+    env:
+      - name: INTEGRATION__MQTT__EVENT_TOPIC_TEMPLATE
+        value: eu868/gateway/{{ .GatewayID }}/event/{{ .EventType }}
+      - name: INTEGRATION__MQTT__STATE_TOPIC_TEMPLATE
+        value: eu868/gateway/{{ .GatewayID }}/state/{{ .StateType }}
+      - name: INTEGRATION__MQTT__COMMAND_TOPIC_TEMPLATE
+        value: eu868/gateway/{{ .GatewayID }}/command/#
+    volumes:
+      - chirpstack-chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
+  chirpstack-gateway-bridge-basicstation:
+    preset: service
+    image:
+      repository: chirpstack-gateway-bridge-basicstation
+      tag: latest
+      build_config:
+        context: ./chirpstack-gateway-bridge-basicstation
+        push: server
+    port: "3001"
+    volumes:
+      - chirpstack-chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
+  chirpstack-rest-api:
+    image:
+      repository: chirpstack-rest-api
+      tag: latest
+      build_config:
+        context: ./chirpstack-rest-api
+        push: server
+    port: "8090"
+    domains:
+      - domain: api-app.example.com
+  chirpstack-postgres:
+    preset: database
+    image: postgres:14-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: chirpstack
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: chirpstack
+    volumes:
+      - chirpstack-postgresqldata:/var/lib/postgresql/data
+      - chirpstack-postgresql-initdb:/docker-entrypoint-initdb.d
+  chirpstack-redis:
+    preset: database
+    image:
+      repository: chirpstack-redis
+      tag: latest
+      build_config:
+        context: ./chirpstack-redis
+        push: server
+    port: "6379"
+    volumes:
+      - chirpstack-redisdata:/data
+  chirpstack-mosquitto:
+    preset: service
+    image: eclipse-mosquitto:2
+    port: "1883"
+    volumes:
+      - chirpstack-mosquitto-config:/mosquitto/config/

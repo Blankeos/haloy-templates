@@ -1,0 +1,20 @@
+name: speedtest-tracker
+server: localhost
+targets:
+  speedtest-tracker:
+    image: lscr.io/linuxserver/speedtest-tracker:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: DB_CONNECTION
+        value: sqlite
+    volumes:
+      - speedtest-tracker-speedtest-config:/config

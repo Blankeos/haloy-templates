@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password"
+  },
+  "derived": {
+    "TEABLE__PRISMA_DATABASE_URL": "postgresql://teable:${DB_PASSWORD}@teable-db:5432/teable",
+    "TEABLE_DB_MIGRATE__PRISMA_DATABASE_URL": "postgresql://teable:${DB_PASSWORD}@teable-db:5432/teable"
+  }
+}

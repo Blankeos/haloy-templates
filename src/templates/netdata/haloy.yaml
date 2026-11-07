@@ -1,0 +1,18 @@
+name: netdata
+server: localhost
+targets:
+  netdata:
+    image: netdata/netdata:latest
+    port: "19999"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - netdata-netdata-config:/etc/netdata
+      - netdata-netdata-lib:/var/lib/netdata
+      - netdata-netdata-cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro

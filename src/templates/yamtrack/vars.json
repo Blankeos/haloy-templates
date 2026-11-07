@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "SECRET": "password:64"
+  },
+  "derived": {}
+}

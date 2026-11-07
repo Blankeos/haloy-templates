@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "KEYDB_PASSWORD": "password:16"
+  },
+  "derived": {}
+}

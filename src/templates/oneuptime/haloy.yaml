@@ -1,0 +1,192 @@
+name: oneuptime
+server: localhost
+targets:
+  oneuptime:
+    preset: service
+    image: oneuptime/app:11.5.6
+    port: "8080"
+    env:
+      - name: PORT
+        value: "3002"
+      - name: NODE_ENV
+        value: production
+      - name: BILLING_ENABLED
+        value: "false"
+      - name: IS_ENTERPRISE_EDITION
+        value: "false"
+      - name: LOG_LEVEL
+        value: ERROR
+      - name: DISABLE_TELEMETRY
+        value: "true"
+      - name: HOST
+        value: app.example.com
+      - name: HTTP_PROTOCOL
+        value: http
+      - name: ONEUPTIME_SECRET
+        from:
+          env: ONEUPTIME_SECRET
+      - name: ENCRYPTION_SECRET
+        from:
+          env: ENCRYPTION_SECRET
+      - name: REGISTER_PROBE_KEY
+        from:
+          env: REGISTER_PROBE_KEY
+      - name: DATABASE_HOST
+        value: oneuptime-postgres
+      - name: DATABASE_PORT
+        value: "5432"
+      - name: DATABASE_USERNAME
+        value: postgres
+      - name: DATABASE_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DATABASE_NAME
+        value: oneuptimedb
+      - name: REDIS_HOST
+        value: oneuptime-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_USERNAME
+        value: default
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: REDIS_DB
+        value: "0"
+      - name: CLICKHOUSE_HOST
+        value: oneuptime-clickhouse
+      - name: CLICKHOUSE_PORT
+        value: "8123"
+      - name: CLICKHOUSE_USER
+        value: default
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+      - name: CLICKHOUSE_DATABASE
+        value: oneuptime
+  oneuptime-ingress:
+    image: oneuptime/nginx:11.5.6
+    port: "7849"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: BILLING_ENABLED
+        value: "false"
+      - name: LOG_LEVEL
+        value: ERROR
+      - name: DISABLE_TELEMETRY
+        value: "true"
+      - name: HOST
+        value: app.example.com
+      - name: SERVER_NAMES_HASH_BUCKET_SIZE
+        value: "128"
+      - name: SERVER_APP_HOSTNAME
+        value: oneuptime
+      - name: APP_PORT
+        value: "3002"
+      - name: SERVER_HOME_HOSTNAME
+        value: home
+      - name: HOME_PORT
+        value: "1444"
+      - name: ONEUPTIME_SECRET
+        from:
+          env: ONEUPTIME_SECRET
+      - name: ENCRYPTION_SECRET
+        from:
+          env: ENCRYPTION_SECRET
+      - name: DATABASE_HOST
+        value: oneuptime-postgres
+      - name: DATABASE_PORT
+        value: "5432"
+      - name: DATABASE_USERNAME
+        value: postgres
+      - name: DATABASE_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DATABASE_NAME
+        value: oneuptimedb
+      - name: REDIS_HOST
+        value: oneuptime-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_USERNAME
+        value: default
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: REDIS_DB
+        value: "0"
+  oneuptime-probe:
+    preset: service
+    image: oneuptime/probe:11.5.6
+    port: "8080"
+    env:
+      - name: PORT
+        value: "3874"
+      - name: NODE_ENV
+        value: production
+      - name: LOG_LEVEL
+        value: ERROR
+      - name: DISABLE_TELEMETRY
+        value: "true"
+      - name: ONEUPTIME_URL
+        value: http://oneuptime-ingress:7849
+      - name: PROBE_NAME
+        value: Probe-1
+      - name: PROBE_DESCRIPTION
+        value: Default probe for monitors
+      - name: PROBE_MONITORING_WORKERS
+        value: "3"
+      - name: PROBE_MONITOR_FETCH_LIMIT
+        value: "10"
+      - name: PROBE_KEY
+        from:
+          env: PROBE_KEY
+      - name: REGISTER_PROBE_KEY
+        from:
+          env: REGISTER_PROBE_KEY
+  oneuptime-postgres:
+    preset: database
+    image: postgres:15
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: oneuptimedb
+    volumes:
+      - oneuptime-postgres-data:/var/lib/postgresql/data
+  oneuptime-redis:
+    preset: database
+    image:
+      repository: oneuptime-redis
+      tag: latest
+      build_config:
+        context: ./oneuptime-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+  oneuptime-clickhouse:
+    preset: database
+    image: clickhouse/clickhouse-server:25.7
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_USER
+        value: default
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+      - name: CLICKHOUSE_DB
+        value: oneuptime
+      - name: CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT
+        value: "1"
+    volumes:
+      - oneuptime-clickhouse-data:/var/lib/clickhouse

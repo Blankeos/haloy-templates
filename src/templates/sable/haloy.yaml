@@ -1,0 +1,15 @@
+name: sable
+server: localhost
+targets:
+  sable:
+    image: ghcr.io/drudge/sable:1.6.1
+    port: "5380"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: UTC
+      - name: SABLE_WEB_UPDATES
+        value: "true"
+    volumes:
+      - sable-sable-data:/data

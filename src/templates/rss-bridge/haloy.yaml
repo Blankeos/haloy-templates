@@ -1,0 +1,10 @@
+name: rss-bridge
+server: localhost
+targets:
+  rss-bridge:
+    image: rssbridge/rss-bridge:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - rss-bridge-rssbridge-config:/config

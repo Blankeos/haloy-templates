@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:24",
+    "DB_ROOT_PASSWORD": "password:24",
+    "APP_SECRET": "base64:32"
+  },
+  "derived": {}
+}

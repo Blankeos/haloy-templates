@@ -1,0 +1,255 @@
+name: fonoster
+server: localhost
+targets:
+  fonoster-dashboard:
+    image: fonoster/dashboard:0.15.15
+    port: "3030"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SERVER_DASHBOARD_SESSION_SECRET
+        from:
+          env: DASHBOARD_SESSION_SECRET
+  fonoster-apiserver:
+    preset: service
+    image:
+      repository: fonoster-apiserver
+      tag: latest
+      build_config:
+        context: ./fonoster-apiserver
+        push: server
+    port: "50051"
+    env:
+      - name: APISERVER_APP_URL
+        value: https://app.example.com
+      - name: APISERVER_ASTERISK_ARI_PROXY_URL
+        value: http://fonoster-asterisk:8088
+      - name: APISERVER_ASTERISK_ARI_SECRET
+        from:
+          env: ARI_SECRET
+      - name: APISERVER_ASTERISK_ARI_USERNAME
+        value: ari
+      - name: APISERVER_AUTHZ_SERVICE_ENABLED
+        value: "false"
+      - name: APISERVER_AUTHZ_SERVICE_HOST
+        value: fnauthz
+      - name: APISERVER_AUTHZ_SERVICE_METHODS
+        value: /fonoster.calls.v1beta2.Calls/CreateCall,/fonoster.identity.v1beta2.Identity/CreateWorkspace
+      - name: APISERVER_AUTHZ_SERVICE_PORT
+        value: "50071"
+      - name: APISERVER_CLOAK_ENCRYPTION_KEY
+        from:
+          env: CLOAK_ENCRYPTION_KEY
+      - name: APISERVER_DATABASE_URL
+        from:
+          env: FONOSTER_APISERVER__APISERVER_DATABASE_URL
+      - name: APISERVER_IDENTITY_DATABASE_URL
+        from:
+          env: FONOSTER_APISERVER__APISERVER_IDENTITY_DATABASE_URL
+      - name: APISERVER_IDENTITY_ISSUER
+        value: https://app.example.com
+      - name: APISERVER_IDENTITY_CONTACT_VERIFICATION_REQUIRED
+        value: "false"
+      - name: APISERVER_IDENTITY_TWO_FACTOR_AUTHENTICATION_REQUIRED
+        value: "false"
+      - name: APISERVER_IDENTITY_WORKSPACE_INVITE_EXPIRATION
+        value: 1d
+      - name: APISERVER_IDENTITY_WORKSPACE_INVITE_FAIL_URL
+        value: https://app.example.com/invite-fail
+      - name: APISERVER_IDENTITY_WORKSPACE_INVITE_URL
+        value: https://app.example.com:8449/api/identity/accept-invite
+      - name: APISERVER_IDENTITY_OAUTH2_GITHUB_ENABLED
+        value: "false"
+      - name: APISERVER_INFLUXDB_INIT_ORG
+        value: fonoster
+      - name: APISERVER_INFLUXDB_INIT_PASSWORD
+        from:
+          env: INFLUXDB_PASSWORD
+      - name: APISERVER_INFLUXDB_INIT_TOKEN
+        from:
+          env: INFLUXDB_TOKEN
+      - name: APISERVER_INFLUXDB_INIT_USERNAME
+        value: fonoster-influxdb
+      - name: APISERVER_INFLUXDB_URL
+        value: http://fonoster-influxdb:8086
+      - name: APISERVER_LOGS_FORMAT
+        value: json
+      - name: APISERVER_LOGS_LEVEL
+        value: verbose
+      - name: APISERVER_LOGS_TRANSPORT
+        value: none
+      - name: APISERVER_NATS_URL
+        value: nats://fonoster-nats:4222
+      - name: APISERVER_OWNER_EMAIL
+        value: admin@app.example.com
+      - name: APISERVER_OWNER_NAME
+        value: Admin User
+      - name: APISERVER_OWNER_PASSWORD
+        from:
+          env: API_SERVER_OWNER_PASSWORD
+      - name: APISERVER_ROOT_DOMAIN
+        value: app.example.com
+      - name: APISERVER_SMTP_AUTH_PASS
+        value: secret
+      - name: APISERVER_SMTP_AUTH_USER
+        value: postmaster@app.example.com
+      - name: APISERVER_SMTP_HOST
+        value: your-smtp-server
+      - name: APISERVER_SMTP_PORT
+        value: "587"
+      - name: APISERVER_SMTP_SECURE
+        value: "true"
+      - name: APISERVER_SMTP_SENDER
+        value: Fonoster Info <info@app.example.com>
+      - name: APISERVER_SIGNALING_SERVER
+        value: ws://app.example.com:5062
+  fonoster-autopilot:
+    preset: service
+    image:
+      repository: fonoster-autopilot
+      tag: latest
+      build_config:
+        context: ./fonoster-autopilot
+        push: server
+    port: "50061"
+    env:
+      - name: AUTOPILOT_AWS_S3_REGION
+        value: us-east-1
+      - name: AUTOPILOT_CONVERSATION_PROVIDER
+        value: api
+      - name: AUTOPILOT_KNOWLEDGE_BASE_ENABLED
+        value: "false"
+      - name: AUTOPILOT_LOGS_FORMAT
+        value: none
+      - name: AUTOPILOT_LOGS_LEVEL
+        value: verbose
+      - name: AUTOPILOT_LOGS_TRANSPORT
+        value: none
+  fonoster-routr:
+    preset: service
+    image:
+      repository: fonoster-routr
+      tag: latest
+      build_config:
+        context: ./fonoster-routr
+        push: server
+    port: "51907"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: FONOSTER_ROUTR__DATABASE_URL
+      - name: EXTERNAL_ADDRS
+        value: CHANGE_ME_TO_HOST_IP
+      - name: LOGS_FORMAT
+        value: none
+      - name: LOGS_LEVEL
+        value: verbose
+      - name: LOGS_TRANSPORT
+        value: none
+      - name: NATS_PUBLISHER_ENABLED
+        value: "true"
+      - name: NATS_PUBLISHER_URL
+        value: nats://fonoster-nats:4222
+      - name: RTPENGINE_HOST
+        value: fonoster-rtpengine
+      - name: START_INTERNAL_DB
+        value: "false"
+      - name: CONNECT_VERIFIER_PUBLIC_KEY_PATH
+        value: /etc/routr/keys/public.pem
+  fonoster-rtpengine:
+    preset: service
+    image: fonoster/rtpengine:0.3.17
+    port: "10000"
+    env:
+      - name: PORT_MAX
+        value: "20000"
+      - name: PORT_MIN
+        value: "10000"
+      - name: PUBLIC_IP
+        value: CHANGE_ME_TO_HOST_IP
+  fonoster-asterisk:
+    preset: service
+    image: fonoster/asterisk:20
+    port: "6060"
+    env:
+      - name: ARI_PROXY_URL
+        value: http://fonoster-asterisk:8088
+      - name: ARI_SECRET
+        from:
+          env: ASTERISK_ARI_SECRET
+      - name: ARI_USERNAME
+        value: ari
+      - name: CODECS
+        value: g722,ulaw,alaw
+      - name: DTMF_MODE
+        value: auto_info
+      - name: RTP_PORT_END
+        value: "20000"
+      - name: RTP_PORT_START
+        value: "10000"
+      - name: SIPPROXY_HOST
+        value: CHANGE_ME_TO_HOST_IP
+      - name: SIPPROXY_PORT
+        value: "5060"
+      - name: SIPPROXY_SECRET
+        from:
+          env: ASTERISK_SIPPROXY_SECRET
+      - name: SIPPROXY_USERNAME
+        value: voice
+  fonoster-postgres:
+    preset: database
+    image:
+      repository: fonoster-postgres
+      tag: latest
+      build_config:
+        context: ./fonoster-postgres
+        push: server
+    port: "5432"
+    env:
+      - name: PGTZ
+        value: UTC
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_DB
+        value: fonoster
+      - name: TZ
+        value: UTC
+    volumes:
+      - fonoster-db:/var/lib/postgresql/data
+  fonoster-influxdb:
+    preset: database
+    image: influxdb:2.7
+    port: "8086"
+    env:
+      - name: DOCKER_INFLUXDB_INIT_ADMIN_TOKEN
+        from:
+          env: INFLUXDB_TOKEN
+      - name: DOCKER_INFLUXDB_INIT_BUCKET
+        value: calls
+      - name: DOCKER_INFLUXDB_INIT_MODE
+        value: setup
+      - name: DOCKER_INFLUXDB_INIT_ORG
+        value: fonoster
+      - name: DOCKER_INFLUXDB_INIT_PASSWORD
+        from:
+          env: INFLUXDB_PASSWORD
+      - name: DOCKER_INFLUXDB_INIT_USERNAME
+        value: influxdb
+    volumes:
+      - fonoster-influxdb:/var/lib/influxdb2
+  fonoster-nats:
+    preset: database
+    image: nats:2.11.8
+    port: "4222"
+  fonoster-envoy:
+    preset: service
+    image:
+      repository: fonoster-envoy
+      tag: latest
+      build_config:
+        context: ./fonoster-envoy
+        push: server
+    port: "8449"

@@ -1,0 +1,11 @@
+name: jenkins
+server: localhost
+targets:
+  jenkins:
+    image: jenkins/jenkins:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - jenkins-jenkins-home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock

@@ -1,0 +1,18 @@
+name: clickhouse
+server: localhost
+targets:
+  clickhouse:
+    preset: database
+    image: clickhouse/clickhouse-server:latest
+    port: "8123"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CLICKHOUSE_USER
+        value: default
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+    volumes:
+      - clickhouse-clickhouse-data:/var/lib/clickhouse
+      - clickhouse-clickhouse-logs:/var/log/clickhouse-server

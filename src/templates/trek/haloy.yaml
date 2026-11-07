@@ -1,0 +1,33 @@
+name: trek
+server: localhost
+targets:
+  trek:
+    health_check_path: /api/health
+    image: mauriceboe/trek:3.3.0
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3000"
+      - name: ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: TZ
+        value: UTC
+      - name: LOG_LEVEL
+        value: info
+      - name: APP_URL
+        value: http://app.example.com
+      - name: ALLOWED_ORIGINS
+        value: http://app.example.com
+      - name: ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+    volumes:
+      - trek-trek-data:/app/data
+      - trek-trek-uploads:/app/uploads

@@ -1,0 +1,45 @@
+name: falkordb
+server: localhost
+targets:
+  falkordb:
+    image: falkordb/falkordb:v4.20.4-alpine
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: REDIS_ARGS
+        from:
+          env: FALKORDB__REDIS_ARGS
+      - name: FALKORDB_ARGS
+        value: MAX_QUEUED_QUERIES 25 TIMEOUT 1000 RESULTSET_SIZE 10000 IMPORT_FOLDER /app/.data/import
+      - name: FALKORDB_PASSWORD
+        from:
+          env: FALKORDB_PASSWORD
+      - name: AUTH_URL
+        value: https://app.example.com
+      - name: AUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: NEXTAUTH_URL
+        value: https://app.example.com
+      - name: NEXTAUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: ALLOWED_ORIGINS
+        value: https://app.example.com
+      - name: TRUST_PROXY_HEADERS
+        value: "true"
+      - name: CSV_STORAGE
+        value: local
+      - name: CSV_LOCAL_TEMP_DIR
+        value: /app/.data/import
+      - name: CSV_LOCAL_LOAD_URI_MODE
+        value: file
+      - name: API_TOKEN_STORAGE_PATH
+        value: /app/.data/api_tokens.json
+    volumes:
+      - falkordb-falkordb-data:/var/lib/falkordb/data
+      - falkordb-falkordb-browser-data:/app/.data

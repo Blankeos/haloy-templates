@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "SECRET_KEY": "password:64",
+    "RABBITMQ_PASSWORD": "password:32",
+    "RABBITMQ_ERLANG_COOKIE": "password:32"
+  },
+  "derived": {}
+}

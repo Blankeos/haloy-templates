@@ -1,0 +1,54 @@
+name: evolutiongo
+server: localhost
+targets:
+  evolutiongo-evolution-go:
+    preset: service
+    image: evoapicloud/evolution-go:latest
+    port: "8080"
+    env:
+      - name: SERVER_PORT
+        value: "8080"
+      - name: CLIENT_NAME
+        value: Evolution
+      - name: GLOBAL_API_KEY
+        from:
+          env: API_KEY
+      - name: POSTGRES_AUTH_DB
+        from:
+          env: EVOLUTIONGO_EVOLUTION_GO__POSTGRES_AUTH_DB
+      - name: POSTGRES_USERS_DB
+        from:
+          env: EVOLUTIONGO_EVOLUTION_GO__POSTGRES_USERS_DB
+      - name: DATABASE_SAVE_MESSAGES
+        value: "false"
+      - name: WADEBUG
+        value: INFO
+      - name: LOGTYPE
+        value: console
+    volumes:
+      - evolutiongo-evolution-go-data:/app/dbdata
+      - evolutiongo-evolution-go-logs:/app/logs
+  evolutiongo-evolution-gateway:
+    image:
+      repository: evolutiongo-evolution-gateway
+      tag: latest
+      build_config:
+        context: ./evolutiongo-evolution-gateway
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+  evolutiongo-evolution-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: evolution
+      - name: POSTGRES_USER
+        value: postgresql
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - evolutiongo-evolution-postgres-data:/var/lib/postgresql/data

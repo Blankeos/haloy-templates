@@ -1,0 +1,8 @@
+name: neko
+server: localhost
+targets:
+  neko:
+    image: ghcr.io/m1k1o/neko/firefox:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com

@@ -1,0 +1,41 @@
+name: kanbn
+server: localhost
+targets:
+  kanbn:
+    image: ghcr.io/kanbn/kan:0.6.0
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NEXT_PUBLIC_BASE_URL
+        value: https://app.example.com
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: BETTER_AUTH_SECRET
+      - name: POSTGRES_URL
+        from:
+          env: KANBN__POSTGRES_URL
+      - name: NEXT_PUBLIC_ALLOW_CREDENTIALS
+        value: "true"
+  kanbn-migrate:
+    preset: service
+    image: ghcr.io/kanbn/kan-migrate:0.6.0
+    port: "8080"
+    env:
+      - name: POSTGRES_URL
+        from:
+          env: KANBN_MIGRATE__POSTGRES_URL
+  kanbn-postgres:
+    preset: database
+    image: postgres:15
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: kan_db
+      - name: POSTGRES_USER
+        value: kan
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - kanbn-kan-postgres-data:/var/lib/postgresql/data

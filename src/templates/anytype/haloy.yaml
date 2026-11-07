@@ -1,0 +1,12 @@
+name: anytype
+server: localhost
+targets:
+  anytype-any-sync-bundle:
+    preset: service
+    image: ghcr.io/grishy/any-sync-bundle:latest
+    port: "33010"
+    env:
+      - name: ANY_SYNC_BUNDLE_INIT_EXTERNAL_ADDRS
+        value: 192.168.100.9
+    volumes:
+      - anytype-anytype-data:/data

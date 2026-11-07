@@ -1,0 +1,21 @@
+name: glpi
+server: localhost
+targets:
+  glpi-mysql:
+    preset: database
+    image: mysql:9.1.0
+    port: "3306"
+    volumes:
+      - glpi-glpi-mysql-data:/var/lib/mysql
+  glpi-web:
+    image: elestio/glpi:10.0.16
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TIMEZONE
+        value: Europe/Brussels
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - glpi-glpi-www-data:/var/www/html/glpi

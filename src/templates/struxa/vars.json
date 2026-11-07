@@ -1,0 +1,14 @@
+{
+  "secrets": {
+    "MYSQL_ROOT_PASSWORD": "password:32",
+    "MYSQL_PASSWORD": "password:32",
+    "BETTER_AUTH_SECRET": "base64:32",
+    "DB_ENCRYPTION_KEY": "hash:64",
+    "MINIO_SECRET_KEY": "password:32"
+  },
+  "derived": {
+    "STRUXA_MIGRATE__DATABASE_URL": "mysql://struxa:${MYSQL_PASSWORD}@struxa-mysql:3306/struxa",
+    "STRUXA__DATABASE_URL": "mysql://struxa:${MYSQL_PASSWORD}@struxa-mysql:3306/struxa",
+    "STRUXA_WATCHKEEPER__DATABASE_URL": "mysql://struxa:${MYSQL_PASSWORD}@struxa-mysql:3306/struxa"
+  }
+}

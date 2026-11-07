@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "SECRET_KEY": "password:32",
+    "API_BEARER_TOKEN": "password:32"
+  },
+  "derived": {}
+}

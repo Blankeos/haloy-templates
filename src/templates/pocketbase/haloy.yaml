@@ -1,0 +1,21 @@
+name: pocketbase
+server: localhost
+targets:
+  pocketbase:
+    health_check_path: /_/
+    image: adrianmusante/pocketbase:latest
+    port: "8090"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: POCKETBASE_ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: POCKETBASE_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: POCKETBASE_ADMIN_UPSERT
+        value: "true"
+      - name: POCKETBASE_PORT_NUMBER
+        value: "8090"
+    volumes:
+      - pocketbase-pocketbase-data:/pocketbase

@@ -1,0 +1,57 @@
+name: authelia
+server: localhost
+targets:
+  authelia:
+    image:
+      repository: authelia
+      tag: latest
+      build_config:
+        context: ./authelia
+        push: server
+    port: "9091"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: AUTHELIA_JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: AUTHELIA_SESSION_SECRET
+        from:
+          env: SESSION_SECRET
+      - name: AUTHELIA_STORAGE_ENCRYPTION_KEY
+        from:
+          env: STORAGE_ENCRYPTION_KEY
+      - name: AUTHELIA_STORAGE_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - authelia-authelia-config:/config
+  authelia-redis:
+    preset: database
+    image:
+      repository: authelia-redis
+      tag: latest
+      build_config:
+        context: ./authelia-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - authelia-redis-data:/data
+  authelia-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: authelia
+      - name: POSTGRES_USER
+        value: authelia
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - authelia-postgres-data:/var/lib/postgresql/data

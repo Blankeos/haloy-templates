@@ -1,0 +1,137 @@
+name: chatwoot
+server: localhost
+targets:
+  chatwoot:
+    image:
+      repository: chatwoot
+      tag: latest
+      build_config:
+        context: ./chatwoot
+        push: server
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: FRONTEND_URL
+        value: http://app.example.com
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: FORCE_SSL
+        value: "false"
+      - name: DEFAULT_LOCALE
+        value: en
+      - name: ACTIVE_STORAGE_SERVICE
+        value: local
+      - name: ENABLE_ACCOUNT_SIGNUP
+        value: "false"
+      - name: RAILS_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: INSTALLATION_ENV
+        value: docker
+      - name: RAILS_LOG_TO_STDOUT
+        value: "true"
+      - name: LOG_LEVEL
+        value: info
+      - name: POSTGRES_HOST
+        value: chatwoot-postgres
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_DATABASE
+        value: chatwoot
+      - name: POSTGRES_USERNAME
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: REDIS_URL
+        from:
+          env: CHATWOOT__REDIS_URL
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - chatwoot-chatwoot-storage:/app/storage
+  chatwoot-worker:
+    preset: service
+    image:
+      repository: chatwoot-worker
+      tag: latest
+      build_config:
+        context: ./chatwoot-worker
+        push: server
+    port: "8080"
+    env:
+      - name: FRONTEND_URL
+        value: http://app.example.com
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: FORCE_SSL
+        value: "false"
+      - name: DEFAULT_LOCALE
+        value: en
+      - name: ACTIVE_STORAGE_SERVICE
+        value: local
+      - name: ENABLE_ACCOUNT_SIGNUP
+        value: "false"
+      - name: RAILS_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: INSTALLATION_ENV
+        value: docker
+      - name: RAILS_LOG_TO_STDOUT
+        value: "true"
+      - name: LOG_LEVEL
+        value: info
+      - name: POSTGRES_HOST
+        value: chatwoot-postgres
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_DATABASE
+        value: chatwoot
+      - name: POSTGRES_USERNAME
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: REDIS_URL
+        from:
+          env: CHATWOOT_WORKER__REDIS_URL
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - chatwoot-chatwoot-storage:/app/storage
+  chatwoot-postgres:
+    preset: database
+    image: pgvector/pgvector:pg16
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: chatwoot
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - chatwoot-chatwoot-postgres-data:/var/lib/postgresql/data
+  chatwoot-redis:
+    preset: database
+    image:
+      repository: chatwoot-redis
+      tag: latest
+      build_config:
+        context: ./chatwoot-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - chatwoot-chatwoot-redis-data:/data

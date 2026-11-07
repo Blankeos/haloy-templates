@@ -1,0 +1,55 @@
+name: n8n-with-postgres
+server: localhost
+targets:
+  n8n-with-postgres-postgres:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: admin
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: n8n
+    volumes:
+      - n8n-with-postgres-postgres-data:/var/lib/postgresql/data
+  n8n-with-postgres-n8n:
+    image: n8nio/n8n:latest
+    port: "5678"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DB_TYPE
+        value: postgresdb
+      - name: DB_POSTGRESDB_HOST
+        value: n8n-with-postgres-postgres
+      - name: DB_POSTGRESDB_PORT
+        value: "5432"
+      - name: DB_POSTGRESDB_DATABASE
+        value: n8n
+      - name: DB_POSTGRESDB_USER
+        value: admin
+      - name: DB_POSTGRESDB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: N8N_ENCRYPTION_KEY
+        from:
+          env: N8N_ENCRYPTION_KEY
+      - name: N8N_HOST
+        value: app.example.com
+      - name: N8N_PORT
+        value: "5678"
+      - name: N8N_PROTOCOL
+        value: http
+      - name: NODE_ENV
+        value: production
+      - name: WEBHOOK_URL
+        value: https://app.example.com/
+      - name: GENERIC_TIMEZONE
+        value: Europe/Berlin
+      - name: N8N_SECURE_COOKIE
+        value: "false"
+    volumes:
+      - n8n-with-postgres-n8n-data:/home/node/.n8n

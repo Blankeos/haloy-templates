@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "DASHBOARD_PASSWORD": "base64:96",
+    "DASHBOARD_SECRET": "base64:32",
+    "API_KEY": "password:32"
+  },
+  "derived": {}
+}

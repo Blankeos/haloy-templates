@@ -1,0 +1,13 @@
+{
+  "secrets": {
+    "MAGIC_LINK_SECRET": "base64:16",
+    "SESSION_SECRET": "base64:16",
+    "ENCRYPTION_KEY": "base64:32",
+    "PROVIDER_SECRET": "base64:32",
+    "COORDINATOR_SECRET": "base64:32",
+    "DB_PASSWORD": "base64:24"
+  },
+  "derived": {
+    "TRIGGERDOTDEV_ELECTRIC__DATABASE_URL": "postgresql://triggeruser:${DB_PASSWORD}@triggerdotdev-postgres:5432/triggerdb?sslmode=disable"
+  }
+}

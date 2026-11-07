@@ -1,0 +1,30 @@
+name: flatnotes-totp
+server: localhost
+targets:
+  flatnotes-totp-flatnotes:
+    image: dullage/flatnotes:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: FLATNOTES_AUTH_TYPE
+        value: totp
+      - name: FLATNOTES_USERNAME
+        value: admin
+      - name: FLATNOTES_PASSWORD
+        from:
+          env: PASSWORD
+      - name: FLATNOTES_SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: FLATNOTES_TOTP_KEY
+        from:
+          env: TOTP_KEY
+      - name: FLATNOTES_SESSION_EXPIRY_DAYS
+        value: "30"
+    volumes:
+      - flatnotes-totp-flatnotes-data:/data

@@ -1,0 +1,110 @@
+name: plunk
+server: localhost
+targets:
+  plunk-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: plunk
+      - name: POSTGRES_USER
+        value: plunk
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - plunk-postgres-data:/var/lib/postgresql/data
+  plunk-redis:
+    preset: database
+    image:
+      repository: plunk-redis
+      tag: latest
+      build_config:
+        context: ./plunk-redis
+        push: server
+    port: "6379"
+    volumes:
+      - plunk-redis-data:/data
+  plunk-minio:
+    health_check_path: /minio/health/live
+    image:
+      repository: plunk-minio
+      tag: latest
+      build_config:
+        context: ./plunk-minio
+        push: server
+    port: "9001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MINIO_ROOT_USER
+        value: plunk
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_ROOT_PASSWORD
+    volumes:
+      - plunk-minio-data:/data
+  plunk:
+    health_check_path: /
+    image: ghcr.io/useplunk/plunk:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SERVICE
+        value: all
+      - name: NODE_ENV
+        value: production
+      - name: DATABASE_URL
+        from:
+          env: PLUNK__DATABASE_URL
+      - name: DIRECT_DATABASE_URL
+        from:
+          env: PLUNK__DIRECT_DATABASE_URL
+      - name: REDIS_URL
+        value: redis://plunk-redis:6379
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: NGINX_PORT
+        value: "80"
+      - name: API_DOMAIN
+        value: app.example.com
+      - name: DASHBOARD_DOMAIN
+        value: app.example.com
+      - name: LANDING_DOMAIN
+        value: app.example.com
+      - name: WIKI_DOMAIN
+        value: app.example.com
+      - name: USE_HTTPS
+        value: "true"
+      - name: AWS_SES_REGION
+        value: us-east-1
+      - name: AWS_SES_ACCESS_KEY_ID
+        value: <your-aws-ses-access-key-id>
+      - name: AWS_SES_SECRET_ACCESS_KEY
+        value: <your-aws-ses-secret-access-key>
+      - name: SES_CONFIGURATION_SET
+        value: <your-ses-configuration-set>
+      - name: STRIPE_METER_EVENT_NAME
+        value: emails
+      - name: S3_ENDPOINT
+        value: http://plunk-minio:9000
+      - name: S3_ACCESS_KEY_ID
+        value: plunk
+      - name: S3_ACCESS_KEY_SECRET
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: S3_BUCKET
+        value: uploads
+      - name: S3_PUBLIC_URL
+        value: https://app.example.com/uploads
+      - name: S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: PORT_SECURE
+        value: "465"
+      - name: PORT_SUBMISSION
+        value: "587"
+    volumes:
+      - /etc/dokploy/traefik/dynamic/acme.json:/certs/acme.json:ro

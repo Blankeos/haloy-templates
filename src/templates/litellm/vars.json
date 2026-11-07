@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "UI_PASSWORD": "password:32",
+    "LITELLM_MASTER_KEY": "password:64"
+  },
+  "derived": {
+    "LITELLM__DATABASE_URL": "postgresql://litellm:${POSTGRES_PASSWORD}@litellm-db:5432/litellm"
+  }
+}

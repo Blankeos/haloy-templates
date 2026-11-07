@@ -1,0 +1,21 @@
+name: naviserver
+server: localhost
+targets:
+  naviserver:
+    image: ghcr.io/andre-carbajal/naviserver:2.4.5
+    port: "23008"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NAVISERVER_HOST
+        value: 0.0.0.0
+      - name: NAVISERVER_PORT
+        value: "23008"
+      - name: NAVISERVER_SECRET_KEY
+        from:
+          env: NAVISERVER_SECRET_KEY
+      - name: NAVISERVER_CLI_TOKEN
+        from:
+          env: NAVISERVER_CLI_TOKEN
+    volumes:
+      - naviserver-naviserver-data:/data

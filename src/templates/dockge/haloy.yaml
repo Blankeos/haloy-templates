@@ -1,0 +1,15 @@
+name: dockge
+server: localhost
+targets:
+  dockge:
+    image: louislam/dockge:1
+    port: "5001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DOCKGE_STACKS_DIR
+        value: /opt/stacks
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - dockge-dockge-data:/app/data
+      - dockge-dockge-stacks:/opt/stacks

@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "INLINE_PASSWORD_64": "password:64"
+  },
+  "derived": {
+    "STACK_AUTH__STACK_DATABASE_CONNECTION_STRING": "postgres://postgres:${POSTGRES_PASSWORD}@stack-auth-db/stackframe",
+    "STACK_AUTH__STACK_DIRECT_DATABASE_CONNECTION_STRING": "postgres://postgres:${POSTGRES_PASSWORD}@stack-auth-db/stackframe"
+  }
+}

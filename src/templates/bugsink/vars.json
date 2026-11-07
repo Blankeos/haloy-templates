@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "SECRET_KEY": "password:64"
+  },
+  "derived": {
+    "BUGSINK_WEB__DATABASE_URL": "postgresql://bugsinkuser:${POSTGRES_PASSWORD}@bugsink-db:5432/bugsink"
+  }
+}

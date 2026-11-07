@@ -1,0 +1,10 @@
+name: directory-lister
+server: localhost
+targets:
+  directory-lister:
+    image: directorylister/directorylister:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - directory-lister-directory-lister-data:/data

@@ -1,0 +1,28 @@
+name: parseable
+server: localhost
+targets:
+  parseable:
+    image:
+      repository: parseable
+      tag: latest
+      build_config:
+        context: ./parseable
+        push: server
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: P_ADDR
+        value: 0.0.0.0:8000
+      - name: P_USERNAME
+        value: admin
+      - name: P_PASSWORD
+        from:
+          env: PARSEABLE_PASSWORD
+      - name: P_STAGING_DIR
+        value: /parseable/staging
+      - name: P_FS_DIR
+        value: /parseable/data
+    volumes:
+      - parseable-parseable-staging:/parseable/staging
+      - parseable-parseable-data:/parseable/data

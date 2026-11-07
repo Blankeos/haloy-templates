@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "hash:16",
+    "AUTH_SECRET": "hash:32",
+    "CRON_SECRET": "hash:32"
+  },
+  "derived": {
+    "CUSTOMERMATES__DATABASE_URL": "postgresql://customermates:${POSTGRES_PASSWORD}@customermates-postgres:5432/customermates",
+    "CUSTOMERMATES__WORKFLOW_POSTGRES_URL": "postgresql://customermates:${POSTGRES_PASSWORD}@customermates-postgres:5432/customermates"
+  }
+}

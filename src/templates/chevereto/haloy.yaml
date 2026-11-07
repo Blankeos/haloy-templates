@@ -1,0 +1,49 @@
+name: chevereto
+server: localhost
+targets:
+  chevereto:
+    image: chevereto/chevereto:4
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CHEVERETO_DB_HOST
+        value: chevereto-mysql
+      - name: CHEVERETO_DB_USER
+        value: mysql
+      - name: CHEVERETO_DB_PASS
+        from:
+          env: DB_PASSWORD
+      - name: CHEVERETO_DB_PORT
+        value: "3306"
+      - name: CHEVERETO_DB_NAME
+        value: chevereto
+      - name: CHEVERETO_HOSTNAME
+        value: app.example.com
+      - name: CHEVERETO_HOSTNAME_PATH
+        value: /
+      - name: CHEVERETO_HTTPS
+        value: "0"
+      - name: CHEVERETO_MAX_POST_SIZE
+        value: 2G
+      - name: CHEVERETO_MAX_UPLOAD_SIZE
+        value: 2G
+    volumes:
+      - chevereto-storage:/var/www/html/images/
+  chevereto-mysql:
+    preset: database
+    image: mysql:8
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MYSQL_DATABASE
+        value: chevereto
+      - name: MYSQL_USER
+        value: mysql
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - chevereto-mysql:/var/lib/mysql

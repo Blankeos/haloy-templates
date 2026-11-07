@@ -1,0 +1,20 @@
+name: kokoro-tts
+server: localhost
+targets:
+  kokoro-tts:
+    health_check_path: /health
+    image: kokoro-tts-kokoro-tts
+    port: "8880"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MODEL_PATH
+        value: /app/models
+      - name: DEVICE
+        value: cpu
+      - name: HOST
+        value: 0.0.0.0
+      - name: PORT
+        value: "8880"
+    volumes:
+      - kokoro-tts-kokoro-models:/app/models

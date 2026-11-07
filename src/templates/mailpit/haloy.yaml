@@ -1,0 +1,17 @@
+name: mailpit
+server: localhost
+targets:
+  mailpit:
+    image: axllent/mailpit:v1.22.3
+    port: "8025"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MP_SMTP_AUTH_ALLOW_INSECURE
+        value: "true"
+      - name: MP_MAX_MESSAGES
+        value: "5000"
+      - name: MP_DATABASE
+        value: /data/mailpit.db
+    volumes:
+      - mailpit-mailpit-data:/data

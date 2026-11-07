@@ -1,0 +1,22 @@
+name: postgres-extensor
+server: localhost
+targets:
+  postgres-extensor:
+    preset: database
+    image:
+      repository: postgres-extensor
+      tag: latest
+      build_config:
+        context: ./postgres-extensor
+        push: server
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: admin
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: postgres
+    volumes:
+      - postgres-extensor-postgres-data:/var/lib/postgresql

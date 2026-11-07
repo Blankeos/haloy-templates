@@ -1,0 +1,14 @@
+name: dragonfly-db
+server: localhost
+targets:
+  dragonfly-db-dragonflydb:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly
+    port: "6379"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DFLY_requirepass
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - dragonfly-db-dragonflydata:/data

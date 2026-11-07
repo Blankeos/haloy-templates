@@ -1,0 +1,10 @@
+name: metube
+server: localhost
+targets:
+  metube:
+    image: ghcr.io/alexta69/metube
+    port: "8081"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - metube-downloads:/downloads

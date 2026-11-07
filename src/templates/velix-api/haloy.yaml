@@ -1,0 +1,53 @@
+name: velix-api
+server: localhost
+targets:
+  velix-api:
+    image: ghcr.io/paulolinder/velix-api:1.1.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: VELIX_API__DATABASE_URL
+      - name: REDIS_URL
+        value: redis://velix-api-redis:6379
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: HTTP_PORT
+        value: "8080"
+      - name: APP_ENV
+        value: production
+      - name: LOG_LEVEL
+        value: info
+      - name: MEDIA_STORAGE_PATH
+        value: /data/media
+      - name: ENGINE_STORE_PATH
+        value: /data/instances
+      - name: ENGINE_AUTO_RECONNECT
+        value: "true"
+      - name: ENGINE_MAX_INSTANCES
+        value: "200"
+      - name: REGISTRATION_ENABLED
+        value: "false"
+    volumes:
+      - velix-api-velix-data:/data
+  velix-api-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: velix
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - velix-api-postgres-data:/var/lib/postgresql/data
+  velix-api-redis:
+    preset: database
+    image: redis:7-alpine
+    port: "6379"
+    volumes:
+      - velix-api-redis-data:/data

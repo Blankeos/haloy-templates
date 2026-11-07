@@ -1,0 +1,86 @@
+name: zulip
+server: localhost
+targets:
+  zulip-database:
+    preset: service
+    image: zulip/zulip-postgresql:14
+    port: "8080"
+    env:
+      - name: POSTGRES_DB
+        value: zulip
+      - name: POSTGRES_USER
+        value: zulip
+      - name: POSTGRES_PASSWORD_FILE
+        value: /run/secrets/zulip__postgres_password
+    volumes:
+      - zulip-zulippostgresdata:/var/lib/postgresql/data
+  zulip-memcached:
+    preset: database
+    image:
+      repository: zulip-memcached
+      tag: latest
+      build_config:
+        context: ./zulip-memcached
+        push: server
+    port: "11211"
+    env:
+      - name: SASL_CONF_PATH
+        value: /home/memcache/memcached.conf
+      - name: MEMCACHED_SASL_PWDB
+        value: /home/memcache/memcached-sasl-db
+      - name: MEMCACHED_PASSWORD_FILE
+        value: /run/secrets/zulip__memcached_password
+  zulip-rabbitmq:
+    preset: database
+    image:
+      repository: zulip-rabbitmq
+      tag: latest
+      build_config:
+        context: ./zulip-rabbitmq
+        push: server
+    port: "5672"
+    env:
+      - name: RABBITMQ_DEFAULT_USER
+        value: zulip
+      - name: RABBITMQ_PASSWORD_FILE
+        value: /run/secrets/zulip__rabbitmq_password
+    volumes:
+      - zulip-zuliprabbitmqdata:/var/lib/rabbitmq
+  zulip-redis:
+    preset: database
+    image:
+      repository: zulip-redis
+      tag: latest
+      build_config:
+        context: ./zulip-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD_FILE
+        value: /run/secrets/zulip__redis_password
+    volumes:
+      - zulip-zulipredisdata:/data
+  zulip:
+    image: ghcr.io/zulip/zulip-server:12.1-0
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SETTING_EXTERNAL_HOST
+        value: app.example.com
+      - name: SETTING_ZULIP_ADMINISTRATOR
+        value: admin@app.example.com
+      - name: SETTING_REMOTE_POSTGRES_HOST
+        value: zulip-database
+      - name: SETTING_MEMCACHED_LOCATION
+        value: zulip-memcached:11211
+      - name: SETTING_RABBITMQ_HOST
+        value: zulip-rabbitmq
+      - name: SETTING_REDIS_HOST
+        value: zulip-redis
+      - name: CONFIG_application_server__http_only
+        value: "true"
+      - name: LOADBALANCER_IPS
+        value: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+    volumes:
+      - zulip-zulipdata:/data

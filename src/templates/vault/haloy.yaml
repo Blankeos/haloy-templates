@@ -1,0 +1,24 @@
+name: vault
+server: localhost
+targets:
+  vault:
+    image:
+      repository: vault
+      tag: latest
+      build_config:
+        context: ./vault
+        push: server
+    port: "8200"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: VAULT_DEV_ROOT_TOKEN_ID
+        from:
+          env: ROOT_TOKEN
+      - name: VAULT_DEV_LISTEN_ADDRESS
+        value: 0.0.0.0:8200
+      - name: ROOT_TOKEN
+        from:
+          env: ROOT_TOKEN
+    volumes:
+      - vault-vault-data:/vault/file

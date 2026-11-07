@@ -1,0 +1,3012 @@
+[
+ {
+  "id": "3dokploy",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "9router",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "ackee",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "activepieces",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "actualbudget",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "adguardhome",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "adminer",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "adventurelog",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "affinepro",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "agent-zero",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "agentdvr",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "airbyte",
+  "status": "manual",
+  "targets": 15
+ },
+ {
+  "id": "akaunting",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "alarik",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "alist",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "alltube",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "ampache",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "anonupload",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "anse",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "answer",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "anubis",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "anythingllm",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "anytype",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "appflowy",
+  "status": "partial",
+  "targets": 10
+ },
+ {
+  "id": "apprise-api",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "appsmith",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "appwrite",
+  "status": "manual",
+  "targets": 19
+ },
+ {
+  "id": "aptabase",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "arangodb",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "arche",
+  "status": "manual",
+  "targets": 3
+ },
+ {
+  "id": "archivebox",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "argilla",
+  "status": "ok",
+  "targets": 5
+ },
+ {
+  "id": "audiobookshelf",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "authelia",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "authentik",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "authorizer",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "autobase",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "automatisch",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "azerothcore",
+  "status": "partial",
+  "targets": 6
+ },
+ {
+  "id": "azuracast",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "babybuddy",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "backrest",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "baikal",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "barrage",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "baserow",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "bazarr",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "bentopdf",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "beszel",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "bigcapital",
+  "status": "ok",
+  "targets": 6
+ },
+ {
+  "id": "billmora",
+  "status": "ok",
+  "targets": 5
+ },
+ {
+  "id": "blender",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "blinko",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "blogfactory",
+  "status": "partial",
+  "targets": 5
+ },
+ {
+  "id": "bluesky-pds",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "bolt.diy",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "bonfire",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "booklore",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "bookstack",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "borgitory",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "botpress",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "browserless",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "budget-board",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "budibase",
+  "status": "ok",
+  "targets": 6
+ },
+ {
+  "id": "bugsink",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "bytebase",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "bytestash",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "cachkey",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "cakephp",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "calcom",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "calibre",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "calibre-web",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "calnode",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "capso",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "carbone",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "casdoor",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "certmate",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "changedetection",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "chatto",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "chatwoot",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "checkcle",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "checkmate",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "chevereto",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "chibisafe",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "chiefonboarding",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "chirpstack",
+  "status": "partial",
+  "targets": 7
+ },
+ {
+  "id": "chroma",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "chromium",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "classicpress",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "clickhouse",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "cloud9",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "cloudcommander",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "cloudflare-ddns",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "cloudflared",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "cloudreve",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "cockpit",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "code-server",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "coder",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "codex-docs",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "colanode",
+  "status": "ok",
+  "targets": 4
+ },
+ {
+  "id": "collabora-office",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "commafeed",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "commento",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "commentoplusplus",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "conduit",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "confluence",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "container-monitoring",
+  "status": "manual",
+  "targets": 4
+ },
+ {
+  "id": "convertx",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "convex",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "cookie-cloud",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "coralproject",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "corsfix",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "couchdb",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "crawl4ai",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "crawlab-master",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "crawlab-worker",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "creed",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "crowdsec",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "cup",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "customermates",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "cut",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "cyberchef",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "cypht",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "dagu",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "dashy",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "databasement",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "databasus",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "datalens",
+  "status": "ok",
+  "targets": 6
+ },
+ {
+  "id": "dexio",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "didacta",
+  "status": "manual",
+  "targets": 3
+ },
+ {
+  "id": "dify",
+  "status": "ok",
+  "targets": 11
+ },
+ {
+  "id": "directory-lister",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "directus",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "discord-tickets",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "discourse",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "dockge",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "dockroute",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "docktail",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "docling-serve",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "docmost",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "documenso",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "docuseal",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "dokploy-actions-runner",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "dokploy-prom-monitoring-extension",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "dolibarr",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "domain-locker",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "dossier",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "doublezero",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "dozzle",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "dragonfly-db",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "drawio",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "drawnix",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "drizzle-gateway",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "dumbassets",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "dumbbudget",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "dumbdrop",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "dumbpad",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "duplicati",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "easyappointments",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "elastic-search",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "emaki-video-starter",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "emby",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "emqx",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "engram",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "enshrouded",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "erpnext",
+  "status": "partial",
+  "targets": 14
+ },
+ {
+  "id": "erpnext-v16",
+  "status": "partial",
+  "targets": 14
+ },
+ {
+  "id": "etherpad",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "ethora-core",
+  "status": "manual",
+  "targets": 13
+ },
+ {
+  "id": "evershop",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "evolutionapi",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "evolutioncrm",
+  "status": "partial",
+  "targets": 10
+ },
+ {
+  "id": "evolutiongo",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "excalidraw",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "ezbookkeeping",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "falco",
+  "status": "manual",
+  "targets": 4
+ },
+ {
+  "id": "falkordb",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "feedbacks",
+  "status": "partial",
+  "targets": 5
+ },
+ {
+  "id": "fider",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "filebrowser",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "filegator",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "filerun",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "filestash",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "firecrawl",
+  "status": "partial",
+  "targets": 9
+ },
+ {
+  "id": "firefly-iii",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "fivem",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "flagsmith",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "flaresolverr",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "flarum",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "flatnotes",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "flatnotes-totp",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "flowise",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "fluxer",
+  "status": "partial",
+  "targets": 25
+ },
+ {
+  "id": "fmd-server",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "focalboard",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "fonoster",
+  "status": "partial",
+  "targets": 10
+ },
+ {
+  "id": "forgejo",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "formbricks",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "frappe-hr",
+  "status": "partial",
+  "targets": 14
+ },
+ {
+  "id": "frappe-lending",
+  "status": "partial",
+  "targets": 14
+ },
+ {
+  "id": "frappe-lms",
+  "status": "partial",
+  "targets": 14
+ },
+ {
+  "id": "freellmapi",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "freescout",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "freshrss",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "garage",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "garage-with-ui",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "gatus",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "gel",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "geoserver",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "ghost",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "gitea-mirror",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "gitea-mysql",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "gitea-postgres",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "gitea-sqlite",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "gitingest",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "gitlab-ce",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "glance",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "glances",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "glitchtip",
+  "status": "ok",
+  "targets": 5
+ },
+ {
+  "id": "glpi",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "go-whatsapp-web-multidevice",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "go2rtc",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "goatcounter",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "gotenberg",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "gotify",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "grafana",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "graylog",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "grimoire",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "grist",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "grovs",
+  "status": "ok",
+  "targets": 8
+ },
+ {
+  "id": "habitica",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "harbor",
+  "status": "manual",
+  "targets": 11
+ },
+ {
+  "id": "healthchecks",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "hedgedoc",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "hermes",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "heyform",
+  "status": "manual",
+  "targets": 3
+ },
+ {
+  "id": "heyo-docs",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "hi-events",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "hivemq-ce",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "hoarder",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "homarr",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "homeassistant",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "homebox",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "homebridge",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "homepage",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "hoppscotch",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "hortusfox",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "huly",
+  "status": "partial",
+  "targets": 12
+ },
+ {
+  "id": "hydrodactyl",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "hyperdx",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "i18n-blog",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "ihatemoney",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "imgproxy",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "immich",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "infisical",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "influxdb",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "inkvoice",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "inngest",
+  "status": "manual",
+  "targets": 3
+ },
+ {
+  "id": "instantdb",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "instatic",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "invoiceshelf",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "ipfs",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "it-tools",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "itsaplan",
+  "status": "partial",
+  "targets": 8
+ },
+ {
+  "id": "java",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "jellyfin",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "jellyseerr",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "jenkins",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "jitsi",
+  "status": "ok",
+  "targets": 4
+ },
+ {
+  "id": "joomla",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "joplin-server",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "junctio",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "kanbn",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "kaneo",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "karakeep",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "kavita",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "kener",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "kestra",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "keycloak",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "keydb",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "keyzori",
+  "status": "manual",
+  "targets": 3
+ },
+ {
+  "id": "kimai",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "kitchenowl",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "kokoro-tts",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "kokoro-web",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "komari-monitor",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "kortix",
+  "status": "partial",
+  "targets": 8
+ },
+ {
+  "id": "kotonoba",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "kutt",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "kuukura",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "langflow",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "langfuse",
+  "status": "partial",
+  "targets": 6
+ },
+ {
+  "id": "languagetool",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "lavalink",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "leantime",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "legejo",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "letterfeed",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "lfsx",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "librechat",
+  "status": "ok",
+  "targets": 5
+ },
+ {
+  "id": "libredb-studio",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "libredesk",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "librespeed",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "libretranslate",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "limesurvey",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "linkding",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "linkstack",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "linkwarden",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "listmonk",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "litellm",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "livekit",
+  "status": "manual",
+  "targets": 4
+ },
+ {
+  "id": "lobe-chat",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "lodestone",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "logto",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "louez",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "lowcoder",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "lubelogger",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "macos",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "mage-ai",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "mailcatcher-ng",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "mailpit",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "mailu",
+  "status": "ok",
+  "targets": 7
+ },
+ {
+  "id": "maintenant",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "marketing-dashboard",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "markup",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "matomo",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "mattermost",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "mautic",
+  "status": "partial",
+  "targets": 5
+ },
+ {
+  "id": "maxio",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "maybe",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "mazanoke",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "mc-controller",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "mcpspan",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "mcsmanager",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "mealie",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "mediacms",
+  "status": "ok",
+  "targets": 6
+ },
+ {
+  "id": "mediafetch",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "meilisearch",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "memos",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "metabase",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "metube",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "minepanel",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "miniflux",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "minio",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "misaka-danmu-server",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "mixpost",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "moltbot",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "morphos",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "mosquitto",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "movary",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "mulesoft-esb",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "multica",
+  "status": "manual",
+  "targets": 3
+ },
+ {
+  "id": "mumble",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "my-links",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "n8n",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "n8n-queue",
+  "status": "ok",
+  "targets": 4
+ },
+ {
+  "id": "n8n-runner-postgres-ollama",
+  "status": "partial",
+  "targets": 7
+ },
+ {
+  "id": "n8n-with-postgres",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "navi-music",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "navidrome",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "naviserver",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "nebulynk",
+  "status": "manual",
+  "targets": 9
+ },
+ {
+  "id": "neko",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "netdata",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "networking-toolbox",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "nextcloud-aio",
+  "status": "ok",
+  "targets": 4
+ },
+ {
+  "id": "nginx",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "nocodb",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "nodelink",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "notifuse",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "novu",
+  "status": "partial",
+  "targets": 6
+ },
+ {
+  "id": "ntfy",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "obscura",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "obsidian-livesync",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "odoo_17",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "odoo_18",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "odoo_19",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "ojs",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "ollama-chat-tone",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "omni-tools",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "omniroute",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "onedev",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "onetimesecret",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "oneuptime",
+  "status": "partial",
+  "targets": 6
+ },
+ {
+  "id": "ontime",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "open_notebook",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "open-design",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "open-fiesta",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "open-webui",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "openanalytics",
+  "status": "ok",
+  "targets": 14
+ },
+ {
+  "id": "openclaw",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "opencloud",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "opencode",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "opendots",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "opengist",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "openhabittracker",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "openhands",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "openinary",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "openlivery",
+  "status": "partial",
+  "targets": 5
+ },
+ {
+  "id": "openlmnp",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "openobserve",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "openpanel",
+  "status": "partial",
+  "targets": 6
+ },
+ {
+  "id": "openproject",
+  "status": "ok",
+  "targets": 6
+ },
+ {
+  "id": "openresty-manager",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "openseo",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "opensourcepos",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "openspeedtest",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "openstatus",
+  "status": "manual",
+  "targets": 7
+ },
+ {
+  "id": "opentodo",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "openwa",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "orbit",
+  "status": "partial",
+  "targets": 8
+ },
+ {
+  "id": "orca-server",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "oryx",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "otterwiki",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "outline",
+  "status": "partial",
+  "targets": 5
+ },
+ {
+  "id": "owncast",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "owncloud-infinite-scale",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "pairdrop",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "palmr",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "paperclip",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "paperless-ngx",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "parseable",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "passbolt",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "pastefy",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "paymenter",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "peerdb",
+  "status": "partial",
+  "targets": 10
+ },
+ {
+  "id": "penpot",
+  "status": "partial",
+  "targets": 6
+ },
+ {
+  "id": "peppermint",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "pgadmin",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "photoprism",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "phpmyadmin",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "picsur",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "pinchflat",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "plane",
+  "status": "ok",
+  "targets": 13
+ },
+ {
+  "id": "plark",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "plausible",
+  "status": "manual",
+  "targets": 3
+ },
+ {
+  "id": "plunk",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "pocket-id",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "pocketbase",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "podfetch",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "poke",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "ponos",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "portabase",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "portainer",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "poste.io",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "postgres-extensor",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "postgres-pgadmin",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "postgres-pgdog",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "postgresus",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "posthog",
+  "status": "partial",
+  "targets": 20
+ },
+ {
+  "id": "postiz",
+  "status": "partial",
+  "targets": 6
+ },
+ {
+  "id": "powersync",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "pre0.22.5-supabase",
+  "status": "manual",
+  "targets": 13
+ },
+ {
+  "id": "prefect",
+  "status": "partial",
+  "targets": 5
+ },
+ {
+  "id": "pretix",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "privatebin",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "privatepaste",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "prometheus",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "prozesswerk",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "pterodactyl",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "pulse",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "puppetflow",
+  "status": "partial",
+  "targets": 9
+ },
+ {
+  "id": "puppetflow-postgres",
+  "status": "partial",
+  "targets": 10
+ },
+ {
+  "id": "pyrodactyl",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "qbittorrent",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "qbitwebui",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "qdrant",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "quant-ux",
+  "status": "ok",
+  "targets": 4
+ },
+ {
+  "id": "qui",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "quireink",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "rabbitmq",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "rallly",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "reactive-resume",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "reef-dev-cluster",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "reef-keygen",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "reelsaw",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "registry",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "reloop",
+  "status": "partial",
+  "targets": 23
+ },
+ {
+  "id": "rocketchat",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "rote",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "roundcube",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "rss-bridge",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "rsshub",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "rustdesk",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "rustfs",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "rustrak",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "rustrak-full",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "rustrak-sqlite",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "rutorrent",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "rybbit",
+  "status": "partial",
+  "targets": 5
+ },
+ {
+  "id": "ryot",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "sable",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "scrutiny",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "scrypted",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "seafile",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "seanime",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "searxng",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "seaweedfs",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "senddock",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "seq",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "sftpgo",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "shiori",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "shlink",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "shopnex",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "shopware",
+  "status": "partial",
+  "targets": 8
+ },
+ {
+  "id": "shoutrrr",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "signoz",
+  "status": "partial",
+  "targets": 7
+ },
+ {
+  "id": "silex",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "silo",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "silverbullet",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "sim",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "slash",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "snapp",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "snipe-it",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "soft-serve",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "soketi",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "solidping",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "spacedrive",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "spacetimedb",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "speedtest-tracker",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "spliit",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "stack-auth",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "stalwart",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "statping-ng",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "steedos",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "stirling",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "storyden",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "strapi",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "streamflow",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "struxa",
+  "status": "partial",
+  "targets": 5
+ },
+ {
+  "id": "supabase",
+  "status": "partial",
+  "targets": 11
+ },
+ {
+  "id": "superset",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "surrealdb",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "synapse",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "syncthing",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "systemprompt",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "taiga",
+  "status": "partial",
+  "targets": 9
+ },
+ {
+  "id": "tailscale-exitnode",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "tandoor-recipes",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "teable",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "tela",
+  "status": "partial",
+  "targets": 6
+ },
+ {
+  "id": "thingsboard",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "tianji",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "timescaledb",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "tolgee",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "tooljet",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "tor-browser",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "trailbase",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "trek",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "triggerdotdev",
+  "status": "manual",
+  "targets": 6
+ },
+ {
+  "id": "trilium",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "trilium-next",
+  "status": "partial",
+  "targets": 1
+ },
+ {
+  "id": "trmnl-larapaper",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "trypost",
+  "status": "manual",
+  "targets": 3
+ },
+ {
+  "id": "tuwunel",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "twenty",
+  "status": "ok",
+  "targets": 5
+ },
+ {
+  "id": "typebot",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "typecho",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "typesense",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "umami",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "unifi",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "unleash",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "upsnap",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "uptime-kotlin",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "uptime-kuma",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "uptimekit",
+  "status": "manual",
+  "targets": 4
+ },
+ {
+  "id": "usesend",
+  "status": "partial",
+  "targets": 4
+ },
+ {
+  "id": "valkey",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "vault",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "vaultwarden",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "velix-api",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "verdaccio",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "versitygw",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "victoriametrics",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "vikunja",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "wakapi",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "wallabag",
+  "status": "ok",
+  "targets": 3
+ },
+ {
+  "id": "wallos",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "wanderer",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "waxum",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "wazuh",
+  "status": "partial",
+  "targets": 5
+ },
+ {
+  "id": "web-check",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "weblate",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "wg-easy",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "whatomate",
+  "status": "partial",
+  "targets": 3
+ },
+ {
+  "id": "wikijs",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "windmill",
+  "status": "manual",
+  "targets": 6
+ },
+ {
+  "id": "windows",
+  "status": "manual",
+  "targets": 1
+ },
+ {
+  "id": "windshift",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "wise-mcp",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "wordpress",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "wud",
+  "status": "manual",
+  "targets": 2
+ },
+ {
+  "id": "wupnext",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "wuzapi",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "xsshunter",
+  "status": "manual",
+  "targets": 3
+ },
+ {
+  "id": "yamtrack",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "yourls",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "yt-dlp-webui",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "yuvomi",
+  "status": "ok",
+  "targets": 1
+ },
+ {
+  "id": "zabbix",
+  "status": "partial",
+  "targets": 5
+ },
+ {
+  "id": "zeqqat",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "zipline",
+  "status": "ok",
+  "targets": 2
+ },
+ {
+  "id": "zitadel",
+  "status": "partial",
+  "targets": 2
+ },
+ {
+  "id": "zulip",
+  "status": "partial",
+  "targets": 5
+ }
+]

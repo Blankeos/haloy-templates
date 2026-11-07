@@ -1,0 +1,25 @@
+name: n8n
+server: localhost
+targets:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:1.104.0
+    port: "5678"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: N8N_HOST
+        value: app.example.com
+      - name: N8N_PORT
+        value: "5678"
+      - name: N8N_PROTOCOL
+        value: http
+      - name: NODE_ENV
+        value: production
+      - name: WEBHOOK_URL
+        value: https://app.example.com/
+      - name: GENERIC_TIMEZONE
+        value: Europe/Berlin
+      - name: N8N_SECURE_COOKIE
+        value: "false"
+    volumes:
+      - n8n-n8n-data:/home/node/.n8n

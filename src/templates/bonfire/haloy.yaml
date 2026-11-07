@@ -1,0 +1,84 @@
+name: bonfire
+server: localhost
+targets:
+  bonfire:
+    health_check_path: /
+    image: bonfirenetworks/bonfire:1.0.5-social-amd64
+    port: "4000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: HOSTNAME
+        value: app.example.com
+      - name: PUBLIC_PORT
+        value: "80"
+      - name: SERVER_PORT
+        value: "4000"
+      - name: APP_NAME
+        value: Bonfire
+      - name: LANG
+        value: en_US.UTF-8
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: SIGNING_SALT
+        from:
+          env: SIGNING_SALT
+      - name: ENCRYPTION_SALT
+        from:
+          env: ENCRYPTION_SALT
+      - name: RELEASE_COOKIE
+        from:
+          env: RELEASE_COOKIE
+      - name: POSTGRES_HOST
+        value: bonfire-db
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_DB
+        value: bonfire_db
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DB_MIGRATE_INDEXES_CONCURRENTLY
+        value: "false"
+      - name: SEARCH_ADAPTER
+        value: meili
+      - name: SEARCH_MEILI_INSTANCE
+        value: http://bonfire-search:7700
+      - name: MEILI_MASTER_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: MAIL_BACKEND
+        value: none
+      - name: UPLOAD_LIMIT
+        value: "20"
+    volumes:
+      - bonfire-bonfire-uploads:/opt/app/data/uploads
+  bonfire-db:
+    preset: service
+    image: postgis/postgis:17-3.5-alpine
+    port: "8080"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_DB
+        value: bonfire_db
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - bonfire-db-data:/var/lib/postgresql/data
+  bonfire-search:
+    preset: service
+    image: getmeili/meilisearch:v1.11
+    port: "8080"
+    env:
+      - name: MEILI_MASTER_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: MEILI_ENV
+        value: production
+      - name: MEILI_NO_ANALYTICS
+        value: "true"
+    volumes:
+      - bonfire-search-data:/meili_data

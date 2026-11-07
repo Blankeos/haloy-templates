@@ -1,0 +1,2 @@
+FROM ghcr.io/struxadotcloud/dashboard:${IMAGE_TAG}
+ENTRYPOINT ["/bin/sh","-c","eval \"$(node -e '\n  const {generateKeyPairSync}=require(\"crypto\");\n  const {publicKey,privateKey}=generateKeyPairSync(\"rsa\",{modulusLength:2048,\n    publicKeyEncoding:{type:\"spki\",format:\"pem\"},\n    privateKeyEncoding:{type:\"pkcs8\",format:\"pem\"}});\n  console.log(\"export JWT_PRIVATE_KEY=\"+JSON.stringify(privateKey.replace(/\\n/g,\"\\\\n\")));\n  console.log(\"export JWT_PUBLIC_KEY=\"+JSON.stringify(publicKey.replace(/\\n/g,\"\\\\n\")));\n')\"\nexec node apps/web/server.js\n"]

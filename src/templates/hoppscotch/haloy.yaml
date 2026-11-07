@@ -1,0 +1,66 @@
+name: hoppscotch
+server: localhost
+targets:
+  hoppscotch:
+    image: hoppscotch/hoppscotch:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: HOPPSCOTCH__DATABASE_URL
+      - name: DATA_ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: HOPP_AIO_ALTERNATE_PORT
+        value: "80"
+      - name: WHITELISTED_ORIGINS
+        value: https://app.example.com,http://app.example.com,app://hoppscotch
+      - name: VITE_BASE_URL
+        value: https://app.example.com
+      - name: VITE_SHORTCODE_BASE_URL
+        value: https://app.example.com
+      - name: VITE_ADMIN_URL
+        value: https://app.example.com/admin
+      - name: VITE_BACKEND_GQL_URL
+        value: https://app.example.com/backend/graphql
+      - name: VITE_BACKEND_WS_URL
+        value: wss://app.example.com/backend/graphql
+      - name: VITE_BACKEND_API_URL
+        value: https://app.example.com/backend/v1
+      - name: VITE_APP_TOS_LINK
+        value: https://docs.hoppscotch.io/support/terms
+      - name: VITE_APP_PRIVACY_POLICY_LINK
+        value: https://docs.hoppscotch.io/support/privacy
+      - name: ENABLE_SUBPATH_BASED_ACCESS
+        value: "true"
+    volumes:
+      - hoppscotch-hoppscotch-data:/app/data
+  hoppscotch-postgres:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: hoppscotch
+      - name: POSTGRES_USER
+        value: hoppscotch
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - hoppscotch-hoppscotch-postgres:/var/lib/postgresql/data
+  hoppscotch-migrate:
+    preset: service
+    image:
+      repository: hoppscotch-migrate
+      tag: latest
+      build_config:
+        context: ./hoppscotch-migrate
+        push: server
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: HOPPSCOTCH_MIGRATE__DATABASE_URL

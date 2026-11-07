@@ -1,0 +1,30 @@
+name: commentoplusplus
+server: localhost
+targets:
+  commentoplusplus:
+    image: caroga/commentoplusplus:v1.8.7
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: COMMENTO_ORIGIN
+        value: http://app.example.com
+      - name: COMMENTO_POSTGRES
+        from:
+          env: COMMENTOPLUSPLUS__COMMENTO_POSTGRES
+      - name: COMMENTO_ENABLE_WILDCARDS
+        value: "true"
+  commentoplusplus-postgres:
+    preset: database
+    image: postgres:11
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: postgres
+      - name: POSTGRES_USER
+        value: postgres
+    volumes:
+      - commentoplusplus-postgres-data:/var/lib/postgresql/data

@@ -1,0 +1,2 @@
+FROM ghcr.io/noveum/orbit-runtime:2026.09.24
+CMD ["node","apps/web/scheduler.mjs"]

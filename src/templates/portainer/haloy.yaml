@@ -1,0 +1,11 @@
+name: portainer
+server: localhost
+targets:
+  portainer:
+    image: portainer/portainer-ce:latest
+    port: "9000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-portainer-data:/data

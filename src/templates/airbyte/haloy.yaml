@@ -1,0 +1,692 @@
+name: airbyte
+server: localhost
+targets:
+  airbyte-db:
+    preset: service
+    image: airbyte/db:${AIRBYTE_VERSION}
+    port: "8080"
+    env:
+      - name: POSTGRES_DB
+        value: db-airbyte
+      - name: POSTGRES_USER
+        value: airbyte
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: PGDATA
+        value: /var/lib/postgresql/data/pgdata
+    volumes:
+      - airbyte-db-data:/var/lib/postgresql/data
+  airbyte-minio:
+    health_check_path: /healthz
+    preset: service
+    image:
+      repository: airbyte-minio
+      tag: latest
+      build_config:
+        context: ./airbyte-minio
+        push: server
+    port: "8080"
+    env:
+      - name: MINIO_ROOT_USER
+        value: minio
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_ROOT_PASSWORD
+    volumes:
+      - airbyte-minio-data:/storage
+  airbyte-minio-init:
+    preset: service
+    image:
+      repository: airbyte-minio-init
+      tag: latest
+      build_config:
+        context: ./airbyte-minio-init
+        push: server
+    port: "8080"
+    env:
+      - name: SEAWEEDFS_MASTER
+        value: airbyte-minio:9333
+  airbyte-temporal:
+    preset: service
+    image:
+      repository: airbyte-temporal
+      tag: latest
+      build_config:
+        context: ./airbyte-temporal
+        push: server
+    port: "8080"
+    env:
+      - name: AUTO_SETUP
+        value: "true"
+      - name: DB
+        value: postgres12
+      - name: DB_PORT
+        value: "5432"
+      - name: POSTGRES_SEEDS
+        value: db
+      - name: POSTGRES_USER
+        value: airbyte
+      - name: POSTGRES_PWD
+        from:
+          env: DATABASE_PASSWORD
+      - name: POSTGRES_TLS_ENABLED
+        value: "false"
+      - name: POSTGRES_TLS_DISABLE_HOST_VERIFICATION
+        value: "false"
+      - name: SQL_TLS_ENABLED
+        value: "false"
+      - name: SQL_TLS_DISABLE_HOST_VERIFICATION
+        value: "false"
+      - name: DYNAMIC_CONFIG_FILE_PATH
+        value: config/dynamicconfig/development.yaml
+      - name: PROMETHEUS_ENDPOINT
+        value: 0.0.0.0:9090
+      - name: BIND_ON_IP
+        value: 0.0.0.0
+      - name: TEMPORAL_BROADCAST_ADDRESS
+        value: 0.0.0.0
+  airbyte-k3s:
+    preset: service
+    image:
+      repository: airbyte-k3s
+      tag: latest
+      build_config:
+        context: ./airbyte-k3s
+        push: server
+    port: "8080"
+    env:
+      - name: K3S_KUBECONFIG_OUTPUT
+        value: /output/kubeconfig.yaml
+      - name: K3S_KUBECONFIG_MODE
+        value: "0644"
+    volumes:
+      - airbyte-k3s-data:/var/lib/rancher/k3s
+      - airbyte-k3s-kubeconfig:/output
+  airbyte-docker-dns:
+    preset: service
+    image:
+      repository: airbyte-docker-dns
+      tag: latest
+      build_config:
+        context: ./airbyte-docker-dns
+        push: server
+    port: "8080"
+  airbyte-k3s-bootstrap:
+    preset: service
+    image:
+      repository: airbyte-k3s-bootstrap
+      tag: latest
+      build_config:
+        context: ./airbyte-k3s-bootstrap
+        push: server
+    port: "8080"
+    env:
+      - name: AIRBYTE_ADMIN_PASSWORD
+        from:
+          env: AIRBYTE_ADMIN_PASSWORD
+      - name: AIRBYTE_ADMIN_CLIENT_ID
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_ID
+      - name: AIRBYTE_ADMIN_CLIENT_SECRET
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_SECRET
+      - name: AIRBYTE_JWT_SIGNATURE_SECRET
+        from:
+          env: AIRBYTE_JWT_SIGNATURE_SECRET
+      - name: DATABASE_USER
+        value: airbyte
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: MINIO_ROOT_USER
+        value: minio
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_ROOT_PASSWORD
+    volumes:
+      - airbyte-k3s-kubeconfig:/kube
+  airbyte-dataplane-credentials:
+    preset: service
+    image:
+      repository: airbyte-dataplane-credentials
+      tag: latest
+      build_config:
+        context: ./airbyte-dataplane-credentials
+        push: server
+    port: "8080"
+    volumes:
+      - airbyte-k3s-kubeconfig:/kube:ro
+      - airbyte-dataplane-credentials:/credentials
+  airbyte-bootloader:
+    preset: service
+    image: airbyte/bootloader:${AIRBYTE_VERSION}
+    port: "8080"
+    env:
+      - name: AIRBYTE_VERSION
+        value: 2.2.0
+      - name: AIRBYTE_URL
+        value: http://app.example.com
+      - name: AIRBYTE_API_HOST
+        value: http://app.example.com/api/public
+      - name: AIRBYTE_SERVER_HOST
+        value: airbyte-server:8001
+      - name: INTERNAL_API_HOST
+        value: http://airbyte-server:8001
+      - name: MANIFEST_SERVER_API_HOST
+        value: http://airbyte-manifest-server:8080
+      - name: CONTROL_PLANE_TOKEN_ENDPOINT
+        value: http://airbyte-server:8001/api/v1/dataplanes/token
+      - name: WORKLOAD_API_HOST
+        value: http://airbyte-workload-api-server:8007
+      - name: TEMPORAL_HOST
+        value: airbyte-temporal:7233
+      - name: MINIO_ENDPOINT
+        value: http://airbyte-minio:9000
+      - name: DATABASE_HOST
+        value: airbyte-db
+      - name: DATABASE_DB
+        value: db-airbyte
+      - name: DATABASE_USER
+        value: airbyte
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_USER
+        value: airbyte
+      - name: CONFIG_DATABASE_REPLICA_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: AWS_ACCESS_KEY_ID
+        value: minio
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: AB_INSTANCE_ADMIN_PASSWORD
+        from:
+          env: AIRBYTE_ADMIN_PASSWORD
+      - name: AB_INSTANCE_ADMIN_CLIENT_ID
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_ID
+      - name: AB_INSTANCE_ADMIN_CLIENT_SECRET
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_SECRET
+      - name: AB_JWT_SIGNATURE_SECRET
+        from:
+          env: AIRBYTE_JWT_SIGNATURE_SECRET
+      - name: CONNECTOR_PROFILER_IMAGE
+        value: airbyte/async-profiler:2.2.0
+      - name: CONNECTOR_SIDECAR_IMAGE
+        value: airbyte/connector-sidecar:2.2.0
+      - name: CONTAINER_ORCHESTRATOR_IMAGE
+        value: airbyte/container-orchestrator:2.2.0
+      - name: WORKLOAD_INIT_IMAGE
+        value: airbyte/workload-init-container:2.2.0
+      - name: JAVA_OPTS
+        value: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=75.0 -XX:FlightRecorderOptions=stackdepth=256
+      - name: KUBECONFIG
+        value: /kube/config.yaml
+      - name: MICRONAUT_ENVIRONMENTS
+        value: k8s,control-plane,edition-community
+      - name: JOB_KUBE_NAMESPACE
+        value: default
+      - name: DD_SERVICE
+        value: airbyte-bootloader
+    volumes:
+      - airbyte-k3s-kubeconfig:/kube:ro
+  airbyte-server:
+    image: airbyte/server:${AIRBYTE_VERSION}
+    port: "8001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: AIRBYTE_VERSION
+        value: 2.2.0
+      - name: AIRBYTE_URL
+        value: http://app.example.com
+      - name: AIRBYTE_API_HOST
+        value: http://app.example.com/api/public
+      - name: AIRBYTE_SERVER_HOST
+        value: airbyte-server:8001
+      - name: INTERNAL_API_HOST
+        value: http://airbyte-server:8001
+      - name: MANIFEST_SERVER_API_HOST
+        value: http://airbyte-manifest-server:8080
+      - name: CONTROL_PLANE_TOKEN_ENDPOINT
+        value: http://airbyte-server:8001/api/v1/dataplanes/token
+      - name: WORKLOAD_API_HOST
+        value: http://airbyte-workload-api-server:8007
+      - name: TEMPORAL_HOST
+        value: airbyte-temporal:7233
+      - name: MINIO_ENDPOINT
+        value: http://airbyte-minio:9000
+      - name: DATABASE_HOST
+        value: airbyte-db
+      - name: DATABASE_DB
+        value: db-airbyte
+      - name: DATABASE_USER
+        value: airbyte
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_USER
+        value: airbyte
+      - name: CONFIG_DATABASE_REPLICA_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: AWS_ACCESS_KEY_ID
+        value: minio
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: AB_INSTANCE_ADMIN_PASSWORD
+        from:
+          env: AIRBYTE_ADMIN_PASSWORD
+      - name: AB_INSTANCE_ADMIN_CLIENT_ID
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_ID
+      - name: AB_INSTANCE_ADMIN_CLIENT_SECRET
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_SECRET
+      - name: AB_JWT_SIGNATURE_SECRET
+        from:
+          env: AIRBYTE_JWT_SIGNATURE_SECRET
+      - name: CONNECTOR_PROFILER_IMAGE
+        value: airbyte/async-profiler:2.2.0
+      - name: CONNECTOR_SIDECAR_IMAGE
+        value: airbyte/connector-sidecar:2.2.0
+      - name: CONTAINER_ORCHESTRATOR_IMAGE
+        value: airbyte/container-orchestrator:2.2.0
+      - name: WORKLOAD_INIT_IMAGE
+        value: airbyte/workload-init-container:2.2.0
+      - name: JAVA_OPTS
+        value: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=75.0 -XX:FlightRecorderOptions=stackdepth=256
+      - name: DD_SERVICE
+        value: airbyte-server
+  airbyte-manifest-server:
+    health_check_path: /health/
+    preset: service
+    image: airbyte/manifest-server:${MANIFEST_SERVER_VERSION}
+    port: "8080"
+    env:
+      - name: AIRBYTE_VERSION
+        value: 2.2.0
+      - name: AIRBYTE_URL
+        value: http://app.example.com
+      - name: AIRBYTE_API_HOST
+        value: http://app.example.com/api/public
+      - name: AIRBYTE_SERVER_HOST
+        value: airbyte-server:8001
+      - name: INTERNAL_API_HOST
+        value: http://airbyte-server:8001
+      - name: MANIFEST_SERVER_API_HOST
+        value: http://airbyte-manifest-server:8080
+      - name: CONTROL_PLANE_TOKEN_ENDPOINT
+        value: http://airbyte-server:8001/api/v1/dataplanes/token
+      - name: WORKLOAD_API_HOST
+        value: http://airbyte-workload-api-server:8007
+      - name: TEMPORAL_HOST
+        value: airbyte-temporal:7233
+      - name: MINIO_ENDPOINT
+        value: http://airbyte-minio:9000
+      - name: DATABASE_HOST
+        value: airbyte-db
+      - name: DATABASE_DB
+        value: db-airbyte
+      - name: DATABASE_USER
+        value: airbyte
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_USER
+        value: airbyte
+      - name: CONFIG_DATABASE_REPLICA_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: AWS_ACCESS_KEY_ID
+        value: minio
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: AB_INSTANCE_ADMIN_PASSWORD
+        from:
+          env: AIRBYTE_ADMIN_PASSWORD
+      - name: AB_INSTANCE_ADMIN_CLIENT_ID
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_ID
+      - name: AB_INSTANCE_ADMIN_CLIENT_SECRET
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_SECRET
+      - name: AB_JWT_SIGNATURE_SECRET
+        from:
+          env: AIRBYTE_JWT_SIGNATURE_SECRET
+      - name: CONNECTOR_PROFILER_IMAGE
+        value: airbyte/async-profiler:2.2.0
+      - name: CONNECTOR_SIDECAR_IMAGE
+        value: airbyte/connector-sidecar:2.2.0
+      - name: CONTAINER_ORCHESTRATOR_IMAGE
+        value: airbyte/container-orchestrator:2.2.0
+      - name: WORKLOAD_INIT_IMAGE
+        value: airbyte/workload-init-container:2.2.0
+      - name: JAVA_OPTS
+        value: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=75.0 -XX:FlightRecorderOptions=stackdepth=256
+      - name: DD_SERVICE
+        value: airbyte-manifest-server
+      - name: AIRBYTE_ENABLE_UNSAFE_CODE
+        value: "false"
+  airbyte-workload-api-server:
+    preset: service
+    image: airbyte/workload-api-server:${AIRBYTE_VERSION}
+    port: "8080"
+    env:
+      - name: AIRBYTE_VERSION
+        value: 2.2.0
+      - name: AIRBYTE_URL
+        value: http://app.example.com
+      - name: AIRBYTE_API_HOST
+        value: http://app.example.com/api/public
+      - name: AIRBYTE_SERVER_HOST
+        value: airbyte-server:8001
+      - name: INTERNAL_API_HOST
+        value: http://airbyte-server:8001
+      - name: MANIFEST_SERVER_API_HOST
+        value: http://airbyte-manifest-server:8080
+      - name: CONTROL_PLANE_TOKEN_ENDPOINT
+        value: http://airbyte-server:8001/api/v1/dataplanes/token
+      - name: WORKLOAD_API_HOST
+        value: http://airbyte-workload-api-server:8007
+      - name: TEMPORAL_HOST
+        value: airbyte-temporal:7233
+      - name: MINIO_ENDPOINT
+        value: http://airbyte-minio:9000
+      - name: DATABASE_HOST
+        value: airbyte-db
+      - name: DATABASE_DB
+        value: db-airbyte
+      - name: DATABASE_USER
+        value: airbyte
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_USER
+        value: airbyte
+      - name: CONFIG_DATABASE_REPLICA_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: AWS_ACCESS_KEY_ID
+        value: minio
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: AB_INSTANCE_ADMIN_PASSWORD
+        from:
+          env: AIRBYTE_ADMIN_PASSWORD
+      - name: AB_INSTANCE_ADMIN_CLIENT_ID
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_ID
+      - name: AB_INSTANCE_ADMIN_CLIENT_SECRET
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_SECRET
+      - name: AB_JWT_SIGNATURE_SECRET
+        from:
+          env: AIRBYTE_JWT_SIGNATURE_SECRET
+      - name: CONNECTOR_PROFILER_IMAGE
+        value: airbyte/async-profiler:2.2.0
+      - name: CONNECTOR_SIDECAR_IMAGE
+        value: airbyte/connector-sidecar:2.2.0
+      - name: CONTAINER_ORCHESTRATOR_IMAGE
+        value: airbyte/container-orchestrator:2.2.0
+      - name: WORKLOAD_INIT_IMAGE
+        value: airbyte/workload-init-container:2.2.0
+      - name: JAVA_OPTS
+        value: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=75.0 -XX:FlightRecorderOptions=stackdepth=256
+      - name: DD_SERVICE
+        value: airbyte-workload-api
+  airbyte-worker:
+    preset: service
+    image: airbyte/worker:${AIRBYTE_VERSION}
+    port: "8080"
+    env:
+      - name: AIRBYTE_VERSION
+        value: 2.2.0
+      - name: AIRBYTE_URL
+        value: http://app.example.com
+      - name: AIRBYTE_API_HOST
+        value: http://app.example.com/api/public
+      - name: AIRBYTE_SERVER_HOST
+        value: airbyte-server:8001
+      - name: INTERNAL_API_HOST
+        value: http://airbyte-server:8001
+      - name: MANIFEST_SERVER_API_HOST
+        value: http://airbyte-manifest-server:8080
+      - name: CONTROL_PLANE_TOKEN_ENDPOINT
+        value: http://airbyte-server:8001/api/v1/dataplanes/token
+      - name: WORKLOAD_API_HOST
+        value: http://airbyte-workload-api-server:8007
+      - name: TEMPORAL_HOST
+        value: airbyte-temporal:7233
+      - name: MINIO_ENDPOINT
+        value: http://airbyte-minio:9000
+      - name: DATABASE_HOST
+        value: airbyte-db
+      - name: DATABASE_DB
+        value: db-airbyte
+      - name: DATABASE_USER
+        value: airbyte
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_USER
+        value: airbyte
+      - name: CONFIG_DATABASE_REPLICA_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: AWS_ACCESS_KEY_ID
+        value: minio
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: AB_INSTANCE_ADMIN_PASSWORD
+        from:
+          env: AIRBYTE_ADMIN_PASSWORD
+      - name: AB_INSTANCE_ADMIN_CLIENT_ID
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_ID
+      - name: AB_INSTANCE_ADMIN_CLIENT_SECRET
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_SECRET
+      - name: AB_JWT_SIGNATURE_SECRET
+        from:
+          env: AIRBYTE_JWT_SIGNATURE_SECRET
+      - name: CONNECTOR_PROFILER_IMAGE
+        value: airbyte/async-profiler:2.2.0
+      - name: CONNECTOR_SIDECAR_IMAGE
+        value: airbyte/connector-sidecar:2.2.0
+      - name: CONTAINER_ORCHESTRATOR_IMAGE
+        value: airbyte/container-orchestrator:2.2.0
+      - name: WORKLOAD_INIT_IMAGE
+        value: airbyte/workload-init-container:2.2.0
+      - name: JAVA_OPTS
+        value: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=75.0 -XX:FlightRecorderOptions=stackdepth=256
+      - name: DD_SERVICE
+        value: airbyte-worker
+  airbyte-cron:
+    preset: service
+    image: airbyte/cron:${AIRBYTE_VERSION}
+    port: "8080"
+    env:
+      - name: AIRBYTE_VERSION
+        value: 2.2.0
+      - name: AIRBYTE_URL
+        value: http://app.example.com
+      - name: AIRBYTE_API_HOST
+        value: http://app.example.com/api/public
+      - name: AIRBYTE_SERVER_HOST
+        value: airbyte-server:8001
+      - name: INTERNAL_API_HOST
+        value: http://airbyte-server:8001
+      - name: MANIFEST_SERVER_API_HOST
+        value: http://airbyte-manifest-server:8080
+      - name: CONTROL_PLANE_TOKEN_ENDPOINT
+        value: http://airbyte-server:8001/api/v1/dataplanes/token
+      - name: WORKLOAD_API_HOST
+        value: http://airbyte-workload-api-server:8007
+      - name: TEMPORAL_HOST
+        value: airbyte-temporal:7233
+      - name: MINIO_ENDPOINT
+        value: http://airbyte-minio:9000
+      - name: DATABASE_HOST
+        value: airbyte-db
+      - name: DATABASE_DB
+        value: db-airbyte
+      - name: DATABASE_USER
+        value: airbyte
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_USER
+        value: airbyte
+      - name: CONFIG_DATABASE_REPLICA_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: AWS_ACCESS_KEY_ID
+        value: minio
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: AB_INSTANCE_ADMIN_PASSWORD
+        from:
+          env: AIRBYTE_ADMIN_PASSWORD
+      - name: AB_INSTANCE_ADMIN_CLIENT_ID
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_ID
+      - name: AB_INSTANCE_ADMIN_CLIENT_SECRET
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_SECRET
+      - name: AB_JWT_SIGNATURE_SECRET
+        from:
+          env: AIRBYTE_JWT_SIGNATURE_SECRET
+      - name: CONNECTOR_PROFILER_IMAGE
+        value: airbyte/async-profiler:2.2.0
+      - name: CONNECTOR_SIDECAR_IMAGE
+        value: airbyte/connector-sidecar:2.2.0
+      - name: CONTAINER_ORCHESTRATOR_IMAGE
+        value: airbyte/container-orchestrator:2.2.0
+      - name: WORKLOAD_INIT_IMAGE
+        value: airbyte/workload-init-container:2.2.0
+      - name: JAVA_OPTS
+        value: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=75.0 -XX:FlightRecorderOptions=stackdepth=256
+      - name: DD_SERVICE
+        value: airbyte-cron
+  airbyte-workload-launcher:
+    preset: service
+    image:
+      repository: airbyte-workload-launcher
+      tag: latest
+      build_config:
+        context: ./airbyte-workload-launcher
+        push: server
+    port: "8080"
+    env:
+      - name: AIRBYTE_VERSION
+        value: 2.2.0
+      - name: AIRBYTE_URL
+        value: http://app.example.com
+      - name: AIRBYTE_API_HOST
+        value: http://app.example.com/api/public
+      - name: AIRBYTE_SERVER_HOST
+        value: airbyte-server:8001
+      - name: INTERNAL_API_HOST
+        value: http://airbyte-server:8001
+      - name: MANIFEST_SERVER_API_HOST
+        value: http://airbyte-manifest-server:8080
+      - name: CONTROL_PLANE_TOKEN_ENDPOINT
+        value: http://airbyte-server:8001/api/v1/dataplanes/token
+      - name: WORKLOAD_API_HOST
+        value: http://airbyte-workload-api-server:8007
+      - name: TEMPORAL_HOST
+        value: airbyte-temporal:7233
+      - name: MINIO_ENDPOINT
+        value: http://airbyte-minio:9000
+      - name: DATABASE_HOST
+        value: airbyte-db
+      - name: DATABASE_DB
+        value: db-airbyte
+      - name: DATABASE_USER
+        value: airbyte
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_URL
+        value: jdbc:postgresql://airbyte-db:5432/db-airbyte
+      - name: CONFIG_DATABASE_REPLICA_USER
+        value: airbyte
+      - name: CONFIG_DATABASE_REPLICA_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: AWS_ACCESS_KEY_ID
+        value: minio
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: AB_INSTANCE_ADMIN_PASSWORD
+        from:
+          env: AIRBYTE_ADMIN_PASSWORD
+      - name: AB_INSTANCE_ADMIN_CLIENT_ID
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_ID
+      - name: AB_INSTANCE_ADMIN_CLIENT_SECRET
+        from:
+          env: AIRBYTE_ADMIN_CLIENT_SECRET
+      - name: AB_JWT_SIGNATURE_SECRET
+        from:
+          env: AIRBYTE_JWT_SIGNATURE_SECRET
+      - name: CONNECTOR_PROFILER_IMAGE
+        value: airbyte/async-profiler:2.2.0
+      - name: CONNECTOR_SIDECAR_IMAGE
+        value: airbyte/connector-sidecar:2.2.0
+      - name: CONTAINER_ORCHESTRATOR_IMAGE
+        value: airbyte/container-orchestrator:2.2.0
+      - name: WORKLOAD_INIT_IMAGE
+        value: airbyte/workload-init-container:2.2.0
+      - name: JAVA_OPTS
+        value: -XX:+ExitOnOutOfMemoryError -XX:MaxRAMPercentage=75.0 -XX:FlightRecorderOptions=stackdepth=256
+      - name: KUBECONFIG
+        value: /kube/config.yaml
+      - name: MICRONAUT_ENVIRONMENTS
+        value: k8s,control-plane,edition-community
+      - name: JOB_KUBE_NAMESPACE
+        value: default
+      - name: DD_SERVICE
+        value: airbyte-workload-launcher
+      - name: AIRBYTE_ENABLE_UNSAFE_CODE
+        value: "false"
+    volumes:
+      - airbyte-k3s-kubeconfig:/kube:ro
+      - airbyte-dataplane-credentials:/credentials:ro

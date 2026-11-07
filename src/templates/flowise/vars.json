@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "JWT_SECRET": "password:32",
+    "JWT_REFRESH_SECRET": "password:32",
+    "EXPRESS_SECRET": "password:32"
+  },
+  "derived": {}
+}

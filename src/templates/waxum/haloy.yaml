@@ -1,0 +1,18 @@
+name: waxum
+server: localhost
+targets:
+  waxum:
+    image: fdciabdul/waxum:0.13.5
+    port: "3451"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SUPERADMIN_TOKEN
+        from:
+          env: SUPERADMIN_TOKEN
+      - name: WHATSAPP_STORAGE_PATH
+        value: /app/whatsapp_sessions
+      - name: SQLITE_PATH
+        value: /app/whatsapp_sessions/waxum.db
+    volumes:
+      - waxum-waxum-data:/app/whatsapp_sessions

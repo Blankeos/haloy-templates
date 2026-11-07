@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "QUX_JWT_PASSWORD": "password:64",
+    "QUX_MAIL_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

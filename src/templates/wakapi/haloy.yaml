@@ -1,0 +1,20 @@
+name: wakapi
+server: localhost
+targets:
+  wakapi:
+    image: ghcr.io/muety/wakapi:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: WAKAPI_PASSWORD_SALT
+        from:
+          env: PASSWORD_SALT
+      - name: WAKAPI_DB_TYPE
+        value: sqlite3
+      - name: WAKAPI_DB_NAME
+        value: /data/wakapi.db
+      - name: WAKAPI_LISTEN_IPV4
+        value: 0.0.0.0
+    volumes:
+      - wakapi-wakapi-data:/data

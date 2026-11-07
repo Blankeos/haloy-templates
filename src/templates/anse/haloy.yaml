@@ -1,0 +1,19 @@
+name: anse
+server: localhost
+targets:
+  anse-demo:
+    image: ddiu8081/anse:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: OPENAI_API_BASE_URL
+        value: https://api.openai.com
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: SITE_PASSWORD
+        from:
+          env: SITE_PASSWORD
+      - name: OPENAI_API_MODEL
+        value: gpt-4o-mini

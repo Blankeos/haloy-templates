@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password"
+  },
+  "derived": {
+    "WINDMILL_SERVER__DATABASE_URL": "postgres://postgres:${POSTGRES_PASSWORD}@windmill-postgres/windmill?sslmode=disable",
+    "WINDMILL_WORKER__DATABASE_URL": "postgres://postgres:${POSTGRES_PASSWORD}@windmill-postgres/windmill?sslmode=disable",
+    "WINDMILL_WORKER_NATIVE__DATABASE_URL": "postgres://postgres:${POSTGRES_PASSWORD}@windmill-postgres/windmill?sslmode=disable"
+  }
+}

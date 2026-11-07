@@ -1,0 +1,35 @@
+name: lavalink
+server: localhost
+targets:
+  lavalink-fix-perms:
+    preset: service
+    image:
+      repository: lavalink-fix-perms
+      tag: latest
+      build_config:
+        context: ./lavalink-fix-perms
+        push: server
+    port: "8080"
+    volumes:
+      - lavalink-plugins:/opt/Lavalink/plugins/
+  lavalink:
+    health_check_path: /
+    image:
+      repository: lavalink
+      tag: latest
+      build_config:
+        context: ./lavalink
+        push: server
+    port: "2333"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: _JAVA_OPTIONS
+        value: -Xmx6G
+      - name: LAVALINK_SERVER_PASSWORD
+        from:
+          env: LAVALINK_SERVER_PASSWORD
+      - name: SERVER_PORT
+        value: "2333"
+    volumes:
+      - lavalink-plugins:/opt/Lavalink/plugins/

@@ -1,0 +1,10 @@
+name: otterwiki
+server: localhost
+targets:
+  otterwiki:
+    image: redimp/otterwiki:2
+    port: "80"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - otterwiki-otterwiki-data:/app-data

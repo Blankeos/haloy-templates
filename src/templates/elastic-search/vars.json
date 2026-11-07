@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "ELASTIC_PASSWORD": "password:32",
+    "KIBANA_PASSWORD": "password:32",
+    "KIBANA_SECURITY_ENCRYPTION_KEY": "password:64",
+    "KIBANA_SAVED_OBJECTS_ENCRYPTION_KEY": "password:64",
+    "KIBANA_REPORTING_ENCRYPTION_KEY": "password:64"
+  },
+  "derived": {}
+}

@@ -1,0 +1,93 @@
+name: hyperdx
+server: localhost
+targets:
+  hyperdx:
+    health_check_path: /api/ready
+    image: hyperdx/hyperdx:2.38.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: FRONTEND_URL
+        value: http://app.example.com
+      - name: HYPERDX_APP_URL
+        value: http://app.example.com
+      - name: HYPERDX_APP_PORT
+        value: "8080"
+      - name: HYPERDX_API_PORT
+        value: "8000"
+      - name: SERVER_URL
+        value: http://127.0.0.1:8000
+      - name: OPAMP_PORT
+        value: "4320"
+      - name: MONGO_URI
+        value: mongodb://hyperdx-mongodb:27017/hyperdx
+      - name: EXPRESS_SESSION_SECRET
+        from:
+          env: SESSION_SECRET
+      - name: HYPERDX_LOG_LEVEL
+        value: info
+      - name: USAGE_STATS_ENABLED
+        value: "false"
+      - name: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      - name: DEFAULT_CONNECTIONS
+        from:
+          env: HYPERDX__DEFAULT_CONNECTIONS
+      - name: DEFAULT_SOURCES
+        value: '[{"from":{"databaseName":"default","tableName":"otel_logs"},"kind":"log","timestampValueExpression":"Timestamp","name":"Logs","displayedTimestampValueExpression":"Timestamp","implicitColumnExpression":"Body","serviceNameExpression":"ServiceName","bodyExpression":"Body","eventAttributesExpression":"LogAttributes","resourceAttributesExpression":"ResourceAttributes","defaultTableSelectExpression":"Timestamp,ServiceName,SeverityText,Body","severityTextExpression":"SeverityText","traceIdExpression":"TraceId","spanIdExpression":"SpanId","metadataMaterializedViews":{"keyRollupTable":"otel_logs_key_rollup_15m","kvRollupTable":"otel_logs_kv_rollup_15m","granularity":"15 minute"},"connection":"Local ClickHouse","traceSourceId":"Traces","sessionSourceId":"Sessions","metricSourceId":"Metrics"},{"from":{"databaseName":"default","tableName":"otel_traces"},"kind":"trace","timestampValueExpression":"Timestamp","name":"Traces","displayedTimestampValueExpression":"Timestamp","implicitColumnExpression":"SpanName","serviceNameExpression":"ServiceName","eventAttributesExpression":"SpanAttributes","resourceAttributesExpression":"ResourceAttributes","defaultTableSelectExpression":"Timestamp,ServiceName,StatusCode,round(Duration/1e6),SpanName","traceIdExpression":"TraceId","spanIdExpression":"SpanId","durationExpression":"Duration","durationPrecision":9,"parentSpanIdExpression":"ParentSpanId","spanNameExpression":"SpanName","spanKindExpression":"SpanKind","statusCodeExpression":"StatusCode","statusMessageExpression":"StatusMessage","metadataMaterializedViews":{"keyRollupTable":"otel_traces_key_rollup_15m","kvRollupTable":"otel_traces_kv_rollup_15m","granularity":"15 minute"},"connection":"Local ClickHouse","logSourceId":"Logs","sessionSourceId":"Sessions","metricSourceId":"Metrics"},{"from":{"databaseName":"default","tableName":""},"kind":"metric","timestampValueExpression":"TimeUnix","name":"Metrics","resourceAttributesExpression":"ResourceAttributes","metricTables":{"gauge":"otel_metrics_gauge","histogram":"otel_metrics_histogram","sum":"otel_metrics_sum","exponential histogram":"otel_metrics_exponential_histogram","_id":"682586a8b1f81924e628e808","id":"682586a8b1f81924e628e808"},"connection":"Local ClickHouse","logSourceId":"Logs","traceSourceId":"Traces","sessionSourceId":"Sessions"},{"from":{"databaseName":"default","tableName":"hyperdx_sessions"},"kind":"session","timestampValueExpression":"TimestampTime","name":"Sessions","displayedTimestampValueExpression":"Timestamp","implicitColumnExpression":"Body","serviceNameExpression":"ServiceName","bodyExpression":"Body","eventAttributesExpression":"LogAttributes","resourceAttributesExpression":"ResourceAttributes","defaultTableSelectExpression":"Timestamp,ServiceName,SeverityText,Body","severityTextExpression":"SeverityText","traceIdExpression":"TraceId","spanIdExpression":"SpanId","connection":"Local ClickHouse","logSourceId":"Logs","traceSourceId":"Traces","metricSourceId":"Metrics"}]'
+  hyperdx-mongodb:
+    preset: database
+    image:
+      repository: hyperdx-mongodb
+      tag: latest
+      build_config:
+        context: ./hyperdx-mongodb
+        push: server
+    port: "27017"
+    volumes:
+      - hyperdx-mongodb-data:/data/db
+      - hyperdx-mongodb-config:/data/configdb
+  hyperdx-clickhouse:
+    health_check_path: /ping
+    preset: database
+    image:
+      repository: hyperdx-clickhouse
+      tag: latest
+      build_config:
+        context: ./hyperdx-clickhouse
+        push: server
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_USER
+        value: hyperdx
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+      - name: CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT
+        value: "1"
+    volumes:
+      - hyperdx-clickhouse-data:/var/lib/clickhouse
+      - hyperdx-clickhouse-logs:/var/log/clickhouse-server
+  hyperdx-otel-collector:
+    preset: service
+    image: clickhouse/clickstack-otel-collector:2.38.0
+    port: "4317"
+    env:
+      - name: CLICKHOUSE_ENDPOINT
+        value: tcp://hyperdx-clickhouse:9000?dial_timeout=10s
+      - name: CLICKHOUSE_USER
+        value: hyperdx
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+      - name: HYPERDX_OTEL_EXPORTER_CLICKHOUSE_DATABASE
+        value: default
+      - name: HYPERDX_OTEL_EXPORTER_CREATE_LEGACY_SCHEMA
+        value: "true"
+      - name: OPAMP_SERVER_URL
+        value: http://hyperdx:4320
+      - name: HYPERDX_LOG_LEVEL
+        value: info
+    volumes:
+      - hyperdx-otel-supervisor:/etc/otel/supervisor-data

@@ -1,0 +1,10 @@
+name: checkcle
+server: localhost
+targets:
+  checkcle:
+    image: operacle/checkcle:latest
+    port: "8090"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - checkcle-checkcle-data:/mnt/pb_data

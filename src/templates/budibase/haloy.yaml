@@ -1,0 +1,175 @@
+name: budibase
+server: localhost
+targets:
+  budibase-apps:
+    health_check_path: /health
+    preset: service
+    image: budibase/apps:3.23.47
+    port: "8080"
+    env:
+      - name: SELF_HOSTED
+        value: "1"
+      - name: LOG_LEVEL
+        value: info
+      - name: PORT
+        value: "4002"
+      - name: INTERNAL_API_KEY
+        from:
+          env: API_KEY
+      - name: API_ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: MINIO_ACCESS_KEY
+        from:
+          env: MINIO_ACCESS_KEY
+      - name: MINIO_SECRET_KEY
+        from:
+          env: MINIO_SECRET_KEY
+      - name: MINIO_URL
+        value: http://budibase-minio:9000
+      - name: REDIS_URL
+        value: budibase-redis:6379
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: WORKER_URL
+        value: http://budibase-worker:4003
+      - name: COUCH_DB_USERNAME
+        value: budibase
+      - name: COUCH_DB_PASSWORD
+        from:
+          env: COUCHDB_PASSWORD
+      - name: COUCH_DB_URL
+        from:
+          env: BUDIBASE_APPS__COUCH_DB_URL
+      - name: BUDIBASE_ENVIRONMENT
+        value: PRODUCTION
+      - name: ENABLE_ANALYTICS
+        value: "true"
+  budibase-worker:
+    health_check_path: /health
+    preset: service
+    image: budibase/worker:3.23.47
+    port: "8080"
+    env:
+      - name: SELF_HOSTED
+        value: "1"
+      - name: LOG_LEVEL
+        value: info
+      - name: PORT
+        value: "4003"
+      - name: CLUSTER_PORT
+        value: "10000"
+      - name: INTERNAL_API_KEY
+        from:
+          env: API_KEY
+      - name: API_ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: MINIO_ACCESS_KEY
+        from:
+          env: MINIO_ACCESS_KEY
+      - name: MINIO_SECRET_KEY
+        from:
+          env: MINIO_SECRET_KEY
+      - name: APPS_URL
+        value: http://budibase-apps:4002
+      - name: MINIO_URL
+        value: http://budibase-minio:9000
+      - name: REDIS_URL
+        value: budibase-redis:6379
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: COUCH_DB_USERNAME
+        value: budibase
+      - name: COUCH_DB_PASSWORD
+        from:
+          env: COUCHDB_PASSWORD
+      - name: COUCH_DB_URL
+        from:
+          env: BUDIBASE_WORKER__COUCH_DB_URL
+      - name: BUDIBASE_ENVIRONMENT
+        value: PRODUCTION
+      - name: ENABLE_ANALYTICS
+        value: "true"
+  budibase-minio:
+    health_check_path: /minio/health/live
+    preset: service
+    image:
+      repository: budibase-minio
+      tag: latest
+      build_config:
+        context: ./budibase-minio
+        push: server
+    port: "8080"
+    env:
+      - name: MINIO_ROOT_USER
+        from:
+          env: MINIO_ACCESS_KEY
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_SECRET_KEY
+      - name: MINIO_BROWSER
+        value: off
+    volumes:
+      - budibase-minio-data:/data
+  budibase-proxy:
+    health_check_path: /
+    image: budibase/proxy:3.23.47
+    port: "10000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PROXY_RATE_LIMIT_WEBHOOKS_PER_SECOND
+        value: "10"
+      - name: PROXY_RATE_LIMIT_API_PER_SECOND
+        value: "20"
+      - name: APPS_UPSTREAM_URL
+        value: http://budibase-apps:4002
+      - name: WORKER_UPSTREAM_URL
+        value: http://budibase-worker:4003
+      - name: MINIO_UPSTREAM_URL
+        value: http://budibase-minio:9000
+      - name: COUCHDB_UPSTREAM_URL
+        value: http://budibase-couchdb:5984
+      - name: WATCHTOWER_UPSTREAM_URL
+        value: http://watchtower:8080
+      - name: RESOLVER
+        value: 127.0.0.11
+  budibase-couchdb:
+    health_check_path: /
+    preset: database
+    image: budibase/couchdb:v3.3.3
+    port: "5984"
+    env:
+      - name: COUCHDB_USER
+        value: budibase
+      - name: COUCHDB_PASSWORD
+        from:
+          env: COUCHDB_PASSWORD
+      - name: TARGETBUILD
+        value: docker-compose
+    volumes:
+      - budibase-couchdb3-data:/opt/couchdb/data
+  budibase-redis:
+    preset: database
+    image:
+      repository: budibase-redis
+      tag: latest
+      build_config:
+        context: ./budibase-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - budibase-redis-data:/data

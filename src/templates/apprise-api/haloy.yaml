@@ -1,0 +1,17 @@
+name: apprise-api
+server: localhost
+targets:
+  apprise-api:
+    image: linuxserver/apprise-api:latest
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: UTC
+    volumes:
+      - apprise-api-config:/config

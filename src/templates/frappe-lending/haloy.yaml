@@ -1,0 +1,213 @@
+name: frappe-lending
+server: localhost
+targets:
+  frappe-lending-backend:
+    preset: service
+    image:
+      repository: frappe-lending-backend
+      tag: latest
+      build_config:
+        context: ./frappe-lending-backend
+        push: server
+    port: "8080"
+    env:
+      - name: SITE_NAME
+        value: frappe.lending
+      - name: MAIN_DOMAIN
+        value: app.example.com
+    volumes:
+      - frappe-lending-sites:/home/frappe/frappe-bench/sites
+      - frappe-lending-apps:/home/frappe/frappe-bench/apps
+  frappe-lending-frontend:
+    health_check_path: /login
+    image:
+      repository: frappe-lending-frontend
+      tag: latest
+      build_config:
+        context: ./frappe-lending-frontend
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BACKEND
+        value: frappe-lending-backend:8000
+      - name: SOCKETIO
+        value: frappe-lending-websocket:9000
+      - name: UPSTREAM_REAL_IP_ADDRESS
+        value: 127.0.0.1
+      - name: UPSTREAM_REAL_IP_HEADER
+        value: X-Forwarded-For
+      - name: UPSTREAM_REAL_IP_RECURSIVE
+        value: off
+      - name: USE_X_FORWARDED_HOST
+        value: "1"
+      - name: PROXY_FIX
+        value: "1"
+      - name: X_FORWARDED_PROTO
+        value: https
+    volumes:
+      - frappe-lending-sites:/home/frappe/frappe-bench/sites
+      - frappe-lending-apps:/home/frappe/frappe-bench/apps
+  frappe-lending-queue-default:
+    preset: service
+    image:
+      repository: frappe-lending-queue-default
+      tag: latest
+      build_config:
+        context: ./frappe-lending-queue-default
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lending-sites:/home/frappe/frappe-bench/sites
+      - frappe-lending-apps:/home/frappe/frappe-bench/apps
+  frappe-lending-queue-long:
+    preset: service
+    image:
+      repository: frappe-lending-queue-long
+      tag: latest
+      build_config:
+        context: ./frappe-lending-queue-long
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lending-sites:/home/frappe/frappe-bench/sites
+      - frappe-lending-apps:/home/frappe/frappe-bench/apps
+  frappe-lending-queue-short:
+    preset: service
+    image:
+      repository: frappe-lending-queue-short
+      tag: latest
+      build_config:
+        context: ./frappe-lending-queue-short
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lending-sites:/home/frappe/frappe-bench/sites
+      - frappe-lending-apps:/home/frappe/frappe-bench/apps
+  frappe-lending-scheduler:
+    preset: service
+    image:
+      repository: frappe-lending-scheduler
+      tag: latest
+      build_config:
+        context: ./frappe-lending-scheduler
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lending-sites:/home/frappe/frappe-bench/sites
+      - frappe-lending-apps:/home/frappe/frappe-bench/apps
+  frappe-lending-websocket:
+    preset: service
+    image:
+      repository: frappe-lending-websocket
+      tag: latest
+      build_config:
+        context: ./frappe-lending-websocket
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lending-sites:/home/frappe/frappe-bench/sites
+      - frappe-lending-apps:/home/frappe/frappe-bench/apps
+  frappe-lending-configurator:
+    preset: service
+    image:
+      repository: frappe-lending-configurator
+      tag: latest
+      build_config:
+        context: ./frappe-lending-configurator
+        push: server
+    port: "8080"
+    env:
+      - name: DB_HOST
+        value: frappe-lending-db
+      - name: DB_PORT
+        value: "3306"
+      - name: REDIS_CACHE
+        value: frappe-lending-redis-cache:6379
+      - name: REDIS_QUEUE
+        value: frappe-lending-redis-queue:6379
+      - name: SOCKETIO_PORT
+        value: "9000"
+      - name: REGENERATE_APPS_TXT
+        value: "1"
+    volumes:
+      - frappe-lending-sites:/home/frappe/frappe-bench/sites
+      - frappe-lending-apps:/home/frappe/frappe-bench/apps
+  frappe-lending-create-site:
+    preset: service
+    image:
+      repository: frappe-lending-create-site
+      tag: latest
+      build_config:
+        context: ./frappe-lending-create-site
+        push: server
+    port: "8080"
+    env:
+      - name: SITE_NAME
+        value: frappe.lending
+      - name: MAIN_DOMAIN
+        value: app.example.com
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: DB_HOST
+        value: frappe-lending-db
+      - name: DB_PORT
+        value: "3306"
+      - name: DB_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: INSTALL_APP_ARGS
+        value: --install-app erpnext --install-app lending
+    volumes:
+      - frappe-lending-sites:/home/frappe/frappe-bench/sites
+      - frappe-lending-apps:/home/frappe/frappe-bench/apps
+  frappe-lending-migration:
+    preset: service
+    image:
+      repository: frappe-lending-migration
+      tag: latest
+      build_config:
+        context: ./frappe-lending-migration
+        push: server
+    port: "8080"
+    volumes:
+      - frappe-lending-sites:/home/frappe/frappe-bench/sites
+      - frappe-lending-apps:/home/frappe/frappe-bench/apps
+  frappe-lending-db:
+    preset: database
+    image:
+      repository: frappe-lending-db
+      tag: latest
+      build_config:
+        context: ./frappe-lending-db
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: MARIADB_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+    volumes:
+      - frappe-lending-db-data:/var/lib/mysql
+  frappe-lending-redis-cache:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - frappe-lending-redis-cache-data:/data
+  frappe-lending-redis-queue:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - frappe-lending-redis-queue-data:/data
+  frappe-lending-redis-socketio:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - frappe-lending-redis-socketio-data:/data

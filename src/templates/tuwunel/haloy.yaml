@@ -1,0 +1,22 @@
+name: tuwunel
+server: localhost
+targets:
+  tuwunel:
+    image: ghcr.io/matrix-construct/tuwunel:v1.5.0
+    port: "6167"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TUWUNEL_SERVER_NAME
+        value: app.example.com
+      - name: TUWUNEL_ALLOW_REGISTRATION
+        value: "false"
+      - name: TUWUNEL_REGISTRATION_TOKEN
+        from:
+          env: REGISTRATION_TOKEN
+      - name: TUWUNEL_ADDRESS
+        value: 0.0.0.0
+      - name: TUWUNEL_PORT
+        value: "6167"
+    volumes:
+      - tuwunel-tuwunel-data:/var/lib/tuwunel/

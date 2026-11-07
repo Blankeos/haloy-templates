@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "LICENSE_KEY": "password:32",
+    "RCON_PASSWORD": "password:16"
+  },
+  "derived": {}
+}

@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "ACKEE_PASSWORD": "password:16",
+    "MONGO_INITDB_ROOT_PASSWORD": "password:16"
+  },
+  "derived": {
+    "ACKEE__ACKEE_MONGODB": "mongodb://mongo:${MONGO_INITDB_ROOT_PASSWORD}@ackee-mongo:27017"
+  }
+}

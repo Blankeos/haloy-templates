@@ -1,0 +1,31 @@
+name: conduit
+server: localhost
+targets:
+  conduit-homeserver:
+    image: registry.gitlab.com/famedly/conduit/matrix-conduit:v0.9.0
+    port: "6167"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CONDUIT_SERVER_NAME
+        value: app.example.com
+      - name: CONDUIT_DATABASE_PATH
+        value: /var/lib/matrix-conduit/
+      - name: CONDUIT_DATABASE_BACKEND
+        value: rocksdb
+      - name: CONDUIT_PORT
+        value: "6167"
+      - name: CONDUIT_MAX_REQUEST_SIZE
+        value: "20000000"
+      - name: CONDUIT_ALLOW_REGISTRATION
+        value: "true"
+      - name: CONDUIT_ALLOW_FEDERATION
+        value: "true"
+      - name: CONDUIT_ALLOW_CHECK_FOR_UPDATES
+        value: "true"
+      - name: CONDUIT_TRUSTED_SERVERS
+        value: '["matrix.org"]'
+      - name: CONDUIT_ADDRESS
+        value: 0.0.0.0
+    volumes:
+      - conduit-db:/var/lib/matrix-conduit/

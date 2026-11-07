@@ -1,0 +1,60 @@
+name: shoutrrr
+server: localhost
+targets:
+  shoutrrr:
+    health_check_path: /up
+    image: ghcr.io/coollabsio/shoutrrr:1.5.4
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_ENV
+        value: production
+      - name: APP_DEBUG
+        value: "false"
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_URL
+        value: http://app.example.com
+      - name: SELF_HOSTED
+        value: "true"
+      - name: TRUSTED_PROXIES
+        value: "*"
+      - name: OCTANE_SERVER
+        value: frankenphp
+      - name: OCTANE_HTTPS
+        value: "false"
+      - name: SESSION_SECURE_COOKIE
+        value: "false"
+      - name: DB_CONNECTION
+        value: sqlite
+      - name: DB_DATABASE
+        value: /var/www/html/database/sqlite/database.sqlite
+      - name: CACHE_STORE
+        value: database
+      - name: QUEUE_CONNECTION
+        value: database
+      - name: SESSION_DRIVER
+        value: database
+      - name: FILESYSTEM_DISK
+        value: public
+      - name: MAIL_MAILER
+        value: log
+      - name: LOG_CHANNEL
+        value: stderr
+      - name: LOG_LEVEL
+        value: info
+      - name: INSTANCE_REGISTRATIONS_ENABLED
+        value: "false"
+      - name: QUEUE_WORKER_ENABLED
+        value: "true"
+      - name: QUEUE_WORKER_COUNT
+        value: "1"
+      - name: SCHEDULER_ENABLED
+        value: "true"
+      - name: INERTIA_SSR_ENABLED
+        value: "false"
+    volumes:
+      - shoutrrr-shoutrrr-storage:/var/www/html/storage
+      - shoutrrr-shoutrrr-sqlite:/var/www/html/database/sqlite

@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password"
+  },
+  "derived": {
+    "SLASH_APP__SLASH_DSN": "postgresql://slash:${DB_PASSWORD}@slash-postgres:5432/slash?sslmode=disable"
+  }
+}

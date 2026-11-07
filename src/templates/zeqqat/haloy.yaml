@@ -1,0 +1,38 @@
+name: zeqqat
+server: localhost
+targets:
+  zeqqat:
+    image: ghcr.io/zeqqat/zeqqat:0.1.0
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ZEQQAT_PUBLIC_URL
+        value: https://app.example.com
+      - name: ZEQQAT_EDITION
+        value: self-hosted
+      - name: DATABASE_URL
+        from:
+          env: ZEQQAT__DATABASE_URL
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: ZEQQAT_ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: ENABLED_AUTH_PROVIDERS
+        value: github
+  zeqqat-postgres:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: zeqqat
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: zeqqat
+    volumes:
+      - zeqqat-zeqqat-postgres:/var/lib/postgresql/data

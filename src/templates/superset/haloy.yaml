@@ -1,0 +1,60 @@
+name: superset
+server: localhost
+targets:
+  superset:
+    image:
+      repository: superset
+      tag: latest
+      build_config:
+        context: ./superset
+        push: server
+    port: "8088"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: POSTGRES_USER
+        value: superset
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: superset
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: POSTGRES_HOST
+        value: superset-postgres
+      - name: REDIS_HOST
+        value: superset-redis
+  superset-postgres:
+    preset: database
+    image: postgres:18
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: superset
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: superset
+    volumes:
+      - superset-superset-postgres-data:/var/lib/postgresql
+  superset-redis:
+    preset: database
+    image:
+      repository: superset-redis
+      tag: latest
+      build_config:
+        context: ./superset-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - superset-superset-redis-data:/data

@@ -1,0 +1,16 @@
+name: code-server
+server: localhost
+targets:
+  code-server:
+    image: codercom/code-server:4.121.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PASSWORD
+        from:
+          env: PASSWORD
+      - name: TZ
+        value: UTC
+    volumes:
+      - code-server-code-server-home:/home/coder

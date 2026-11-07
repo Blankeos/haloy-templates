@@ -1,0 +1,17 @@
+name: homeassistant
+server: localhost
+targets:
+  homeassistant:
+    image:
+      repository: homeassistant
+      tag: latest
+      build_config:
+        context: ./homeassistant
+        push: server
+    port: "8123"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - /opt/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro

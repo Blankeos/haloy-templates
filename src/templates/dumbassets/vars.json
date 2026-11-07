@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "DEFAULT_PIN": "password:4"
+  },
+  "derived": {}
+}

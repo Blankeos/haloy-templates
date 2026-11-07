@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "INLINE_PASSWORD_32": "password:32",
+    "INLINE_PASSWORD_16": "password:16"
+  },
+  "derived": {
+    "CAPSO_CAP_WEB__DATABASE_URL": "mysql://root:${INLINE_PASSWORD_32}@capso-ps-mysql:3306/planetscale?ssl={\"rejectUnauthorized\":false}"
+  }
+}

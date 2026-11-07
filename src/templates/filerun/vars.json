@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "MYSQL_PASSWORD": "password:32",
+    "MARIADB_ROOT_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

@@ -1,0 +1,26 @@
+name: cut
+server: localhost
+targets:
+  cut:
+    health_check_path: /
+    image: ghcr.io/mendylanda/cut:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: REDIS_URL
+        value: redis://cut-redis:6379
+  cut-redis:
+    preset: database
+    image:
+      repository: cut-redis
+      tag: latest
+      build_config:
+        context: ./cut-redis
+        push: server
+    port: "6379"
+    volumes:
+      - cut-redis-data:/data

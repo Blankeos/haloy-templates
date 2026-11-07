@@ -1,0 +1,34 @@
+name: cockpit
+server: localhost
+targets:
+  cockpit:
+    image: cockpithq/cockpit:core-2.11.0
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: COCKPIT_SESSION_NAME
+        value: cockpit
+      - name: COCKPIT_SALT
+        from:
+          env: SALT
+      - name: COCKPIT_DATABASE_SERVER
+        from:
+          env: COCKPIT__COCKPIT_DATABASE_SERVER
+      - name: COCKPIT_DATABASE_NAME
+        value: cockpit
+    volumes:
+      - cockpit-config:/var/www/html/config
+      - cockpit-storage:/var/www/html/storage
+  cockpit-mongo:
+    preset: database
+    image: mongo:4
+    port: "27017"
+    env:
+      - name: MONGO_INITDB_ROOT_PASSWORD
+        from:
+          env: MONGO_PASSWORD
+      - name: MONGO_INITDB_ROOT_USERNAME
+        value: mongo
+    volumes:
+      - cockpit-mongo-data:/data/db

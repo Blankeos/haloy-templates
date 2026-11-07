@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "ADMIN_TOKEN": "password:32",
+    "JWKS_KEY": "password:48"
+  },
+  "derived": {}
+}

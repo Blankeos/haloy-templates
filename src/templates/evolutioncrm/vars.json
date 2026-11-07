@@ -1,0 +1,15 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password",
+    "SECRET_KEY_BASE": "base64:64",
+    "JWT_SECRET_KEY": "base64:64",
+    "API_TOKEN": "base64:64",
+    "DOORKEEPER_JWT_SECRET_KEY": "base64:64",
+    "BOT_RUNTIME_SECRET": "base64:64",
+    "ENCRYPTION_KEY": "base64:32",
+    "GLOBAL_API_KEY": "base64:64"
+  },
+  "derived": {
+    "EVOLUTIONCRM_EVO_PROCESSOR__POSTGRES_CONNECTION_STRING": "postgresql://postgres:${POSTGRES_PASSWORD}@evolutioncrm-postgres:5432/evo_crm_production"
+  }
+}

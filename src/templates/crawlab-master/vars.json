@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "MONGO_PASSWORD": "password:24"
+  },
+  "derived": {}
+}

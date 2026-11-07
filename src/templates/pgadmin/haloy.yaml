@@ -1,0 +1,20 @@
+name: pgadmin
+server: localhost
+targets:
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PGADMIN_DEFAULT_EMAIL
+        value: user@example.com
+      - name: PGADMIN_DEFAULT_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: PGADMIN_CONFIG_SERVER_MODE
+        value: "False"
+      - name: PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED
+        value: "False"
+    volumes:
+      - pgadmin-pgadmin-data:/var/lib/pgadmin

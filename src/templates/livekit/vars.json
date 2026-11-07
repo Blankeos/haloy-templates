@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "API_SECRET": "password:44",
+    "REDIS_PASSWORD": "password:32",
+    "INLINE_PASSWORD_12": "password:12"
+  },
+  "derived": {}
+}

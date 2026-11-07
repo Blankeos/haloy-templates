@@ -1,0 +1,39 @@
+name: opendots
+server: localhost
+targets:
+  opendots:
+    image: opendots-opendots
+    port: "4310"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: OWNER_TOKEN
+        from:
+          env: OWNER_TOKEN
+      - name: OWNER_ID
+        value: opendots-owner
+      - name: APP_ORIGIN
+        value: https://app.example.com
+      - name: OPENAI_BASE_URL
+        value: https://api.openai.com/v1
+      - name: WEB_SEARCH_PROVIDER
+        value: parallel
+      - name: BROWSER_URL
+        value: http://opendots-browser:4311
+      - name: BROWSER_SECRET
+        from:
+          env: BROWSER_SECRET
+      - name: VOICE_NAME
+        value: marin
+    volumes:
+      - opendots-opendots-data:/data
+  opendots-browser:
+    preset: service
+    image: opendots-opendots-browser
+    port: "4311"
+    env:
+      - name: BROWSER_SECRET
+        from:
+          env: BROWSER_SECRET
+    volumes:
+      - opendots-undefined:/tmp

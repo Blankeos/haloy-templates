@@ -1,0 +1,21 @@
+{
+  "secrets": {
+    "OPENSSL_KEY": "password:32",
+    "NOTIFICATIONS_TRACKING_SECRET": "password:32",
+    "DB_PW": "password:32",
+    "DB_ROOT_PW": "password:32",
+    "DB_USER_PW": "password:32",
+    "USAGE_PW": "password:32",
+    "EXECUTOR_SECRET": "password:32",
+    "JOBS_SECRET": "password:32",
+    "GEO_SECRET": "password:32"
+  },
+  "derived": {
+    "APPWRITE___APP_CONNECTIONS_DB_USAGE": "http://appwrite:${USAGE_PW}@appwrite-clickhouse:8123/appwrite",
+    "APPWRITE___APP_CONNECTIONS_DB_EXECUTIONS": "http://appwrite:${USAGE_PW}@appwrite-clickhouse:8123/appwrite",
+    "APPWRITE_WORKER___APP_CONNECTIONS_DB_USAGE": "http://appwrite:${USAGE_PW}@appwrite-clickhouse:8123/appwrite",
+    "APPWRITE_WORKER___APP_CONNECTIONS_DB_EXECUTIONS": "http://appwrite:${USAGE_PW}@appwrite-clickhouse:8123/appwrite",
+    "APPWRITE_TASK_SCHEDULER___APP_CONNECTIONS_DB_USAGE": "http://appwrite:${USAGE_PW}@appwrite-clickhouse:8123/appwrite",
+    "APPWRITE_TASK_SCHEDULER___APP_CONNECTIONS_DB_EXECUTIONS": "http://appwrite:${USAGE_PW}@appwrite-clickhouse:8123/appwrite"
+  }
+}

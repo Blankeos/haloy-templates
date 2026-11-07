@@ -1,0 +1,31 @@
+name: shlink
+server: localhost
+targets:
+  shlink:
+    health_check_path: /rest/v3/health
+    image: shlinkio/shlink:stable
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: INITIAL_API_KEY
+        from:
+          env: INITIAL_API_KEY
+      - name: DEFAULT_DOMAIN
+        value: app.example.com
+      - name: IS_HTTPS_ENABLED
+        value: "false"
+    volumes:
+      - shlink-shlink-data:/etc/shlink/data
+  shlink-web:
+    health_check_path: /
+    image: shlinkio/shlink-web-client
+    port: "8080"
+    domains:
+      - domain: web-app.example.com
+    env:
+      - name: SHLINK_SERVER_API_KEY
+        from:
+          env: INITIAL_API_KEY
+      - name: SHLINK_SERVER_URL
+        value: http://app.example.com

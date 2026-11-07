@@ -1,0 +1,14 @@
+name: openresty-manager
+server: localhost
+targets:
+  openresty-manager:
+    image: uusec/openresty-manager:latest
+    port: "34567"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/resolv.conf:/etc/resolv.conf:ro
+      - openresty-manager-om-acme:/opt/om/acme
+      - openresty-manager-om-data:/opt/om/data
+      - openresty-manager-om-conf:/opt/om/nginx/conf

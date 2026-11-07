@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "ARANGO_PASSWORD": "password:16"
+  },
+  "derived": {}
+}

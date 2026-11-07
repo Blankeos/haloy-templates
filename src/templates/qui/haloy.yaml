@@ -1,0 +1,10 @@
+name: qui
+server: localhost
+targets:
+  qui:
+    image: ghcr.io/autobrr/qui:latest
+    port: "7476"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - qui-qui-config:/config

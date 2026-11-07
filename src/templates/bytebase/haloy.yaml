@@ -1,0 +1,28 @@
+name: bytebase
+server: localhost
+targets:
+  bytebase:
+    image: bytebase/bytebase:3.3.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PG_URL
+        from:
+          env: BYTEBASE__PG_URL
+    volumes:
+      - bytebase-data:/var/opt/bytebase
+  bytebase-db:
+    preset: database
+    image: postgres:13
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: bytebase
+    volumes:
+      - bytebase-db-data:/var/lib/postgresql/data

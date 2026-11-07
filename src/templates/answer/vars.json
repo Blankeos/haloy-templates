@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "SERVICE_HASH": "hash:32"
+  },
+  "derived": {}
+}

@@ -1,0 +1,40 @@
+name: crawlab-master
+server: localhost
+targets:
+  crawlab-master:
+    image: crawlabteam/crawlab:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CRAWLAB_NODE_MASTER
+        value: Y
+      - name: CRAWLAB_MONGO_HOST
+        value: crawlab-master-mongo
+      - name: CRAWLAB_MONGO_PORT
+        value: "27017"
+      - name: CRAWLAB_MONGO_DB
+        value: crawlab
+      - name: CRAWLAB_MONGO_USERNAME
+        value: crawlab
+      - name: CRAWLAB_MONGO_PASSWORD
+        from:
+          env: MONGO_PASSWORD
+      - name: CRAWLAB_MONGO_AUTHSOURCE
+        value: admin
+    volumes:
+      - crawlab-master-crawlab-master-data:/root/.crawlab
+      - crawlab-master-crawlab-app-data:/data
+      - crawlab-master-crawlab-logs:/var/log/crawlab
+  crawlab-master-mongo:
+    preset: database
+    image: mongo:4.2
+    port: "27017"
+    env:
+      - name: MONGO_INITDB_ROOT_USERNAME
+        value: crawlab
+      - name: MONGO_INITDB_ROOT_PASSWORD
+        from:
+          env: MONGO_PASSWORD
+    volumes:
+      - crawlab-master-mongo-data:/data/db

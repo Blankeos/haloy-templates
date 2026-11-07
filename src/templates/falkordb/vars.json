@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "FALKORDB_PASSWORD": "hash:32",
+    "AUTH_SECRET": "base64:48",
+    "ENCRYPTION_KEY": "hash:32"
+  },
+  "derived": {
+    "FALKORDB__REDIS_ARGS": "--requirepass ${FALKORDB_PASSWORD} --appendonly yes"
+  }
+}

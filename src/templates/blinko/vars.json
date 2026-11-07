@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "NEXTAUTH_SECRET": "password:32"
+  },
+  "derived": {
+    "BLINKO_WEBSITE__DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@blinko-postgres:5432/postgres"
+  }
+}

@@ -1,0 +1,109 @@
+name: rybbit
+server: localhost
+targets:
+  rybbit-clickhouse:
+    health_check_path: /ping
+    preset: database
+    image:
+      repository: rybbit-clickhouse
+      tag: latest
+      build_config:
+        context: ./rybbit-clickhouse
+        push: server
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_DB
+        value: analytics
+      - name: CLICKHOUSE_USER
+        value: default
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+    volumes:
+      - rybbit-clickhouse-data:/var/lib/clickhouse
+  rybbit-postgres:
+    preset: database
+    image: postgres:17.5
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: analytics
+      - name: POSTGRES_USER
+        value: frog
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - rybbit-postgres-data:/var/lib/postgresql/data
+  rybbit-redis:
+    preset: database
+    image:
+      repository: rybbit-redis
+      tag: latest
+      build_config:
+        context: ./rybbit-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - rybbit-redis-data:/data
+  rybbit-backend:
+    health_check_path: /api/health
+    image: ghcr.io/rybbit-io/rybbit-backend:v2.7.0
+    port: "3001"
+    domains:
+      - domain: api.app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: CLICKHOUSE_HOST
+        value: http://rybbit-clickhouse:8123
+      - name: CLICKHOUSE_DB
+        value: analytics
+      - name: CLICKHOUSE_USER
+        value: default
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: CLICKHOUSE_PASSWORD
+      - name: POSTGRES_HOST
+        value: rybbit-postgres
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_DB
+        value: analytics
+      - name: POSTGRES_USER
+        value: frog
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: REDIS_HOST
+        value: rybbit-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: BETTER_AUTH_SECRET
+      - name: BASE_URL
+        value: http://app.example.com
+      - name: DISABLE_SIGNUP
+        value: "false"
+      - name: DISABLE_TELEMETRY
+        value: "false"
+  rybbit-client:
+    image: ghcr.io/rybbit-io/rybbit-client:v2.7.0
+    port: "3002"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: NEXT_PUBLIC_BACKEND_URL
+        value: http://app.example.com
+      - name: NEXT_PUBLIC_DISABLE_SIGNUP
+        value: "false"

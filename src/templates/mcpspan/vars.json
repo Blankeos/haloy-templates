@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "INLINE_PASSWORD_32": "password:32",
+    "INLINE_BASE64_48": "base64:48"
+  },
+  "derived": {
+    "MCPSPAN_MIGRATE__DATABASE_URL": "postgres://mcpspan:${INLINE_PASSWORD_32}@mcpspan-db:5432/mcpspan",
+    "MCPSPAN_API__DATABASE_URL": "postgres://mcpspan:${INLINE_PASSWORD_32}@mcpspan-db:5432/mcpspan"
+  }
+}

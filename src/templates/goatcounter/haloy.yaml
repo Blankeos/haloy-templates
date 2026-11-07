@@ -1,0 +1,33 @@
+name: goatcounter
+server: localhost
+targets:
+  goatcounter-postgres:
+    preset: database
+    image: postgres:18-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: goatcounter
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: goatcounter
+    volumes:
+      - goatcounter-postgres-data:/var/lib/postgresql
+  goatcounter:
+    image:
+      repository: goatcounter
+      tag: latest
+      build_config:
+        context: ./goatcounter
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: GOATCOUNTER_DB
+        from:
+          env: GOATCOUNTER__GOATCOUNTER_DB
+      - name: GOATCOUNTER_LISTEN
+        value: 0.0.0.0:8080

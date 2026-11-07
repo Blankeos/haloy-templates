@@ -1,0 +1,17 @@
+name: crowdsec
+server: localhost
+targets:
+  crowdsec:
+    preset: service
+    image: crowdsecurity/crowdsec:latest
+    port: "8080"
+    env:
+      - name: GID
+        value: "1000"
+      - name: COLLECTIONS
+        value: crowdsecurity/linux crowdsecurity/traefik crowdsecurity/http-cve
+    volumes:
+      - crowdsec-crowdsec-db:/var/lib/crowdsec/data/
+      - crowdsec-crowdsec-config:/etc/crowdsec/
+      - /etc/dokploy/traefik/dynamic/access.log:/var/log/traefik/access.log:ro
+      - /var/log/auth.log:/var/log/ssh/auth.log:ro

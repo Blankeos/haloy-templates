@@ -1,0 +1,45 @@
+name: customermates
+server: localhost
+targets:
+  customermates:
+    image: ghcr.io/customermates/customermates:sha-4f4d61c
+    port: "4000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_MODE
+        value: self-hosted
+      - name: NODE_ENV
+        value: production
+      - name: DATABASE_URL
+        from:
+          env: CUSTOMERMATES__DATABASE_URL
+      - name: WORKFLOW_TARGET_WORLD
+        value: "@workflow/world-postgres"
+      - name: WORKFLOW_POSTGRES_URL
+        from:
+          env: CUSTOMERMATES__WORKFLOW_POSTGRES_URL
+      - name: BASE_URL
+        value: http://app.example.com
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: CRON_SECRET
+        from:
+          env: CRON_SECRET
+      - name: RESEND_OPERATOR_EMAIL
+        value: mail@your-company.com
+  customermates-postgres:
+    preset: database
+    image: postgres:16.15-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: customermates
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: customermates
+    volumes:
+      - customermates-customermates-postgres-data:/var/lib/postgresql/data

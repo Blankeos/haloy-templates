@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "SECRET_KEY": "password"
+  },
+  "derived": {
+    "SPACEDRIVE_SERVER__SD_AUTH": "admin:${SECRET_KEY}"
+  }
+}

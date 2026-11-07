@@ -1,0 +1,18 @@
+{
+  "secrets": {
+    "DASHBOARD_SESSION_SECRET": "password:64",
+    "ARI_SECRET": "password:32",
+    "ASTERISK_ARI_SECRET": "password:32",
+    "ASTERISK_SIPPROXY_SECRET": "password:32",
+    "POSTGRES_PASSWORD": "password:32",
+    "INFLUXDB_PASSWORD": "password:32",
+    "INFLUXDB_TOKEN": "password:64",
+    "CLOAK_ENCRYPTION_KEY": "base64:32",
+    "API_SERVER_OWNER_PASSWORD": "password:32"
+  },
+  "derived": {
+    "FONOSTER_APISERVER__APISERVER_DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@fonoster-postgres:5432/fonoster",
+    "FONOSTER_APISERVER__APISERVER_IDENTITY_DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@fonoster-postgres:5432/fnidentity",
+    "FONOSTER_ROUTR__DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@fonoster-postgres:5432/routr"
+  }
+}

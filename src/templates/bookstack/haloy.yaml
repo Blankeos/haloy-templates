@@ -1,0 +1,46 @@
+name: bookstack
+server: localhost
+targets:
+  bookstack:
+    image: lscr.io/linuxserver/bookstack:24.12.1
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: APP_URL
+        value: http://app.example.com
+      - name: DB_HOST
+        value: bookstack-db
+      - name: DB_USERNAME
+        value: mariadb
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DB_DATABASE
+        value: bookstack
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+    volumes:
+      - bookstack-config:/config
+  bookstack-db:
+    preset: database
+    image: mariadb:10.11
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MYSQL_DATABASE
+        value: bookstack
+      - name: MYSQL_USER
+        value: mariadb
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - bookstack-db-data:/var/lib/mysql

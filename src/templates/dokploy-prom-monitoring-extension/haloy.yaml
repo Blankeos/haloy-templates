@@ -1,0 +1,11 @@
+name: dokploy-prom-monitoring-extension
+server: localhost
+targets:
+  dokploy-prom-monitoring-extension-dokploy-monitoring:
+    image: dokploy/monitoring:canary
+    port: "3001"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - dokploy-prom-monitoring-extension-monitoring-data:/app/data

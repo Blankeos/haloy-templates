@@ -1,0 +1,43 @@
+name: maybe
+server: localhost
+targets:
+  maybe-app:
+    image:
+      repository: maybe-app
+      tag: latest
+      build_config:
+        context: ./maybe-app
+        push: server
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        value: postgresql://maybe:maybe@maybe-db:5432/maybe
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: SELF_HOSTED
+        value: "true"
+      - name: SYNTH_API_KEY
+        from:
+          env: SYNTH_API_KEY
+      - name: RAILS_FORCE_SSL
+        value: "false"
+      - name: RAILS_ASSUME_SSL
+        value: "false"
+      - name: GOOD_JOB_EXECUTION_MODE
+        value: async
+  maybe-db:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: maybe
+      - name: POSTGRES_USER
+        value: maybe
+      - name: POSTGRES_PASSWORD
+        value: maybe
+    volumes:
+      - maybe-db-data:/var/lib/postgresql/data

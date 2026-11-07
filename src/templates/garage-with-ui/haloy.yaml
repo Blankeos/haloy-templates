@@ -1,0 +1,31 @@
+name: garage-with-ui
+server: localhost
+targets:
+  garage-with-ui-garage:
+    image:
+      repository: garage-with-ui-garage
+      tag: latest
+      build_config:
+        context: ./garage-with-ui-garage
+        push: server
+    port: "3900"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - garage-with-ui-garage-storage:/var/lib/garage
+      - garage-with-ui-garage-storage:/var/lib/garage
+  garage-with-ui-garage-webui:
+    image:
+      repository: garage-with-ui-garage-webui
+      tag: latest
+      build_config:
+        context: ./garage-with-ui-garage-webui
+        push: server
+    port: "3909"
+    domains:
+      - domain: web-ui.app.example.com
+    env:
+      - name: API_BASE_URL
+        value: http://garage-with-ui-garage:3903
+      - name: S3_ENDPOINT_URL
+        value: http://garage-with-ui-garage:3900

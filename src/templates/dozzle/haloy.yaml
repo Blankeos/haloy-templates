@@ -1,0 +1,10 @@
+name: dozzle
+server: localhost
+targets:
+  dozzle:
+    image: amir20/dozzle:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro

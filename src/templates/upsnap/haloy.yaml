@@ -1,0 +1,24 @@
+name: upsnap
+server: localhost
+targets:
+  upsnap:
+    health_check_path: /api/health
+    image: ghcr.io/seriousm4x/upsnap:5
+    port: "8090"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: Europe/Berlin
+      - name: UPSNAP_INTERVAL
+        value: "*/10 * * * * *"
+      - name: UPSNAP_SCAN_RANGE
+        value: 192.168.1.0/24
+      - name: UPSNAP_SCAN_TIMEOUT
+        value: 500ms
+      - name: UPSNAP_PING_PRIVILEGED
+        value: "true"
+      - name: UPSNAP_WEBSITE_TITLE
+        value: Upsnap Network Monitor
+    volumes:
+      - upsnap-upsnap-data:/app/pb_data

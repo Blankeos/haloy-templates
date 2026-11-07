@@ -1,0 +1,18 @@
+name: anonupload
+server: localhost
+targets:
+  anonupload:
+    image: ghcr.io/supernova3339/anonfiles:1
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: CONTACT_EMAIL
+        value: admin@app.example.com
+    volumes:
+      - anonupload-uploads:/var/www/html/uploads

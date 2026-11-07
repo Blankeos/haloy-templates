@@ -1,0 +1,31 @@
+name: nodelink
+server: localhost
+targets:
+  nodelink:
+    health_check_path: /version
+    image: performanc/nodelink:3.8.0
+    port: "2333"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODELINK_SERVER_HOST
+        value: 0.0.0.0
+      - name: NODELINK_SERVER_PORT
+        value: "2333"
+      - name: NODELINK_SERVER_PASSWORD
+        from:
+          env: SERVER_PASSWORD
+      - name: NODELINK_LOGGING_LEVEL
+        value: info
+      - name: NODELINK_LOGGING_FILE_ENABLED
+        value: "false"
+      - name: NODELINK_SOURCES_LOCAL_ENABLED
+        value: "false"
+      - name: NODELINK_SOURCES_LOCAL_BASEPATH
+        value: /app/local-music/
+      - name: NODELINK_METRICS_ENABLED
+        value: "false"
+    volumes:
+      - nodelink-nodelink-cache:/app/.cache
+      - nodelink-nodelink-local-music:/app/local-music
+      - nodelink-nodelink-logs:/app/logs

@@ -1,0 +1,41 @@
+name: kutt
+server: localhost
+targets:
+  kutt:
+    image: kutt/kutt:main
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DB_FILENAME
+        value: /var/lib/kutt/data.sqlite
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: DEFAULT_DOMAIN
+        value: app.example.com
+      - name: TRUST_PROXY
+        value: "false"
+      - name: DISALLOW_ANONYMOUS_LINKS
+        value: "true"
+      - name: CUSTOM_DOMAIN_USE_HTTPS
+        value: "true"
+      - name: MAIL_ENABLED
+        value: "false"
+      - name: MAIL_HOST
+        value: "''"
+      - name: MAIL_PORT
+        value: "'22'"
+      - name: MAIL_SECURE
+        value: "true"
+      - name: MAIL_USER
+        value: "''"
+      - name: MAIL_FROM
+        value: "''"
+      - name: MAIL_PASSWORD
+        value: "''"
+      - name: CONTACT_EMAIL
+        value: "''"
+    volumes:
+      - kutt-kutt-db-data:/var/lib/kutt
+      - kutt-kutt-custom:/kutt/custom

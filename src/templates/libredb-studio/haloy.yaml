@@ -1,0 +1,31 @@
+name: libredb-studio
+server: localhost
+targets:
+  libredb-studio:
+    health_check_path: /api/db/health
+    image: ghcr.io/libredb/libredb-studio:1.2.0
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ADMIN_EMAIL
+        value: admin@libredb.org
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: USER_EMAIL
+        value: user@libredb.org
+      - name: USER_PASSWORD
+        from:
+          env: USER_PASSWORD
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: STORAGE_PROVIDER
+        value: sqlite
+      - name: STORAGE_SQLITE_PATH
+        value: /app/data/libredb-storage.db
+      - name: AUTH_COOKIE_SECURE
+        value: "false"
+    volumes:
+      - libredb-studio-libredb-data:/app/data

@@ -1,0 +1,32 @@
+name: geoserver
+server: localhost
+targets:
+  geoserver:
+    image: kartoza/geoserver:2.24.1
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: GEOSERVER_ADMIN_USER
+        value: admin
+      - name: GEOSERVER_ADMIN_PASSWORD
+        value: geoserver_secure
+      - name: INITIAL_MEMORY
+        value: 2G
+      - name: MAXIMUM_MEMORY
+        value: 4G
+    volumes:
+      - geoserver-geoserver-data:/opt/geoserver/data_dir
+  geoserver-db:
+    preset: service
+    image: postgis/postgis:17-3.4
+    port: "8080"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        value: postgres_secure
+      - name: POSTGRES_DB
+        value: gis
+    volumes:
+      - geoserver-postgis-data:/var/lib/postgresql/data

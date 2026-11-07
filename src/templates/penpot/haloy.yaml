@@ -1,0 +1,82 @@
+name: penpot
+server: localhost
+targets:
+  penpot-frontend:
+    image: penpotapp/frontend:2.6.1
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PENPOT_FLAGS
+        value: disable-email-verification enable-smtp enable-prepl-server disable-secure-session-cookies
+    volumes:
+      - penpot-penpot-assets:/opt/data/assets
+  penpot-backend:
+    preset: service
+    image: penpotapp/backend:2.6.1
+    port: "8080"
+    env:
+      - name: PENPOT_PUBLIC_URI
+        value: http://app.example.com
+      - name: PENPOT_FLAGS
+        value: disable-email-verification enable-smtp enable-prepl-server disable-secure-session-cookies
+      - name: PENPOT_DATABASE_URI
+        value: postgresql://penpot-postgres/penpot
+      - name: PENPOT_DATABASE_USERNAME
+        value: penpot
+      - name: PENPOT_DATABASE_PASSWORD
+        value: penpot
+      - name: PENPOT_REDIS_URI
+        value: redis://penpot-redis/0
+      - name: PENPOT_ASSETS_STORAGE_BACKEND
+        value: assets-fs
+      - name: PENPOT_STORAGE_ASSETS_FS_DIRECTORY
+        value: /opt/data/assets
+      - name: PENPOT_TELEMETRY_ENABLED
+        value: "true"
+      - name: PENPOT_SMTP_DEFAULT_FROM
+        value: no-reply@example.com
+      - name: PENPOT_SMTP_DEFAULT_REPLY_TO
+        value: no-reply@example.com
+      - name: PENPOT_SMTP_HOST
+        value: penpot-mailcatch
+      - name: PENPOT_SMTP_PORT
+        value: "1025"
+      - name: PENPOT_SMTP_TLS
+        value: "false"
+      - name: PENPOT_SMTP_SSL
+        value: "false"
+    volumes:
+      - penpot-penpot-assets:/opt/data/assets
+  penpot-exporter:
+    preset: service
+    image: penpotapp/exporter:2.6.1
+    port: "8080"
+    env:
+      - name: PENPOT_PUBLIC_URI
+        value: http://penpot-frontend
+      - name: PENPOT_REDIS_URI
+        value: redis://penpot-redis/0
+  penpot-postgres:
+    preset: database
+    image: postgres:15
+    port: "5432"
+    env:
+      - name: POSTGRES_INITDB_ARGS
+        value: --data-checksums
+      - name: POSTGRES_DB
+        value: penpot
+      - name: POSTGRES_USER
+        value: penpot
+      - name: POSTGRES_PASSWORD
+        value: penpot
+    volumes:
+      - penpot-penpot-postgres-v15:/var/lib/postgresql/data
+  penpot-redis:
+    preset: database
+    image: redis:7.2
+    port: "6379"
+  penpot-mailcatch:
+    preset: service
+    image: sj26/mailcatcher:latest
+    port: "1025"

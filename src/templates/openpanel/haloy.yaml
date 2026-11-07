@@ -1,0 +1,136 @@
+name: openpanel
+server: localhost
+targets:
+  openpanel-op-db:
+    preset: database
+    image: postgres:14-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: openpanel
+      - name: POSTGRES_USER
+        value: openpanel
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - openpanel-op-db-data:/var/lib/postgresql/data
+  openpanel-op-kv:
+    preset: database
+    image:
+      repository: openpanel-op-kv
+      tag: latest
+      build_config:
+        context: ./openpanel-op-kv
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - openpanel-op-kv-data:/data
+  openpanel-op-ch:
+    preset: database
+    image:
+      repository: openpanel-op-ch
+      tag: latest
+      build_config:
+        context: ./openpanel-op-ch
+        push: server
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_SKIP_USER_SETUP
+        value: "1"
+    volumes:
+      - openpanel-op-ch-data:/var/lib/clickhouse
+      - openpanel-op-ch-logs:/var/log/clickhouse-server
+  openpanel-op-api:
+    health_check_path: /healthcheck
+    image:
+      repository: openpanel-op-api
+      tag: latest
+      build_config:
+        context: ./openpanel-op-api
+        push: server
+    port: "3000"
+    domains:
+      - domain: api.app.example.com
+    env:
+      - name: COOKIE_SECRET
+        from:
+          env: COOKIE_SECRET
+      - name: ALLOW_REGISTRATION
+        value: "true"
+      - name: ALLOW_INVITATION
+        value: "true"
+      - name: NODE_ENV
+        value: production
+      - name: SELF_HOSTED
+        value: "true"
+      - name: API_URL
+        value: http://app.example.com/api
+      - name: DASHBOARD_URL
+        value: http://app.example.com
+      - name: DATABASE_URL
+        from:
+          env: OPENPANEL_OP_API__DATABASE_URL
+      - name: DATABASE_URL_DIRECT
+        from:
+          env: OPENPANEL_OP_API__DATABASE_URL_DIRECT
+      - name: REDIS_URL
+        from:
+          env: OPENPANEL_OP_API__REDIS_URL
+      - name: CLICKHOUSE_URL
+        value: http://openpanel-op-ch:8123/openpanel
+  openpanel-op-dashboard:
+    health_check_path: /api/healthcheck
+    image: lindesvard/openpanel-dashboard:2.2.1
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: SELF_HOSTED
+        value: "true"
+      - name: API_URL
+        value: http://app.example.com/api
+      - name: DASHBOARD_URL
+        value: http://app.example.com
+      - name: DATABASE_URL
+        from:
+          env: OPENPANEL_OP_DASHBOARD__DATABASE_URL
+      - name: DATABASE_URL_DIRECT
+        from:
+          env: OPENPANEL_OP_DASHBOARD__DATABASE_URL_DIRECT
+      - name: REDIS_URL
+        from:
+          env: OPENPANEL_OP_DASHBOARD__REDIS_URL
+      - name: CLICKHOUSE_URL
+        value: http://openpanel-op-ch:8123/openpanel
+  openpanel-op-worker:
+    health_check_path: /healthcheck
+    preset: service
+    image: lindesvard/openpanel-worker:2.2.1
+    port: "8080"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: SELF_HOSTED
+        value: "true"
+      - name: API_URL
+        value: http://app.example.com/api
+      - name: DASHBOARD_URL
+        value: http://app.example.com
+      - name: DATABASE_URL
+        from:
+          env: OPENPANEL_OP_WORKER__DATABASE_URL
+      - name: DATABASE_URL_DIRECT
+        from:
+          env: OPENPANEL_OP_WORKER__DATABASE_URL_DIRECT
+      - name: REDIS_URL
+        from:
+          env: OPENPANEL_OP_WORKER__REDIS_URL
+      - name: CLICKHOUSE_URL
+        value: http://openpanel-op-ch:8123/openpanel

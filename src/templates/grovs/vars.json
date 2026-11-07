@@ -1,0 +1,26 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "CLICKHOUSE_PASSWORD": "password:32",
+    "SECRET_KEY_BASE": "hash:64",
+    "ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY": "hash:64",
+    "ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY": "hash:64",
+    "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT": "hash:64",
+    "ADMIN_API_KEY": "hash:64",
+    "DIAGNOSTICS_API_KEY": "hash:64",
+    "SENT_QUOTAS_WEBHOOK_KEY": "hash:64",
+    "OAUTH_CLIENT_UID": "hash:48",
+    "OAUTH_CLIENT_SECRET": "hash:64",
+    "BOOTSTRAP_ADMIN_PASSWORD": "password:24"
+  },
+  "derived": {
+    "GROVS_MIGRATE__CLICKHOUSE_URL": "http://grovs:${CLICKHOUSE_PASSWORD}@grovs-clickhouse:8123",
+    "GROVS_MIGRATE__DATABASE_URL": "postgres://grovs:${POSTGRES_PASSWORD}@grovs-postgres:5432/grovs_production",
+    "GROVS_WEB__CLICKHOUSE_URL": "http://grovs:${CLICKHOUSE_PASSWORD}@grovs-clickhouse:8123",
+    "GROVS_WEB__DATABASE_URL": "postgres://grovs:${POSTGRES_PASSWORD}@grovs-postgres:5432/grovs_production",
+    "GROVS_WORKER_1__CLICKHOUSE_URL": "http://grovs:${CLICKHOUSE_PASSWORD}@grovs-clickhouse:8123",
+    "GROVS_WORKER_1__DATABASE_URL": "postgres://grovs:${POSTGRES_PASSWORD}@grovs-postgres:5432/grovs_production",
+    "GROVS_WORKER_2__CLICKHOUSE_URL": "http://grovs:${CLICKHOUSE_PASSWORD}@grovs-clickhouse:8123",
+    "GROVS_WORKER_2__DATABASE_URL": "postgres://grovs:${POSTGRES_PASSWORD}@grovs-postgres:5432/grovs_production"
+  }
+}

@@ -1,0 +1,16 @@
+name: kokoro-web
+server: localhost
+targets:
+  kokoro-web:
+    image: ghcr.io/eduardolat/kokoro-web:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: KW_SECRET_API_KEY
+        from:
+          env: API_KEY
+      - name: KW_PUBLIC_NO_TRACK
+        value: "false"
+    volumes:
+      - kokoro-web-kokoro-cache:/kokoro/cache

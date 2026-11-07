@@ -1,0 +1,42 @@
+name: botpress
+server: localhost
+targets:
+  botpress:
+    image: botpress/server:12.31.9
+    port: "81"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BP_HOST
+        value: 0.0.0.0
+      - name: NODE_ENV
+        value: production
+      - name: PG_HOST
+        value: botpress-db
+      - name: PG_PORT
+        value: "5432"
+      - name: PG_USER
+        value: postgres
+      - name: PG_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: PG_SSL
+        value: "false"
+      - name: PORT
+        value: "80"
+    volumes:
+      - botpress-data:/botpress/data
+  botpress-db:
+    preset: database
+    image: postgres:15-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: botpress
+    volumes:
+      - botpress-db-data:/var/lib/postgresql/data

@@ -1,0 +1,54 @@
+name: paperless-ngx
+server: localhost
+targets:
+  paperless-ngx:
+    image: ghcr.io/paperless-ngx/paperless-ngx:2.20.15
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PAPERLESS_REDIS
+        value: redis://paperless-ngx-broker:6379
+      - name: PAPERLESS_DBHOST
+        value: paperless-ngx-db
+      - name: PAPERLESS_DBNAME
+        value: paperless
+      - name: PAPERLESS_DBUSER
+        value: paperless
+      - name: PAPERLESS_DBPASS
+        from:
+          env: POSTGRES_PASSWORD
+      - name: PAPERLESS_SECRET_KEY
+        from:
+          env: PAPERLESS_SECRET_KEY
+      - name: PAPERLESS_URL
+        value: http://app.example.com
+      - name: PAPERLESS_TIME_ZONE
+        value: UTC
+      - name: PAPERLESS_OCR_LANGUAGE
+        value: eng
+    volumes:
+      - paperless-ngx-paperless-data:/usr/src/paperless/data
+      - paperless-ngx-paperless-media:/usr/src/paperless/media
+      - paperless-ngx-paperless-export:/usr/src/paperless/export
+      - paperless-ngx-paperless-consume:/usr/src/paperless/consume
+  paperless-ngx-db:
+    preset: database
+    image: postgres:18-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: paperless
+      - name: POSTGRES_USER
+        value: paperless
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - paperless-ngx-paperless-db:/var/lib/postgresql
+  paperless-ngx-broker:
+    preset: database
+    image: redis:8-alpine
+    port: "6379"
+    volumes:
+      - paperless-ngx-paperless-redis:/data

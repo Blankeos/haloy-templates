@@ -1,0 +1,184 @@
+name: erpnext
+server: localhost
+targets:
+  erpnext-backend:
+    preset: service
+    image: ${IMAGE_NAME:-docker.io/frappe/erpnext}:${VERSION:-version-15}
+    port: "8080"
+    volumes:
+      - erpnext-sites:/home/frappe/frappe-bench/sites
+  erpnext-frontend:
+    image:
+      repository: erpnext-frontend
+      tag: latest
+      build_config:
+        context: ./erpnext-frontend
+        push: server
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BACKEND
+        value: erpnext-backend:8000
+      - name: SOCKETIO
+        value: erpnext-websocket:9000
+      - name: UPSTREAM_REAL_IP_ADDRESS
+        value: 127.0.0.1
+      - name: UPSTREAM_REAL_IP_HEADER
+        value: X-Forwarded-For
+      - name: UPSTREAM_REAL_IP_RECURSIVE
+        value: off
+    volumes:
+      - erpnext-sites:/home/frappe/frappe-bench/sites
+  erpnext-queue-default:
+    preset: service
+    image:
+      repository: erpnext-queue-default
+      tag: latest
+      build_config:
+        context: ./erpnext-queue-default
+        push: server
+    port: "8080"
+    volumes:
+      - erpnext-sites:/home/frappe/frappe-bench/sites
+  erpnext-queue-long:
+    preset: service
+    image:
+      repository: erpnext-queue-long
+      tag: latest
+      build_config:
+        context: ./erpnext-queue-long
+        push: server
+    port: "8080"
+    volumes:
+      - erpnext-sites:/home/frappe/frappe-bench/sites
+  erpnext-queue-short:
+    preset: service
+    image:
+      repository: erpnext-queue-short
+      tag: latest
+      build_config:
+        context: ./erpnext-queue-short
+        push: server
+    port: "8080"
+    volumes:
+      - erpnext-sites:/home/frappe/frappe-bench/sites
+  erpnext-scheduler:
+    preset: service
+    image:
+      repository: erpnext-scheduler
+      tag: latest
+      build_config:
+        context: ./erpnext-scheduler
+        push: server
+    port: "8080"
+    volumes:
+      - erpnext-sites:/home/frappe/frappe-bench/sites
+  erpnext-websocket:
+    preset: service
+    image:
+      repository: erpnext-websocket
+      tag: latest
+      build_config:
+        context: ./erpnext-websocket
+        push: server
+    port: "8080"
+    volumes:
+      - erpnext-sites:/home/frappe/frappe-bench/sites
+  erpnext-configurator:
+    preset: service
+    image:
+      repository: erpnext-configurator
+      tag: latest
+      build_config:
+        context: ./erpnext-configurator
+        push: server
+    port: "8080"
+    env:
+      - name: DB_HOST
+        value: erpnext-db
+      - name: DB_PORT
+        value: "3306"
+      - name: REDIS_CACHE
+        value: erpnext-redis-cache:6379
+      - name: REDIS_QUEUE
+        value: erpnext-redis-queue:6379
+      - name: SOCKETIO_PORT
+        value: "9000"
+      - name: REGENERATE_APPS_TXT
+        value: "1"
+    volumes:
+      - erpnext-sites:/home/frappe/frappe-bench/sites
+  erpnext-create-site:
+    preset: service
+    image:
+      repository: erpnext-create-site
+      tag: latest
+      build_config:
+        context: ./erpnext-create-site
+        push: server
+    port: "8080"
+    env:
+      - name: SITE_NAME
+        value: app.example.com
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: DB_HOST
+        value: erpnext-db
+      - name: DB_PORT
+        value: "3306"
+      - name: DB_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: INSTALL_APP_ARGS
+        value: --install-app erpnext
+    volumes:
+      - erpnext-sites:/home/frappe/frappe-bench/sites
+  erpnext-migration:
+    preset: service
+    image:
+      repository: erpnext-migration
+      tag: latest
+      build_config:
+        context: ./erpnext-migration
+        push: server
+    port: "8080"
+    volumes:
+      - erpnext-sites:/home/frappe/frappe-bench/sites
+  erpnext-db:
+    preset: database
+    image:
+      repository: erpnext-db
+      tag: latest
+      build_config:
+        context: ./erpnext-db
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: MARIADB_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+    volumes:
+      - erpnext-db-data:/var/lib/mysql
+  erpnext-redis-cache:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - erpnext-redis-cache-data:/data
+  erpnext-redis-queue:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - erpnext-redis-queue-data:/data
+  erpnext-redis-socketio:
+    preset: database
+    image: redis:6.2-alpine
+    port: "6379"
+    volumes:
+      - erpnext-redis-socketio-data:/data

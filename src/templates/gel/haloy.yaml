@@ -1,0 +1,22 @@
+name: gel
+server: localhost
+targets:
+  gel:
+    image: geldata/gel:6
+    port: "5656"
+    domains:
+      - domain: ui.app.example.com
+    env:
+      - name: GEL_SERVER_SECURITY
+        value: strict
+      - name: GEL_SERVER_PASSWORD
+        from:
+          env: GEL_PASSWORD
+      - name: GEL_SERVER_TLS_CERT_MODE
+        value: generate_self_signed
+      - name: GEL_SERVER_HTTP_ENDPOINT_SECURITY
+        value: optional
+      - name: GEL_SERVER_ADMIN_UI
+        value: enabled
+    volumes:
+      - gel-gel-data:/var/lib/gel/data

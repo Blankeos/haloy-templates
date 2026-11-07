@@ -1,11 +1,26 @@
 # haloy-templates
 
-Translates Dokploy templates (`docker-compose.yml` + `template.toml`) into Haloy configs (`haloy.yaml`).
+Dokploy templates translated into Haloy configs, bundled in `src/templates/<id>/`.
 
-- Bun + TypeScript. `bun test` for tests, `bun run src/cli.ts` for the CLI.
-- All translation logic lives in `src/translate.ts` and is a pure function (`translate(input) -> files + warnings`). Keep it free of I/O.
-- Never commit translated output or secrets. Output goes to `./out` (ignored).
-- Every behaviour change needs a test in `test/translate.test.ts` using a fixture under `test/fixtures/<id>/`.
-- Verify against the real thing: translate everything, then run `scripts/validate-all.sh <out dir>` on a machine with the `haloy` CLI. The target is 100% of templates passing `haloy validate-config`.
-- Warnings are the honest part of this tool. If something cannot be translated, warn (`partial` = workaround applied, `manual` = needs a human) instead of guessing silently.
-- Do not clone Dokploy/templates. Files are fetched one by one into `~/.cache/haloy-templates` (capped at 20 MB).
+## Layout
+
+- `src/translate.ts`: pure function `translate(input) -> files + warnings`. No I/O, deterministic.
+- `src/cli.ts`: `list`, `add`, `env`, `translate`, `sync`. `src/fetch.ts`: upstream fetch + capped cache. `src/secrets.ts`: `.env` generation.
+- `src/templates/`: generated. Never hand-edit; change the translator and re-sync. `index.json`, `UPSTREAM` (upstream commit) and `/COVERAGE.md` are generated too.
+- Secrets never live in the repo. Each template has a `vars.json` recipe; `add` generates `.env`.
+
+## Rules
+
+- Bun + TypeScript. `bun test`, `bunx tsc --noEmit`.
+- Every translator behaviour change needs a test using a fixture in `test/fixtures/<id>/`.
+- Warn instead of guessing: `partial` = workaround applied, `manual` = needs a human.
+- Do not clone Dokploy/templates. Files are fetched one by one into `~/.cache/haloy-templates` (20 MB cap).
+- Do not leave junk behind: temp output and VMs get deleted after use.
+
+## Maintaining (routine)
+
+1. `bun run sync`. A weekly workflow does this and opens a PR; the diff is the upstream change.
+2. `bun run validate` (needs the haloy CLI). The bar is 602/602 (all templates) passing `haloy validate-config`. A failure means a translator bug: fix `translate.ts`, add a fixture test, re-sync.
+3. Read the `COVERAGE.md` diff. New warning codes or fewer clean templates need a look.
+4. Deploy-test a sample of new or changed templates in a throwaway amd64 VM (health check passing, not just validating) before calling them working. Haloy does not expand `${VAR}` in `value:`; use `from: env`.
+5. Never claim a template works unless it was deployed and healthy.

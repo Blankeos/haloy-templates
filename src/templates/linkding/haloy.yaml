@@ -1,0 +1,10 @@
+name: linkding
+server: localhost
+targets:
+  linkding:
+    image: sissbruecker/linkding:latest
+    port: "9090"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - linkding-linkding-data:/etc/linkding/data

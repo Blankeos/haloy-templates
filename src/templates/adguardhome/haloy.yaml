@@ -1,0 +1,11 @@
+name: adguardhome
+server: localhost
+targets:
+  adguardhome:
+    image: adguard/adguardhome:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - adguardhome-adguardhome-work:/opt/adguardhome/work
+      - adguardhome-adguardhome-conf:/opt/adguardhome/conf

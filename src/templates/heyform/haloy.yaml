@@ -1,0 +1,42 @@
+name: heyform
+server: localhost
+targets:
+  heyform:
+    image: heyform/community-edition:v0.1.0
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MONGO_URI
+        value: mongodb://heyform-mongo:27017/heyform
+      - name: REDIS_HOST
+        value: heyform-keydb
+      - name: REDIS_PORT
+        value: "6379"
+      - name: SMTP_FROM
+        value: HeyForm <noreply@app.example.com>
+      - name: SMTP_PORT
+        value: "587"
+      - name: SMTP_SECURE
+        value: "false"
+      - name: SMTP_IGNORE_CERT
+        value: "false"
+    volumes:
+      - heyform-heyform-data:/app/static/upload
+  heyform-mongo:
+    preset: service
+    image: percona/percona-server-mongodb:4.4
+    port: "8080"
+    volumes:
+      - heyform-mongo-data:/data/db
+  heyform-keydb:
+    preset: database
+    image:
+      repository: heyform-keydb
+      tag: latest
+      build_config:
+        context: ./heyform-keydb
+        push: server
+    port: "6379"
+    volumes:
+      - heyform-keydb-data:/data

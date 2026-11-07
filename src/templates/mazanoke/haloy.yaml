@@ -1,0 +1,8 @@
+name: mazanoke
+server: localhost
+targets:
+  mazanoke:
+    image: ghcr.io/civilblur/mazanoke:latest
+    port: "80"
+    domains:
+      - domain: app.example.com

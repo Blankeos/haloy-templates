@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "API_KEY": "base64:64",
+    "POSTGRES_PASSWORD": "password"
+  },
+  "derived": {
+    "EVOLUTIONAPI_EVOLUTION_API__DATABASE_CONNECTION_URI": "postgres://postgresql:${POSTGRES_PASSWORD}@evolutionapi-evolution-postgres:5432/evolution"
+  }
+}

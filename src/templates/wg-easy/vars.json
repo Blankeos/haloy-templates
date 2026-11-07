@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "WG_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

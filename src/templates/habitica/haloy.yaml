@@ -1,0 +1,57 @@
+name: habitica
+server: localhost
+targets:
+  habitica-server:
+    preset: service
+    image: docker.io/awinterstein/habitica-server:latest
+    port: "8080"
+    env:
+      - name: NODE_DB_URI
+        from:
+          env: HABITICA_SERVER__NODE_DB_URI
+      - name: INVITE_ONLY
+        value: "false"
+      - name: EMAIL_SERVER_URL
+        value: mail.example.com
+      - name: EMAIL_SERVER_PORT
+        value: "587"
+      - name: EMAIL_SERVER_AUTH_USER
+        value: mail_user
+      - name: EMAIL_SERVER_AUTH_PASSWORD
+        from:
+          env: MAIL_PASSWORD
+      - name: ADMIN_EMAIL
+        value: no-reply@app.example.com
+  habitica-client:
+    image: docker.io/awinterstein/habitica-client:latest
+    port: "80"
+    domains:
+      - domain: habitica.app.example.com
+  habitica-mongo:
+    preset: database
+    image:
+      repository: habitica-mongo
+      tag: latest
+      build_config:
+        context: ./habitica-mongo
+        push: server
+    port: "27017"
+    env:
+      - name: MONGO_INITDB_ROOT_USERNAME
+        value: admin
+      - name: MONGO_INITDB_ROOT_PASSWORD
+        from:
+          env: MONGO_ADMIN_PASSWORD
+      - name: MONGO_KEYFILE_CONTENT
+        from:
+          env: MONGO_KEY
+      - name: MONGO_HABITICA_USER
+        value: habitica
+      - name: MONGO_HABITICA_PASSWORD
+        from:
+          env: MONGO_HABITICA_PASSWORD
+      - name: MONGO_KEY
+        from:
+          env: MONGO_KEY
+    volumes:
+      - habitica-habitica-mongo-data:/data/db

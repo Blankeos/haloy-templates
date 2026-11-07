@@ -1,0 +1,8 @@
+name: omni-tools
+server: localhost
+targets:
+  omni-tools:
+    image: iib0011/omni-tools:latest
+    port: "80"
+    domains:
+      - domain: app.example.com

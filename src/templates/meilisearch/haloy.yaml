@@ -1,0 +1,14 @@
+name: meilisearch
+server: localhost
+targets:
+  meilisearch:
+    image: getmeili/meilisearch:v1.35.1
+    port: "7700"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MEILI_MASTER_KEY
+        from:
+          env: MASTER_KEY
+    volumes:
+      - meilisearch-meili-data:/meili_data

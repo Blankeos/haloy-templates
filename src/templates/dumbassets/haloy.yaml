@@ -1,0 +1,10 @@
+name: dumbassets
+server: localhost
+targets:
+  dumbassets:
+    image: dumbwareio/dumbassets:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - dumbassets-dumbassets-data:/app/data

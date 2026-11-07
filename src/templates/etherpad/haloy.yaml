@@ -1,0 +1,56 @@
+name: etherpad
+server: localhost
+targets:
+  etherpad-app:
+    image: etherpad/etherpad:latest
+    port: "9001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: DB_CHARSET
+        value: utf8mb4
+      - name: DB_HOST
+        value: etherpad-postgres
+      - name: DB_NAME
+        value: etherpad
+      - name: DB_PASS
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_TYPE
+        value: postgres
+      - name: DB_USER
+        value: admin
+      - name: DEFAULT_PAD_TEXT
+        value: " "
+      - name: DISABLE_IP_LOGGING
+        value: "false"
+      - name: SOFFICE
+        value: "null"
+      - name: TRUST_PROXY
+        value: "true"
+    volumes:
+      - etherpad-plugins:/opt/etherpad-lite/src/plugin_packages
+      - etherpad-etherpad-var:/opt/etherpad-lite/var
+  etherpad-postgres:
+    preset: database
+    image: postgres:15-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: etherpad
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        value: admin
+      - name: PGDATA
+        value: /var/lib/postgresql/data/pgdata
+    volumes:
+      - etherpad-postgres-data:/var/lib/postgresql/data/pgdata

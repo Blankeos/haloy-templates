@@ -1,0 +1,52 @@
+name: movary
+server: localhost
+targets:
+  movary:
+    image: leepeuker/movary:${MOVARY_VERSION:-latest}
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_MODE
+        value: mysql
+      - name: DATABASE_MYSQL_HOST
+        value: movary-mysql
+      - name: DATABASE_MYSQL_NAME
+        value: movary
+      - name: DATABASE_MYSQL_USER
+        value: movary_user
+      - name: DATABASE_MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+      - name: APP_URL
+        value: http://app.example.com
+      - name: APP_ENV
+        value: production
+    volumes:
+      - movary-movary-storage:/app/storage
+  movary-mysql:
+    preset: database
+    image:
+      repository: movary-mysql
+      tag: latest
+      build_config:
+        context: ./movary-mysql
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: movary
+      - name: MYSQL_USER
+        value: movary_user
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+      - name: MYSQL_INNODB_BUFFER_POOL_SIZE
+        value: 128M
+      - name: MYSQL_INNODB_LOG_FILE_SIZE
+        value: 64M
+    volumes:
+      - movary-movary-db:/var/lib/mysql

@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "BROWSERLESS_TOKEN": "password:16"
+  },
+  "derived": {}
+}

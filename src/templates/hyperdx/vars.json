@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "SESSION_SECRET": "password:64",
+    "CLICKHOUSE_PASSWORD": "password:32"
+  },
+  "derived": {
+    "HYPERDX__DEFAULT_CONNECTIONS": "[{\"name\":\"Local ClickHouse\",\"host\":\"http://hyperdx-clickhouse:8123\",\"username\":\"hyperdx\",\"password\":\"${CLICKHOUSE_PASSWORD}\"}]"
+  }
+}

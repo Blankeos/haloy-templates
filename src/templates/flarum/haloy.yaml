@@ -1,0 +1,39 @@
+name: flarum
+server: localhost
+targets:
+  flarum:
+    image: crazymax/flarum:latest
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: FLARUM_BASE_URL
+        value: https://app.example.com
+      - name: DB_HOST
+        value: flarum-db
+      - name: DB_NAME
+        value: flarum
+      - name: DB_USER
+        value: flarum
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - flarum-flarum-data:/data
+  flarum-db:
+    preset: database
+    image: mariadb:11
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: flarum
+      - name: MYSQL_USER
+        value: flarum
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - flarum-db-data:/var/lib/mysql

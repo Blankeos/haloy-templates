@@ -1,0 +1,16 @@
+name: networking-toolbox
+server: localhost
+targets:
+  networking-toolbox-app:
+    health_check_path: /health
+    image: lissy93/networking-toolbox:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3000"
+      - name: HOST
+        value: 0.0.0.0

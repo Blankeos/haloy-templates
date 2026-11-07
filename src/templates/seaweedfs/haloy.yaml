@@ -1,0 +1,59 @@
+name: seaweedfs
+server: localhost
+targets:
+  seaweedfs-master:
+    health_check_path: /
+    image:
+      repository: seaweedfs-master
+      tag: latest
+      build_config:
+        context: ./seaweedfs-master
+        push: server
+    port: "9333"
+    domains:
+      - domain: master.app.example.com
+    volumes:
+      - seaweedfs-seaweedfs-master:/data/master
+  seaweedfs-volume:
+    preset: service
+    image:
+      repository: seaweedfs-volume
+      tag: latest
+      build_config:
+        context: ./seaweedfs-volume
+        push: server
+    port: "8080"
+    volumes:
+      - seaweedfs-seaweedfs-volume:/data/volume
+  seaweedfs-filer:
+    health_check_path: /
+    image:
+      repository: seaweedfs-filer
+      tag: latest
+      build_config:
+        context: ./seaweedfs-filer
+        push: server
+    port: "8888"
+    domains:
+      - domain: filer.app.example.com
+    env:
+      - name: WEED_MASTER
+        value: seaweedfs-master:9333
+    volumes:
+      - seaweedfs-seaweedfs-filer:/data
+  seaweedfs-s3:
+    image:
+      repository: seaweedfs-s3
+      tag: latest
+      build_config:
+        context: ./seaweedfs-s3
+        push: server
+    port: "8333"
+    domains:
+      - domain: s3.app.example.com
+    env:
+      - name: AWS_ACCESS_KEY_ID
+        value: admin
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: INLINE_PASSWORD_16

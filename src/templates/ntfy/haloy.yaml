@@ -1,0 +1,18 @@
+name: ntfy
+server: localhost
+targets:
+  ntfy:
+    health_check_path: /
+    image:
+      repository: ntfy
+      tag: latest
+      build_config:
+        context: ./ntfy
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - ntfy-ntfy-data:/var/lib/ntfy
+      - ntfy-ntfy-cache:/var/cache/ntfy
+      - ntfy-templates:/etc/ntfy/templates:ro

@@ -1,0 +1,17 @@
+name: soketi
+server: localhost
+targets:
+  soketi:
+    image: quay.io/soketi/soketi:1.6.1-16-debian
+    port: "6001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SOKETI_DEBUG
+        value: "1"
+      - name: SOKETI_HOST
+        value: 0.0.0.0
+      - name: SOKETI_PORT
+        value: "6001"
+      - name: SOKETI_METRICS_SERVER_PORT
+        value: "9601"

@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "API_KEY_PEPPER": "password:64"
+  },
+  "derived": {}
+}

@@ -1,0 +1,43 @@
+name: owncloud-infinite-scale
+server: localhost
+targets:
+  owncloud-infinite-scale-gateway:
+    image: nginx:1.27-alpine
+    port: "8080"
+    domains:
+      - domain: app.example.com
+  owncloud-infinite-scale:
+    preset: service
+    image:
+      repository: owncloud-infinite-scale
+      tag: latest
+      build_config:
+        context: ./owncloud-infinite-scale
+        push: server
+    port: "9200"
+    env:
+      - name: OCIS_URL
+        value: https://app.example.com
+      - name: OCIS_LOG_LEVEL
+        value: info
+      - name: OCIS_INSECURE
+        value: "true"
+      - name: PROXY_TLS
+        value: "false"
+      - name: PROXY_HTTP_ADDR
+        value: 0.0.0.0:9200
+      - name: IDM_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: SETTINGS_GRPC_ADDR
+        value: 0.0.0.0:9191
+      - name: GATEWAY_GRPC_ADDR
+        value: 0.0.0.0:9142
+      - name: STORAGE_USERS_DATA_GATEWAY_URL
+        value: http://owncloud-infinite-scale:9200/data
+      - name: THUMBNAILS_FILESYSTEMSTORAGE_ROOT
+        value: /var/lib/ocis-thumbnails
+    volumes:
+      - owncloud-infinite-scale-owncloud-infinite-scale-config:/etc/ocis
+      - owncloud-infinite-scale-owncloud-infinite-scale-data:/var/lib/ocis
+      - owncloud-infinite-scale-owncloud-infinite-scale-thumbnails:/var/lib/ocis-thumbnails

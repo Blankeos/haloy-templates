@@ -1,0 +1,14 @@
+{
+  "secrets": {
+    "MONGODB_PASSWORD": "hash:64",
+    "REDIS_PASSWORD": "hash:64",
+    "KEK_VERSION_1": "base64:32",
+    "AUTH_SECRET": "base64:32"
+  },
+  "derived": {
+    "CORSFIX__MONGODB_URI": "mongodb://corsfix:${MONGODB_PASSWORD}@corsfix-mongodb:27017/db?authSource=admin",
+    "CORSFIX__REDIS_URI": "redis://default:${REDIS_PASSWORD}@corsfix-redis:6379",
+    "CORSFIX_PROXY__MONGODB_URI": "mongodb://corsfix:${MONGODB_PASSWORD}@corsfix-mongodb:27017/db?authSource=admin",
+    "CORSFIX_PROXY__REDIS_URI": "redis://default:${REDIS_PASSWORD}@corsfix-redis:6379"
+  }
+}

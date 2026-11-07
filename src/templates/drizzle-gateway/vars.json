@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "MASTERPASS": "base64:32"
+  },
+  "derived": {}
+}

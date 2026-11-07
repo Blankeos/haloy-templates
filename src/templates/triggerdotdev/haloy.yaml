@@ -1,0 +1,78 @@
+name: triggerdotdev
+server: localhost
+targets:
+  triggerdotdev-webapp:
+    image: ghcr.io/triggerdotdev/trigger.dev:${TRIGGER_IMAGE_TAG:-v3}
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LOGIN_ORIGIN
+        value: http://app.example.com
+      - name: APP_ORIGIN
+        value: http://app.example.com
+      - name: DEV_OTEL_EXPORTER_OTLP_ENDPOINT
+        value: http://app.example.com/otel
+      - name: ELECTRIC_ORIGIN
+        value: http://triggerdotdev-electric:3000
+  triggerdotdev-postgres:
+    preset: database
+    image:
+      repository: triggerdotdev-postgres
+      tag: latest
+      build_config:
+        context: ./triggerdotdev-postgres
+        push: server
+    port: "5432"
+    volumes:
+      - triggerdotdev-postgres-data:/var/lib/postgresql/data/
+  triggerdotdev-redis:
+    preset: database
+    image: redis:${REDIS_IMAGE_TAG:-7}
+    port: "6379"
+    volumes:
+      - triggerdotdev-redis-data:/data
+  triggerdotdev-docker-provider:
+    preset: service
+    image: ghcr.io/triggerdotdev/provider/docker:${TRIGGER_IMAGE_TAG:-v3}
+    port: "9020"
+    env:
+      - name: PLATFORM_HOST
+        value: triggerdotdev-webapp
+      - name: PLATFORM_WS_PORT
+        value: "3030"
+      - name: SECURE_CONNECTION
+        value: "false"
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: http://app.example.com/otel
+      - name: PLATFORM_SECRET
+        from:
+          env: PROVIDER_SECRET
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  triggerdotdev-coordinator:
+    preset: service
+    image: ghcr.io/triggerdotdev/coordinator:${TRIGGER_IMAGE_TAG:-v3}
+    port: "9020"
+    env:
+      - name: PLATFORM_HOST
+        value: triggerdotdev-webapp
+      - name: PLATFORM_WS_PORT
+        value: "3030"
+      - name: SECURE_CONNECTION
+        value: "false"
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: http://app.example.com/otel
+      - name: PLATFORM_SECRET
+        from:
+          env: COORDINATOR_SECRET
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  triggerdotdev-electric:
+    preset: service
+    image: electricsql/electric:${ELECTRIC_IMAGE_TAG:-latest}
+    port: "3000"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: TRIGGERDOTDEV_ELECTRIC__DATABASE_URL

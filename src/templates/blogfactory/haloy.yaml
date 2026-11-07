@@ -1,0 +1,108 @@
+name: blogfactory
+server: localhost
+targets:
+  blogfactory-postgres:
+    preset: database
+    image: postgres:17.6-alpine3.22
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: blogfactory
+      - name: POSTGRES_USER
+        value: blogfactory
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - blogfactory-postgres-data:/var/lib/postgresql/data
+  blogfactory-minio:
+    health_check_path: /minio/health/live
+    preset: service
+    image:
+      repository: blogfactory-minio
+      tag: latest
+      build_config:
+        context: ./blogfactory-minio
+        push: server
+    port: "8080"
+    env:
+      - name: MINIO_ROOT_USER
+        value: blogfactory
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_ROOT_PASSWORD
+    volumes:
+      - blogfactory-minio-data:/data
+  blogfactory-api:
+    health_check_path: /api/ready
+    preset: service
+    image:
+      repository: blogfactory-api
+      tag: latest
+      build_config:
+        context: ./blogfactory-api
+        push: server
+    port: "3000"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3000"
+      - name: BLOGFACTORY_SELF_HOSTED
+        value: "true"
+      - name: DATABASE_URL
+        from:
+          env: BLOGFACTORY_API__DATABASE_URL
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: API_KEY_ENCRYPTION_SECRET
+        from:
+          env: ENCRYPTION_SECRET
+      - name: ADMIN_EMAILS
+        value: admin@app.example.com
+      - name: BLOGFACTORY_ALLOW_SIGNUP
+        value: "true"
+      - name: CRON_SECRET
+        from:
+          env: CRON_SECRET
+      - name: WEB_APP_URL
+        value: https://app.example.com
+      - name: MCP_APP_URL
+        value: http://blogfactory-web/mcp-review.html
+      - name: MCP_ALLOWED_ORIGINS
+        value: https://app.example.com
+      - name: S3_ENDPOINT
+        value: http://blogfactory-minio:9000
+      - name: S3_ACCESS_KEY_ID
+        value: blogfactory
+      - name: S3_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: S3_BUCKET
+        value: blogfactory
+      - name: S3_REGION
+        value: us-east-1
+  blogfactory-web:
+    image: ghcr.io/blogfactoryhq/blogfactory-web:v0.1.0
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: API_UPSTREAM
+        value: http://blogfactory-api:3000
+  blogfactory-scheduler:
+    preset: service
+    image:
+      repository: blogfactory-scheduler
+      tag: latest
+      build_config:
+        context: ./blogfactory-scheduler
+        push: server
+    port: "8080"
+    env:
+      - name: CRON_SECRET
+        from:
+          env: CRON_SECRET
+      - name: CRON_INTERVAL_SECONDS
+        value: "21600"

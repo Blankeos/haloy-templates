@@ -1,0 +1,58 @@
+name: flagsmith
+server: localhost
+targets:
+  flagsmith-postgres:
+    preset: database
+    image: postgres:15.5-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: POSTGRES_DB
+        value: flagsmith
+    volumes:
+      - flagsmith-pgdata:/var/lib/postgresql/data
+  flagsmith:
+    image: docker.flagsmith.com/flagsmith/flagsmith:2.177.1
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: FLAGSMITH__DATABASE_URL
+      - name: USE_POSTGRES_FOR_ANALYTICS
+        value: "true"
+      - name: ENVIRONMENT
+        value: production
+      - name: DJANGO_ALLOWED_HOSTS
+        value: "*"
+      - name: FLAGSMITH_DOMAIN
+        value: app.example.com
+      - name: DJANGO_SECRET_KEY
+        from:
+          env: DJANGO_SECRET_KEY
+      - name: TASK_RUN_METHOD
+        value: TASK_PROCESSOR
+      - name: PROMETHEUS_ENABLED
+        value: "true"
+  flagsmith-task-processor:
+    preset: service
+    image:
+      repository: flagsmith-task-processor
+      tag: latest
+      build_config:
+        context: ./flagsmith-task-processor
+        push: server
+    port: "8000"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: FLAGSMITH_TASK_PROCESSOR__DATABASE_URL
+      - name: USE_POSTGRES_FOR_ANALYTICS
+        value: "true"
+      - name: DJANGO_ALLOWED_HOSTS
+        value: "*"
+      - name: PROMETHEUS_ENABLED
+        value: "true"

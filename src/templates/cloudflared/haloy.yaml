@@ -1,0 +1,12 @@
+name: cloudflared
+server: localhost
+targets:
+  cloudflared:
+    preset: service
+    image:
+      repository: cloudflared
+      tag: latest
+      build_config:
+        context: ./cloudflared
+        push: server
+    port: "8080"

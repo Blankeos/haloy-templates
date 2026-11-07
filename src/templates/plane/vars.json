@@ -1,0 +1,19 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "MINIO_PASSWORD": "password:32",
+    "RABBITMQ_PASSWORD": "password:32",
+    "SECRET_KEY": "base64:48",
+    "LIVE_SECRET_KEY": "base64:48"
+  },
+  "derived": {
+    "PLANE_API__DATABASE_URL": "postgresql://plane:${POSTGRES_PASSWORD}@plane-db:5432/plane",
+    "PLANE_API__AMQP_URL": "amqp://plane:${RABBITMQ_PASSWORD}@plane-mq:5672/plane",
+    "PLANE_WORKER__DATABASE_URL": "postgresql://plane:${POSTGRES_PASSWORD}@plane-db:5432/plane",
+    "PLANE_WORKER__AMQP_URL": "amqp://plane:${RABBITMQ_PASSWORD}@plane-mq:5672/plane",
+    "PLANE_BEAT_WORKER__DATABASE_URL": "postgresql://plane:${POSTGRES_PASSWORD}@plane-db:5432/plane",
+    "PLANE_BEAT_WORKER__AMQP_URL": "amqp://plane:${RABBITMQ_PASSWORD}@plane-mq:5672/plane",
+    "PLANE_MIGRATOR__DATABASE_URL": "postgresql://plane:${POSTGRES_PASSWORD}@plane-db:5432/plane",
+    "PLANE_MIGRATOR__AMQP_URL": "amqp://plane:${RABBITMQ_PASSWORD}@plane-mq:5672/plane"
+  }
+}

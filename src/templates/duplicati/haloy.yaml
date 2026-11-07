@@ -1,0 +1,29 @@
+name: duplicati
+server: localhost
+targets:
+  duplicati:
+    health_check_path: /
+    image: lscr.io/linuxserver/duplicati:${APP_RELEASE:-2.3.0}
+    port: "8200"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "0"
+      - name: PGID
+        value: "0"
+      - name: TZ
+        value: Europe/Vienna
+      - name: SETTINGS_ENCRYPTION_KEY
+        from:
+          env: INLINE_PASSWORD_32
+      - name: DUPLICATI__WEBSERVICE_PASSWORD
+        from:
+          env: INLINE_PASSWORD_16
+      - name: DUPLICATI__WEBSERVICE_ALLOWED_HOSTNAMES
+        value: "*"
+    volumes:
+      - duplicati-duplicati-config:/config
+      - duplicati-backups:/backups
+      - duplicati-source:/source
+      - duplicati-restore:/restore

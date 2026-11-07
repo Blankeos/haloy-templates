@@ -1,0 +1,28 @@
+name: nocodb
+server: localhost
+targets:
+  nocodb:
+    image: nocodb/nocodb:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NC_DB
+        from:
+          env: NOCODB__NC_DB
+    volumes:
+      - nocodb-nc-data:/usr/app/data
+  nocodb-root-db:
+    preset: database
+    image: postgres:16.6
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: root_db
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - nocodb-db-data:/var/lib/postgresql/data

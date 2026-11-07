@@ -1,0 +1,17 @@
+name: tor-browser
+server: localhost
+targets:
+  tor-browser-tor:
+    image: domistyle/tor-browser
+    port: "5800"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DISPLAY_WIDTH
+        value: "1920"
+      - name: DISPLAY_HEIGHT
+        value: "1080"
+      - name: KEEP_APP_RUNNING
+        value: "1"
+      - name: TZ
+        value: Europe/Vienna

@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "ENCRYPTION_SECRET": "base64:24"
+  },
+  "derived": {}
+}

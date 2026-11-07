@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "ADMIN_PASSWORD": "hash:48"
+  },
+  "derived": {}
+}

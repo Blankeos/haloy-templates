@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "SECRET_KEY_BASE": "base64:64"
+  },
+  "derived": {}
+}

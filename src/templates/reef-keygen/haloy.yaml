@@ -1,0 +1,15 @@
+name: reef-keygen
+server: localhost
+targets:
+  reef-keygen:
+    image:
+      repository: reef-keygen
+      tag: latest
+      build_config:
+        context: ./reef-keygen
+        push: server
+    port: "48765"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - reef-keygen-output:/output

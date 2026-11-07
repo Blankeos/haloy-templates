@@ -1,0 +1,10 @@
+name: commafeed
+server: localhost
+targets:
+  commafeed:
+    image: athou/commafeed:latest-h2
+    port: "8082"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - commafeed-commafeed-data:/commafeed/data

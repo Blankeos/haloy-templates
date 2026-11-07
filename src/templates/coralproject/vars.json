@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "MONGO_PASSWORD": "password:16",
+    "REDIS_PASSWORD": "password:16",
+    "SIGNING_SECRET": "password:45"
+  },
+  "derived": {
+    "CORALPROJECT_CORAL__MONGODB_URI": "mongodb://mongo:${MONGO_PASSWORD}@coralproject-mongo:27017",
+    "CORALPROJECT_CORAL__REDIS_URI": "redis://default:${REDIS_PASSWORD}@coralproject-redis:6379"
+  }
+}

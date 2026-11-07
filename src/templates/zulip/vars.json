@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "INLINE_PASSWORD_32": "password:32",
+    "INLINE_PASSWORD_64": "password:64"
+  },
+  "derived": {}
+}

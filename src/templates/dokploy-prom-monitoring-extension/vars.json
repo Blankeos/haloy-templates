@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "MONITORING_TOKEN": "password:32"
+  },
+  "derived": {}
+}

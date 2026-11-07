@@ -1,0 +1,13 @@
+name: lfsx
+server: localhost
+targets:
+  lfsx:
+    image: ghcr.io/ferrlabs/lfsx:1.14.1
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LFSX_AUTH
+        value: github
+    volumes:
+      - lfsx-lfsx-data:/var/lib/lfsx

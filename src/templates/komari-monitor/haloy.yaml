@@ -1,0 +1,16 @@
+name: komari-monitor
+server: localhost
+targets:
+  komari-monitor-komari:
+    image: ghcr.io/komari-monitor/komari:latest
+    port: "25774"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ADMIN_USERNAME
+        value: admin
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+    volumes:
+      - komari-monitor-komari-data:/app/data

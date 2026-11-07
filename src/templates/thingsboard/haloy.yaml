@@ -1,0 +1,68 @@
+name: thingsboard
+server: localhost
+targets:
+  thingsboard:
+    image: thingsboard/tb-node:4.3.1.1
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TB_SERVICE_ID
+        value: tb-ce-node
+      - name: TB_QUEUE_TYPE
+        value: in-memory
+      - name: JAVA_OPTS
+        value: -Xms512m -Xmx2048m
+      - name: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://thingsboard-db:5432/thingsboard
+      - name: SPRING_DATASOURCE_USERNAME
+        value: postgres
+      - name: SPRING_DATASOURCE_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: SECURITY_CORS_ALLOWED_ORIGINS
+        value: http://app.example.com,https://app.example.com
+    volumes:
+      - thingsboard-thingsboard-logs:/var/log/thingsboard
+  thingsboard-init:
+    preset: service
+    image:
+      repository: thingsboard-init
+      tag: latest
+      build_config:
+        context: ./thingsboard-init
+        push: server
+    port: "8080"
+    env:
+      - name: TB_SERVICE_ID
+        value: tb-ce-node
+      - name: TB_QUEUE_TYPE
+        value: in-memory
+      - name: JAVA_OPTS
+        value: -Xms512m -Xmx2048m
+      - name: LOAD_DEMO
+        value: "false"
+      - name: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://thingsboard-db:5432/thingsboard
+      - name: SPRING_DATASOURCE_USERNAME
+        value: postgres
+      - name: SPRING_DATASOURCE_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - thingsboard-thingsboard-install:/data
+      - thingsboard-thingsboard-logs:/var/log/thingsboard
+  thingsboard-db:
+    preset: database
+    image: postgres:18
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: thingsboard
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - thingsboard-thingsboard-db:/var/lib/postgresql

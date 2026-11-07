@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:32",
+    "DB_ROOT_PASSWORD": "password:32",
+    "JWT_SECRET": "hash:64",
+    "AGENDASH_AUTH_PASSWORD": "password:24"
+  },
+  "derived": {}
+}

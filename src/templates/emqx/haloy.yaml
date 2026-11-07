@@ -1,0 +1,15 @@
+name: emqx
+server: localhost
+targets:
+  emqx:
+    image: emqx/emqx-enterprise:6.0.1
+    port: "18083"
+    domains:
+      - domain: emqx.yourdomain.com
+      - domain: broker.yourdomain.com
+    env:
+      - name: EMQX_NODE_NAME
+        value: emqx@node1.emqx.com
+    volumes:
+      - emqx-emqx-data:/opt/emqx/data
+      - emqx-emqx-log:/opt/emqx/log

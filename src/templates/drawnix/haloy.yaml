@@ -1,0 +1,8 @@
+name: drawnix
+server: localhost
+targets:
+  drawnix:
+    image: pubuzhixing/drawnix:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com

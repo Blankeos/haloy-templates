@@ -1,0 +1,71 @@
+name: paymenter
+server: localhost
+targets:
+  paymenter-database:
+    preset: database
+    image:
+      repository: paymenter-database
+      tag: latest
+      build_config:
+        context: ./paymenter-database
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: paymenter
+      - name: MYSQL_USER
+        value: paymenter
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+    volumes:
+      - paymenter-paymenter-database:/var/lib/mysql
+  paymenter-cache:
+    preset: database
+    image: redis:alpine
+    port: "6379"
+    volumes:
+      - paymenter-paymenter-redis:/data
+  paymenter:
+    image: ghcr.io/paymenter/paymenter:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_ENV
+        value: production
+      - name: APP_DEBUG
+        value: "false"
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_URL
+        value: https://app.example.com
+      - name: DB_CONNECTION
+        value: mysql
+      - name: DB_HOST
+        value: paymenter-database
+      - name: DB_PORT
+        value: "3306"
+      - name: DB_DATABASE
+        value: paymenter
+      - name: DB_USERNAME
+        value: paymenter
+      - name: DB_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+      - name: CACHE_STORE
+        value: redis
+      - name: REDIS_HOST
+        value: paymenter-cache
+      - name: REDIS_PORT
+        value: "6379"
+      - name: TRUSTED_PROXIES
+        value: "*"
+    volumes:
+      - paymenter-paymenter-storage:/app/var
+      - paymenter-paymenter-logs:/app/storage/logs
+      - paymenter-paymenter-public:/app/storage/app/public

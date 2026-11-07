@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:32",
+    "ANY_HELPER": "uuid"
+  },
+  "derived": {}
+}

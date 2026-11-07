@@ -1,0 +1,37 @@
+name: powersync
+server: localhost
+targets:
+  powersync-postgres:
+    preset: database
+    image:
+      repository: powersync-postgres
+      tag: latest
+      build_config:
+        context: ./powersync-postgres
+        push: server
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: powersync
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: powersync
+    volumes:
+      - powersync-postgres-data:/var/lib/postgresql/data
+  powersync:
+    image:
+      repository: powersync
+      tag: latest
+      build_config:
+        context: ./powersync
+        push: server
+    port: "8080"
+    domains:
+      - domain: probes-liveness.app.example.com
+    env:
+      - name: POWERSYNC_CONFIG_PATH
+        value: /config/powersync.yaml
+      - name: NODE_OPTIONS
+        value: --max-old-space-size=1000

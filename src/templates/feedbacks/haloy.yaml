@@ -1,0 +1,107 @@
+name: feedbacks
+server: localhost
+targets:
+  feedbacks:
+    image: softinator/feedbacks@sha256:f7d759e671b48906a4aa5deff92b4644a73a6a4239f32b4cebba5cfcef8cc97b
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3000"
+      - name: APP_ORIGIN
+        value: https://app.example.com
+      - name: DATABASE_URL
+        from:
+          env: FEEDBACKS__DATABASE_URL
+      - name: DATABASE_POOL_MAX
+        value: "10"
+      - name: TRUST_PROXY_HOPS
+        value: "1"
+      - name: ASSET_DRIVER
+        value: s3
+      - name: ORGANIZATION_ID
+        from:
+          env: ORGANIZATION_ID
+      - name: S3_ENDPOINT
+        value: https://feedbacks-s3:8333
+      - name: S3_REGION
+        value: us-east-1
+      - name: S3_BUCKET
+        value: feedbacks
+      - name: S3_ACCESS_KEY_ID
+        from:
+          env: S3_ACCESS_KEY
+      - name: S3_SECRET_ACCESS_KEY
+        from:
+          env: S3_SECRET_KEY
+      - name: NODE_EXTRA_CA_CERTS
+        value: /s3-config/public.crt
+    volumes:
+      - feedbacks-feedbacks-s3-config:/s3-config:ro
+  feedbacks-postgres:
+    preset: database
+    image: postgres:17-bookworm
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: feedbacks
+      - name: POSTGRES_DB
+        value: feedbacks
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - feedbacks-feedbacks-postgres:/var/lib/postgresql/data
+  feedbacks-s3-init:
+    preset: service
+    image:
+      repository: feedbacks-s3-init
+      tag: latest
+      build_config:
+        context: ./feedbacks-s3-init
+        push: server
+    port: "8080"
+    env:
+      - name: S3_ACCESS_KEY_ID
+        from:
+          env: S3_ACCESS_KEY
+      - name: S3_SECRET_ACCESS_KEY
+        from:
+          env: S3_SECRET_KEY
+    volumes:
+      - feedbacks-feedbacks-s3-config:/config
+  feedbacks-s3:
+    preset: service
+    image:
+      repository: feedbacks-s3
+      tag: latest
+      build_config:
+        context: ./feedbacks-s3
+        push: server
+    port: "8080"
+    volumes:
+      - feedbacks-feedbacks-s3:/data
+      - feedbacks-feedbacks-s3-config:/config:ro
+  feedbacks-s3-bucket:
+    preset: service
+    image:
+      repository: feedbacks-s3-bucket
+      tag: latest
+      build_config:
+        context: ./feedbacks-s3-bucket
+        push: server
+    port: "8080"
+    env:
+      - name: S3_BUCKET
+        value: feedbacks
+      - name: S3_ACCESS_KEY_ID
+        from:
+          env: S3_ACCESS_KEY
+      - name: S3_SECRET_ACCESS_KEY
+        from:
+          env: S3_SECRET_KEY
+    volumes:
+      - feedbacks-feedbacks-s3-config:/config:ro

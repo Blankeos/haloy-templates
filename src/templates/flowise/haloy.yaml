@@ -1,0 +1,57 @@
+name: flowise
+server: localhost
+targets:
+  flowise-redis:
+    preset: database
+    image: redis:alpine
+    port: "6379"
+    volumes:
+      - flowise-redis-data:/data
+  flowise:
+    health_check_path: /api/v1/ping
+    image:
+      repository: flowise
+      tag: latest
+      build_config:
+        context: ./flowise
+        push: server
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PORT
+        value: "3000"
+      - name: DATABASE_PATH
+        value: /root/.flowise
+      - name: REDIS_URL
+        value: redis://flowise-redis:6379
+      - name: JWT_AUTH_TOKEN_SECRET
+        from:
+          env: JWT_SECRET
+      - name: JWT_REFRESH_TOKEN_SECRET
+        from:
+          env: JWT_REFRESH_SECRET
+      - name: EXPRESS_SESSION_SECRET
+        from:
+          env: EXPRESS_SECRET
+    volumes:
+      - flowise-flowise-data:/root/.flowise
+  flowise-worker:
+    health_check_path: /healthz
+    preset: service
+    image:
+      repository: flowise-worker
+      tag: latest
+      build_config:
+        context: ./flowise-worker
+        push: server
+    port: "8080"
+    env:
+      - name: WORKER_PORT
+        value: "5566"
+      - name: DATABASE_PATH
+        value: /root/.flowise
+      - name: REDIS_URL
+        value: redis://flowise-redis:6379
+    volumes:
+      - flowise-flowise-data:/root/.flowise

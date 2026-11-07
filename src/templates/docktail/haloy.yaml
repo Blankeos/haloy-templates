@@ -1,0 +1,30 @@
+name: docktail
+server: localhost
+targets:
+  docktail:
+    preset: service
+    image: ghcr.io/marvinvr/docktail:1.6.0
+    port: "8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - docktail-tailscale-socket:/var/run/tailscale
+  docktail-tailscale:
+    preset: service
+    image: tailscale/tailscale:v1.102.5
+    port: "8080"
+    env:
+      - name: TS_HOSTNAME
+        value: docktail
+      - name: TS_EXTRA_ARGS
+        value: --advertise-tags=tag:server
+      - name: TS_USERSPACE
+        value: "true"
+      - name: TS_AUTH_ONCE
+        value: "true"
+      - name: TS_STATE_DIR
+        value: /var/lib/tailscale
+      - name: TS_SOCKET
+        value: /var/run/tailscale/tailscaled.sock
+    volumes:
+      - docktail-tailscale-state:/var/lib/tailscale
+      - docktail-tailscale-socket:/var/run/tailscale

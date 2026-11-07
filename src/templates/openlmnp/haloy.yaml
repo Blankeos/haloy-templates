@@ -1,0 +1,17 @@
+name: openlmnp
+server: localhost
+targets:
+  openlmnp:
+    health_check_path: /up
+    image: manganate06/openlmnp:1.6.6
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_URL
+        value: https://app.example.com
+      - name: ALLOW_REGISTRATION
+        value: auto
+    volumes:
+      - openlmnp-openlmnp-database:/var/www/html/database
+      - openlmnp-openlmnp-storage:/var/www/html/storage

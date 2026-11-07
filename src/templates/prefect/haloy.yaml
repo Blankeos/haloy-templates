@@ -1,0 +1,108 @@
+name: prefect
+server: localhost
+targets:
+  prefect:
+    health_check_path: /api/health
+    image:
+      repository: prefect
+      tag: latest
+      build_config:
+        context: ./prefect
+        push: server
+    port: "4200"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PREFECT_API_DATABASE_CONNECTION_URL
+        from:
+          env: PREFECT__PREFECT_API_DATABASE_CONNECTION_URL
+      - name: PREFECT_SERVER_API_HOST
+        value: 0.0.0.0
+      - name: PREFECT_SERVER_UI_API_URL
+        value: https://app.example.com/api
+      - name: PREFECT_MESSAGING_BROKER
+        value: prefect_redis.messaging
+      - name: PREFECT_MESSAGING_CACHE
+        value: prefect_redis.messaging
+      - name: PREFECT_REDIS_MESSAGING_HOST
+        value: prefect-redis
+      - name: PREFECT_REDIS_MESSAGING_PORT
+        value: "6379"
+      - name: PREFECT_REDIS_MESSAGING_DB
+        value: "0"
+      - name: USE_AUTH
+        value: "False"
+      - name: PREFECT_AUTH_USER
+        value: admin
+      - name: PREFECT_AUTH_PASSWORD
+        from:
+          env: AUTH_PASSWORD
+  prefect-services:
+    preset: service
+    image:
+      repository: prefect-services
+      tag: latest
+      build_config:
+        context: ./prefect-services
+        push: server
+    port: "8080"
+    env:
+      - name: PREFECT_API_DATABASE_CONNECTION_URL
+        from:
+          env: PREFECT_SERVICES__PREFECT_API_DATABASE_CONNECTION_URL
+      - name: PREFECT_MESSAGING_BROKER
+        value: prefect_redis.messaging
+      - name: PREFECT_MESSAGING_CACHE
+        value: prefect_redis.messaging
+      - name: PREFECT_REDIS_MESSAGING_HOST
+        value: prefect-redis
+      - name: PREFECT_REDIS_MESSAGING_PORT
+        value: "6379"
+      - name: PREFECT_REDIS_MESSAGING_DB
+        value: "0"
+      - name: USE_AUTH
+        value: "False"
+      - name: PREFECT_AUTH_USER
+        value: admin
+      - name: PREFECT_AUTH_PASSWORD
+        from:
+          env: AUTH_PASSWORD
+  prefect-worker:
+    preset: service
+    image:
+      repository: prefect-worker
+      tag: latest
+      build_config:
+        context: ./prefect-worker
+        push: server
+    port: "8080"
+    env:
+      - name: PREFECT_API_URL
+        value: http://prefect:4200/api
+      - name: USE_AUTH
+        value: "False"
+      - name: PREFECT_AUTH_USER
+        value: admin
+      - name: PREFECT_AUTH_PASSWORD
+        from:
+          env: AUTH_PASSWORD
+  prefect-postgres:
+    preset: database
+    image: postgres:14-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: prefect
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: prefect
+    volumes:
+      - prefect-prefect-postgres-data:/var/lib/postgresql/data
+  prefect-redis:
+    preset: database
+    image: redis:7.2-alpine
+    port: "6379"
+    volumes:
+      - prefect-prefect-redis-data:/data

@@ -1,0 +1,26 @@
+name: i18n-blog
+server: localhost
+targets:
+  i18n-blog-kuno:
+    image: ictrun/kuno:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NEXT_PUBLIC_API_URL
+        value: https://app.example.com/api
+      - name: DB_PATH
+        value: /app/data/blog.db
+      - name: UPLOAD_DIR
+        value: /app/data/uploads
+      - name: GIN_MODE
+        value: release
+      - name: NODE_ENV
+        value: production
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: RECOVERY_MODE
+        value: "false"
+    volumes:
+      - i18n-blog-kuno-data:/app/data

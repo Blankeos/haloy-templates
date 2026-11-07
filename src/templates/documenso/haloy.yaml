@@ -1,0 +1,70 @@
+name: documenso
+server: localhost
+targets:
+  documenso-postgres:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: documenso
+      - name: POSTGRES_PASSWORD
+        value: password
+      - name: POSTGRES_DB
+        value: documenso
+    volumes:
+      - documenso-documenso-data:/var/lib/postgresql/data
+  documenso:
+    image:
+      repository: documenso
+      tag: latest
+      build_config:
+        context: ./documenso
+        push: server
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PORT
+        value: "3000"
+      - name: NEXTAUTH_URL
+        value: http://app.example.com
+      - name: NEXTAUTH_SECRET
+        from:
+          env: NEXTAUTH_SECRET
+      - name: NEXT_PRIVATE_ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY
+        from:
+          env: SECONDARY_ENCRYPTION_KEY
+      - name: NEXT_PUBLIC_WEBAPP_URL
+        value: http://app.example.com
+      - name: NEXT_PRIVATE_DATABASE_URL
+        value: postgres://documenso:password@documenso-postgres:5432/documenso
+      - name: NEXT_PRIVATE_DIRECT_DATABASE_URL
+        value: postgres://documenso:password@documenso-postgres:5432/documenso
+      - name: NEXT_PUBLIC_UPLOAD_TRANSPORT
+        value: database
+      - name: NEXT_PRIVATE_SMTP_TRANSPORT
+        value: smtp-auth
+      - name: NEXT_PRIVATE_SIGNING_TRANSPORT
+        value: local
+      - name: NEXT_PRIVATE_SIGNING_LOCAL_FILE_PATH
+        value: /app/certs/cert.p12
+      - name: CERT_VALID_DAYS
+        value: "365"
+      - name: CERT_INFO_COUNTRY_NAME
+        value: US
+      - name: CERT_INFO_STATE_OR_PROVIDENCE
+        value: State
+      - name: CERT_INFO_LOCALITY_NAME
+        value: City
+      - name: CERT_INFO_ORGANIZATION_NAME
+        value: Organization
+      - name: CERT_INFO_ORGANIZATIONAL_UNIT
+        value: IT Department
+      - name: CERT_INFO_EMAIL
+        value: admin@example.com
+      - name: DOCUMENSO_HOST
+        value: app.example.com

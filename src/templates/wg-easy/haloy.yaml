@@ -1,0 +1,27 @@
+name: wg-easy
+server: localhost
+targets:
+  wg-easy:
+    image: ghcr.io/wg-easy/wg-easy:15
+    port: "51821"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: INIT_ENABLED
+        value: "1"
+      - name: INIT_HOST
+        value: app.example.com
+      - name: INIT_PORT
+        value: "51820"
+      - name: INIT_USERNAME
+        value: admin
+      - name: INIT_PASSWORD
+        from:
+          env: WG_PASSWORD
+      - name: INIT_DNS
+        value: 1.1.1.1,8.8.8.8
+      - name: PORT
+        value: "51821"
+    volumes:
+      - wg-easy-etc-wireguard:/etc/wireguard
+      - /lib/modules:/lib/modules:ro

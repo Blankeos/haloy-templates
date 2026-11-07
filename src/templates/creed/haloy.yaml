@@ -1,0 +1,18 @@
+name: creed
+server: localhost
+targets:
+  creed:
+    image: creed-creed
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NEXT_PUBLIC_SITE_URL
+        value: https://app.example.com
+      - name: CREED_ENCRYPTION_SECRET
+        from:
+          env: CREED_ENCRYPTION_SECRET
+      - name: RESEND_FROM_EMAIL
+        value: Creed <hello@example.com>
+      - name: NEXT_PUBLIC_GITHUB_URL
+        value: https://github.com/connorhpbrn/creed

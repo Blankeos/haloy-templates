@@ -1,0 +1,17 @@
+name: crawlab-worker
+server: localhost
+targets:
+  crawlab-worker:
+    preset: service
+    image: crawlabteam/crawlab:latest
+    port: "8080"
+    env:
+      - name: CRAWLAB_NODE_MASTER
+        value: N
+      - name: CRAWLAB_GRPC_ADDRESS
+        value: <master_node_ip>:9666
+      - name: CRAWLAB_FS_FILER_URL
+        value: http://<master_node_ip>:8080/api/filer
+    volumes:
+      - crawlab-worker-crawlab-worker-data:/root/.crawlab
+      - crawlab-worker-crawlab-worker-app:/data

@@ -1,0 +1,13 @@
+{
+  "secrets": {
+    "JWT_SECRET": "password:64",
+    "STORE_ENCRYPTION_KEY": "password:32",
+    "NOVU_SECRET_KEY": "password:64",
+    "MONGO_PASSWORD": "password:32"
+  },
+  "derived": {
+    "NOVU_API__MONGO_URL": "mongodb://root:${MONGO_PASSWORD}@novu-mongodb:27017/novu-db?authSource=admin",
+    "NOVU_WORKER__MONGO_URL": "mongodb://root:${MONGO_PASSWORD}@novu-mongodb:27017/novu-db?authSource=admin",
+    "NOVU_WS__MONGO_URL": "mongodb://root:${MONGO_PASSWORD}@novu-mongodb:27017/novu-db?authSource=admin"
+  }
+}

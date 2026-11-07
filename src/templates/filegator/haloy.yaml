@@ -1,0 +1,11 @@
+name: filegator
+server: localhost
+targets:
+  filegator:
+    image: filegator/filegator:v7.14.3
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - filegator-filegator-repository:/var/www/filegator/repository
+      - filegator-filegator-private:/var/www/filegator/private

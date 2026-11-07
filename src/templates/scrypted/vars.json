@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "SCRYPTED_WEBHOOK_UPDATE_AUTHORIZATION": "password:32"
+  },
+  "derived": {}
+}

@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "APP_ADMIN_PASSWORD": "password:16",
+    "DB_PASSWORD": "password:20",
+    "MARIADB_ROOT_PASSWORD": "password:24"
+  },
+  "derived": {}
+}

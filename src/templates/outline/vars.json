@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "SECRET_KEY": "hash:64",
+    "UTILS_SECRET": "base64:32",
+    "CLIENT_SECRET": "base64:32",
+    "POSTGRES_PASSWORD": "password"
+  },
+  "derived": {
+    "OUTLINE__DATABASE_URL": "postgres://outline:${POSTGRES_PASSWORD}@outline-postgres:5432/outline"
+  }
+}

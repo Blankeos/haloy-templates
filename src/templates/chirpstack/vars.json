@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "API_SECRET": "base64:32",
+    "POSTGRES_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

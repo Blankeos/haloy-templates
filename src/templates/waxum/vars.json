@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "SUPERADMIN_TOKEN": "password:32"
+  },
+  "derived": {}
+}

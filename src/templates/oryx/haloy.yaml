@@ -1,0 +1,10 @@
+name: oryx
+server: localhost
+targets:
+  oryx:
+    image: ossrs/oryx:5.15.20
+    port: "2022"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - oryx-oryx-data:/data

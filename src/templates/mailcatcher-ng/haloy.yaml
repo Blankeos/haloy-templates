@@ -1,0 +1,19 @@
+name: mailcatcher-ng
+server: localhost
+targets:
+  mailcatcher-ng:
+    health_check_path: /
+    image:
+      repository: mailcatcher-ng
+      tag: latest
+      build_config:
+        context: ./mailcatcher-ng
+        push: server
+    port: "1080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MAIL_LIMIT
+        value: "50"
+    volumes:
+      - mailcatcher-ng-mailcatcher-data:/home/mailcatcher/.mailcatcher

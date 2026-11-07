@@ -1,0 +1,14 @@
+name: lodestone
+server: localhost
+targets:
+  lodestone:
+    preset: service
+    image: ghcr.io/lodestone-team/lodestone_core
+    port: "16662"
+    volumes:
+      - lodestone-lodestone:/home/user/.lodestone
+  lodestone-dashboard:
+    image: ghcr.io/lodestone-team/lodestone_dashboard:v0.5.1
+    port: "80"
+    domains:
+      - domain: app.example.com

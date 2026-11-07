@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:24",
+    "N8N_ENCRYPTION_KEY": "base64:64",
+    "N8N_RUNNER_SECRET": "base64:64"
+  },
+  "derived": {}
+}

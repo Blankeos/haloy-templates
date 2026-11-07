@@ -1,0 +1,42 @@
+name: matomo
+server: localhost
+targets:
+  matomo:
+    image: matomo:5.1-apache
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MATOMO_DATABASE_HOST
+        value: matomo-db
+      - name: MATOMO_DATABASE_DB
+        value: matomo
+      - name: MATOMO_DATABASE_USER
+        value: matomo
+      - name: MATOMO_DATABASE_PASSWORD
+        from:
+          env: MATOMO_DATABASE_PASSWORD
+    volumes:
+      - matomo-matomo:/var/www/html
+  matomo-db:
+    preset: database
+    image:
+      repository: matomo-db
+      tag: latest
+      build_config:
+        context: ./matomo-db
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: matomo
+      - name: MYSQL_USER
+        value: matomo
+      - name: MYSQL_PASSWORD
+        from:
+          env: MATOMO_DATABASE_PASSWORD
+    volumes:
+      - matomo-db:/var/lib/mysql

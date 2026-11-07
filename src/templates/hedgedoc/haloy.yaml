@@ -1,0 +1,34 @@
+name: hedgedoc
+server: localhost
+targets:
+  hedgedoc:
+    image: quay.io/hedgedoc/hedgedoc:1.10.8
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CMD_DB_URL
+        from:
+          env: HEDGEDOC__CMD_DB_URL
+      - name: CMD_DOMAIN
+        value: app.example.com
+      - name: CMD_PROTOCOL_USESSL
+        value: "true"
+      - name: CMD_URL_ADDPORT
+        value: "false"
+    volumes:
+      - hedgedoc-hedgedoc-uploads:/hedgedoc/public/uploads
+  hedgedoc-database:
+    preset: database
+    image: postgres:17.7-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: hedgedoc
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: POSTGRES_DB
+        value: hedgedoc
+    volumes:
+      - hedgedoc-hedgedoc-database:/var/lib/postgresql/data

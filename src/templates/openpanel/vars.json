@@ -1,0 +1,18 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:32",
+    "COOKIE_SECRET": "base64:32",
+    "REDIS_PASSWORD": "password:32"
+  },
+  "derived": {
+    "OPENPANEL_OP_API__DATABASE_URL": "postgres://openpanel:${DB_PASSWORD}@openpanel-op-db:5432/openpanel?schema=public",
+    "OPENPANEL_OP_API__DATABASE_URL_DIRECT": "postgres://openpanel:${DB_PASSWORD}@openpanel-op-db:5432/openpanel?schema=public",
+    "OPENPANEL_OP_API__REDIS_URL": "redis://default:${REDIS_PASSWORD}@openpanel-op-kv:6379",
+    "OPENPANEL_OP_DASHBOARD__DATABASE_URL": "postgres://openpanel:${DB_PASSWORD}@openpanel-op-db:5432/openpanel?schema=public",
+    "OPENPANEL_OP_DASHBOARD__DATABASE_URL_DIRECT": "postgres://openpanel:${DB_PASSWORD}@openpanel-op-db:5432/openpanel?schema=public",
+    "OPENPANEL_OP_DASHBOARD__REDIS_URL": "redis://default:${REDIS_PASSWORD}@openpanel-op-kv:6379",
+    "OPENPANEL_OP_WORKER__DATABASE_URL": "postgres://openpanel:${DB_PASSWORD}@openpanel-op-db:5432/openpanel?schema=public",
+    "OPENPANEL_OP_WORKER__DATABASE_URL_DIRECT": "postgres://openpanel:${DB_PASSWORD}@openpanel-op-db:5432/openpanel?schema=public",
+    "OPENPANEL_OP_WORKER__REDIS_URL": "redis://default:${REDIS_PASSWORD}@openpanel-op-kv:6379"
+  }
+}

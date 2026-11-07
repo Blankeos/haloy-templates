@@ -1,0 +1,57 @@
+name: mcpspan
+server: localhost
+targets:
+  mcpspan-db:
+    preset: database
+    image: timescale/timescaledb:2.30.1-pg17
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: mcpspan
+      - name: POSTGRES_PASSWORD
+        from:
+          env: INLINE_PASSWORD_32
+      - name: POSTGRES_DB
+        value: mcpspan
+    volumes:
+      - mcpspan-db-data:/var/lib/postgresql/data
+  mcpspan-migrate:
+    preset: service
+    image:
+      repository: mcpspan-migrate
+      tag: latest
+      build_config:
+        context: ./mcpspan-migrate
+        push: server
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: MCPSPAN_MIGRATE__DATABASE_URL
+  mcpspan-api:
+    health_check_path: /health
+    image: ghcr.io/mcpspan/core-api:0.13.0
+    port: "6271"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: MCPSPAN_API__DATABASE_URL
+      - name: PORT
+        value: "6271"
+      - name: API_KEY_SECRET
+        from:
+          env: INLINE_BASE64_48
+      - name: MCPSPAN_DASHBOARD_URL
+        value: http://app.example.com
+  mcpspan-dashboard:
+    image: ghcr.io/mcpspan/core-dashboard:0.13.0
+    port: "6270"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CORE_API_URL
+        value: http://mcpspan-api:6271
+      - name: MCPSPAN_INGEST_URL
+        value: http://app.example.com

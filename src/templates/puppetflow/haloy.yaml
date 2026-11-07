@@ -1,0 +1,376 @@
+name: puppetflow
+server: localhost
+targets:
+  puppetflow:
+    health_check_path: /up
+    image: ghcr.io/puppetflow/puppetflow:v2026.11.7
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_ENV
+        value: production
+      - name: LOG_STACK
+        value: single,stderr
+      - name: LANG
+        value: C.UTF-8
+      - name: LANGUAGE
+        value: en-US
+      - name: CONNECTION_TIMEOUT_MS
+        value: "60000000"
+      - name: APP_URL
+        value: http://app.example.com
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_QUEUES_COUNTER
+        value: "2"
+      - name: DB_CONNECTION
+        value: sqlite
+      - name: DB_DATABASE
+        value: /app/storage/database.sqlite
+      - name: REDIS_HOST
+        value: puppetflow-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: PINOKIO_HOST
+        value: puppetflow-pinokio
+      - name: PINOKIO_PORT
+        value: "3000"
+      - name: PINOKIO_TOKEN
+        from:
+          env: PINOKIO_TOKEN
+      - name: RUNNER_API_INTERNAL_URL
+        value: http://puppetflow:8000/api/internal/runner
+      - name: BROWSER_STREAM_INTERNAL_URL
+        value: http://puppetflow-stream-server:6080
+      - name: BROWSER_STREAM_PUBLIC_URL
+        value: http://app.example.com
+      - name: BROWSER_STREAM_ALLOWED_ORIGINS
+        value: http://app.example.com
+      - name: BROWSER_STREAM_SECRET
+        from:
+          env: BROWSER_STREAM_SECRET
+    volumes:
+      - puppetflow-puppetflow-framework:/app/storage
+      - puppetflow-puppetflow-execution:/app/data/execution
+      - puppetflow-puppetflow-uploads:/app/data/storage
+  puppetflow-migrate:
+    preset: service
+    image:
+      repository: puppetflow-migrate
+      tag: latest
+      build_config:
+        context: ./puppetflow-migrate
+        push: server
+    port: "8080"
+    env:
+      - name: APP_ENV
+        value: production
+      - name: LOG_STACK
+        value: single,stderr
+      - name: LANG
+        value: C.UTF-8
+      - name: LANGUAGE
+        value: en-US
+      - name: CONNECTION_TIMEOUT_MS
+        value: "60000000"
+      - name: APP_URL
+        value: http://app.example.com
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_QUEUES_COUNTER
+        value: "2"
+      - name: DB_CONNECTION
+        value: sqlite
+      - name: DB_DATABASE
+        value: /app/storage/database.sqlite
+      - name: REDIS_HOST
+        value: puppetflow-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: PINOKIO_HOST
+        value: puppetflow-pinokio
+      - name: PINOKIO_PORT
+        value: "3000"
+      - name: PINOKIO_TOKEN
+        from:
+          env: PINOKIO_TOKEN
+      - name: RUNNER_API_INTERNAL_URL
+        value: http://puppetflow:8000/api/internal/runner
+      - name: BROWSER_STREAM_INTERNAL_URL
+        value: http://puppetflow-stream-server:6080
+      - name: BROWSER_STREAM_PUBLIC_URL
+        value: http://app.example.com
+      - name: BROWSER_STREAM_ALLOWED_ORIGINS
+        value: http://app.example.com
+      - name: BROWSER_STREAM_SECRET
+        from:
+          env: BROWSER_STREAM_SECRET
+    volumes:
+      - puppetflow-puppetflow-framework:/app/storage
+  puppetflow-queue-1:
+    preset: service
+    image:
+      repository: puppetflow-queue-1
+      tag: latest
+      build_config:
+        context: ./puppetflow-queue-1
+        push: server
+    port: "8080"
+    env:
+      - name: APP_ENV
+        value: production
+      - name: LOG_STACK
+        value: single,stderr
+      - name: LANG
+        value: C.UTF-8
+      - name: LANGUAGE
+        value: en-US
+      - name: CONNECTION_TIMEOUT_MS
+        value: "60000000"
+      - name: APP_URL
+        value: http://app.example.com
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_QUEUES_COUNTER
+        value: "2"
+      - name: DB_CONNECTION
+        value: sqlite
+      - name: DB_DATABASE
+        value: /app/storage/database.sqlite
+      - name: REDIS_HOST
+        value: puppetflow-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: PINOKIO_HOST
+        value: puppetflow-pinokio
+      - name: PINOKIO_PORT
+        value: "3000"
+      - name: PINOKIO_TOKEN
+        from:
+          env: PINOKIO_TOKEN
+      - name: RUNNER_API_INTERNAL_URL
+        value: http://puppetflow:8000/api/internal/runner
+      - name: BROWSER_STREAM_INTERNAL_URL
+        value: http://puppetflow-stream-server:6080
+      - name: BROWSER_STREAM_PUBLIC_URL
+        value: http://app.example.com
+      - name: BROWSER_STREAM_ALLOWED_ORIGINS
+        value: http://app.example.com
+      - name: BROWSER_STREAM_SECRET
+        from:
+          env: BROWSER_STREAM_SECRET
+    volumes:
+      - puppetflow-puppetflow-framework:/app/storage
+      - puppetflow-puppetflow-execution:/app/data/execution
+      - puppetflow-puppetflow-uploads:/app/data/storage
+  puppetflow-queue-2:
+    preset: service
+    image:
+      repository: puppetflow-queue-2
+      tag: latest
+      build_config:
+        context: ./puppetflow-queue-2
+        push: server
+    port: "8080"
+    env:
+      - name: APP_ENV
+        value: production
+      - name: LOG_STACK
+        value: single,stderr
+      - name: LANG
+        value: C.UTF-8
+      - name: LANGUAGE
+        value: en-US
+      - name: CONNECTION_TIMEOUT_MS
+        value: "60000000"
+      - name: APP_URL
+        value: http://app.example.com
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_QUEUES_COUNTER
+        value: "2"
+      - name: DB_CONNECTION
+        value: sqlite
+      - name: DB_DATABASE
+        value: /app/storage/database.sqlite
+      - name: REDIS_HOST
+        value: puppetflow-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: PINOKIO_HOST
+        value: puppetflow-pinokio
+      - name: PINOKIO_PORT
+        value: "3000"
+      - name: PINOKIO_TOKEN
+        from:
+          env: PINOKIO_TOKEN
+      - name: RUNNER_API_INTERNAL_URL
+        value: http://puppetflow:8000/api/internal/runner
+      - name: BROWSER_STREAM_INTERNAL_URL
+        value: http://puppetflow-stream-server:6080
+      - name: BROWSER_STREAM_PUBLIC_URL
+        value: http://app.example.com
+      - name: BROWSER_STREAM_ALLOWED_ORIGINS
+        value: http://app.example.com
+      - name: BROWSER_STREAM_SECRET
+        from:
+          env: BROWSER_STREAM_SECRET
+    volumes:
+      - puppetflow-puppetflow-framework:/app/storage
+      - puppetflow-puppetflow-execution:/app/data/execution
+      - puppetflow-puppetflow-uploads:/app/data/storage
+  puppetflow-scheduler:
+    preset: service
+    image:
+      repository: puppetflow-scheduler
+      tag: latest
+      build_config:
+        context: ./puppetflow-scheduler
+        push: server
+    port: "8080"
+    env:
+      - name: APP_ENV
+        value: production
+      - name: LOG_STACK
+        value: single,stderr
+      - name: LANG
+        value: C.UTF-8
+      - name: LANGUAGE
+        value: en-US
+      - name: CONNECTION_TIMEOUT_MS
+        value: "60000000"
+      - name: APP_URL
+        value: http://app.example.com
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_QUEUES_COUNTER
+        value: "2"
+      - name: DB_CONNECTION
+        value: sqlite
+      - name: DB_DATABASE
+        value: /app/storage/database.sqlite
+      - name: REDIS_HOST
+        value: puppetflow-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: PINOKIO_HOST
+        value: puppetflow-pinokio
+      - name: PINOKIO_PORT
+        value: "3000"
+      - name: PINOKIO_TOKEN
+        from:
+          env: PINOKIO_TOKEN
+      - name: RUNNER_API_INTERNAL_URL
+        value: http://puppetflow:8000/api/internal/runner
+      - name: BROWSER_STREAM_INTERNAL_URL
+        value: http://puppetflow-stream-server:6080
+      - name: BROWSER_STREAM_PUBLIC_URL
+        value: http://app.example.com
+      - name: BROWSER_STREAM_ALLOWED_ORIGINS
+        value: http://app.example.com
+      - name: BROWSER_STREAM_SECRET
+        from:
+          env: BROWSER_STREAM_SECRET
+    volumes:
+      - puppetflow-puppetflow-framework:/app/storage
+      - puppetflow-puppetflow-execution:/app/data/execution
+      - puppetflow-puppetflow-uploads:/app/data/storage
+  puppetflow-stream-server:
+    image: ghcr.io/puppetflow/puppetflow-stream-server:v2026.11.7
+    port: "6080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_ENV
+        value: production
+      - name: LOG_STACK
+        value: single,stderr
+      - name: LANG
+        value: C.UTF-8
+      - name: LANGUAGE
+        value: en-US
+      - name: CONNECTION_TIMEOUT_MS
+        value: "60000000"
+      - name: APP_URL
+        value: http://app.example.com
+      - name: APP_KEY
+        from:
+          env: APP_KEY
+      - name: APP_QUEUES_COUNTER
+        value: "2"
+      - name: DB_CONNECTION
+        value: sqlite
+      - name: DB_DATABASE
+        value: /app/storage/database.sqlite
+      - name: REDIS_HOST
+        value: puppetflow-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: PINOKIO_HOST
+        value: puppetflow-pinokio
+      - name: PINOKIO_PORT
+        value: "3000"
+      - name: PINOKIO_TOKEN
+        from:
+          env: PINOKIO_TOKEN
+      - name: RUNNER_API_INTERNAL_URL
+        value: http://puppetflow:8000/api/internal/runner
+      - name: BROWSER_STREAM_INTERNAL_URL
+        value: http://puppetflow-stream-server:6080
+      - name: BROWSER_STREAM_PUBLIC_URL
+        value: http://app.example.com
+      - name: BROWSER_STREAM_ALLOWED_ORIGINS
+        value: http://app.example.com
+      - name: BROWSER_STREAM_SECRET
+        from:
+          env: BROWSER_STREAM_SECRET
+  puppetflow-init-volumes:
+    preset: service
+    image:
+      repository: puppetflow-init-volumes
+      tag: latest
+      build_config:
+        context: ./puppetflow-init-volumes
+        push: server
+    port: "8080"
+    volumes:
+      - puppetflow-puppetflow-framework:/framework
+      - puppetflow-puppetflow-execution:/execution
+      - puppetflow-puppetflow-uploads:/uploads
+      - puppetflow-pinokio-downloads:/browsers
+  puppetflow-pinokio:
+    preset: service
+    image: ghcr.io/puppetflow/pinokio:v2026.11.1
+    port: "8080"
+    env:
+      - name: TOKEN
+        from:
+          env: PINOKIO_TOKEN
+      - name: HOME
+        value: /tmp
+      - name: XDG_CONFIG_HOME
+        value: /tmp/.config
+      - name: XDG_CACHE_HOME
+        value: /tmp/.cache
+      - name: LANG
+        value: C.UTF-8
+      - name: LANGUAGE
+        value: en-US
+    volumes:
+      - puppetflow-puppetflow-execution:/app/data/execution
+      - puppetflow-pinokio-downloads:/opt/browsers
+  puppetflow-redis:
+    preset: database
+    image:
+      repository: puppetflow-redis
+      tag: latest
+      build_config:
+        context: ./puppetflow-redis
+        push: server
+    port: "6379"

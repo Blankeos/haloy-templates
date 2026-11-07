@@ -1,0 +1,330 @@
+name: openanalytics
+server: localhost
+targets:
+  openanalytics-postgres:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: openanalytics
+      - name: POSTGRES_DB
+        value: openanalytics
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - openanalytics-pg-data:/var/lib/postgresql/data
+  openanalytics-clickhouse:
+    preset: database
+    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/clickhouse:${OA_IMAGE_TAG:-v0.5.0}
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_INGEST_PASSWORD
+        from:
+          env: CLICKHOUSE_INGEST_PASSWORD
+      - name: CLICKHOUSE_READ_PASSWORD
+        from:
+          env: CLICKHOUSE_READ_PASSWORD
+      - name: CLICKHOUSE_MAINTENANCE_PASSWORD
+        from:
+          env: CLICKHOUSE_MAINTENANCE_PASSWORD
+      - name: CLICKHOUSE_MIGRATION_PASSWORD
+        from:
+          env: CLICKHOUSE_MIGRATION_PASSWORD
+    volumes:
+      - openanalytics-ch-data:/var/lib/clickhouse
+  openanalytics-valkey-queue:
+    preset: database
+    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/valkey:${OA_IMAGE_TAG:-v0.5.0}
+    port: "6379"
+    env:
+      - name: VALKEY_PASSWORD
+        from:
+          env: VALKEY_QUEUE_PASSWORD
+      - name: OA_VALKEY_CONF
+        value: /usr/local/etc/valkey/valkey-queue.conf
+    volumes:
+      - openanalytics-valkey-queue-data:/data
+  openanalytics-valkey-realtime:
+    preset: database
+    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/valkey:${OA_IMAGE_TAG:-v0.5.0}
+    port: "6379"
+    env:
+      - name: VALKEY_PASSWORD
+        from:
+          env: VALKEY_REALTIME_PASSWORD
+      - name: OA_VALKEY_CONF
+        value: /usr/local/etc/valkey/valkey-realtime.conf
+    volumes:
+      - openanalytics-valkey-realtime-data:/data
+  openanalytics-keygen:
+    preset: service
+    image:
+      repository: openanalytics-keygen
+      tag: latest
+      build_config:
+        context: ./openanalytics-keygen
+        push: server
+    port: "8080"
+    volumes:
+      - openanalytics-keys-api:/keys/api
+      - openanalytics-keys-gateway:/keys/gateway
+      - openanalytics-keys-realtime:/keys/realtime
+      - openanalytics-keyring:/keyring
+  openanalytics-geoip:
+    preset: service
+    image:
+      repository: openanalytics-geoip
+      tag: latest
+      build_config:
+        context: ./openanalytics-geoip
+        push: server
+    port: "8080"
+    volumes:
+      - openanalytics-geoip:/geoip
+  openanalytics-migrate:
+    preset: service
+    image:
+      repository: openanalytics-migrate
+      tag: latest
+      build_config:
+        context: ./openanalytics-migrate
+        push: server
+    port: "8080"
+    env:
+      - name: ENVIRONMENT
+        value: production
+      - name: POSTGRES_MIGRATION_URL
+        from:
+          env: OPENANALYTICS_MIGRATE__POSTGRES_MIGRATION_URL
+      - name: CLICKHOUSE_URL
+        value: http://openanalytics-clickhouse:8123
+      - name: CLICKHOUSE_DATABASE
+        value: analytics
+      - name: CLICKHOUSE_MIGRATION_USER
+        value: oa_migration
+      - name: CLICKHOUSE_MIGRATION_PASSWORD
+        from:
+          env: CLICKHOUSE_MIGRATION_PASSWORD
+  openanalytics-gateway:
+    health_check_path: /
+    preset: service
+    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/query-gateway:${OA_IMAGE_TAG:-v0.5.0}
+    port: "8080"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: ENVIRONMENT
+        value: production
+      - name: LOG_LEVEL
+        value: info
+      - name: PORT
+        value: "8081"
+      - name: CLICKHOUSE_URL
+        value: http://openanalytics-clickhouse:8123
+      - name: CLICKHOUSE_DB
+        value: analytics
+      - name: CLICKHOUSE_READ_USER
+        value: oa_read
+      - name: CLICKHOUSE_READ_PASSWORD
+        from:
+          env: CLICKHOUSE_READ_PASSWORD
+      - name: REALTIME_CACHE_REDIS_URL
+        from:
+          env: OPENANALYTICS_GATEWAY__REALTIME_CACHE_REDIS_URL
+      - name: QUERY_SIGNING_KEY_ID
+        value: oa-selfhost-1
+      - name: QUERY_SIGNING_PUBLIC_KEY_FILE
+        value: /keys/query.public.pem
+    volumes:
+      - openanalytics-keys-gateway:/keys:ro
+  openanalytics-api:
+    health_check_path: /
+    preset: service
+    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/api:${OA_IMAGE_TAG:-v0.5.0}
+    port: "8080"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: ENVIRONMENT
+        value: production
+      - name: LOG_LEVEL
+        value: info
+      - name: PORT
+        value: "8082"
+      - name: DATABASE_URL
+        from:
+          env: OPENANALYTICS_API__DATABASE_URL
+      - name: REALTIME_CACHE_REDIS_URL
+        from:
+          env: OPENANALYTICS_API__REALTIME_CACHE_REDIS_URL
+      - name: QUERY_GATEWAY_URL
+        value: http://openanalytics-gateway:8081
+      - name: AUTH_BASE_URL
+        value: https://app.example.com
+      - name: APP_BASE_URL
+        value: https://app.example.com
+      - name: COLLECTOR_BASE_URL
+        value: https://app.example.com
+      - name: AUTH_TRUSTED_ORIGINS
+        value: https://app.example.com
+      - name: PRODUCT_NAME
+        value: Open Analytics
+      - name: AUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: TRIAL_IDENTITY_SECRET
+        from:
+          env: TRIAL_IDENTITY_SECRET
+      - name: CREDENTIAL_SOURCE_SECRET
+        from:
+          env: CREDENTIAL_SOURCE_SECRET
+      - name: OA_CREDENTIAL_KEYRING_FILE
+        value: /keyring/credential-keyring.json
+      - name: QUERY_SIGNING_KEY_ID
+        value: oa-selfhost-1
+      - name: AUTH_PASSWORD_SIGNIN
+        value: enabled
+      - name: QUERY_SIGNING_PRIVATE_KEY_FILE
+        value: /keys/query.private.pem
+      - name: REALTIME_TOKEN_SIGNING_KEY_FILE
+        value: /keys/realtime.private.pem
+    volumes:
+      - openanalytics-keys-api:/keys:ro
+      - openanalytics-keyring:/keyring:ro
+  openanalytics-collector:
+    health_check_path: /
+    preset: service
+    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/collector:${OA_IMAGE_TAG:-v0.5.0}
+    port: "8080"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: ENVIRONMENT
+        value: production
+      - name: LOG_LEVEL
+        value: info
+      - name: PORT
+        value: "8083"
+      - name: DATABASE_URL
+        from:
+          env: OPENANALYTICS_COLLECTOR__DATABASE_URL
+      - name: EVENT_STREAM_REDIS_URL
+        from:
+          env: OPENANALYTICS_COLLECTOR__EVENT_STREAM_REDIS_URL
+      - name: REALTIME_CACHE_REDIS_URL
+        from:
+          env: OPENANALYTICS_COLLECTOR__REALTIME_CACHE_REDIS_URL
+      - name: ANONYMOUS_IDENTITY_SECRET
+        from:
+          env: ANONYMOUS_IDENTITY_SECRET
+      - name: ANONYMOUS_IDENTITY_KEY_VERSION
+        value: "1"
+      - name: GEOIP_DB_PATH
+        value: /geoip/dbip-city-lite.mmdb
+    volumes:
+      - openanalytics-geoip:/geoip
+  openanalytics-realtime:
+    health_check_path: /
+    preset: service
+    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/realtime:${OA_IMAGE_TAG:-v0.5.0}
+    port: "8080"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: ENVIRONMENT
+        value: production
+      - name: LOG_LEVEL
+        value: info
+      - name: PORT
+        value: "8084"
+      - name: REALTIME_CACHE_REDIS_URL
+        from:
+          env: OPENANALYTICS_REALTIME__REALTIME_CACHE_REDIS_URL
+      - name: REALTIME_TOKEN_VERIFY_KEY_FILE
+        value: /keys/realtime.public.pem
+    volumes:
+      - openanalytics-keys-realtime:/keys:ro
+  openanalytics-worker:
+    health_check_path: /
+    preset: service
+    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/worker:${OA_IMAGE_TAG:-v0.5.0}
+    port: "8080"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: ENVIRONMENT
+        value: production
+      - name: LOG_LEVEL
+        value: info
+      - name: PORT
+        value: "8085"
+      - name: DATABASE_URL
+        from:
+          env: OPENANALYTICS_WORKER__DATABASE_URL
+      - name: EVENT_STREAM_REDIS_URL
+        from:
+          env: OPENANALYTICS_WORKER__EVENT_STREAM_REDIS_URL
+      - name: REALTIME_CACHE_REDIS_URL
+        from:
+          env: OPENANALYTICS_WORKER__REALTIME_CACHE_REDIS_URL
+      - name: CLICKHOUSE_URL
+        value: http://openanalytics-clickhouse:8123
+      - name: CLICKHOUSE_DB
+        value: analytics
+      - name: CLICKHOUSE_INGEST_USER
+        value: oa_ingest
+      - name: CLICKHOUSE_INGEST_PASSWORD
+        from:
+          env: CLICKHOUSE_INGEST_PASSWORD
+      - name: CLICKHOUSE_MAINTENANCE_USER
+        value: oa_maintenance
+      - name: CLICKHOUSE_MAINTENANCE_PASSWORD
+        from:
+          env: CLICKHOUSE_MAINTENANCE_PASSWORD
+      - name: ANONYMOUS_IDENTITY_SECRET
+        from:
+          env: ANONYMOUS_IDENTITY_SECRET
+      - name: ANONYMOUS_IDENTITY_KEY_VERSION
+        value: "1"
+      - name: OA_CREDENTIAL_KEYRING_FILE
+        value: /keyring/credential-keyring.json
+      - name: PRODUCT_NAME
+        value: Open Analytics
+      - name: EMAIL_FROM
+        value: Open Analytics <analytics@analytics.example>
+    volumes:
+      - openanalytics-keyring:/keyring:ro
+  openanalytics-web:
+    health_check_path: /login
+    preset: service
+    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/web:${OA_IMAGE_TAG:-v0.5.0}
+    port: "8080"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3000"
+      - name: NEXT_PUBLIC_API_URL
+        value: https://app.example.com
+      - name: NEXT_PUBLIC_REALTIME_URL
+        value: https://app.example.com
+      - name: NEXT_PUBLIC_COLLECTOR_URL
+        value: https://app.example.com
+  openanalytics-edge:
+    image: caddy:2-alpine
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: OA_APP_HOST
+        value: app.example.com
+      - name: OA_API_HOST
+        value: app.example.com
+      - name: OA_COLLECTOR_HOST
+        value: app.example.com
+      - name: OA_REALTIME_HOST
+        value: app.example.com
+    volumes:
+      - openanalytics-caddyfile:/etc/caddy/Caddyfile:ro

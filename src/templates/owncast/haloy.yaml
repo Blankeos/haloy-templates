@@ -1,0 +1,10 @@
+name: owncast
+server: localhost
+targets:
+  owncast:
+    image: owncast/owncast:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - owncast-owncast-data:/app/data

@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "SECRET_PASSWORD": "password:32",
+    "S3_SECRET_ACCESS_KEY": "password:32",
+    "SMTP_PASSWORD": "password:32"
+  },
+  "derived": {
+    "RALLLY__DATABASE_URL": "postgres://postgres:${POSTGRES_PASSWORD}@rallly-db:5432/rallly"
+  }
+}

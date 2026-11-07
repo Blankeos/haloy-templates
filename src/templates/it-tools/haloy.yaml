@@ -1,0 +1,9 @@
+name: it-tools
+server: localhost
+targets:
+  it-tools:
+    health_check_path: /
+    image: corentinth/it-tools:latest
+    port: "80"
+    domains:
+      - domain: app.example.com

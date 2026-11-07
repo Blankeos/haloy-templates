@@ -1,0 +1,22 @@
+name: mulesoft-esb
+server: localhost
+targets:
+  mulesoft-esb-mule:
+    health_check_path: /
+    image: yogeshmulecraft/mulece-esb:latest
+    port: "8081"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MULE_VERSION
+        value: 4.9.0
+      - name: HTTP_PORT
+        value: "8081"
+      - name: MULE_HOME
+        value: /opt/mule-standalone
+      - name: MULE_BASE
+        value: /opt/mule-standalone
+      - name: TZ
+        value: UTC
+      - name: MULE_VERBOSE_EXCEPTIONS
+        value: "true"

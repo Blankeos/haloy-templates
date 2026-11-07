@@ -1,0 +1,16 @@
+name: agent-zero
+server: localhost
+targets:
+  agent-zero:
+    image: agent0ai/agent-zero:v1.9
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: AUTH_LOGIN
+        value: admin
+      - name: AUTH_PASSWORD
+        from:
+          env: AUTH_PASSWORD
+    volumes:
+      - agent-zero-agent-zero-data:/a0/usr

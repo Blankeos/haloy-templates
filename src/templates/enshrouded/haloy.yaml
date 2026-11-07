@@ -1,0 +1,23 @@
+name: enshrouded
+server: localhost
+targets:
+  enshrouded:
+    preset: service
+    image: mornedhels/enshrouded-server:latest
+    port: "15637"
+    env:
+      - name: SERVER_NAME
+        value: Enshrouded Dokploy
+      - name: SERVER_PASSWORD
+        from:
+          env: SERVER_PASSWORD
+      - name: SERVER_SLOT_COUNT
+        value: "6"
+      - name: UPDATE_CRON
+        value: 0 3 * * *
+      - name: PUID
+        value: "4711"
+      - name: PGID
+        value: "4711"
+    volumes:
+      - enshrouded-enshrouded-persistent-data:/opt/enshrouded

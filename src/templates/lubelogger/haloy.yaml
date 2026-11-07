@@ -1,0 +1,20 @@
+name: lubelogger
+server: localhost
+targets:
+  lubelogger:
+    image: ghcr.io/hargata/lubelogger:v1.6.5
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LC_ALL
+        value: en_US.UTF-8
+      - name: LANG
+        value: en_US.UTF-8
+      - name: LUBELOGGER_DOMAIN
+        value: https://app.example.com
+      - name: EnableAuth
+        value: "false"
+    volumes:
+      - lubelogger-lubelogger-data:/App/data
+      - lubelogger-lubelogger-keys:/root/.aspnet/DataProtection-Keys

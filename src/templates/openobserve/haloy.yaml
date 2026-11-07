@@ -1,0 +1,18 @@
+name: openobserve
+server: localhost
+targets:
+  openobserve:
+    image: public.ecr.aws/zinclabs/openobserve:v0.70.0
+    port: "5080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ZO_ROOT_USER_EMAIL
+        value: admin@app.example.com
+      - name: ZO_ROOT_USER_PASSWORD
+        from:
+          env: ROOT_PASSWORD
+      - name: ZO_DATA_DIR
+        value: /data
+    volumes:
+      - openobserve-data:/data

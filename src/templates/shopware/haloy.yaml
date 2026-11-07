@@ -1,0 +1,613 @@
+name: shopware
+server: localhost
+targets:
+  shopware-database:
+    preset: database
+    image:
+      repository: shopware-database
+      tag: latest
+      build_config:
+        context: ./shopware-database
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: shopware
+      - name: MYSQL_USER
+        value: shopware
+      - name: MYSQL_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+    volumes:
+      - shopware-database-data:/var/lib/mysql
+  shopware-redis:
+    preset: database
+    image:
+      repository: shopware-redis
+      tag: latest
+      build_config:
+        context: ./shopware-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - shopware-redis-data:/data
+  shopware-bootstrap:
+    preset: service
+    image:
+      repository: shopware-bootstrap
+      tag: latest
+      build_config:
+        context: ./shopware-bootstrap
+        push: server
+    port: "8080"
+    env:
+      - name: APP_ENV
+        value: prod
+      - name: APP_SECRET
+        from:
+          env: APP_SECRET
+      - name: INSTANCE_ID
+        from:
+          env: INSTANCE_ID
+      - name: APP_URL
+        value: http://app.example.com
+      - name: ENABLE_DEMO_DATA
+        value: "1"
+      - name: TRUSTED_PROXIES
+        value: private_ranges
+      - name: SYMFONY_TRUSTED_PROXIES
+        value: private_ranges
+      - name: SYMFONY_TRUSTED_HEADERS
+        value: x-forwarded-for,x-forwarded-host,x-forwarded-proto,x-forwarded-port,x-forwarded-prefix
+      - name: DATABASE_HOST
+        value: shopware-database
+      - name: DATABASE_PORT
+        value: "3306"
+      - name: DATABASE_NAME
+        value: shopware
+      - name: DATABASE_USER
+        value: shopware
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        from:
+          env: SHOPWARE_BOOTSTRAP__DATABASE_URL
+      - name: REDIS_HOST
+        value: shopware-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: MAILER_DSN
+        value: null://localhost
+      - name: LOCK_DSN
+        from:
+          env: SHOPWARE_BOOTSTRAP__LOCK_DSN
+      - name: MESSENGER_TRANSPORT_DSN
+        value: doctrine://default?queue_name=async
+      - name: MESSENGER_TRANSPORT_LOW_PRIORITY_DSN
+        value: doctrine://default?queue_name=low_priority
+      - name: MESSENGER_TRANSPORT_FAILURE_DSN
+        value: doctrine://default?queue_name=failed
+      - name: COMPOSER_PLUGIN_LOADER
+        value: "1"
+      - name: SHOPWARE_HTTP_CACHE_ENABLED
+        value: "1"
+      - name: SHOPWARE_HTTP_DEFAULT_TTL
+        value: "7200"
+      - name: INSTALL_LOCALE
+        value: en-GB
+      - name: INSTALL_CURRENCY
+        value: EUR
+      - name: INSTALL_ADMIN_USERNAME
+        value: admin
+      - name: INSTALL_ADMIN_PASSWORD
+        from:
+          env: INSTALL_ADMIN_PASSWORD
+      - name: PHP_SESSION_HANDLER
+        value: redis
+      - name: PHP_SESSION_SAVE_PATH
+        from:
+          env: SHOPWARE_BOOTSTRAP__PHP_SESSION_SAVE_PATH
+      - name: PHP_SESSION_COOKIE_LIFETIME
+        value: "0"
+      - name: PHP_SESSION_GC_MAXLIFETIME
+        value: "1440"
+      - name: PHP_MAX_UPLOAD_SIZE
+        value: 128M
+      - name: PHP_MAX_EXECUTION_TIME
+        value: "300"
+      - name: PHP_MEMORY_LIMIT
+        value: 512M
+      - name: FPM_PM
+        value: dynamic
+      - name: FPM_PM_MAX_CHILDREN
+        value: "20"
+      - name: FPM_PM_START_SERVERS
+        value: "4"
+      - name: FPM_PM_MIN_SPARE_SERVERS
+        value: "2"
+      - name: FPM_PM_MAX_SPARE_SERVERS
+        value: "6"
+      - name: BLUE_GREEN_DEPLOYMENT
+        value: "0"
+      - name: COMPOSER_ALLOW_SUPERUSER
+        value: "1"
+      - name: COMPOSER_HOME
+        value: /tmp/composer
+      - name: SHOPWARE_VERSION
+        value: 6.7.12.1
+      - name: SHOPWARE_DOCKER_VERSION
+        value: 0.3.0
+      - name: DEMO_DATA_VERSION
+        value: 2.1.0
+    volumes:
+      - shopware-shopware-code:/var/www/html
+      - shopware-shopware-secrets:/run/shopware-secrets
+  shopware-init-permissions:
+    preset: service
+    image:
+      repository: shopware-init-permissions
+      tag: latest
+      build_config:
+        context: ./shopware-init-permissions
+        push: server
+    port: "8080"
+    volumes:
+      - shopware-shopware-code:/var/www/html
+      - shopware-shopware-secrets:/run/shopware-secrets
+      - shopware-files:/var/www/html/files
+      - shopware-theme:/var/www/html/public/theme
+      - shopware-media:/var/www/html/public/media
+      - shopware-thumbnail:/var/www/html/public/thumbnail
+      - shopware-sitemap:/var/www/html/public/sitemap
+  shopware-init:
+    preset: service
+    image:
+      repository: shopware-init
+      tag: latest
+      build_config:
+        context: ./shopware-init
+        push: server
+    port: "8080"
+    env:
+      - name: APP_ENV
+        value: prod
+      - name: APP_SECRET
+        from:
+          env: APP_SECRET
+      - name: INSTANCE_ID
+        from:
+          env: INSTANCE_ID
+      - name: APP_URL
+        value: http://app.example.com
+      - name: ENABLE_DEMO_DATA
+        value: "1"
+      - name: TRUSTED_PROXIES
+        value: private_ranges
+      - name: SYMFONY_TRUSTED_PROXIES
+        value: private_ranges
+      - name: SYMFONY_TRUSTED_HEADERS
+        value: x-forwarded-for,x-forwarded-host,x-forwarded-proto,x-forwarded-port,x-forwarded-prefix
+      - name: DATABASE_HOST
+        value: shopware-database
+      - name: DATABASE_PORT
+        value: "3306"
+      - name: DATABASE_NAME
+        value: shopware
+      - name: DATABASE_USER
+        value: shopware
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        from:
+          env: SHOPWARE_INIT__DATABASE_URL
+      - name: REDIS_HOST
+        value: shopware-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: MAILER_DSN
+        value: null://localhost
+      - name: LOCK_DSN
+        from:
+          env: SHOPWARE_INIT__LOCK_DSN
+      - name: MESSENGER_TRANSPORT_DSN
+        value: doctrine://default?queue_name=async
+      - name: MESSENGER_TRANSPORT_LOW_PRIORITY_DSN
+        value: doctrine://default?queue_name=low_priority
+      - name: MESSENGER_TRANSPORT_FAILURE_DSN
+        value: doctrine://default?queue_name=failed
+      - name: COMPOSER_PLUGIN_LOADER
+        value: "1"
+      - name: SHOPWARE_HTTP_CACHE_ENABLED
+        value: "1"
+      - name: SHOPWARE_HTTP_DEFAULT_TTL
+        value: "7200"
+      - name: INSTALL_LOCALE
+        value: en-GB
+      - name: INSTALL_CURRENCY
+        value: EUR
+      - name: INSTALL_ADMIN_USERNAME
+        value: admin
+      - name: INSTALL_ADMIN_PASSWORD
+        from:
+          env: INSTALL_ADMIN_PASSWORD
+      - name: PHP_SESSION_HANDLER
+        value: redis
+      - name: PHP_SESSION_SAVE_PATH
+        from:
+          env: SHOPWARE_INIT__PHP_SESSION_SAVE_PATH
+      - name: PHP_SESSION_COOKIE_LIFETIME
+        value: "0"
+      - name: PHP_SESSION_GC_MAXLIFETIME
+        value: "1440"
+      - name: PHP_MAX_UPLOAD_SIZE
+        value: 128M
+      - name: PHP_MAX_EXECUTION_TIME
+        value: "300"
+      - name: PHP_MEMORY_LIMIT
+        value: 512M
+      - name: FPM_PM
+        value: dynamic
+      - name: FPM_PM_MAX_CHILDREN
+        value: "20"
+      - name: FPM_PM_START_SERVERS
+        value: "4"
+      - name: FPM_PM_MIN_SPARE_SERVERS
+        value: "2"
+      - name: FPM_PM_MAX_SPARE_SERVERS
+        value: "6"
+      - name: BLUE_GREEN_DEPLOYMENT
+        value: "0"
+    volumes:
+      - shopware-shopware-code:/var/www/html
+      - shopware-shopware-secrets:/run/shopware-secrets
+      - shopware-files:/var/www/html/files
+      - shopware-theme:/var/www/html/public/theme
+      - shopware-media:/var/www/html/public/media
+      - shopware-thumbnail:/var/www/html/public/thumbnail
+      - shopware-sitemap:/var/www/html/public/sitemap
+  shopware:
+    image:
+      repository: shopware
+      tag: latest
+      build_config:
+        context: ./shopware
+        push: server
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_ENV
+        value: prod
+      - name: APP_SECRET
+        from:
+          env: APP_SECRET
+      - name: INSTANCE_ID
+        from:
+          env: INSTANCE_ID
+      - name: APP_URL
+        value: http://app.example.com
+      - name: ENABLE_DEMO_DATA
+        value: "1"
+      - name: TRUSTED_PROXIES
+        value: private_ranges
+      - name: SYMFONY_TRUSTED_PROXIES
+        value: private_ranges
+      - name: SYMFONY_TRUSTED_HEADERS
+        value: x-forwarded-for,x-forwarded-host,x-forwarded-proto,x-forwarded-port,x-forwarded-prefix
+      - name: DATABASE_HOST
+        value: shopware-database
+      - name: DATABASE_PORT
+        value: "3306"
+      - name: DATABASE_NAME
+        value: shopware
+      - name: DATABASE_USER
+        value: shopware
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        from:
+          env: SHOPWARE__DATABASE_URL
+      - name: REDIS_HOST
+        value: shopware-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: MAILER_DSN
+        value: null://localhost
+      - name: LOCK_DSN
+        from:
+          env: SHOPWARE__LOCK_DSN
+      - name: MESSENGER_TRANSPORT_DSN
+        value: doctrine://default?queue_name=async
+      - name: MESSENGER_TRANSPORT_LOW_PRIORITY_DSN
+        value: doctrine://default?queue_name=low_priority
+      - name: MESSENGER_TRANSPORT_FAILURE_DSN
+        value: doctrine://default?queue_name=failed
+      - name: COMPOSER_PLUGIN_LOADER
+        value: "1"
+      - name: SHOPWARE_HTTP_CACHE_ENABLED
+        value: "1"
+      - name: SHOPWARE_HTTP_DEFAULT_TTL
+        value: "7200"
+      - name: INSTALL_LOCALE
+        value: en-GB
+      - name: INSTALL_CURRENCY
+        value: EUR
+      - name: INSTALL_ADMIN_USERNAME
+        value: admin
+      - name: INSTALL_ADMIN_PASSWORD
+        from:
+          env: INSTALL_ADMIN_PASSWORD
+      - name: PHP_SESSION_HANDLER
+        value: redis
+      - name: PHP_SESSION_SAVE_PATH
+        from:
+          env: SHOPWARE__PHP_SESSION_SAVE_PATH
+      - name: PHP_SESSION_COOKIE_LIFETIME
+        value: "0"
+      - name: PHP_SESSION_GC_MAXLIFETIME
+        value: "1440"
+      - name: PHP_MAX_UPLOAD_SIZE
+        value: 128M
+      - name: PHP_MAX_EXECUTION_TIME
+        value: "300"
+      - name: PHP_MEMORY_LIMIT
+        value: 512M
+      - name: FPM_PM
+        value: dynamic
+      - name: FPM_PM_MAX_CHILDREN
+        value: "20"
+      - name: FPM_PM_START_SERVERS
+        value: "4"
+      - name: FPM_PM_MIN_SPARE_SERVERS
+        value: "2"
+      - name: FPM_PM_MAX_SPARE_SERVERS
+        value: "6"
+      - name: BLUE_GREEN_DEPLOYMENT
+        value: "0"
+    volumes:
+      - shopware-shopware-code:/var/www/html
+      - shopware-shopware-secrets:/run/shopware-secrets
+      - shopware-files:/var/www/html/files
+      - shopware-theme:/var/www/html/public/theme
+      - shopware-media:/var/www/html/public/media
+      - shopware-thumbnail:/var/www/html/public/thumbnail
+      - shopware-sitemap:/var/www/html/public/sitemap
+  shopware-worker:
+    preset: service
+    image:
+      repository: shopware-worker
+      tag: latest
+      build_config:
+        context: ./shopware-worker
+        push: server
+    port: "8080"
+    env:
+      - name: APP_ENV
+        value: prod
+      - name: APP_SECRET
+        from:
+          env: APP_SECRET
+      - name: INSTANCE_ID
+        from:
+          env: INSTANCE_ID
+      - name: APP_URL
+        value: http://app.example.com
+      - name: ENABLE_DEMO_DATA
+        value: "1"
+      - name: TRUSTED_PROXIES
+        value: private_ranges
+      - name: SYMFONY_TRUSTED_PROXIES
+        value: private_ranges
+      - name: SYMFONY_TRUSTED_HEADERS
+        value: x-forwarded-for,x-forwarded-host,x-forwarded-proto,x-forwarded-port,x-forwarded-prefix
+      - name: DATABASE_HOST
+        value: shopware-database
+      - name: DATABASE_PORT
+        value: "3306"
+      - name: DATABASE_NAME
+        value: shopware
+      - name: DATABASE_USER
+        value: shopware
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        from:
+          env: SHOPWARE_WORKER__DATABASE_URL
+      - name: REDIS_HOST
+        value: shopware-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: MAILER_DSN
+        value: null://localhost
+      - name: LOCK_DSN
+        from:
+          env: SHOPWARE_WORKER__LOCK_DSN
+      - name: MESSENGER_TRANSPORT_DSN
+        value: doctrine://default?queue_name=async
+      - name: MESSENGER_TRANSPORT_LOW_PRIORITY_DSN
+        value: doctrine://default?queue_name=low_priority
+      - name: MESSENGER_TRANSPORT_FAILURE_DSN
+        value: doctrine://default?queue_name=failed
+      - name: COMPOSER_PLUGIN_LOADER
+        value: "1"
+      - name: SHOPWARE_HTTP_CACHE_ENABLED
+        value: "1"
+      - name: SHOPWARE_HTTP_DEFAULT_TTL
+        value: "7200"
+      - name: INSTALL_LOCALE
+        value: en-GB
+      - name: INSTALL_CURRENCY
+        value: EUR
+      - name: INSTALL_ADMIN_USERNAME
+        value: admin
+      - name: INSTALL_ADMIN_PASSWORD
+        from:
+          env: INSTALL_ADMIN_PASSWORD
+      - name: PHP_SESSION_HANDLER
+        value: redis
+      - name: PHP_SESSION_SAVE_PATH
+        from:
+          env: SHOPWARE_WORKER__PHP_SESSION_SAVE_PATH
+      - name: PHP_SESSION_COOKIE_LIFETIME
+        value: "0"
+      - name: PHP_SESSION_GC_MAXLIFETIME
+        value: "1440"
+      - name: PHP_MAX_UPLOAD_SIZE
+        value: 128M
+      - name: PHP_MAX_EXECUTION_TIME
+        value: "300"
+      - name: PHP_MEMORY_LIMIT
+        value: 512M
+      - name: FPM_PM
+        value: dynamic
+      - name: FPM_PM_MAX_CHILDREN
+        value: "20"
+      - name: FPM_PM_START_SERVERS
+        value: "4"
+      - name: FPM_PM_MIN_SPARE_SERVERS
+        value: "2"
+      - name: FPM_PM_MAX_SPARE_SERVERS
+        value: "6"
+      - name: BLUE_GREEN_DEPLOYMENT
+        value: "0"
+    volumes:
+      - shopware-shopware-code:/var/www/html
+      - shopware-shopware-secrets:/run/shopware-secrets
+      - shopware-files:/var/www/html/files
+      - shopware-theme:/var/www/html/public/theme
+      - shopware-media:/var/www/html/public/media
+      - shopware-thumbnail:/var/www/html/public/thumbnail
+      - shopware-sitemap:/var/www/html/public/sitemap
+  shopware-scheduler:
+    preset: service
+    image:
+      repository: shopware-scheduler
+      tag: latest
+      build_config:
+        context: ./shopware-scheduler
+        push: server
+    port: "8080"
+    env:
+      - name: APP_ENV
+        value: prod
+      - name: APP_SECRET
+        from:
+          env: APP_SECRET
+      - name: INSTANCE_ID
+        from:
+          env: INSTANCE_ID
+      - name: APP_URL
+        value: http://app.example.com
+      - name: ENABLE_DEMO_DATA
+        value: "1"
+      - name: TRUSTED_PROXIES
+        value: private_ranges
+      - name: SYMFONY_TRUSTED_PROXIES
+        value: private_ranges
+      - name: SYMFONY_TRUSTED_HEADERS
+        value: x-forwarded-for,x-forwarded-host,x-forwarded-proto,x-forwarded-port,x-forwarded-prefix
+      - name: DATABASE_HOST
+        value: shopware-database
+      - name: DATABASE_PORT
+        value: "3306"
+      - name: DATABASE_NAME
+        value: shopware
+      - name: DATABASE_USER
+        value: shopware
+      - name: DATABASE_PASSWORD
+        from:
+          env: DATABASE_PASSWORD
+      - name: DATABASE_URL
+        from:
+          env: SHOPWARE_SCHEDULER__DATABASE_URL
+      - name: REDIS_HOST
+        value: shopware-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: MAILER_DSN
+        value: null://localhost
+      - name: LOCK_DSN
+        from:
+          env: SHOPWARE_SCHEDULER__LOCK_DSN
+      - name: MESSENGER_TRANSPORT_DSN
+        value: doctrine://default?queue_name=async
+      - name: MESSENGER_TRANSPORT_LOW_PRIORITY_DSN
+        value: doctrine://default?queue_name=low_priority
+      - name: MESSENGER_TRANSPORT_FAILURE_DSN
+        value: doctrine://default?queue_name=failed
+      - name: COMPOSER_PLUGIN_LOADER
+        value: "1"
+      - name: SHOPWARE_HTTP_CACHE_ENABLED
+        value: "1"
+      - name: SHOPWARE_HTTP_DEFAULT_TTL
+        value: "7200"
+      - name: INSTALL_LOCALE
+        value: en-GB
+      - name: INSTALL_CURRENCY
+        value: EUR
+      - name: INSTALL_ADMIN_USERNAME
+        value: admin
+      - name: INSTALL_ADMIN_PASSWORD
+        from:
+          env: INSTALL_ADMIN_PASSWORD
+      - name: PHP_SESSION_HANDLER
+        value: redis
+      - name: PHP_SESSION_SAVE_PATH
+        from:
+          env: SHOPWARE_SCHEDULER__PHP_SESSION_SAVE_PATH
+      - name: PHP_SESSION_COOKIE_LIFETIME
+        value: "0"
+      - name: PHP_SESSION_GC_MAXLIFETIME
+        value: "1440"
+      - name: PHP_MAX_UPLOAD_SIZE
+        value: 128M
+      - name: PHP_MAX_EXECUTION_TIME
+        value: "300"
+      - name: PHP_MEMORY_LIMIT
+        value: 512M
+      - name: FPM_PM
+        value: dynamic
+      - name: FPM_PM_MAX_CHILDREN
+        value: "20"
+      - name: FPM_PM_START_SERVERS
+        value: "4"
+      - name: FPM_PM_MIN_SPARE_SERVERS
+        value: "2"
+      - name: FPM_PM_MAX_SPARE_SERVERS
+        value: "6"
+      - name: BLUE_GREEN_DEPLOYMENT
+        value: "0"
+    volumes:
+      - shopware-shopware-code:/var/www/html
+      - shopware-shopware-secrets:/run/shopware-secrets
+      - shopware-files:/var/www/html/files
+      - shopware-theme:/var/www/html/public/theme
+      - shopware-media:/var/www/html/public/media
+      - shopware-thumbnail:/var/www/html/public/thumbnail
+      - shopware-sitemap:/var/www/html/public/sitemap

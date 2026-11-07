@@ -1,0 +1,22 @@
+name: freshrss
+server: localhost
+targets:
+  freshrss:
+    image: freshrss/freshrss:${FRESHRSS_VERSION:-latest}
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: UTC
+      - name: CRON_MIN
+        value: 13,43
+      - name: FRESHRSS_ENV
+        value: production
+      - name: COPY_LOG_TO_SYSLOG
+        value: On
+      - name: COPY_SYSLOG_TO_STDERR
+        value: On
+    volumes:
+      - freshrss-freshrss-data:/var/www/FreshRSS/data
+      - freshrss-freshrss-extensions:/var/www/FreshRSS/extensions

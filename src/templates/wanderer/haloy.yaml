@@ -1,0 +1,71 @@
+name: wanderer
+server: localhost
+targets:
+  wanderer-search:
+    health_check_path: /health
+    image: getmeili/meilisearch:v1.11.3
+    port: "7700"
+    domains:
+      - domain: search.app.example.com
+    env:
+      - name: MEILI_URL
+        value: http://wanderer-search:7700
+      - name: MEILI_MASTER_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: MEILI_NO_ANALYTICS
+        value: "true"
+    volumes:
+      - wanderer-search-data:/meili_data/data.ms
+  wanderer-db:
+    health_check_path: /health
+    image: flomp/wanderer-db
+    port: "8090"
+    domains:
+      - domain: db.app.example.com
+    env:
+      - name: MEILI_URL
+        value: http://wanderer-search:7700
+      - name: MEILI_MASTER_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: POCKETBASE_ENCRYPTION_KEY
+        from:
+          env: POCKETBASE_KEY
+      - name: ORIGIN
+        value: http://app.example.com
+    volumes:
+      - wanderer-db-data:/pb_data
+  wanderer-web:
+    health_check_path: /
+    image: flomp/wanderer-web
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MEILI_URL
+        value: http://wanderer-search:7700
+      - name: MEILI_MASTER_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: ORIGIN
+        value: http://app.example.com
+      - name: BODY_SIZE_LIMIT
+        value: Infinity
+      - name: PUBLIC_POCKETBASE_URL
+        value: http://wanderer-db:8090
+      - name: PUBLIC_DISABLE_SIGNUP
+        value: "false"
+      - name: UPLOAD_FOLDER
+        value: /app/uploads
+      - name: UPLOAD_USER
+        value: admin
+      - name: UPLOAD_PASSWORD
+        from:
+          env: UPLOAD_PASSWORD
+      - name: PUBLIC_VALHALLA_URL
+        value: https://valhalla1.openstreetmap.de
+      - name: PUBLIC_NOMINATIM_URL
+        value: https://nominatim.openstreetmap.org
+    volumes:
+      - wanderer-uploads:/app/uploads

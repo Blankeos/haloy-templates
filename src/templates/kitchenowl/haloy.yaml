@@ -1,0 +1,39 @@
+name: kitchenowl
+server: localhost
+targets:
+  kitchenowl-web:
+    image: tombursch/kitchenowl:v0.7.1
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: JWT_SECRET_KEY
+        from:
+          env: APP_PASSWORD
+      - name: DB_DRIVER
+        value: postgresql
+      - name: DB_HOST
+        value: kitchenowl-db
+      - name: DB_NAME
+        value: kitchenowl
+      - name: DB_USER
+        value: kitchenowl
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - kitchenowl-kitchenowl-files:/data
+  kitchenowl-db:
+    preset: database
+    image: postgres:17
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: kitchenowl
+      - name: POSTGRES_USER
+        value: kitchenowl
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - kitchenowl-kitchenowl-db:/var/lib/postgresql/data

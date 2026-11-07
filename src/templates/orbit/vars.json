@@ -1,0 +1,14 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:48",
+    "MINIO_PASSWORD": "password:48",
+    "AUTH_SECRET": "password:64",
+    "CRON_SECRET": "password:64"
+  },
+  "derived": {
+    "ORBIT_WEB__DATABASE_URL": "postgres://orbit:${POSTGRES_PASSWORD}@orbit-postgres:5432/orbit",
+    "ORBIT_WEB__DIRECT_URL": "postgres://orbit:${POSTGRES_PASSWORD}@orbit-postgres:5432/orbit",
+    "ORBIT_REALTIME__DATABASE_URL": "postgres://orbit:${POSTGRES_PASSWORD}@orbit-postgres:5432/orbit",
+    "ORBIT_REALTIME__DIRECT_URL": "postgres://orbit:${POSTGRES_PASSWORD}@orbit-postgres:5432/orbit"
+  }
+}

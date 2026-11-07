@@ -1,0 +1,22 @@
+name: obsidian-livesync
+server: localhost
+targets:
+  obsidian-livesync-couchdb:
+    preset: database
+    image:
+      repository: obsidian-livesync-couchdb
+      tag: latest
+      build_config:
+        context: ./obsidian-livesync-couchdb
+        push: server
+    port: "5984"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: COUCHDB_USER
+        value: admin
+      - name: COUCHDB_PASSWORD
+        from:
+          env: COUCHDB_PASSWORD
+    volumes:
+      - obsidian-livesync-couchdb-data:/opt/couchdb/data

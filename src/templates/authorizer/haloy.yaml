@@ -1,0 +1,50 @@
+name: authorizer
+server: localhost
+targets:
+  authorizer:
+    image: lakhansamani/authorizer:1.4.4
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_TYPE
+        value: postgres
+      - name: DATABASE_URL
+        from:
+          env: AUTHORIZER__DATABASE_URL
+      - name: REDIS_URL
+        value: redis://authorizer-redis:6379
+      - name: ADMIN_SECRET
+        from:
+          env: ADMIN_SECRET
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: COOKIE_NAME
+        value: authorizer
+      - name: ACCESS_TOKEN_EXPIRY_TIME
+        value: "86400"
+      - name: REFRESH_TOKEN_EXPIRY_TIME
+        value: "86400"
+      - name: DISABLE_PLAYGROUND
+        value: "true"
+  authorizer-db:
+    preset: database
+    image: postgres:15-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: authorizer
+    volumes:
+      - authorizer-db-data:/var/lib/postgresql/data
+  authorizer-redis:
+    preset: database
+    image: redis:7-alpine
+    port: "6379"
+    volumes:
+      - authorizer-redis-data:/data

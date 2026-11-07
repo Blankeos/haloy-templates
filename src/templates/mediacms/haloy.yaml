@@ -1,0 +1,178 @@
+name: mediacms
+server: localhost
+targets:
+  mediacms-migrations:
+    preset: service
+    image:
+      repository: mediacms-migrations
+      tag: latest
+      build_config:
+        context: ./mediacms-migrations
+        push: server
+    port: "8080"
+    env:
+      - name: ENABLE_UWSGI
+        value: no
+      - name: ENABLE_NGINX
+        value: no
+      - name: ENABLE_CELERY_SHORT
+        value: no
+      - name: ENABLE_CELERY_LONG
+        value: no
+      - name: ENABLE_CELERY_BEAT
+        value: no
+      - name: ENABLE_MIGRATIONS
+        value: yes
+      - name: ADMIN_USER
+        value: admin
+      - name: ADMIN_EMAIL
+        value: admin@localhost
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: DATABASE_HOST
+        value: mediacms-db
+      - name: DATABASE_PORT
+        value: "5432"
+      - name: DATABASE_USER
+        value: mediacms
+      - name: DATABASE_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DATABASE_NAME
+        value: mediacms
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: REDIS_HOST
+        value: mediacms-redis
+      - name: REDIS_PORT
+        value: "6379"
+    volumes:
+      - mediacms-mediacms-data:/home/mediacms.io/mediacms/media
+      - mediacms-mediacms-static:/home/mediacms.io/mediacms/staticfiles
+  mediacms-web:
+    image: mediacms/mediacms:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ENABLE_CELERY_BEAT
+        value: no
+      - name: ENABLE_CELERY_SHORT
+        value: no
+      - name: ENABLE_CELERY_LONG
+        value: no
+      - name: ENABLE_MIGRATIONS
+        value: no
+      - name: DATABASE_HOST
+        value: mediacms-db
+      - name: DATABASE_PORT
+        value: "5432"
+      - name: DATABASE_USER
+        value: mediacms
+      - name: DATABASE_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DATABASE_NAME
+        value: mediacms
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: REDIS_HOST
+        value: mediacms-redis
+      - name: REDIS_PORT
+        value: "6379"
+    volumes:
+      - mediacms-mediacms-data:/home/mediacms.io/mediacms/media
+      - mediacms-mediacms-static:/home/mediacms.io/mediacms/staticfiles
+  mediacms-celery-beat:
+    preset: service
+    image: mediacms/mediacms:latest
+    port: "8080"
+    env:
+      - name: ENABLE_UWSGI
+        value: no
+      - name: ENABLE_NGINX
+        value: no
+      - name: ENABLE_CELERY_SHORT
+        value: no
+      - name: ENABLE_CELERY_LONG
+        value: no
+      - name: ENABLE_MIGRATIONS
+        value: no
+      - name: DATABASE_HOST
+        value: mediacms-db
+      - name: DATABASE_PORT
+        value: "5432"
+      - name: DATABASE_USER
+        value: mediacms
+      - name: DATABASE_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DATABASE_NAME
+        value: mediacms
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: REDIS_HOST
+        value: mediacms-redis
+      - name: REDIS_PORT
+        value: "6379"
+    volumes:
+      - mediacms-mediacms-data:/home/mediacms.io/mediacms/media
+      - mediacms-mediacms-static:/home/mediacms.io/mediacms/staticfiles
+  mediacms-celery-worker:
+    preset: service
+    image: mediacms/mediacms:latest
+    port: "8080"
+    env:
+      - name: ENABLE_UWSGI
+        value: no
+      - name: ENABLE_NGINX
+        value: no
+      - name: ENABLE_CELERY_BEAT
+        value: no
+      - name: ENABLE_MIGRATIONS
+        value: no
+      - name: DATABASE_HOST
+        value: mediacms-db
+      - name: DATABASE_PORT
+        value: "5432"
+      - name: DATABASE_USER
+        value: mediacms
+      - name: DATABASE_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DATABASE_NAME
+        value: mediacms
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: REDIS_HOST
+        value: mediacms-redis
+      - name: REDIS_PORT
+        value: "6379"
+    volumes:
+      - mediacms-mediacms-data:/home/mediacms.io/mediacms/media
+      - mediacms-mediacms-static:/home/mediacms.io/mediacms/staticfiles
+  mediacms-db:
+    preset: database
+    image: postgres:17.2-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: mediacms
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: mediacms
+      - name: TZ
+        value: Europe/London
+    volumes:
+      - mediacms-postgres-data:/var/lib/postgresql/data/
+  mediacms-redis:
+    preset: database
+    image: redis:alpine
+    port: "6379"

@@ -1,0 +1,20 @@
+name: fivem
+server: localhost
+targets:
+  fivem:
+    image: spritsail/fivem:latest
+    port: "40120"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LICENSE_KEY
+        from:
+          env: LICENSE_KEY
+      - name: RCON_PASSWORD
+        from:
+          env: RCON_PASSWORD
+      - name: NO_DEFAULT_CONFIG
+        value: ${NO_DEFAULT_CONFIG:-}
+    volumes:
+      - fivem-fivem-config:/config
+      - fivem-fivem-txdata:/txData

@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "AUTH_PASSWORD": "password:32"
+  },
+  "derived": {
+    "PREFECT__PREFECT_API_DATABASE_CONNECTION_URL": "postgresql+asyncpg://prefect:${POSTGRES_PASSWORD}@prefect-postgres:5432/prefect",
+    "PREFECT_SERVICES__PREFECT_API_DATABASE_CONNECTION_URL": "postgresql+asyncpg://prefect:${POSTGRES_PASSWORD}@prefect-postgres:5432/prefect"
+  }
+}

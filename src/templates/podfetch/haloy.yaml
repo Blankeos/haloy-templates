@@ -1,0 +1,25 @@
+name: podfetch
+server: localhost
+targets:
+  podfetch:
+    image: samuel19982/podfetch:v5.2.2
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        value: sqlite:///app/db/podcast.db
+      - name: POLLING_INTERVAL
+        value: "300"
+      - name: BASIC_AUTH
+        value: "true"
+      - name: USERNAME
+        value: admin
+      - name: PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: GPODDER_INTEGRATION_ENABLED
+        value: "true"
+    volumes:
+      - podfetch-podfetch-podcasts:/app/podcasts
+      - podfetch-podfetch-db:/app/db

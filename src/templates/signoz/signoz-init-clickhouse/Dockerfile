@@ -1,0 +1,2 @@
+FROM clickhouse/clickhouse-server:25.5.6
+CMD ["bash","-c","version=\"v0.0.1\"\nnode_os=$(uname -s | tr '[:upper:]' '[:lower:]')\nnode_arch=$(uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/)\necho \"Fetching histogram-binary for ${node_os}/${node_arch}\"\ncd /tmp\nwget -O histogram-quantile.tar.gz \"https://github.com/SigNoz/signoz/releases/download/histogram-quantile%2F${version}/histogram-quantile_${node_os}_${node_arch}.tar.gz\"\ntar -xvzf histogram-quantile.tar.gz\nmv histogram-quantile /var/lib/clickhouse/user_scripts/histogramQuantile\n"]

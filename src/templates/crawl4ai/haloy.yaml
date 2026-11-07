@@ -1,0 +1,15 @@
+name: crawl4ai
+server: localhost
+targets:
+  crawl4ai:
+    health_check_path: /health
+    image: unclecode/crawl4ai:latest
+    port: "11235"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LLM_PROVIDER
+        value: openai/gpt-4o-mini
+      - name: OPENAI_API_KEY
+        from:
+          env: INLINE_PASSWORD_48

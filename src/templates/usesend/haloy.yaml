@@ -1,0 +1,74 @@
+name: usesend
+server: localhost
+targets:
+  usesend-db-prod:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        value: postgres
+      - name: POSTGRES_DB
+        value: usesend
+    volumes:
+      - usesend-database:/var/lib/postgresql/data
+  usesend-redis-prod:
+    preset: database
+    image:
+      repository: usesend-redis-prod
+      tag: latest
+      build_config:
+        context: ./usesend-redis-prod
+        push: server
+    port: "6379"
+    volumes:
+      - usesend-cache:/data
+  usesend-storage-prod:
+    preset: service
+    image:
+      repository: usesend-storage-prod
+      tag: latest
+      build_config:
+        context: ./usesend-storage-prod
+        push: server
+    port: "9002"
+    env:
+      - name: MINIO_ROOT_USER
+        value: usesend
+      - name: MINIO_ROOT_PASSWORD
+        value: password
+    volumes:
+      - usesend-storage:/data
+  usesend:
+    image: usesend/usesend:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PORT
+        value: "3000"
+      - name: DATABASE_URL
+        value: postgresql://postgres:postgres@usesend-db-prod:5432/usesend
+      - name: NEXTAUTH_URL
+        value: http://localhost:3000
+      - name: NEXTAUTH_SECRET
+        from:
+          env: SECRET_BASE
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_SECRET_KEY
+        value: "'Fill'"
+      - name: AWS_ACCESS_KEY
+        value: "'Fill'"
+      - name: GITHUB_ID
+        value: "'Fill'"
+      - name: GITHUB_SECRET
+        value: "'Fill'"
+      - name: REDIS_URL
+        value: redis://usesend-redis-prod:6379
+      - name: NEXT_PUBLIC_IS_CLOUD
+        value: "false"
+      - name: API_RATE_LIMIT
+        value: "1"

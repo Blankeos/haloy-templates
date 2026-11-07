@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "GRAFANA_ADMIN_PASSWORD": "password:24"
+  },
+  "derived": {}
+}

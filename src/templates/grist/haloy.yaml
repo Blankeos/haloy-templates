@@ -1,0 +1,13 @@
+name: grist
+server: localhost
+targets:
+  grist:
+    image: gristlabs/grist:latest
+    port: "8484"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: GRIST_DEFAULT_EMAIL
+        value: admin@app.example.com
+    volumes:
+      - grist-grist-data:/persist

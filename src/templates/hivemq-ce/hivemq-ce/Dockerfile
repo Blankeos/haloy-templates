@@ -1,0 +1,2 @@
+FROM hivemq/hivemq-ce:2026.5
+ENTRYPOINT ["/bin/bash","-ec","test -f /opt/hivemq/extensions/hivemq-file-rbac-extension/hivemq-extension.xml\ntest -f /opt/hivemq/extensions/hivemq-file-rbac-extension/hivemq-file-rbac-extension-4.6.17.jar\ntest -f /opt/hivemq/extensions/hivemq-file-rbac-extension/conf/credentials.xml\ntest ! -e /opt/hivemq/extensions/hivemq-allow-all-extension\nexec /opt/docker-entrypoint.sh /opt/hivemq/bin/run.sh\n"]

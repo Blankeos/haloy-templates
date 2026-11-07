@@ -1,0 +1,13 @@
+name: baserow
+server: localhost
+targets:
+  baserow:
+    image: baserow/baserow:1.25.2
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BASEROW_PUBLIC_URL
+        value: http://app.example.com
+    volumes:
+      - baserow-baserow-data:/baserow/data

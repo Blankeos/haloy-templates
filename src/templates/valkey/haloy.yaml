@@ -1,0 +1,18 @@
+name: valkey
+server: localhost
+targets:
+  valkey:
+    preset: database
+    image:
+      repository: valkey
+      tag: latest
+      build_config:
+        context: ./valkey
+        push: server
+    port: "6379"
+    env:
+      - name: VALKEY_PASSWORD
+        from:
+          env: VALKEY_PASSWORD
+    volumes:
+      - valkey-valkey-data:/data

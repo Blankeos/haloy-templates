@@ -1,0 +1,14 @@
+name: postgresus
+server: localhost
+targets:
+  postgresus:
+    health_check_path: /
+    image: rostislavdugin/postgresus:v2.15.3
+    port: "4005"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: UTC
+    volumes:
+      - postgresus-postgresus-data:/postgresus-data

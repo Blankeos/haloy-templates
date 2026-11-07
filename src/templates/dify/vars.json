@@ -1,0 +1,15 @@
+{
+  "secrets": {
+    "SECRET_KEY": "base64:42",
+    "POSTGRES_PASSWORD": "password:32",
+    "REDIS_PASSWORD": "password:32",
+    "SANDBOX_API_KEY": "password:32",
+    "PLUGIN_DAEMON_KEY": "base64:42",
+    "PLUGIN_INNER_API_KEY": "base64:42"
+  },
+  "derived": {
+    "DIFY_API__CELERY_BROKER_URL": "redis://:${REDIS_PASSWORD}@dify-redis:6379/1",
+    "DIFY_WORKER__CELERY_BROKER_URL": "redis://:${REDIS_PASSWORD}@dify-redis:6379/1",
+    "DIFY_WORKER_BEAT__CELERY_BROKER_URL": "redis://:${REDIS_PASSWORD}@dify-redis:6379/1"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "hash:64",
+    "ORGANIZATION_ID": "uuid",
+    "S3_ACCESS_KEY": "hash:20",
+    "S3_SECRET_KEY": "hash:40"
+  },
+  "derived": {
+    "FEEDBACKS__DATABASE_URL": "postgresql://feedbacks:${POSTGRES_PASSWORD}@feedbacks-postgres:5432/feedbacks"
+  }
+}

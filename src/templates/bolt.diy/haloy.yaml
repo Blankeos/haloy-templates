@@ -1,0 +1,28 @@
+name: bolt-diy
+server: localhost
+targets:
+  bolt-diy-app:
+    image:
+      repository: bolt-diy-app
+      tag: latest
+      build_config:
+        context: ./bolt-diy-app
+        push: server
+    port: "5173"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: COMPOSE_PROFILES
+        value: production
+      - name: PORT
+        value: "5173"
+      - name: OLLAMA_API_BASE_URL
+        value: http://127.0.0.1:11434
+      - name: VITE_LOG_LEVEL
+        value: info
+      - name: DEFAULT_NUM_CTX
+        value: "32768"
+      - name: RUNNING_IN_DOCKER
+        value: "true"

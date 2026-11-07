@@ -1,0 +1,13 @@
+{
+  "secrets": {
+    "LOGIN_PASSWORD": "password:8",
+    "DB_PASSWORD": "password:16",
+    "REDIS_PASSWORD": "password:16"
+  },
+  "derived": {
+    "ARGILLA_WEB__ARGILLA_DATABASE_URL": "postgresql+asyncpg://postgres:${DB_PASSWORD}@argilla-db:5432/argilla",
+    "ARGILLA_WEB__ARGILLA_REDIS_URL": "redis://:${REDIS_PASSWORD}@argilla-redis:6379/0",
+    "ARGILLA_WORKER__ARGILLA_DATABASE_URL": "postgresql+asyncpg://postgres:${DB_PASSWORD}@argilla-db:5432/argilla",
+    "ARGILLA_WORKER__ARGILLA_REDIS_URL": "redis://:${REDIS_PASSWORD}@argilla-redis:6379/0"
+  }
+}

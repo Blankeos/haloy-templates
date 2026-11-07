@@ -1,0 +1,11 @@
+name: beszel
+server: localhost
+targets:
+  beszel:
+    image: henrygd/beszel:0.10.2
+    port: "8090"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - beszel-beszel-data:/beszel_data
+      - /var/run/docker.sock:/var/run/docker.sock:ro

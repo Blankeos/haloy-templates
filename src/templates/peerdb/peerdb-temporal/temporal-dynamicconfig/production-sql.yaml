@@ -1,0 +1,8 @@
+limit.maxIDLength:
+  - value: 255
+    constraints: {}
+system.forceSearchAttributesCacheRefreshOnRead:
+  - value: false
+    constraints: {}
+frontend.enableUpdateWorkflowExecution:
+  - value: true

@@ -1,0 +1,29 @@
+name: chiefonboarding
+server: localhost
+targets:
+  chiefonboarding:
+    image: chiefonboarding/chiefonboarding:v2.2.5
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: DATABASE_URL
+        from:
+          env: CHIEFONBOARDING__DATABASE_URL
+      - name: ALLOWED_HOSTS
+        value: app.example.com
+  chiefonboarding-db:
+    preset: database
+    image: postgres:13
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: chiefonboarding
+    volumes:
+      - chiefonboarding-postgres-data:/var/lib/postgresql/data

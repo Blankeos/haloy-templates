@@ -1,0 +1,14 @@
+name: wallos
+server: localhost
+targets:
+  wallos:
+    image: bellamy/wallos:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: Europe/Paris
+    volumes:
+      - wallos-wallos-db:/var/www/html/db
+      - wallos-wallos-logos:/var/www/html/images/uploads/logos

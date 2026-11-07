@@ -1,0 +1,14 @@
+name: qdrant
+server: localhost
+targets:
+  qdrant:
+    image: qdrant/qdrant:latest
+    port: "6333"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: QDRANT__SERVICE__API_KEY
+        from:
+          env: INLINE_PASSWORD_32
+    volumes:
+      - qdrant-qdrant-data:/qdrant/storage

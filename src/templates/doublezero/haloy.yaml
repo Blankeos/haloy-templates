@@ -1,0 +1,26 @@
+name: doublezero
+server: localhost
+targets:
+  doublezero:
+    image: liltechnomancer/double-zero:0.2.1
+    port: "4000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: AWS_ACCESS_KEY_ID
+        value: your-aws-access-key
+      - name: AWS_SECRET_ACCESS_KEY
+        value: your-aws-secret-key
+      - name: AWS_REGION
+        value: your-aws-region
+      - name: SQS_URL
+        value: your-aws-sqs-url
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: PHX_HOST
+        value: app.example.com
+      - name: DATABASE_PATH
+        value: ./00.db
+    volumes:
+      - doublezero-db-data:/var/lib/doublezero/data

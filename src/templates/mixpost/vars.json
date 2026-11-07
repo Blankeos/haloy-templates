@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "MX_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

@@ -1,0 +1,32 @@
+name: casdoor
+server: localhost
+targets:
+  casdoor:
+    image:
+      repository: casdoor
+      tag: latest
+      build_config:
+        context: ./casdoor
+        push: server
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: RUNNING_IN_DOCKER
+        value: "true"
+    volumes:
+      - casdoor-casdoor-data:/data
+  casdoor-db:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: casdoor
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: casdoor
+    volumes:
+      - casdoor-casdoor-postgres-data:/var/lib/postgresql/data

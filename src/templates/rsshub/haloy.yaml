@@ -1,0 +1,29 @@
+name: rsshub
+server: localhost
+targets:
+  rsshub:
+    health_check_path: /healthz
+    image: diygod/rsshub
+    port: "1200"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: CACHE_TYPE
+        value: redis
+      - name: REDIS_URL
+        value: redis://rsshub-redis:6379/
+      - name: PUPPETEER_WS_ENDPOINT
+        value: ws://rsshub-browserless:3000
+  rsshub-browserless:
+    health_check_path: /pressure
+    preset: service
+    image: browserless/chrome
+    port: "8080"
+  rsshub-redis:
+    preset: database
+    image: redis:alpine
+    port: "6379"
+    volumes:
+      - rsshub-redis-data:/data

@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "ADMIN_PASSWORD": "password:32",
+    "DB_PASSWORD": "password:32",
+    "INLINE_UUID": "uuid"
+  },
+  "derived": {
+    "HARBOR_INIT__HARBOR_INSTANCE_ID": "harbor-${INLINE_UUID}"
+  }
+}

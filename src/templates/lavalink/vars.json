@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "LAVALINK_SERVER_PASSWORD": "password"
+  },
+  "derived": {}
+}

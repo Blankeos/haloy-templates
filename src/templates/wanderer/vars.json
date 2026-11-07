@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "MEILI_MASTER_KEY": "password:32",
+    "POCKETBASE_KEY": "password:32",
+    "UPLOAD_PASSWORD": "password:16"
+  },
+  "derived": {}
+}

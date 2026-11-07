@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "UI_PASSWORD": "hash:64",
+    "REDIS_PASSWORD": "hash:64"
+  },
+  "derived": {
+    "FALCO_UI__FALCOSIDEKICK_UI_USER": "admin:${UI_PASSWORD}"
+  }
+}

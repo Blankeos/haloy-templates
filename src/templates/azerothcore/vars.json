@@ -1,0 +1,14 @@
+{
+  "secrets": {
+    "MYSQL_ROOT_PASSWORD": "password:32"
+  },
+  "derived": {
+    "AZEROTHCORE_DB_IMPORT__AC_LOGIN_DATABASE_INFO": "azerothcore-database;3306;root;${MYSQL_ROOT_PASSWORD};acore_auth",
+    "AZEROTHCORE_DB_IMPORT__AC_WORLD_DATABASE_INFO": "azerothcore-database;3306;root;${MYSQL_ROOT_PASSWORD};acore_world",
+    "AZEROTHCORE_DB_IMPORT__AC_CHARACTER_DATABASE_INFO": "azerothcore-database;3306;root;${MYSQL_ROOT_PASSWORD};acore_characters",
+    "AZEROTHCORE_AUTH__AC_LOGIN_DATABASE_INFO": "azerothcore-database;3306;root;${MYSQL_ROOT_PASSWORD};acore_auth",
+    "AZEROTHCORE__AC_LOGIN_DATABASE_INFO": "azerothcore-database;3306;root;${MYSQL_ROOT_PASSWORD};acore_auth",
+    "AZEROTHCORE__AC_WORLD_DATABASE_INFO": "azerothcore-database;3306;root;${MYSQL_ROOT_PASSWORD};acore_world",
+    "AZEROTHCORE__AC_CHARACTER_DATABASE_INFO": "azerothcore-database;3306;root;${MYSQL_ROOT_PASSWORD};acore_characters"
+  }
+}

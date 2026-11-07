@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "SESSION_KEY": "base64:64",
+    "FORM_ENCRYPTION_KEY": "base64:64"
+  },
+  "derived": {}
+}

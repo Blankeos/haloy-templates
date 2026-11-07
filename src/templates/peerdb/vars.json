@@ -1,0 +1,11 @@
+{
+  "secrets": {
+    "PEERDB_PASSWORD": "password:32",
+    "POSTGRES_PASSWORD": "password:32",
+    "MINIO_ROOT_PASSWORD": "password:32",
+    "NEXTAUTH_SECRET": "password:32"
+  },
+  "derived": {
+    "PEERDB_UI__DATABASE_URL": "postgres://postgres:${POSTGRES_PASSWORD}@peerdb-catalog:5432/postgres"
+  }
+}

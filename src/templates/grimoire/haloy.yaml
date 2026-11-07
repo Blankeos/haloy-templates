@@ -1,0 +1,10 @@
+name: grimoire
+server: localhost
+targets:
+  grimoire:
+    image: goniszewski/grimoire:latest
+    port: "5173"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - grimoire-grimoire-data:/app/data

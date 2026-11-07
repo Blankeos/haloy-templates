@@ -1,0 +1,35 @@
+name: filestash
+server: localhost
+targets:
+  filestash-app:
+    image: machines/filestash:latest
+    port: "8334"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APPLICATION_URL
+        value: app.example.com
+      - name: CANARY
+        value: "true"
+      - name: OFFICE_URL
+        value: http://filestash-wopi-server:9980
+      - name: OFFICE_FILESTASH_URL
+        value: http://filestash-app:8334
+      - name: OFFICE_REWRITE_URL
+        value: http://127.0.0.1:9980
+    volumes:
+      - filestash-filestash:/app/data/state/
+  filestash-wopi-server:
+    preset: service
+    image:
+      repository: filestash-wopi-server
+      tag: latest
+      build_config:
+        context: ./filestash-wopi-server
+        push: server
+    port: "9980"
+    env:
+      - name: extra_params
+        value: --o:ssl.enable=false
+      - name: aliasgroup1
+        value: https://.*:443

@@ -1,0 +1,13 @@
+name: actualbudget
+server: localhost
+targets:
+  actualbudget:
+    image: docker.io/actualbudget/actual-server:latest
+    port: "5006"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ACTUAL_PORT
+        value: "5006"
+    volumes:
+      - actualbudget-actual-data:/data

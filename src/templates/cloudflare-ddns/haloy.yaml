@@ -1,0 +1,16 @@
+name: cloudflare-ddns
+server: localhost
+targets:
+  cloudflare-ddns:
+    preset: service
+    image: favonia/cloudflare-ddns:1
+    port: "8080"
+    env:
+      - name: CLOUDFLARE_API_TOKEN
+        value: <INSERT YOUR TOKEN>
+      - name: DOMAINS
+        value: example.org,www.example.org,example.io
+      - name: PROXIED
+        value: "false"
+      - name: IP6_PROVIDER
+        value: none

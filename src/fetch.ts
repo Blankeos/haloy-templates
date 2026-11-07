@@ -51,3 +51,11 @@ export async function trimCache() {
     total -= d.s;
   }
 }
+
+export async function upstreamSha(): Promise<string> {
+  const res = await fetch("https://api.github.com/repos/Dokploy/templates/commits/canary", {
+    headers: { "user-agent": "haloy-templates", accept: "application/vnd.github.sha", ...(process.env.GITHUB_TOKEN ? { authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {}) },
+  });
+  if (!res.ok) throw new Error(`upstream sha: ${res.status}`);
+  return (await res.text()).trim();
+}

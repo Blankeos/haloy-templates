@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "BETTER_AUTH_SECRET": "base64:32",
+    "CLICKHOUSE_PASSWORD": "password:32",
+    "POSTGRES_PASSWORD": "password:32",
+    "REDIS_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

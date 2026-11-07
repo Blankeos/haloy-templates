@@ -1,0 +1,102 @@
+name: argilla
+server: localhost
+targets:
+  argilla-web:
+    image: argilla/argilla-server:latest
+    port: "6900"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ARGILLA_HOME_PATH
+        value: /var/lib/argilla
+      - name: ARGILLA_ELASTICSEARCH
+        value: http://argilla-elasticsearch:9200
+      - name: ARGILLA_DATABASE_URL
+        from:
+          env: ARGILLA_WEB__ARGILLA_DATABASE_URL
+      - name: ARGILLA_REDIS_URL
+        from:
+          env: ARGILLA_WEB__ARGILLA_REDIS_URL
+      - name: USERNAME
+        value: admin
+      - name: PASSWORD
+        from:
+          env: LOGIN_PASSWORD
+      - name: API_KEY
+        value: argilla.apikey
+      - name: WORKSPACE
+        value: default
+    volumes:
+      - argilla-argilladata:/var/lib/argilla
+  argilla-worker:
+    preset: service
+    image:
+      repository: argilla-worker
+      tag: latest
+      build_config:
+        context: ./argilla-worker
+        push: server
+    port: "8080"
+    env:
+      - name: BACKGROUND_NUM_WORKERS
+        value: "2"
+      - name: ARGILLA_HOME_PATH
+        value: /var/lib/argilla
+      - name: ARGILLA_ELASTICSEARCH
+        value: http://argilla-elasticsearch:9200
+      - name: ARGILLA_DATABASE_URL
+        from:
+          env: ARGILLA_WORKER__ARGILLA_DATABASE_URL
+      - name: ARGILLA_REDIS_URL
+        from:
+          env: ARGILLA_WORKER__ARGILLA_REDIS_URL
+    volumes:
+      - argilla-argilladata:/var/lib/argilla
+  argilla-elasticsearch:
+    preset: database
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    port: "9200"
+    env:
+      - name: node.name
+        value: elasticsearch
+      - name: cluster.name
+        value: es-argilla-local
+      - name: discovery.type
+        value: single-node
+      - name: ES_JAVA_OPTS
+        value: -Xms512m -Xmx512m
+      - name: cluster.routing.allocation.disk.threshold_enabled
+        value: "false"
+      - name: xpack.security.enabled
+        value: "false"
+    volumes:
+      - argilla-elasticdata:/usr/share/elasticsearch/data
+  argilla-db:
+    preset: database
+    image: postgres:15-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: argilla
+    volumes:
+      - argilla-dbdata:/var/lib/postgresql/data
+  argilla-redis:
+    preset: database
+    image:
+      repository: argilla-redis
+      tag: latest
+      build_config:
+        context: ./argilla-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - argilla-redisdata:/data

@@ -1,0 +1,71 @@
+name: activepieces
+server: localhost
+targets:
+  activepieces:
+    image: activepieces/activepieces:0.91.2
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: AP_ENGINE_EXECUTABLE_PATH
+        value: dist/packages/engine/main.js
+      - name: AP_API_KEY
+        from:
+          env: API_KEY
+      - name: AP_ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: AP_JWT_SECRET
+        from:
+          env: JWT_SECRET
+      - name: AP_ENVIRONMENT
+        value: prod
+      - name: AP_FRONTEND_URL
+        value: https://app.example.com
+      - name: AP_WEBHOOK_TIMEOUT_SECONDS
+        value: "30"
+      - name: AP_TRIGGER_DEFAULT_POLL_INTERVAL
+        value: "5"
+      - name: AP_POSTGRES_DATABASE
+        value: activepieces
+      - name: AP_POSTGRES_HOST
+        value: activepieces-postgres
+      - name: AP_POSTGRES_PORT
+        value: "5432"
+      - name: AP_POSTGRES_USERNAME
+        value: activepieces
+      - name: AP_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: AP_EXECUTION_MODE
+        value: UNSANDBOXED
+      - name: AP_REDIS_HOST
+        value: activepieces-redis
+      - name: AP_REDIS_PORT
+        value: "6379"
+      - name: AP_SANDBOX_RUN_TIME_SECONDS
+        value: "600"
+      - name: AP_TELEMETRY_ENABLED
+        value: "false"
+      - name: AP_TEMPLATES_SOURCE_URL
+        value: https://cloud.activepieces.com/api/v1/flow-templates
+  activepieces-postgres:
+    preset: database
+    image: postgres:17
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: activepieces
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        value: activepieces
+    volumes:
+      - activepieces-postgres-data:/var/lib/postgresql/data
+  activepieces-redis:
+    preset: database
+    image: redis:7
+    port: "6379"
+    volumes:
+      - activepieces-redis-data:/data

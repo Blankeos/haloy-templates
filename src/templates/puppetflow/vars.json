@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "APP_KEY": "base64:32",
+    "BROWSER_STREAM_SECRET": "hash:32",
+    "PINOKIO_TOKEN": "hash:32",
+    "INSTANCE_ID": "hash:8"
+  },
+  "derived": {}
+}

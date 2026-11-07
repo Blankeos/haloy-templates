@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "GATEWAY_TOKEN": "password:32",
+    "AUTH_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

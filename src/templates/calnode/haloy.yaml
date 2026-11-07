@@ -1,0 +1,26 @@
+name: calnode
+server: localhost
+targets:
+  calnode:
+    image: ghcr.io/calnode/calnode:0.12.0
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PORT
+        value: "3000"
+      - name: BASE_URL
+        value: http:app.example.com
+      - name: DATABASE_URL
+        value: sqlite://./data/calnode.db
+      - name: CALNODE_ENCRYPTION_KEY
+        from:
+          env: CALNODE_ENCRYPTION_KEY
+      - name: MICROSOFT_TENANT
+        value: common
+      - name: EMAIL_SMTP_PORT
+        value: "587"
+      - name: EMAIL_FROM_NAME
+        value: Calnode
+    volumes:
+      - calnode-calnode-data:/data

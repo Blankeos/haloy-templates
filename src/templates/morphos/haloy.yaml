@@ -1,0 +1,10 @@
+name: morphos
+server: localhost
+targets:
+  morphos-server:
+    image: ghcr.io/danvergara/morphos-server:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - morphos-morphos-upload:/upload

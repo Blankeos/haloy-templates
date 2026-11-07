@@ -1,0 +1,15 @@
+name: trilium-next
+server: localhost
+targets:
+  trilium-next:
+    image: triliumnext/trilium:v0.101.3
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TRILIUM_DATA_DIR
+        value: /home/node/trilium-data
+    volumes:
+      - /root:/home/node/trilium-data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro

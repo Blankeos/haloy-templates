@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32"
+  },
+  "derived": {
+    "LOGTO_APP__DB_URL": "postgres://logto:${POSTGRES_PASSWORD}@logto-postgres:5432/logto"
+  }
+}

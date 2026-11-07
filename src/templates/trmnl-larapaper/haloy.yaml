@@ -1,0 +1,26 @@
+name: trmnl-larapaper
+server: localhost
+targets:
+  trmnl-larapaper:
+    image: ghcr.io/usetrmnl/larapaper:0.45.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_URL
+        value: app.example.com
+      - name: PHP_OPCACHE_ENABLE
+        value: "1"
+      - name: DEPLOY_VARIANT
+        value: '"dokploy"'
+      - name: DB_DATABASE
+        value: database/storage/database.sqlite
+      - name: APP_TIMEZONE
+        value: UTC
+      - name: REGISTRATION_ENABLED
+        value: "1"
+      - name: FORCE_HTTPS
+        value: "0"
+    volumes:
+      - trmnl-larapaper-trmnl-database:/var/www/html/database/storage
+      - trmnl-larapaper-trmnl-storage:/var/www/html/storage/app/public/images/generated

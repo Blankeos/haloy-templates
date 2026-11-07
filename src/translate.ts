@@ -1,6 +1,5 @@
 import { parse as parseYaml, stringify as toYaml } from "yaml";
 import { parse as parseToml } from "smol-toml";
-import { randomBytes, randomUUID } from "node:crypto";
 
 export type Level = "partial" | "manual";
 export interface Warning {
@@ -24,8 +23,6 @@ export interface Input {
   domain?: string;
   /** Haloy server the generated config points at. */
   server?: string;
-  /** Fixed seed for secrets (tests). */
-  secretFor?: (name: string, spec: string) => string;
 }
 
 const DB_IMAGES = new Set([
@@ -44,19 +41,6 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(
 const upper = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]+/g, "_").replace(/^(\d)/, "T_$1");
 const imageName = (image: string) => image.split("/").pop()!.split(":")[0].split("@")[0];
 
-function genSecret(spec: string): string {
-  const [kind, arg] = spec.split(":");
-  const n = Number(arg) || 32;
-  if (kind === "password") {
-    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const bytes = randomBytes(n);
-    return Array.from(bytes, (b) => chars[b % chars.length]).join("");
-  }
-  if (kind === "base64") return randomBytes(n).toString("base64");
-  if (kind === "hash") return randomBytes(Math.ceil(n / 2)).toString("hex").slice(0, n);
-  if (kind === "uuid") return randomUUID();
-  return randomBytes(24).toString("hex");
-}
 const HELPER = /^\$\{(password|base64|hash|uuid|jwt|randomPort)(?::[^}]*)?\}$/;
 
 /** Compose-level `$${VAR}` is an escaped literal `${VAR}`. */
@@ -74,12 +58,11 @@ export function translate(input: Input): Result {
   const domain = input.domain ?? "example.com";
 
   // ---- template variables ------------------------------------------------
-  const secrets: Record<string, string> = {}; // ENV_NAME -> value
+  const secrets: Record<string, string> = {}; // ENV_NAME -> generator spec, e.g. "password:32"
   const needInput = new Set<string>(); // vars the user must supply
   const derived: Record<string, string> = {}; // composed env strings that embed secrets
   const secretVars = new Set<string>(); // template variable names that are secrets
   const plain: Record<string, string> = {};
-  const gen = input.secretFor ?? ((_n: string, spec: string) => genSecret(spec));
   const rawVars: Record<string, string> = { ...(tpl.variables ?? {}) };
   for (const [k, v] of Object.entries(rawVars)) {
     const s = String(v);
@@ -87,7 +70,7 @@ export function translate(input: Input): Result {
       if (/^\$\{randomPort\}$/.test(s)) plain[k] = "8080";
       else {
         secretVars.add(k);
-        secrets[upper(k)] = gen(k, s.slice(2, -1));
+        secrets[upper(k)] = s.slice(2, -1);
       }
     }
   }
@@ -102,7 +85,7 @@ export function translate(input: Input): Result {
       }
       if (/^(password|base64|hash|uuid|jwt)/.test(name)) {
         const key = upper("INLINE_" + name.replace(/[^a-z0-9]+/gi, "_"));
-        secrets[key] ??= gen(key, name);
+        secrets[key] ??= name;
         return "${" + key + "}";
       }
       return m;
@@ -331,8 +314,9 @@ export function translate(input: Input): Result {
         // Haloy does not interpolate ${VAR} inside `value`, so composed strings that contain a
         // generated secret become a derived variable in .env, read with `from: env`.
         if (/\$\{[A-Za-z_][A-Za-z0-9_]*\}/.test(e.value)) {
-          const composed = e.value.replace(/\$\{([A-Za-z_][A-Za-z0-9_]*)\}/g, (mm, n) => (n in secrets ? secrets[n] : mm));
-          if (!/\$\{[A-Za-z_]/.test(composed)) {
+          const composed = e.value;
+          const refs = [...composed.matchAll(/\$\{([A-Za-z_][A-Za-z0-9_]*)\}/g)].map((m) => m[1]);
+          if (refs.every((n) => n in secrets || n in derived)) {
             const key = `${upper(t)}__${e.name}`;
             derived[key] = composed;
             return { name: e.name, from: { env: key } };
@@ -378,12 +362,10 @@ export function translate(input: Input): Result {
   files["deploy.sh"] =
     `#!/usr/bin/env bash\nset -euo pipefail\ncd "$(dirname "$0")"\nset -a; [ -f .env ] && . ./.env; set +a\n\n# Haloy has no depends_on: deploy in dependency order.\n` +
     sorted.map((n) => `haloy deploy -t ${n}`).join("\n") + "\n";
-  const secretNames = Object.keys(secrets);
-  const inputNames: string[] = [];
   if (needInput.size) warn("partial", "unset-vars", `${needInput.size} optional vars have no value in template.toml and were left empty/omitted: ${[...needInput].slice(0, 8).join(", ")}${needInput.size > 8 ? ", ..." : ""}`);
-  files[".env.example"] = [...secretNames, ...inputNames].map((k) => `${k}=`).join("\n") + (secretNames.length + inputNames.length ? "\n" : "");
-  files[".env"] = [...secretNames.map((k) => `${k}='${secrets[k].replace(/'/g, "'\\''")}'`), ...Object.entries(derived).map(([k, v]) => `${k}='${v.replace(/'/g, "'\\''")}'`)].join("\n") + (secretNames.length + Object.keys(derived).length ? "\n" : "");
-  files[".gitignore"] = ".env\n";
+  if (Object.keys(secrets).length || Object.keys(derived).length) {
+    files["vars.json"] = JSON.stringify({ secrets, derived }, null, 2) + "\n";
+  }
 
   const status: Result["status"] = warnings.some((w) => w.level === "manual") ? "manual" : warnings.length ? "partial" : "ok";
   files["REPORT.md"] =

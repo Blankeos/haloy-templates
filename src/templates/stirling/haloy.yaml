@@ -1,0 +1,19 @@
+name: stirling
+server: localhost
+targets:
+  stirling-pdf:
+    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DOCKER_ENABLE_SECURITY
+        value: "false"
+      - name: LANGS
+        value: en_GB
+    volumes:
+      - stirling-stirling-pdf-trainingdata:/usr/share/tessdata
+      - stirling-stirling-pdf-extraconfigs:/configs
+      - stirling-stirling-pdf-customfiles:/customFiles/
+      - stirling-stirling-pdf-logs:/logs/
+      - stirling-stirling-pdf-pipeline:/pipeline/

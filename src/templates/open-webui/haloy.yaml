@@ -1,0 +1,16 @@
+name: open-webui
+server: localhost
+targets:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: OLLAMA_BASE_URL
+        value: http://ollama:11434
+      - name: WEBUI_SECRET_KEY
+        from:
+          env: WEBUI_SECRET_KEY
+    volumes:
+      - open-webui-open-webui:/app/backend/data

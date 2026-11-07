@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "REGISTRATION_SHARED_SECRET": "password:32",
+    "MACAROON_SECRET_KEY": "password:32",
+    "FORM_SECRET": "password:32"
+  },
+  "derived": {}
+}

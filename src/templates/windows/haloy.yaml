@@ -1,0 +1,13 @@
+name: windows
+server: localhost
+targets:
+  windows:
+    image: dockurr/windows:4.00
+    port: "8006"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: VERSION
+        value: win11
+    volumes:
+      - windows-win-storage:/storage

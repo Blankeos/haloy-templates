@@ -1,0 +1,130 @@
+name: n8n-queue
+server: localhost
+targets:
+  n8n-queue-postgres:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: admin
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: n8n
+    volumes:
+      - n8n-queue-postgres-data:/var/lib/postgresql/data
+  n8n-queue-redis:
+    preset: database
+    image:
+      repository: n8n-queue-redis
+      tag: latest
+      build_config:
+        context: ./n8n-queue-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - n8n-queue-redis-data:/data
+  n8n-queue-n8n:
+    health_check_path: /healthz
+    image: n8nio/n8n:2.30.4
+    port: "5678"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DB_TYPE
+        value: postgresdb
+      - name: DB_POSTGRESDB_HOST
+        value: n8n-queue-postgres
+      - name: DB_POSTGRESDB_PORT
+        value: "5432"
+      - name: DB_POSTGRESDB_DATABASE
+        value: n8n
+      - name: DB_POSTGRESDB_USER
+        value: admin
+      - name: DB_POSTGRESDB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: EXECUTIONS_MODE
+        value: queue
+      - name: QUEUE_BULL_REDIS_HOST
+        value: n8n-queue-redis
+      - name: QUEUE_BULL_REDIS_PORT
+        value: "6379"
+      - name: QUEUE_BULL_REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: QUEUE_HEALTH_CHECK_ACTIVE
+        value: "true"
+      - name: OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS
+        value: "true"
+      - name: N8N_ENCRYPTION_KEY
+        from:
+          env: N8N_ENCRYPTION_KEY
+      - name: N8N_HOST
+        value: app.example.com
+      - name: N8N_PORT
+        value: "5678"
+      - name: N8N_PROTOCOL
+        value: http
+      - name: N8N_PROXY_HOPS
+        value: "1"
+      - name: NODE_ENV
+        value: production
+      - name: N8N_WEBHOOK_URL
+        value: https://app.example.com/
+      - name: N8N_EDITOR_BASE_URL
+        value: https://app.example.com/
+      - name: GENERIC_TIMEZONE
+        value: Europe/Berlin
+      - name: N8N_SECURE_COOKIE
+        value: "false"
+    volumes:
+      - n8n-queue-n8n-data:/home/node/.n8n
+  n8n-queue-n8n-worker:
+    health_check_path: /healthz
+    preset: service
+    image:
+      repository: n8n-queue-n8n-worker
+      tag: latest
+      build_config:
+        context: ./n8n-queue-n8n-worker
+        push: server
+    port: "8080"
+    env:
+      - name: DB_TYPE
+        value: postgresdb
+      - name: DB_POSTGRESDB_HOST
+        value: n8n-queue-postgres
+      - name: DB_POSTGRESDB_PORT
+        value: "5432"
+      - name: DB_POSTGRESDB_DATABASE
+        value: n8n
+      - name: DB_POSTGRESDB_USER
+        value: admin
+      - name: DB_POSTGRESDB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: EXECUTIONS_MODE
+        value: queue
+      - name: QUEUE_BULL_REDIS_HOST
+        value: n8n-queue-redis
+      - name: QUEUE_BULL_REDIS_PORT
+        value: "6379"
+      - name: QUEUE_BULL_REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: QUEUE_HEALTH_CHECK_ACTIVE
+        value: "true"
+      - name: N8N_ENCRYPTION_KEY
+        from:
+          env: N8N_ENCRYPTION_KEY
+      - name: NODE_ENV
+        value: production
+      - name: GENERIC_TIMEZONE
+        value: Europe/Berlin

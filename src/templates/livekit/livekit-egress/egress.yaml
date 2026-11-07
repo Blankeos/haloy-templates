@@ -1,0 +1,15 @@
+redis:
+    address: ${redis_address}
+    username: ""
+    password: ${redis_password}
+    db: 0
+    use_tls: false
+    sentinel_master_name: ""
+    sentinel_username: ""
+    sentinel_password: ""
+    sentinel_addresses: []
+    cluster_addresses: []
+    max_redirects: null
+api_key: ${api_key}
+api_secret: ${api_secret}
+ws_url: wss://${main_domain}

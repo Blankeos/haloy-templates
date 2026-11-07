@@ -1,0 +1,42 @@
+telemetry:
+  disable_telemetry_sharing: true
+
+# Replication source: the bundled Postgres (wal_level=logical).
+# Point this at your own database to sync real data.
+replication:
+  connections:
+    - type: postgresql
+      uri: postgresql://powersync:${postgres_password}@postgres:5432/powersync
+      sslmode: disable
+
+# Bucket storage. Must be a different database than the replication source.
+storage:
+  type: postgresql
+  uri: postgresql://powersync:${postgres_password}@postgres:5432/powersync_storage
+  sslmode: disable
+
+port: 8080
+
+# Sync rules: syncs the demo "lists" table to all clients.
+# Edit these for your own schema: https://docs.powersync.com/usage/sync-rules
+sync_rules:
+  content: |
+    bucket_definitions:
+      global:
+        data:
+          - SELECT * FROM lists
+
+client_auth:
+  # HS256 key for signing development tokens.
+  # See https://docs.powersync.com/installation/authentication-setup/custom
+  jwks:
+    keys:
+      - kty: oct
+        alg: HS256
+        kid: powersync-dev
+        k: ${jwks_key}
+  audience: ["powersync"]
+
+api:
+  tokens:
+    - ${admin_token}

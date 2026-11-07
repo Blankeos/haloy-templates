@@ -1,0 +1,60 @@
+name: wallabag
+server: localhost
+targets:
+  wallabag:
+    image: wallabag/wallabag:2.6.14
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: SYMFONY__ENV__DATABASE_DRIVER
+        value: pdo_mysql
+      - name: SYMFONY__ENV__DATABASE_HOST
+        value: wallabag-db
+      - name: SYMFONY__ENV__DATABASE_PORT
+        value: "3306"
+      - name: SYMFONY__ENV__DATABASE_NAME
+        value: wallabag
+      - name: SYMFONY__ENV__DATABASE_USER
+        value: wallabag
+      - name: SYMFONY__ENV__DATABASE_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: SYMFONY__ENV__DATABASE_CHARSET
+        value: utf8mb4
+      - name: SYMFONY__ENV__DATABASE_TABLE_PREFIX
+        value: wallabag_
+      - name: SYMFONY__ENV__MAILER_DSN
+        value: smtp://127.0.0.1
+      - name: SYMFONY__ENV__FROM_EMAIL
+        value: wallabag@example.com
+      - name: SYMFONY__ENV__DOMAIN_NAME
+        value: http://app.example.com
+      - name: SYMFONY__ENV__SERVER_NAME
+        value: wallabag
+      - name: SYMFONY__ENV__SECRET
+        from:
+          env: APP_SECRET
+      - name: SYMFONY__ENV__REDIS_HOST
+        value: wallabag-redis
+    volumes:
+      - wallabag-wallabag-images:/var/www/wallabag/web/assets/images
+  wallabag-db:
+    preset: database
+    image: mariadb:11.4
+    port: "3306"
+    env:
+      - name: MARIADB_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+    volumes:
+      - wallabag-wallabag-db-data:/var/lib/mysql
+  wallabag-redis:
+    preset: database
+    image: redis:7-alpine
+    port: "6379"
+    volumes:
+      - wallabag-wallabag-redis-data:/data

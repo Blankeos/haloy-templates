@@ -1,0 +1,27 @@
+{
+  "secrets": {
+    "APP_SECRET": "hash:64",
+    "INSTANCE_ID": "hash:32",
+    "DATABASE_PASSWORD": "hash:32",
+    "MYSQL_ROOT_PASSWORD": "hash:32",
+    "REDIS_PASSWORD": "hash:32",
+    "INSTALL_ADMIN_PASSWORD": "password:20"
+  },
+  "derived": {
+    "SHOPWARE_BOOTSTRAP__DATABASE_URL": "mysql://shopware:${DATABASE_PASSWORD}@shopware-database:3306/shopware?charset=utf8mb4",
+    "SHOPWARE_BOOTSTRAP__LOCK_DSN": "redis://:${REDIS_PASSWORD}@shopware-redis:6379/1",
+    "SHOPWARE_BOOTSTRAP__PHP_SESSION_SAVE_PATH": "tcp://shopware-redis:6379?auth=${REDIS_PASSWORD}",
+    "SHOPWARE_INIT__DATABASE_URL": "mysql://shopware:${DATABASE_PASSWORD}@shopware-database:3306/shopware?charset=utf8mb4",
+    "SHOPWARE_INIT__LOCK_DSN": "redis://:${REDIS_PASSWORD}@shopware-redis:6379/1",
+    "SHOPWARE_INIT__PHP_SESSION_SAVE_PATH": "tcp://shopware-redis:6379?auth=${REDIS_PASSWORD}",
+    "SHOPWARE__DATABASE_URL": "mysql://shopware:${DATABASE_PASSWORD}@shopware-database:3306/shopware?charset=utf8mb4",
+    "SHOPWARE__LOCK_DSN": "redis://:${REDIS_PASSWORD}@shopware-redis:6379/1",
+    "SHOPWARE__PHP_SESSION_SAVE_PATH": "tcp://shopware-redis:6379?auth=${REDIS_PASSWORD}",
+    "SHOPWARE_WORKER__DATABASE_URL": "mysql://shopware:${DATABASE_PASSWORD}@shopware-database:3306/shopware?charset=utf8mb4",
+    "SHOPWARE_WORKER__LOCK_DSN": "redis://:${REDIS_PASSWORD}@shopware-redis:6379/1",
+    "SHOPWARE_WORKER__PHP_SESSION_SAVE_PATH": "tcp://shopware-redis:6379?auth=${REDIS_PASSWORD}",
+    "SHOPWARE_SCHEDULER__DATABASE_URL": "mysql://shopware:${DATABASE_PASSWORD}@shopware-database:3306/shopware?charset=utf8mb4",
+    "SHOPWARE_SCHEDULER__LOCK_DSN": "redis://:${REDIS_PASSWORD}@shopware-redis:6379/1",
+    "SHOPWARE_SCHEDULER__PHP_SESSION_SAVE_PATH": "tcp://shopware-redis:6379?auth=${REDIS_PASSWORD}"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "ROOT_TOKEN": "password:32"
+  },
+  "derived": {}
+}

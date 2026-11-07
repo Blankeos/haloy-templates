@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "ROOT_PASSWORD": "password:32",
+    "DATABASE_PASSWORD": "password:32",
+    "SECURITY_SALT": "base64:32"
+  },
+  "derived": {
+    "CAKEPHP__DATABASE_URL": "mysql://${username:8}:${DATABASE_PASSWORD}@cakephp-mariadb:3306/cakephp?encoding=utf8mb4"
+  }
+}

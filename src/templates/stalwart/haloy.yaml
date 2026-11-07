@@ -1,0 +1,11 @@
+name: stalwart
+server: localhost
+targets:
+  stalwart-mail:
+    image: stalwartlabs/stalwart:latest-alpine
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - stalwart-stalwart-etc:/etc/stalwart
+      - stalwart-stalwart-data:/var/lib/stalwart

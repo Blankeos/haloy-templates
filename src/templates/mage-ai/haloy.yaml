@@ -1,0 +1,21 @@
+name: mage-ai
+server: localhost
+targets:
+  mage-ai:
+    health_check_path: /
+    image:
+      repository: mage-ai
+      tag: latest
+      build_config:
+        context: ./mage-ai
+        push: server
+    port: "6789"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: USER_CODE_PATH
+        value: /home/src/mage-ai
+      - name: ENV
+        value: production
+    volumes:
+      - mage-ai-mageai-data:/home/src/

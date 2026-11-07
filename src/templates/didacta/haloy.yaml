@@ -1,0 +1,28 @@
+name: didacta
+server: localhost
+targets:
+  didacta:
+    health_check_path: /healthz
+    image: ghcr.io/va360labs/didacta-community:0.0.1-alpha.107
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - didacta-didacta-data:/app/data
+  didacta-postgres:
+    preset: database
+    image: pgvector/pgvector:pg16
+    port: "5432"
+    volumes:
+      - didacta-didacta-postgres-data:/var/lib/postgresql/data
+  didacta-redis:
+    preset: database
+    image:
+      repository: didacta-redis
+      tag: latest
+      build_config:
+        context: ./didacta-redis
+        push: server
+    port: "6379"
+    volumes:
+      - didacta-didacta-redis-data:/data

@@ -1,0 +1,15 @@
+name: orca-server
+server: localhost
+targets:
+  orca-server:
+    image:
+      repository: orca-server
+      tag: latest
+      build_config:
+        context: ./orca-server
+        push: server
+    port: "6768"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - orca-server-orca-home:/home/orca

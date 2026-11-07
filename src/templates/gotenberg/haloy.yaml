@@ -1,0 +1,18 @@
+name: gotenberg
+server: localhost
+targets:
+  gotenberg:
+    image:
+      repository: gotenberg
+      tag: latest
+      build_config:
+        context: ./gotenberg
+        push: server
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: GOTENBERG_API_BASIC_AUTH_USERNAME
+        value: admin
+      - name: GOTENBERG_API_BASIC_AUTH_PASSWORD
+        value: changethis

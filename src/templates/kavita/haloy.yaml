@@ -1,0 +1,16 @@
+name: kavita
+server: localhost
+targets:
+  kavita:
+    image: jvmilazz0/kavita:latest
+    port: "5000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: Etc/UTC
+    volumes:
+      - kavita-kavita-config:/kavita/config
+      - kavita-kavita-media:/manga
+      - kavita-kavita-books:/books
+      - kavita-kavita-comics:/comics

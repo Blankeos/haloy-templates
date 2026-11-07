@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "IMGPROXY_KEY": "hash:128",
+    "IMGPROXY_SALT": "hash:128"
+  },
+  "derived": {}
+}

@@ -1,0 +1,266 @@
+name: peerdb
+server: localhost
+targets:
+  peerdb-catalog:
+    preset: database
+    image:
+      repository: peerdb-catalog
+      tag: latest
+      build_config:
+        context: ./peerdb-catalog
+        push: server
+    port: "5432"
+    env:
+      - name: PGUSER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: postgres
+      - name: POSTGRES_INITDB_ARGS
+        value: --locale=C.UTF-8
+    volumes:
+      - peerdb-pgdata:/var/lib/postgresql/data
+  peerdb-temporal:
+    preset: service
+    image:
+      repository: peerdb-temporal
+      tag: latest
+      build_config:
+        context: ./peerdb-temporal
+        push: server
+    port: "7233"
+    env:
+      - name: DB
+        value: postgres12
+      - name: DB_PORT
+        value: "5432"
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PWD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_SEEDS
+        value: catalog
+      - name: DYNAMIC_CONFIG_FILE_PATH
+        value: config/dynamicconfig/production-sql.yaml
+  peerdb-temporal-admin-tools:
+    preset: service
+    image:
+      repository: peerdb-temporal-admin-tools
+      tag: latest
+      build_config:
+        context: ./peerdb-temporal-admin-tools
+        push: server
+    port: "8080"
+    env:
+      - name: TEMPORAL_ADDRESS
+        value: peerdb-temporal:7233
+      - name: TEMPORAL_CLI_ADDRESS
+        value: peerdb-temporal:7233
+      - name: TEMPORAL_CLI_SHOW_STACKS
+        value: "1"
+  peerdb-temporal-ui:
+    image: temporalio/ui:2.43.3@sha256:31f0d8c1ed0bfc49c9c20ea9613ee9dd5c52f5f989bacb8a30210f847028e9cd
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TEMPORAL_ADDRESS
+        value: peerdb-temporal:7233
+      - name: TEMPORAL_CORS_ORIGINS
+        value: http://localhost:3000
+      - name: TEMPORAL_CSRF_COOKIE_INSECURE
+        value: "true"
+  peerdb-flow-api:
+    preset: service
+    image: ghcr.io/peerdb-io/flow-api:stable-v0.35.5
+    port: "8112"
+    env:
+      - name: PEERDB_CATALOG_HOST
+        value: peerdb-catalog
+      - name: PEERDB_CATALOG_PORT
+        value: "5432"
+      - name: PEERDB_CATALOG_USER
+        value: postgres
+      - name: PEERDB_CATALOG_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: PEERDB_CATALOG_DATABASE
+        value: postgres
+      - name: TEMPORAL_HOST_PORT
+        value: peerdb-temporal:7233
+      - name: PEERDB_TEMPORAL_NAMESPACE
+        value: default
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_ACCESS_KEY_ID
+        value: _peerdb_minioadmin
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: MINIO_ROOT_USER
+        value: _peerdb_minioadmin
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_REGION
+        value: us-east-1
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_ENDPOINT_URL_S3
+        value: http://peerdb-minio:9000
+      - name: PEERDB_CLICKHOUSE_AWS_S3_BUCKET_NAME
+        value: peerdbbucket
+  peerdb-flow-snapshot-worker:
+    preset: service
+    image: ghcr.io/peerdb-io/flow-snapshot-worker:stable-v0.35.5
+    port: "8080"
+    env:
+      - name: PEERDB_CATALOG_HOST
+        value: peerdb-catalog
+      - name: PEERDB_CATALOG_PORT
+        value: "5432"
+      - name: PEERDB_CATALOG_USER
+        value: postgres
+      - name: PEERDB_CATALOG_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: PEERDB_CATALOG_DATABASE
+        value: postgres
+      - name: TEMPORAL_HOST_PORT
+        value: peerdb-temporal:7233
+      - name: PEERDB_TEMPORAL_NAMESPACE
+        value: default
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_ACCESS_KEY_ID
+        value: _peerdb_minioadmin
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: MINIO_ROOT_USER
+        value: _peerdb_minioadmin
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_REGION
+        value: us-east-1
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_ENDPOINT_URL_S3
+        value: http://peerdb-minio:9000
+      - name: PEERDB_CLICKHOUSE_AWS_S3_BUCKET_NAME
+        value: peerdbbucket
+  peerdb-flow-worker:
+    preset: service
+    image: ghcr.io/peerdb-io/flow-worker:stable-v0.35.5
+    port: "8080"
+    env:
+      - name: PEERDB_CATALOG_HOST
+        value: peerdb-catalog
+      - name: PEERDB_CATALOG_PORT
+        value: "5432"
+      - name: PEERDB_CATALOG_USER
+        value: postgres
+      - name: PEERDB_CATALOG_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: PEERDB_CATALOG_DATABASE
+        value: postgres
+      - name: TEMPORAL_HOST_PORT
+        value: peerdb-temporal:7233
+      - name: PEERDB_TEMPORAL_NAMESPACE
+        value: default
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_ACCESS_KEY_ID
+        value: _peerdb_minioadmin
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: MINIO_ROOT_USER
+        value: _peerdb_minioadmin
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_REGION
+        value: us-east-1
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_ENDPOINT_URL_S3
+        value: http://peerdb-minio:9000
+      - name: PEERDB_CLICKHOUSE_AWS_S3_BUCKET_NAME
+        value: peerdbbucket
+  peerdb:
+    preset: service
+    image: ghcr.io/peerdb-io/peerdb-server:stable-v0.35.5
+    port: "9900"
+    env:
+      - name: PEERDB_CATALOG_HOST
+        value: peerdb-catalog
+      - name: PEERDB_CATALOG_PORT
+        value: "5432"
+      - name: PEERDB_CATALOG_USER
+        value: postgres
+      - name: PEERDB_CATALOG_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: PEERDB_CATALOG_DATABASE
+        value: postgres
+      - name: PEERDB_PASSWORD
+        from:
+          env: PEERDB_PASSWORD
+      - name: PEERDB_FLOW_SERVER_ADDRESS
+        value: grpc://peerdb-flow-api:8112
+      - name: RUST_LOG
+        value: info
+      - name: RUST_BACKTRACE
+        value: "1"
+  peerdb-ui:
+    image: ghcr.io/peerdb-io/peerdb-ui:stable-v0.35.5
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PEERDB_CATALOG_HOST
+        value: peerdb-catalog
+      - name: PEERDB_CATALOG_PORT
+        value: "5432"
+      - name: PEERDB_CATALOG_USER
+        value: postgres
+      - name: PEERDB_CATALOG_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: PEERDB_CATALOG_DATABASE
+        value: postgres
+      - name: DATABASE_URL
+        from:
+          env: PEERDB_UI__DATABASE_URL
+      - name: PEERDB_FLOW_SERVER_HTTP
+        value: http://peerdb-flow-api:8113
+      - name: NEXTAUTH_SECRET
+        from:
+          env: NEXTAUTH_SECRET
+      - name: NEXTAUTH_URL
+        value: http://localhost:3000
+      - name: PEERDB_EXPERIMENTAL_ENABLE_SCRIPTING
+        value: "true"
+  peerdb-minio:
+    image:
+      repository: peerdb-minio
+      tag: latest
+      build_config:
+        context: ./peerdb-minio
+        push: server
+    port: "9001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_ACCESS_KEY_ID
+        value: _peerdb_minioadmin
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: MINIO_ROOT_USER
+        value: _peerdb_minioadmin
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_ROOT_PASSWORD
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_REGION
+        value: us-east-1
+      - name: PEERDB_CLICKHOUSE_AWS_CREDENTIALS_AWS_ENDPOINT_URL_S3
+        value: http://peerdb-minio:9000
+      - name: PEERDB_CLICKHOUSE_AWS_S3_BUCKET_NAME
+        value: peerdbbucket
+    volumes:
+      - peerdb-minio-data:/data

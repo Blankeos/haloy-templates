@@ -1,0 +1,19 @@
+name: bazarr
+server: localhost
+targets:
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:1.5.1
+    port: "6767"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: UTC
+    volumes:
+      - bazarr-config:/config
+      - /path/to/movies:/movies
+      - /path/to/tv:/tv

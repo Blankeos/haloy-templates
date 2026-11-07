@@ -1,0 +1,14 @@
+name: homarr
+server: localhost
+targets:
+  homarr:
+    image: ghcr.io/homarr-labs/homarr:latest
+    port: "7575"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SECRET_ENCRYPTION_KEY
+        from:
+          env: SECRET_KEY
+    volumes:
+      - homarr-homarr-appdata:/appdata

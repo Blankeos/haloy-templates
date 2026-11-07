@@ -1,0 +1,15 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "CLICKHOUSE_PASSWORD": "password:32",
+    "MINIO_ROOT_PASSWORD": "password:32",
+    "REDIS_AUTH": "password:32",
+    "NEXTAUTH_SECRET": "password:32",
+    "SALT": "password:32",
+    "ENCRYPTION_KEY": "hash:64"
+  },
+  "derived": {
+    "LANGFUSE_WORKER__DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@langfuse-postgres:5432/postgres",
+    "LANGFUSE_WEB__DATABASE_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@langfuse-postgres:5432/postgres"
+  }
+}

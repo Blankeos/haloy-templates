@@ -1,0 +1,8 @@
+name: languagetool
+server: localhost
+targets:
+  languagetool:
+    image: collabora/languagetool:6.6
+    port: "8010"
+    domains:
+      - domain: v2-languages.app.example.com

@@ -1,0 +1,37 @@
+name: flatnotes
+server: localhost
+targets:
+  flatnotes:
+    image: dullage/flatnotes:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: FLATNOTES_AUTH_TYPE
+        value: password
+      - name: FLATNOTES_USERNAME
+        value: admin
+      - name: FLATNOTES_PASSWORD
+        from:
+          env: PASSWORD
+      - name: FLATNOTES_SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: FLATNOTES_SESSION_EXPIRY_DAYS
+        value: "30"
+      - name: FLATNOTES_QUICK_ACCESS_HIDE
+        value: "false"
+      - name: FLATNOTES_QUICK_ACCESS_TITLE
+        value: RECENTLY MODIFIED
+      - name: FLATNOTES_QUICK_ACCESS_TERM
+        value: "*"
+      - name: FLATNOTES_QUICK_ACCESS_SORT
+        value: lastModified
+      - name: FLATNOTES_QUICK_ACCESS_LIMIT
+        value: "4"
+    volumes:
+      - flatnotes-flatnotes-data:/data

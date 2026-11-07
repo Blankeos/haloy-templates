@@ -1,0 +1,38 @@
+name: omniroute
+server: localhost
+targets:
+  omniroute:
+    image: diegosouzapw/omniroute:3.8.17
+    port: "20128"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "20128"
+      - name: DASHBOARD_PORT
+        value: ${PORT:-20128}
+      - name: API_PORT
+        value: "20129"
+      - name: API_HOST
+        value: 0.0.0.0
+      - name: HOSTNAME
+        value: 0.0.0.0
+      - name: DATA_DIR
+        value: /app/data
+      - name: PATH
+        value: /home/node/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    volumes:
+      - omniroute-omniroute-prod-data:/app/data
+  omniroute-redis:
+    preset: database
+    image:
+      repository: omniroute-redis
+      tag: latest
+      build_config:
+        context: ./omniroute-redis
+        push: server
+    port: "6379"
+    volumes:
+      - omniroute-redis-prod-data:/data

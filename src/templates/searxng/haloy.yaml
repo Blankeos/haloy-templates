@@ -1,0 +1,22 @@
+name: searxng
+server: localhost
+targets:
+  searxng-valkey:
+    preset: database
+    image:
+      repository: searxng-valkey
+      tag: latest
+      build_config:
+        context: ./searxng-valkey
+        push: server
+    port: "6379"
+    volumes:
+      - searxng-valkey-data:/data
+  searxng:
+    image: searxng/searxng:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - searxng-searxng:/etc/searxng
+      - searxng-searxng-data:/var/cache/searxng

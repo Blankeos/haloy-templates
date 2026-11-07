@@ -1,0 +1,35 @@
+name: linkstack
+server: localhost
+targets:
+  linkstack:
+    image: linkstackorg/linkstack:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TZ
+        value: Europe/Berlin
+      - name: SERVER_ADMIN
+        value: admin@app.example.com
+      - name: HTTP_SERVER_NAME
+        value: app.example.com
+      - name: HTTPS_SERVER_NAME
+        value: app.example.com
+      - name: LOG_LEVEL
+        value: info
+      - name: PHP_MEMORY_LIMIT
+        value: 256M
+      - name: UPLOAD_MAX_FILESIZE
+        value: 8M
+    volumes:
+      - linkstack-linkstack-data:/htdocs
+  linkstack-mysql:
+    preset: database
+    image: mysql:8
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+    volumes:
+      - linkstack-mysql-data:/var/lib/mysql

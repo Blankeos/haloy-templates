@@ -1,0 +1,13 @@
+name: chroma
+server: localhost
+targets:
+  chroma:
+    image: chromadb/chroma:1.5.6
+    port: "8000"
+    domains:
+      - domain: api-v2-heartbeat.app.example.com
+    env:
+      - name: ANONYMIZED_TELEMETRY
+        value: "FALSE"
+    volumes:
+      - chroma-chroma-data:/data

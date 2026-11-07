@@ -1,0 +1,378 @@
+name: mailu
+server: localhost
+targets:
+  mailu-front:
+    health_check_path: /health
+    image: ghcr.io/mailu/nginx:2024.06
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: DOMAIN
+        value: app.example.com
+      - name: HOSTNAMES
+        value: app.example.com
+      - name: POSTMASTER
+        value: admin
+      - name: TLS_FLAVOR
+        value: mail-letsencrypt
+      - name: SUBNET
+        value: 172.16.0.0/12
+      - name: ADMIN
+        value: "true"
+      - name: WEBMAIL
+        value: roundcube
+      - name: API
+        value: "false"
+      - name: WEBDAV
+        value: none
+      - name: ANTIVIRUS
+        value: none
+      - name: SCAN_MACROS
+        value: "false"
+      - name: PORTS
+        value: 25,80,443,465,587,993,4190
+      - name: MESSAGE_SIZE_LIMIT
+        value: "50000000"
+      - name: FULL_TEXT_SEARCH
+        value: en
+      - name: WEBROOT_REDIRECT
+        value: /webmail
+      - name: WEB_ADMIN
+        value: /admin
+      - name: WEB_WEBMAIL
+        value: /webmail
+      - name: SITENAME
+        value: Mailu
+      - name: WEBSITE
+        value: https://mailu.io
+      - name: REAL_IP_FROM
+        value: 172.16.0.0/12
+      - name: REAL_IP_HEADER
+        value: X-Forwarded-For
+      - name: INITIAL_ADMIN_ACCOUNT
+        value: admin
+      - name: INITIAL_ADMIN_DOMAIN
+        value: app.example.com
+      - name: INITIAL_ADMIN_PW
+        from:
+          env: ADMIN_PASSWORD
+      - name: INITIAL_ADMIN_MODE
+        value: ifmissing
+    volumes:
+      - mailu-mailu-certs:/certs
+  mailu-admin:
+    preset: service
+    image: ghcr.io/mailu/admin:2024.06
+    port: "8080"
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: DOMAIN
+        value: app.example.com
+      - name: HOSTNAMES
+        value: app.example.com
+      - name: POSTMASTER
+        value: admin
+      - name: TLS_FLAVOR
+        value: mail-letsencrypt
+      - name: SUBNET
+        value: 172.16.0.0/12
+      - name: ADMIN
+        value: "true"
+      - name: WEBMAIL
+        value: roundcube
+      - name: API
+        value: "false"
+      - name: WEBDAV
+        value: none
+      - name: ANTIVIRUS
+        value: none
+      - name: SCAN_MACROS
+        value: "false"
+      - name: PORTS
+        value: 25,80,443,465,587,993,4190
+      - name: MESSAGE_SIZE_LIMIT
+        value: "50000000"
+      - name: FULL_TEXT_SEARCH
+        value: en
+      - name: WEBROOT_REDIRECT
+        value: /webmail
+      - name: WEB_ADMIN
+        value: /admin
+      - name: WEB_WEBMAIL
+        value: /webmail
+      - name: SITENAME
+        value: Mailu
+      - name: WEBSITE
+        value: https://mailu.io
+      - name: REAL_IP_FROM
+        value: 172.16.0.0/12
+      - name: REAL_IP_HEADER
+        value: X-Forwarded-For
+      - name: INITIAL_ADMIN_ACCOUNT
+        value: admin
+      - name: INITIAL_ADMIN_DOMAIN
+        value: app.example.com
+      - name: INITIAL_ADMIN_PW
+        from:
+          env: ADMIN_PASSWORD
+      - name: INITIAL_ADMIN_MODE
+        value: ifmissing
+    volumes:
+      - mailu-mailu-data:/data
+      - mailu-mailu-dkim:/dkim
+  mailu-imap:
+    preset: service
+    image: ghcr.io/mailu/dovecot:2024.06
+    port: "8080"
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: DOMAIN
+        value: app.example.com
+      - name: HOSTNAMES
+        value: app.example.com
+      - name: POSTMASTER
+        value: admin
+      - name: TLS_FLAVOR
+        value: mail-letsencrypt
+      - name: SUBNET
+        value: 172.16.0.0/12
+      - name: ADMIN
+        value: "true"
+      - name: WEBMAIL
+        value: roundcube
+      - name: API
+        value: "false"
+      - name: WEBDAV
+        value: none
+      - name: ANTIVIRUS
+        value: none
+      - name: SCAN_MACROS
+        value: "false"
+      - name: PORTS
+        value: 25,80,443,465,587,993,4190
+      - name: MESSAGE_SIZE_LIMIT
+        value: "50000000"
+      - name: FULL_TEXT_SEARCH
+        value: en
+      - name: WEBROOT_REDIRECT
+        value: /webmail
+      - name: WEB_ADMIN
+        value: /admin
+      - name: WEB_WEBMAIL
+        value: /webmail
+      - name: SITENAME
+        value: Mailu
+      - name: WEBSITE
+        value: https://mailu.io
+      - name: REAL_IP_FROM
+        value: 172.16.0.0/12
+      - name: REAL_IP_HEADER
+        value: X-Forwarded-For
+      - name: INITIAL_ADMIN_ACCOUNT
+        value: admin
+      - name: INITIAL_ADMIN_DOMAIN
+        value: app.example.com
+      - name: INITIAL_ADMIN_PW
+        from:
+          env: ADMIN_PASSWORD
+      - name: INITIAL_ADMIN_MODE
+        value: ifmissing
+    volumes:
+      - mailu-mailu-mail:/mail
+  mailu-smtp:
+    preset: service
+    image: ghcr.io/mailu/postfix:2024.06
+    port: "8080"
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: DOMAIN
+        value: app.example.com
+      - name: HOSTNAMES
+        value: app.example.com
+      - name: POSTMASTER
+        value: admin
+      - name: TLS_FLAVOR
+        value: mail-letsencrypt
+      - name: SUBNET
+        value: 172.16.0.0/12
+      - name: ADMIN
+        value: "true"
+      - name: WEBMAIL
+        value: roundcube
+      - name: API
+        value: "false"
+      - name: WEBDAV
+        value: none
+      - name: ANTIVIRUS
+        value: none
+      - name: SCAN_MACROS
+        value: "false"
+      - name: PORTS
+        value: 25,80,443,465,587,993,4190
+      - name: MESSAGE_SIZE_LIMIT
+        value: "50000000"
+      - name: FULL_TEXT_SEARCH
+        value: en
+      - name: WEBROOT_REDIRECT
+        value: /webmail
+      - name: WEB_ADMIN
+        value: /admin
+      - name: WEB_WEBMAIL
+        value: /webmail
+      - name: SITENAME
+        value: Mailu
+      - name: WEBSITE
+        value: https://mailu.io
+      - name: REAL_IP_FROM
+        value: 172.16.0.0/12
+      - name: REAL_IP_HEADER
+        value: X-Forwarded-For
+      - name: INITIAL_ADMIN_ACCOUNT
+        value: admin
+      - name: INITIAL_ADMIN_DOMAIN
+        value: app.example.com
+      - name: INITIAL_ADMIN_PW
+        from:
+          env: ADMIN_PASSWORD
+      - name: INITIAL_ADMIN_MODE
+        value: ifmissing
+    volumes:
+      - mailu-mailu-mailqueue:/queue
+  mailu-antispam:
+    preset: service
+    image: ghcr.io/mailu/rspamd:2024.06
+    port: "8080"
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: DOMAIN
+        value: app.example.com
+      - name: HOSTNAMES
+        value: app.example.com
+      - name: POSTMASTER
+        value: admin
+      - name: TLS_FLAVOR
+        value: mail-letsencrypt
+      - name: SUBNET
+        value: 172.16.0.0/12
+      - name: ADMIN
+        value: "true"
+      - name: WEBMAIL
+        value: roundcube
+      - name: API
+        value: "false"
+      - name: WEBDAV
+        value: none
+      - name: ANTIVIRUS
+        value: none
+      - name: SCAN_MACROS
+        value: "false"
+      - name: PORTS
+        value: 25,80,443,465,587,993,4190
+      - name: MESSAGE_SIZE_LIMIT
+        value: "50000000"
+      - name: FULL_TEXT_SEARCH
+        value: en
+      - name: WEBROOT_REDIRECT
+        value: /webmail
+      - name: WEB_ADMIN
+        value: /admin
+      - name: WEB_WEBMAIL
+        value: /webmail
+      - name: SITENAME
+        value: Mailu
+      - name: WEBSITE
+        value: https://mailu.io
+      - name: REAL_IP_FROM
+        value: 172.16.0.0/12
+      - name: REAL_IP_HEADER
+        value: X-Forwarded-For
+      - name: INITIAL_ADMIN_ACCOUNT
+        value: admin
+      - name: INITIAL_ADMIN_DOMAIN
+        value: app.example.com
+      - name: INITIAL_ADMIN_PW
+        from:
+          env: ADMIN_PASSWORD
+      - name: INITIAL_ADMIN_MODE
+        value: ifmissing
+    volumes:
+      - mailu-mailu-filter:/var/lib/rspamd
+  mailu-webmail:
+    preset: service
+    image: ghcr.io/mailu/webmail:2024.06
+    port: "8080"
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: DOMAIN
+        value: app.example.com
+      - name: HOSTNAMES
+        value: app.example.com
+      - name: POSTMASTER
+        value: admin
+      - name: TLS_FLAVOR
+        value: mail-letsencrypt
+      - name: SUBNET
+        value: 172.16.0.0/12
+      - name: ADMIN
+        value: "true"
+      - name: WEBMAIL
+        value: roundcube
+      - name: API
+        value: "false"
+      - name: WEBDAV
+        value: none
+      - name: ANTIVIRUS
+        value: none
+      - name: SCAN_MACROS
+        value: "false"
+      - name: PORTS
+        value: 25,80,443,465,587,993,4190
+      - name: MESSAGE_SIZE_LIMIT
+        value: "50000000"
+      - name: FULL_TEXT_SEARCH
+        value: en
+      - name: WEBROOT_REDIRECT
+        value: /webmail
+      - name: WEB_ADMIN
+        value: /admin
+      - name: WEB_WEBMAIL
+        value: /webmail
+      - name: SITENAME
+        value: Mailu
+      - name: WEBSITE
+        value: https://mailu.io
+      - name: REAL_IP_FROM
+        value: 172.16.0.0/12
+      - name: REAL_IP_HEADER
+        value: X-Forwarded-For
+      - name: INITIAL_ADMIN_ACCOUNT
+        value: admin
+      - name: INITIAL_ADMIN_DOMAIN
+        value: app.example.com
+      - name: INITIAL_ADMIN_PW
+        from:
+          env: ADMIN_PASSWORD
+      - name: INITIAL_ADMIN_MODE
+        value: ifmissing
+    volumes:
+      - mailu-mailu-webmail:/data
+  mailu-redis:
+    preset: database
+    image: redis:alpine
+    port: "6379"
+    volumes:
+      - mailu-mailu-redis:/data

@@ -1,0 +1,15 @@
+name: spacetimedb
+server: localhost
+targets:
+  spacetimedb:
+    image:
+      repository: spacetimedb
+      tag: latest
+      build_config:
+        context: ./spacetimedb
+        push: server
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - spacetimedb-spacetimedb-data:/home/spacetime

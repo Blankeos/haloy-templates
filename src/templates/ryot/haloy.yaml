@@ -1,0 +1,33 @@
+name: ryot
+server: localhost
+targets:
+  ryot-app:
+    image: ignisda/ryot:v7.10
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: RYOT_APP__DATABASE_URL
+      - name: SERVER_ADMIN_ACCESS_TOKEN
+        from:
+          env: ADMIN_ACCESS_TOKEN
+      - name: TZ
+        value: UTC
+  ryot-db:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_DB
+        value: postgres
+      - name: TZ
+        value: UTC
+    volumes:
+      - ryot-ryot-postgres-data:/var/lib/postgresql/data

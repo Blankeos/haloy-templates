@@ -1,0 +1,46 @@
+name: opensourcepos
+server: localhost
+targets:
+  opensourcepos:
+    image: jekkos/opensourcepos:master
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CI_ENVIRONMENT
+        value: production
+      - name: ALLOWED_HOSTNAMES
+        value: app.example.com
+      - name: FORCE_HTTPS
+        value: "false"
+      - name: PHP_TIMEZONE
+        value: UTC
+      - name: MYSQL_USERNAME
+        value: admin
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+      - name: MYSQL_DB_NAME
+        value: ospos
+      - name: MYSQL_HOST_NAME
+        value: opensourcepos-db
+    volumes:
+      - opensourcepos-opensourcepos-uploads:/app/public/uploads
+      - opensourcepos-opensourcepos-logs:/app/writable/logs
+  opensourcepos-db:
+    preset: database
+    image: mariadb:10.11
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: MYSQL_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: ospos
+      - name: MYSQL_USER
+        value: admin
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+    volumes:
+      - opensourcepos-opensourcepos-db:/var/lib/mysql

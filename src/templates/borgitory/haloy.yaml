@@ -1,0 +1,12 @@
+name: borgitory
+server: localhost
+targets:
+  borgitory:
+    image: mlapaglia/borgitory:latest
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - borgitory-borgitory-data:/app/data
+      - borgitory-borgitory-sources:/mnt/sources:ro
+      - borgitory-borgitory-repos:/mnt/repos:ro

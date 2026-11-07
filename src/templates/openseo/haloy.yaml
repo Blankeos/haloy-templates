@@ -1,0 +1,21 @@
+name: openseo
+server: localhost
+targets:
+  openseo:
+    image: ghcr.io/every-app/open-seo:v0.1.6
+    port: "3001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CLOUDFLARE_INCLUDE_PROCESS_ENV
+        value: "true"
+      - name: PORT
+        value: "3001"
+      - name: ALLOWED_HOST
+        value: app.example.com
+      - name: AUTH_MODE
+        value: local_noauth
+      - name: OPENROUTER_MODEL
+        value: openai/gpt-4o-mini
+    volumes:
+      - openseo-openseo-data:/app/.wrangler

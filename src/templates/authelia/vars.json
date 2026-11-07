@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "JWT_SECRET": "password:64",
+    "SESSION_SECRET": "password:64",
+    "STORAGE_ENCRYPTION_KEY": "password:64",
+    "REDIS_PASSWORD": "password:32",
+    "POSTGRES_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

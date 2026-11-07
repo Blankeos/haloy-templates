@@ -1,0 +1,151 @@
+name: openstatus
+server: localhost
+targets:
+  openstatus-libsql:
+    preset: service
+    image: ghcr.io/tursodatabase/libsql-server:v0.24.33
+    port: "8080"
+    env:
+      - name: SQLD_NODE
+        value: primary
+      - name: SQLD_MAX_CONCURRENT_CONNECTIONS
+        value: "512"
+      - name: SQLD_MAX_CONCURRENT_REQUESTS
+        value: "1024"
+    volumes:
+      - openstatus-libsql-data:/var/lib/sqld
+  openstatus-db-migrate:
+    preset: service
+    image: openstatus-db-migrate
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        value: http://openstatus-libsql:8080
+  openstatus-workflows:
+    health_check_path: /ping
+    preset: service
+    image: ghcr.io/openstatushq/openstatus-workflows:e1a9825
+    port: "3000"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3000"
+      - name: DATABASE_URL
+        value: http://openstatus-libsql:8080
+      - name: CRON_SECRET
+        from:
+          env: CRON_SECRET
+      - name: SITE_URL
+        value: https://app.example.com
+      - name: TINYBIRD_NOOP
+        value: "true"
+    volumes:
+      - openstatus-workflows-data:/app/data
+  openstatus-server:
+    health_check_path: /ping
+    preset: service
+    image: ghcr.io/openstatushq/openstatus-server:e1a9825
+    port: "3000"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3000"
+      - name: DATABASE_URL
+        value: http://openstatus-libsql:8080
+      - name: CRON_SECRET
+        from:
+          env: CRON_SECRET
+      - name: SUPER_ADMIN_TOKEN
+        from:
+          env: SUPER_ADMIN_TOKEN
+      - name: SELF_HOST
+        value: "true"
+      - name: FLY_REGION
+        value: self-hosted
+      - name: TINYBIRD_NOOP
+        value: "true"
+      - name: UPSTASH_REDIS_REST_URL
+        value: http://localhost:6379
+      - name: UPSTASH_REDIS_REST_TOKEN
+        value: placeholder
+  openstatus-dashboard:
+    health_check_path: /
+    image: ghcr.io/openstatushq/openstatus-dashboard:e1a9825
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3000"
+      - name: HOSTNAME
+        value: 0.0.0.0
+      - name: AUTH_TRUST_HOST
+        value: "true"
+      - name: DATABASE_URL
+        value: http://openstatus-libsql:8080
+      - name: AUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: SELF_HOST
+        value: "true"
+      - name: NEXT_PUBLIC_URL
+        value: https://app.example.com
+      - name: CRON_SECRET
+        from:
+          env: CRON_SECRET
+      - name: TINYBIRD_NOOP
+        value: "true"
+      - name: UPSTASH_REDIS_REST_URL
+        value: http://localhost:6379
+      - name: UPSTASH_REDIS_REST_TOKEN
+        value: placeholder
+  openstatus-status-page:
+    health_check_path: /
+    image: ghcr.io/openstatushq/openstatus-status-page:e1a9825
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3000"
+      - name: HOSTNAME
+        value: 0.0.0.0
+      - name: AUTH_TRUST_HOST
+        value: "true"
+      - name: DATABASE_URL
+        value: http://openstatus-libsql:8080
+      - name: AUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: SELF_HOST
+        value: "true"
+      - name: NEXT_PUBLIC_URL
+        value: https://app.example.com
+      - name: CRON_SECRET
+        from:
+          env: CRON_SECRET
+      - name: TINYBIRD_NOOP
+        value: "true"
+  openstatus-private-location:
+    health_check_path: /health
+    preset: service
+    image: ghcr.io/openstatushq/openstatus-private-location:e1a9825
+    port: "8080"
+    env:
+      - name: PORT
+        value: "8080"
+      - name: GIN_MODE
+        value: release
+      - name: DB_URL
+        value: http://openstatus-libsql:8080
+      - name: WORKFLOWS_URL
+        value: http://openstatus-workflows:3000
+      - name: CRON_SECRET
+        from:
+          env: CRON_SECRET

@@ -1,0 +1,17 @@
+name: opengist
+server: localhost
+targets:
+  opengist:
+    image: ghcr.io/thomiceli/opengist:1
+    port: "6157"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: UID
+        value: "1001"
+      - name: GID
+        value: "1001"
+      - name: OG_LOG_LEVEL
+        value: info
+    volumes:
+      - opengist-opengist-data:/opengist

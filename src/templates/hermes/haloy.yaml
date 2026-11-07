@@ -1,0 +1,33 @@
+name: hermes
+server: localhost
+targets:
+  hermes:
+    image:
+      repository: hermes
+      tag: latest
+      build_config:
+        context: ./hermes
+        push: server
+    port: "9119"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: HERMES_DASHBOARD
+        value: "1"
+      - name: HERMES_DASHBOARD_BASIC_AUTH_USERNAME
+        value: admin
+      - name: HERMES_DASHBOARD_BASIC_AUTH_PASSWORD
+        from:
+          env: DASHBOARD_PASSWORD
+      - name: HERMES_DASHBOARD_BASIC_AUTH_SECRET
+        from:
+          env: DASHBOARD_SECRET
+      - name: API_SERVER_ENABLED
+        value: "true"
+      - name: API_SERVER_HOST
+        value: 0.0.0.0
+      - name: API_SERVER_KEY
+        from:
+          env: API_KEY
+    volumes:
+      - hermes-hermes-data:/opt/data

@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "JWT_SECRET": "jwt:32"
+  },
+  "derived": {}
+}

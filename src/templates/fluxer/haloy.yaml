@@ -1,0 +1,2732 @@
+name: fluxer
+server: localhost
+targets:
+  fluxer-caddy:
+    image: caddy:2.10-alpine
+    port: "80"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - fluxer-caddy-data:/data
+      - fluxer-caddy-config:/config
+  fluxer-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: fluxer
+      - name: POSTGRES_USER
+        value: fluxer
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - fluxer-postgres-data:/var/lib/postgresql/data
+  fluxer-valkey:
+    preset: database
+    image:
+      repository: fluxer-valkey
+      tag: latest
+      build_config:
+        context: ./fluxer-valkey
+        push: server
+    port: "6379"
+  fluxer-nats:
+    preset: database
+    image:
+      repository: fluxer-nats
+      tag: latest
+      build_config:
+        context: ./fluxer-nats
+        push: server
+    port: "4222"
+    volumes:
+      - fluxer-nats-data:/data
+  fluxer-meilisearch:
+    preset: service
+    image: getmeili/meilisearch:v1.12
+    port: "8080"
+    env:
+      - name: MEILI_ENV
+        value: production
+      - name: MEILI_NO_ANALYTICS
+        value: "true"
+      - name: MEILI_MASTER_KEY
+        from:
+          env: MEILI_MASTER_KEY
+    volumes:
+      - fluxer-meilisearch-data:/meili_data
+  fluxer-seaweedfs:
+    preset: service
+    image:
+      repository: fluxer-seaweedfs
+      tag: latest
+      build_config:
+        context: ./fluxer-seaweedfs
+        push: server
+    port: "8080"
+    volumes:
+      - fluxer-seaweedfs-data:/data
+  fluxer-gifs:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-gifs:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_SVC_NAME
+        value: gifs
+      - name: FLUXER_SVC_MODE
+        value: router
+      - name: FLUXER_MEDIA_PROXY_PUBLIC_ENDPOINT
+        value: http://app.example.com/media
+  fluxer-gifs-shard:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-gifs:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_SVC_NAME
+        value: gifs
+      - name: FLUXER_SVC_MODE
+        value: shard
+      - name: FLUXER_SVC_SHARD_ID
+        value: "0"
+      - name: FLUXER_MEDIA_PROXY_PUBLIC_ENDPOINT
+        value: http://app.example.com/media
+  fluxer-seaweedfs-init:
+    preset: service
+    image:
+      repository: fluxer-seaweedfs-init
+      tag: latest
+      build_config:
+        context: ./fluxer-seaweedfs-init
+        push: server
+    port: "8080"
+  fluxer-livekit:
+    preset: service
+    image:
+      repository: fluxer-livekit
+      tag: latest
+      build_config:
+        context: ./fluxer-livekit
+        push: server
+    port: "7881"
+    env:
+      - name: LIVEKIT_KEYS
+        from:
+          env: FLUXER_LIVEKIT__LIVEKIT_KEYS
+  fluxer-api:
+    health_check_path: /_health
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-api:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_API_PORT
+        value: "8080"
+      - name: FLUXER_API_PRESIGNED_ATTACHMENT_UPLOADS_ENABLED
+        value: "true"
+  fluxer-worker:
+    preset: service
+    image:
+      repository: fluxer-worker
+      tag: latest
+      build_config:
+        context: ./fluxer-worker
+        push: server
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_API_WORKER_MODE
+        value: all_lanes
+      - name: FLUXER_API_WORKER_ENABLE_CRON_SCHEDULER
+        value: "true"
+      - name: FLUXER_API_WORKER_ENABLE_VOICE_RECONCILIATION
+        value: "true"
+  fluxer-gateway:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-gateway:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_GATEWAY_PORT
+        value: "8080"
+      - name: FLUXER_GATEWAY_MEDIA_PROXY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_GATEWAY_STATIC_CDN_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_GATEWAY_LOGGER_LEVEL
+        value: info
+  fluxer-media-proxy:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-media-proxy:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_MEDIA_PROXY_HOST
+        value: 0.0.0.0
+      - name: FLUXER_MEDIA_PROXY_PORT
+        value: "8080"
+      - name: FLUXER_MEDIA_PROXY_MODE
+        value: upload
+      - name: FLUXER_MEDIA_PROXY_STORAGE_BACKEND
+        value: s3
+  fluxer-static-proxy:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-static:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+  fluxer-app-proxy:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-app-proxy-self-hosted:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_APP_PROXY_HOST
+        value: 0.0.0.0
+      - name: FLUXER_APP_PROXY_PORT
+        value: "8080"
+      - name: DISCOVERY_UPSTREAM_URL
+        value: http://fluxer-caddy:8088/api/.well-known/fluxer
+      - name: PUBLIC_BOOTSTRAP_API_ENDPOINT
+        value: /api
+      - name: PUBLIC_BOOTSTRAP_API_PUBLIC_ENDPOINT
+        value: http://app.example.com/api
+  fluxer-snowflakes:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-snowflakes:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_SVC_MODE
+        value: router
+  fluxer-snowflakes-shard:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-snowflakes:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_SVC_MODE
+        value: shard
+      - name: FLUXER_SVC_SHARD_ID
+        value: "0"
+  fluxer-users:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-users:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_SVC_MODE
+        value: router
+  fluxer-users-shard:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-users:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_SVC_MODE
+        value: shard
+      - name: FLUXER_SVC_SHARD_ID
+        value: "0"
+  fluxer-messages:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-messages:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_SVC_MODE
+        value: router
+  fluxer-messages-shard:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-messages:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_SVC_MODE
+        value: shard
+      - name: FLUXER_SVC_SHARD_ID
+        value: "0"
+  fluxer-unfurl:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-unfurl:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_SVC_MODE
+        value: router
+  fluxer-unfurl-shard:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-unfurl:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_SVC_MODE
+        value: shard
+      - name: FLUXER_SVC_SHARD_ID
+        value: "0"
+  fluxer-admin:
+    preset: service
+    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-admin:${FLUXER_IMAGE_TAG:-v1}
+    port: "8080"
+    env:
+      - name: FLUXER_ENV
+        value: production
+      - name: NODE_ENV
+        value: production
+      - name: FLUXER_SELF_HOSTED
+        value: "true"
+      - name: FLUXER_BASE_DOMAIN
+        value: app.example.com
+      - name: FLUXER_PUBLIC_SCHEME
+        value: http
+      - name: FLUXER_PUBLIC_PORT
+        value: "80"
+      - name: FLUXER_TRUST_CLIENT_IP_HEADER
+        value: "true"
+      - name: FLUXER_CLIENT_IP_HEADER_NAME
+        value: x-forwarded-for
+      - name: FLUXER_DATABASE_BACKEND
+        value: postgres
+      - name: FLUXER_POSTGRES_HOST
+        value: fluxer-postgres
+      - name: FLUXER_POSTGRES_PORT
+        value: "5432"
+      - name: FLUXER_POSTGRES_DATABASE
+        value: fluxer
+      - name: FLUXER_POSTGRES_USERNAME
+        value: fluxer
+      - name: FLUXER_POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: FLUXER_POSTGRES_SSL
+        value: "false"
+      - name: FLUXER_KV_URL
+        value: redis://fluxer-valkey:6379/0
+      - name: FLUXER_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_NATS_JETSTREAM_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_NATS_URL
+        value: nats://fluxer-nats:4222
+      - name: FLUXER_SVC_SHARD_COUNT
+        value: "1"
+      - name: FLUXER_SEARCH_ENGINE
+        value: meilisearch
+      - name: FLUXER_SEARCH_URL
+        value: http://fluxer-meilisearch:7700
+      - name: FLUXER_SEARCH_API_KEY
+        from:
+          env: MEILI_MASTER_KEY
+      - name: FLUXER_S3_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_PUBLIC_ENDPOINT
+        value: http://fluxer-seaweedfs:8333
+      - name: FLUXER_S3_REGION
+        value: us-east-1
+      - name: FLUXER_S3_ACCESS_KEY_ID
+        value: fluxer
+      - name: FLUXER_S3_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: FLUXER_S3_FORCE_PATH_STYLE
+        value: "true"
+      - name: FLUXER_S3_BUCKET_CDN
+        value: fluxer
+      - name: FLUXER_S3_BUCKET_UPLOADS
+        value: fluxer-uploads
+      - name: FLUXER_S3_BUCKET_DOWNLOADS
+        value: fluxer-downloads
+      - name: FLUXER_S3_BUCKET_REPORTS
+        value: fluxer-reports
+      - name: FLUXER_S3_BUCKET_HARVESTS
+        value: fluxer-harvests
+      - name: AWS_ACCESS_KEY_ID
+        value: fluxer
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: FLUXER_S3_SECRET_KEY
+      - name: AWS_DEFAULT_REGION
+        value: us-east-1
+      - name: AWS_EC2_METADATA_DISABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_ENABLED
+        value: "true"
+      - name: FLUXER_LIVEKIT_API_KEY
+        value: fluxer
+      - name: FLUXER_LIVEKIT_API_SECRET
+        from:
+          env: LIVEKIT_API_SECRET
+      - name: FLUXER_LIVEKIT_WEBHOOK_URL
+        value: http://fluxer-api:8080/webhooks/livekit
+      - name: FLUXER_EMAIL_ENABLED
+        value: "false"
+      - name: FLUXER_EMAIL_PROVIDER
+        value: none
+      - name: FLUXER_EMAIL_FROM_EMAIL
+        value: noreply@example.com
+      - name: FLUXER_EMAIL_FROM_NAME
+        value: Fluxer
+      - name: FLUXER_EMAIL_SMTP_PORT
+        value: "587"
+      - name: FLUXER_EMAIL_SMTP_SECURE
+        value: "true"
+      - name: FLUXER_SMS_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_ENABLED
+        value: "false"
+      - name: FLUXER_CAPTCHA_PROVIDER
+        value: none
+      - name: FLUXER_STRIPE_ENABLED
+        value: "false"
+      - name: FLUXER_NCMEC_ENABLED
+        value: "false"
+      - name: FLUXER_CLAMAV_ENABLED
+        value: "false"
+      - name: FLUXER_DISCOVERY_ENABLED
+        value: "true"
+      - name: FLUXER_SUDO_MODE_SECRET
+        from:
+          env: FLUXER_SUDO_MODE_SECRET
+      - name: FLUXER_CONNECTION_INITIATION_SECRET
+        from:
+          env: FLUXER_CONNECTION_INITIATION_SECRET
+      - name: FLUXER_VAPID_EMAIL
+        value: admin@example.com
+      - name: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+        from:
+          env: FLUXER_GATEWAY_RPC_AUTH_TOKEN
+      - name: FLUXER_MEDIA_PROXY_SECRET_KEY
+        from:
+          env: FLUXER_MEDIA_PROXY_SECRET_KEY
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+        from:
+          env: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_SECRET_BASE64
+      - name: FLUXER_ADMIN_SECRET_KEY_BASE
+        from:
+          env: FLUXER_ADMIN_SECRET_KEY_BASE
+      - name: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+        from:
+          env: FLUXER_ADMIN_OAUTH_CLIENT_SECRET
+      - name: FLUXER_INTERNAL_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_INTERNAL_GATEWAY_ENDPOINT
+        value: http://fluxer-gateway:8080
+      - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MARKETING_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_MEDIA_PROXY_ENDPOINT
+        value: http://fluxer-media-proxy:8080
+      - name: FLUXER_MEDIA_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
+        value: http://app.example.com/media
+      - name: FLUXER_ERLANG_COOKIE
+        from:
+          env: FLUXER_ERLANG_COOKIE
+      - name: FLUXER_PROFILE_PSEUDONYM_SECRET
+        from:
+          env: FLUXER_PROFILE_PSEUDONYM_SECRET
+      - name: FLUXER_PASSKEY_RP_NAME
+        value: Fluxer
+      - name: FLUXER_PASSKEY_RP_ID
+        value: app.example.com}
+      - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
+        value: http://app.example.com}
+      - name: FLUXER_ADMIN_HOST
+        value: 0.0.0.0
+      - name: FLUXER_ADMIN_PORT
+        value: "8080"
+      - name: FLUXER_ADMIN_BASE_PATH
+        value: /admin
+      - name: FLUXER_API_ENDPOINT
+        value: http://fluxer-api:8080
+      - name: FLUXER_ADMIN_ENDPOINT
+        value: http://app.example.com/admin
+      - name: FLUXER_APP_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_STATIC_CDN_ENDPOINT
+        value: http://app.example.com
+      - name: FLUXER_ADMIN_OAUTH_REDIRECT_URI
+        value: http://app.example.com/admin/oauth2_callback

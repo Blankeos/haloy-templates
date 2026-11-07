@@ -1,0 +1,19 @@
+name: freellmapi
+server: localhost
+targets:
+  freellmapi:
+    health_check_path: /api/ping
+    image: ghcr.io/tashfeenahmed/freellmapi:v0.8.4
+    port: "3001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3001"
+      - name: ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+    volumes:
+      - freellmapi-freellmapi-data:/app/server/data

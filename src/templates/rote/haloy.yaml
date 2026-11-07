@@ -1,0 +1,39 @@
+name: rote
+server: localhost
+targets:
+  rote-backend:
+    image:
+      repository: rote-backend
+      tag: latest
+      build_config:
+        context: ./rote-backend
+        push: server
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: POSTGRESQL_URL
+        from:
+          env: ROTE_BACKEND__POSTGRESQL_URL
+  rote-frontend:
+    image: rabithua/rote-frontend:${IMAGE_TAG:-latest}
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: VITE_API_BASE
+        value: http://app.example.com
+  rote-postgres:
+    preset: database
+    image: postgres:17
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: rote
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: rote
+    volumes:
+      - rote-rote-postgres-data:/var/lib/postgresql/data

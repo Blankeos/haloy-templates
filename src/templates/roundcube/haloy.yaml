@@ -1,0 +1,20 @@
+name: roundcube
+server: localhost
+targets:
+  roundcubemail:
+    image: roundcube/roundcubemail:1.6.9-apache
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: ROUNDCUBEMAIL_DB_TYPE
+        value: sqlite
+      - name: ROUNDCUBEMAIL_SKIN
+        value: elastic
+      - name: ROUNDCUBEMAIL_DEFAULT_HOST
+        value: tls://mail.example.com
+      - name: ROUNDCUBEMAIL_SMTP_SERVER
+        value: tls://mail.example.com
+    volumes:
+      - roundcube-www:/var/www/html
+      - roundcube-db-sqlite:/var/roundcube/db

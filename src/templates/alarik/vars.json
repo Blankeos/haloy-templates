@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "INLINE_PASSWORD_16": "password:16",
+    "INLINE_BASE64_64": "base64:64"
+  },
+  "derived": {}
+}

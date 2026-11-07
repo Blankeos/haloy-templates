@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password"
+  },
+  "derived": {
+    "LANGFLOW__LANGFLOW_DATABASE_URL": "postgresql://langflow:${DB_PASSWORD}@langflow-postgres-langflow:5432/langflow"
+  }
+}

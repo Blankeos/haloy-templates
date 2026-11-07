@@ -1,0 +1,452 @@
+name: plane
+server: localhost
+targets:
+  plane-web:
+    preset: service
+    image: makeplane/plane-frontend:${APP_RELEASE:-v1.3.1}
+    port: "8080"
+  plane-space:
+    preset: service
+    image: makeplane/plane-space:${APP_RELEASE:-v1.3.1}
+    port: "8080"
+  plane-admin:
+    preset: service
+    image: makeplane/plane-admin:${APP_RELEASE:-v1.3.1}
+    port: "8080"
+  plane-live:
+    preset: service
+    image: makeplane/plane-live:${APP_RELEASE:-v1.3.1}
+    port: "8080"
+    env:
+      - name: API_BASE_URL
+        value: http://plane-api:8000
+      - name: LIVE_SERVER_SECRET_KEY
+        from:
+          env: LIVE_SECRET_KEY
+      - name: REDIS_HOST
+        value: plane-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_URL
+        value: redis://plane-redis:6379/
+  plane-api:
+    preset: service
+    image:
+      repository: plane-api
+      tag: latest
+      build_config:
+        context: ./plane-api
+        push: server
+    port: "8080"
+    env:
+      - name: WEB_URL
+        value: https://app.example.com
+      - name: DEBUG
+        value: "0"
+      - name: CORS_ALLOWED_ORIGINS
+        value: https://app.example.com
+      - name: GUNICORN_WORKERS
+        value: "1"
+      - name: USE_MINIO
+        value: "1"
+      - name: DATABASE_URL
+        from:
+          env: PLANE_API__DATABASE_URL
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: AMQP_URL
+        from:
+          env: PLANE_API__AMQP_URL
+      - name: API_KEY_RATE_LIMIT
+        value: 60/minute
+      - name: MINIO_ENDPOINT_SSL
+        value: "0"
+      - name: LIVE_SERVER_SECRET_KEY
+        from:
+          env: LIVE_SECRET_KEY
+      - name: PGHOST
+        value: plane-db
+      - name: PGDATABASE
+        value: plane
+      - name: POSTGRES_USER
+        value: plane
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: plane
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: PGDATA
+        value: /var/lib/postgresql/data
+      - name: REDIS_HOST
+        value: plane-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_URL
+        value: redis://plane-redis:6379/
+      - name: MINIO_ROOT_USER
+        value: access-key
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_PASSWORD
+      - name: AWS_ACCESS_KEY_ID
+        value: access-key
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_PASSWORD
+      - name: AWS_S3_ENDPOINT_URL
+        value: http://plane-minio:9000
+      - name: AWS_S3_BUCKET_NAME
+        value: uploads
+      - name: APP_DOMAIN
+        value: app.example.com
+      - name: FILE_SIZE_LIMIT
+        value: "5242880"
+      - name: BUCKET_NAME
+        value: uploads
+      - name: SITE_ADDRESS
+        value: :80
+      - name: TRUSTED_PROXIES
+        value: private_ranges
+    volumes:
+      - plane-logs-api:/code/plane/logs
+  plane-worker:
+    preset: service
+    image:
+      repository: plane-worker
+      tag: latest
+      build_config:
+        context: ./plane-worker
+        push: server
+    port: "8080"
+    env:
+      - name: WEB_URL
+        value: https://app.example.com
+      - name: DEBUG
+        value: "0"
+      - name: CORS_ALLOWED_ORIGINS
+        value: https://app.example.com
+      - name: GUNICORN_WORKERS
+        value: "1"
+      - name: USE_MINIO
+        value: "1"
+      - name: DATABASE_URL
+        from:
+          env: PLANE_WORKER__DATABASE_URL
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: AMQP_URL
+        from:
+          env: PLANE_WORKER__AMQP_URL
+      - name: API_KEY_RATE_LIMIT
+        value: 60/minute
+      - name: MINIO_ENDPOINT_SSL
+        value: "0"
+      - name: LIVE_SERVER_SECRET_KEY
+        from:
+          env: LIVE_SECRET_KEY
+      - name: PGHOST
+        value: plane-db
+      - name: PGDATABASE
+        value: plane
+      - name: POSTGRES_USER
+        value: plane
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: plane
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: PGDATA
+        value: /var/lib/postgresql/data
+      - name: REDIS_HOST
+        value: plane-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_URL
+        value: redis://plane-redis:6379/
+      - name: MINIO_ROOT_USER
+        value: access-key
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_PASSWORD
+      - name: AWS_ACCESS_KEY_ID
+        value: access-key
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_PASSWORD
+      - name: AWS_S3_ENDPOINT_URL
+        value: http://plane-minio:9000
+      - name: AWS_S3_BUCKET_NAME
+        value: uploads
+      - name: APP_DOMAIN
+        value: app.example.com
+      - name: FILE_SIZE_LIMIT
+        value: "5242880"
+      - name: BUCKET_NAME
+        value: uploads
+      - name: SITE_ADDRESS
+        value: :80
+      - name: TRUSTED_PROXIES
+        value: private_ranges
+    volumes:
+      - plane-logs-worker:/code/plane/logs
+  plane-beat-worker:
+    preset: service
+    image:
+      repository: plane-beat-worker
+      tag: latest
+      build_config:
+        context: ./plane-beat-worker
+        push: server
+    port: "8080"
+    env:
+      - name: WEB_URL
+        value: https://app.example.com
+      - name: DEBUG
+        value: "0"
+      - name: CORS_ALLOWED_ORIGINS
+        value: https://app.example.com
+      - name: GUNICORN_WORKERS
+        value: "1"
+      - name: USE_MINIO
+        value: "1"
+      - name: DATABASE_URL
+        from:
+          env: PLANE_BEAT_WORKER__DATABASE_URL
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: AMQP_URL
+        from:
+          env: PLANE_BEAT_WORKER__AMQP_URL
+      - name: API_KEY_RATE_LIMIT
+        value: 60/minute
+      - name: MINIO_ENDPOINT_SSL
+        value: "0"
+      - name: LIVE_SERVER_SECRET_KEY
+        from:
+          env: LIVE_SECRET_KEY
+      - name: PGHOST
+        value: plane-db
+      - name: PGDATABASE
+        value: plane
+      - name: POSTGRES_USER
+        value: plane
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: plane
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: PGDATA
+        value: /var/lib/postgresql/data
+      - name: REDIS_HOST
+        value: plane-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_URL
+        value: redis://plane-redis:6379/
+      - name: MINIO_ROOT_USER
+        value: access-key
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_PASSWORD
+      - name: AWS_ACCESS_KEY_ID
+        value: access-key
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_PASSWORD
+      - name: AWS_S3_ENDPOINT_URL
+        value: http://plane-minio:9000
+      - name: AWS_S3_BUCKET_NAME
+        value: uploads
+      - name: APP_DOMAIN
+        value: app.example.com
+      - name: FILE_SIZE_LIMIT
+        value: "5242880"
+      - name: BUCKET_NAME
+        value: uploads
+      - name: SITE_ADDRESS
+        value: :80
+      - name: TRUSTED_PROXIES
+        value: private_ranges
+    volumes:
+      - plane-logs-beat-worker:/code/plane/logs
+  plane-migrator:
+    preset: service
+    image:
+      repository: plane-migrator
+      tag: latest
+      build_config:
+        context: ./plane-migrator
+        push: server
+    port: "8080"
+    env:
+      - name: WEB_URL
+        value: https://app.example.com
+      - name: DEBUG
+        value: "0"
+      - name: CORS_ALLOWED_ORIGINS
+        value: https://app.example.com
+      - name: GUNICORN_WORKERS
+        value: "1"
+      - name: USE_MINIO
+        value: "1"
+      - name: DATABASE_URL
+        from:
+          env: PLANE_MIGRATOR__DATABASE_URL
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: AMQP_URL
+        from:
+          env: PLANE_MIGRATOR__AMQP_URL
+      - name: API_KEY_RATE_LIMIT
+        value: 60/minute
+      - name: MINIO_ENDPOINT_SSL
+        value: "0"
+      - name: LIVE_SERVER_SECRET_KEY
+        from:
+          env: LIVE_SECRET_KEY
+      - name: PGHOST
+        value: plane-db
+      - name: PGDATABASE
+        value: plane
+      - name: POSTGRES_USER
+        value: plane
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: plane
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: PGDATA
+        value: /var/lib/postgresql/data
+      - name: REDIS_HOST
+        value: plane-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_URL
+        value: redis://plane-redis:6379/
+      - name: MINIO_ROOT_USER
+        value: access-key
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_PASSWORD
+      - name: AWS_ACCESS_KEY_ID
+        value: access-key
+      - name: AWS_SECRET_ACCESS_KEY
+        from:
+          env: MINIO_PASSWORD
+      - name: AWS_S3_ENDPOINT_URL
+        value: http://plane-minio:9000
+      - name: AWS_S3_BUCKET_NAME
+        value: uploads
+      - name: APP_DOMAIN
+        value: app.example.com
+      - name: FILE_SIZE_LIMIT
+        value: "5242880"
+      - name: BUCKET_NAME
+        value: uploads
+      - name: SITE_ADDRESS
+        value: :80
+      - name: TRUSTED_PROXIES
+        value: private_ranges
+    volumes:
+      - plane-logs-migrator:/code/plane/logs
+  plane-db:
+    preset: database
+    image:
+      repository: plane-db
+      tag: latest
+      build_config:
+        context: ./plane-db
+        push: server
+    port: "5432"
+    env:
+      - name: PGHOST
+        value: plane-db
+      - name: PGDATABASE
+        value: plane
+      - name: POSTGRES_USER
+        value: plane
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: plane
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: PGDATA
+        value: /var/lib/postgresql/data
+    volumes:
+      - plane-pgdata:/var/lib/postgresql/data
+  plane-redis:
+    preset: database
+    image: valkey/valkey:7.2.11-alpine
+    port: "6379"
+    volumes:
+      - plane-redisdata:/data
+  plane-mq:
+    preset: database
+    image: rabbitmq:3.13.6-management-alpine
+    port: "5672"
+    env:
+      - name: RABBITMQ_HOST
+        value: plane-mq
+      - name: RABBITMQ_PORT
+        value: "5672"
+      - name: RABBITMQ_DEFAULT_USER
+        value: plane
+      - name: RABBITMQ_DEFAULT_PASS
+        from:
+          env: RABBITMQ_PASSWORD
+      - name: RABBITMQ_DEFAULT_VHOST
+        value: plane
+      - name: RABBITMQ_VHOST
+        value: plane
+    volumes:
+      - plane-rabbitmq-data:/var/lib/rabbitmq
+  plane-minio:
+    preset: service
+    image:
+      repository: plane-minio
+      tag: latest
+      build_config:
+        context: ./plane-minio
+        push: server
+    port: "8080"
+    env:
+      - name: MINIO_ROOT_USER
+        value: access-key
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: MINIO_PASSWORD
+    volumes:
+      - plane-uploads:/export
+  plane-proxy:
+    image: makeplane/plane-proxy:${APP_RELEASE:-v1.3.1}
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_DOMAIN
+        value: app.example.com
+      - name: FILE_SIZE_LIMIT
+        value: "5242880"
+      - name: BUCKET_NAME
+        value: uploads
+      - name: SITE_ADDRESS
+        value: :80
+      - name: TRUSTED_PROXIES
+        value: private_ranges
+    volumes:
+      - plane-proxy-config:/config
+      - plane-proxy-data:/data

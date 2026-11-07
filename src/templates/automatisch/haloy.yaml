@@ -1,0 +1,109 @@
+name: automatisch
+server: localhost
+targets:
+  automatisch:
+    image: automatischio/automatisch:0.15.0
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: HOST
+        value: app.example.com
+      - name: PROTOCOL
+        value: http
+      - name: PORT
+        value: "3000"
+      - name: API_URL
+        value: http://app.example.com
+      - name: WEB_APP_URL
+        value: http://app.example.com
+      - name: APP_ENV
+        value: production
+      - name: REDIS_HOST
+        value: automatisch-redis
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: POSTGRES_HOST
+        value: automatisch-postgres
+      - name: POSTGRES_DATABASE
+        value: automatisch
+      - name: POSTGRES_USERNAME
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: WEBHOOK_SECRET_KEY
+        from:
+          env: WEBHOOK_SECRET_KEY
+      - name: APP_SECRET_KEY
+        from:
+          env: APP_SECRET_KEY
+    volumes:
+      - automatisch-storage:/automatisch/storage
+  automatisch-worker:
+    preset: service
+    image: automatischio/automatisch:0.15.0
+    port: "8080"
+    env:
+      - name: APP_ENV
+        value: production
+      - name: REDIS_HOST
+        value: automatisch-redis
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+      - name: POSTGRES_HOST
+        value: automatisch-postgres
+      - name: POSTGRES_DATABASE
+        value: automatisch
+      - name: POSTGRES_USERNAME
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: WEBHOOK_SECRET_KEY
+        from:
+          env: WEBHOOK_SECRET_KEY
+      - name: APP_SECRET_KEY
+        from:
+          env: APP_SECRET_KEY
+      - name: WORKER
+        value: "true"
+    volumes:
+      - automatisch-storage:/automatisch/storage
+  automatisch-postgres:
+    preset: database
+    image: postgres:15-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: automatisch
+    volumes:
+      - automatisch-postgres-data:/var/lib/postgresql/data
+  automatisch-redis:
+    preset: database
+    image:
+      repository: automatisch-redis
+      tag: latest
+      build_config:
+        context: ./automatisch-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - automatisch-redis-data:/data

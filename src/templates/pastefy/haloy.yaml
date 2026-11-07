@@ -1,0 +1,65 @@
+name: pastefy
+server: localhost
+targets:
+  pastefy-db:
+    preset: database
+    image: mariadb:10.11
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: MYSQL_DATABASE
+        value: pastefy
+      - name: MYSQL_USER
+        value: pastefy
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - pastefy-db:/var/lib/mysql
+  pastefy:
+    image: interaapps/pastefy:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: HTTP_SERVER_PORT
+        value: "80"
+      - name: HTTP_SERVER_CORS
+        value: "*"
+      - name: DATABASE_DRIVER
+        value: mysql
+      - name: DATABASE_NAME
+        value: pastefy
+      - name: DATABASE_USER
+        value: pastefy
+      - name: DATABASE_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DATABASE_HOST
+        value: pastefy-db
+      - name: DATABASE_PORT
+        value: "3306"
+      - name: SERVER_NAME
+        value: https://app.example.com
+      - name: OAUTH2_INTERAAPPS_CLIENT_ID
+        value: "NONE # Interaapps API Key (optional)"
+      - name: OAUTH2_INTERAAPPS_CLIENT_SECRET
+        value: " # Interaapps API Secret (optional)"
+      - name: OAUTH2_GITHUB_CLIENT_ID
+        value: "NONE # GitHub API Key (optional)"
+      - name: OAUTH2_GITHUB_CLIENT_SECRET
+        value: " # GitHub API Secret (optional)"
+      - name: OAUTH2_GOOGLE_CLIENT_ID
+        value: "NONE # Google API Key (optional)"
+      - name: OAUTH2_GOOGLE_CLIENT_SECRET
+        value: " # Google API Secret (optional)"
+      - name: OAUTH2_DISCORD_CLIENT_ID
+        value: "NONE # Discord API Key (optional)"
+      - name: OAUTH2_DISCORD_CLIENT_SECRET
+        value: " # Discord API Secret (optional)"
+      - name: OAUTH2_TWITCH_CLIENT_ID
+        value: "NONE # Twitch API Key (optional)"
+      - name: OAUTH2_TWITCH_CLIENT_SECRET
+        value: " # Twitch API Secret (optional)"

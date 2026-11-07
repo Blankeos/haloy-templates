@@ -1,0 +1,16 @@
+storage:
+  type: sqlite
+  path: /data/data.db
+
+ui:
+  title: Gatus
+  header: Gatus
+
+endpoints:
+  - name: ${monitor_name}
+    group: external
+    url: "${monitor_url}"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+      - "[CERTIFICATE_EXPIRATION] > 48h"

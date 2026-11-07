@@ -1,0 +1,400 @@
+name: evolutioncrm
+server: localhost
+targets:
+  evolutioncrm-evo-auth:
+    health_check_path: /up
+    image:
+      repository: evolutioncrm-evo-auth
+      tag: latest
+      build_config:
+        context: ./evolutioncrm-evo-auth
+        push: server
+    port: "3001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: RAILS_ENV
+        value: production
+      - name: RAILS_MAX_THREADS
+        value: "5"
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: JWT_SECRET_KEY
+        from:
+          env: JWT_SECRET_KEY
+      - name: EVOAI_CRM_API_TOKEN
+        from:
+          env: API_TOKEN
+      - name: POSTGRES_HOST
+        value: evolutioncrm-postgres
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_USERNAME
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DATABASE
+        value: evo_crm_production
+      - name: POSTGRES_SSLMODE
+        value: disable
+      - name: REDIS_URL
+        value: redis://evolutioncrm-redis:6379/3
+      - name: FRONTEND_URL
+        value: '"http://app.example.com"'
+      - name: BACKEND_URL
+        value: '"http://app.example.com"'
+      - name: CORS_ORIGINS
+        value: '"http://app.example.com","http://app.example.com"'
+      - name: DOORKEEPER_JWT_SECRET_KEY
+        from:
+          env: DOORKEEPER_JWT_SECRET_KEY
+      - name: DOORKEEPER_JWT_ALGORITHM
+        value: hs256
+      - name: DOORKEEPER_JWT_ISS
+        value: evo-auth-service
+      - name: MFA_ISSUER
+        value: EvoCRM
+  evolutioncrm-evo-auth-sidekiq:
+    preset: service
+    image:
+      repository: evolutioncrm-evo-auth-sidekiq
+      tag: latest
+      build_config:
+        context: ./evolutioncrm-evo-auth-sidekiq
+        push: server
+    port: "8080"
+    env:
+      - name: RAILS_ENV
+        value: production
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: JWT_SECRET_KEY
+        from:
+          env: JWT_SECRET_KEY
+      - name: EVOAI_CRM_API_TOKEN
+        from:
+          env: API_TOKEN
+      - name: POSTGRES_HOST
+        value: evolutioncrm-postgres
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_USERNAME
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DATABASE
+        value: evo_crm_production
+      - name: POSTGRES_SSLMODE
+        value: disable
+      - name: REDIS_URL
+        value: redis://evolutioncrm-redis:6379/3
+      - name: DOORKEEPER_JWT_SECRET_KEY
+        from:
+          env: DOORKEEPER_JWT_SECRET_KEY
+      - name: DOORKEEPER_JWT_ALGORITHM
+        value: hs256
+      - name: DOORKEEPER_JWT_ISS
+        value: evo-auth-service
+      - name: MFA_ISSUER
+        value: EvoCRM
+      - name: SIDEKIQ_CONCURRENCY
+        value: "10"
+  evolutioncrm-evo-crm:
+    health_check_path: /health/live
+    image:
+      repository: evolutioncrm-evo-crm
+      tag: latest
+      build_config:
+        context: ./evolutioncrm-evo-crm
+        push: server
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: RAILS_ENV
+        value: production
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: JWT_SECRET_KEY
+        from:
+          env: JWT_SECRET_KEY
+      - name: EVOAI_CRM_API_TOKEN
+        from:
+          env: API_TOKEN
+      - name: POSTGRES_HOST
+        value: evolutioncrm-postgres
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_USERNAME
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DATABASE
+        value: evo_crm_production
+      - name: POSTGRES_SSLMODE
+        value: disable
+      - name: REDIS_URL
+        value: redis://evolutioncrm-redis:6379/3
+      - name: EVO_AUTH_SERVICE_URL
+        value: http://evolutioncrm-evo-auth:3001
+      - name: EVO_AI_CORE_SERVICE_URL
+        value: http://evolutioncrm-evo-core:5555
+      - name: BACKEND_URL
+        value: '"http://app.example.com"'
+      - name: FRONTEND_URL
+        value: '"http://app.example.com"'
+      - name: CORS_ORIGINS
+        value: '"http://app.example.com","http://app.example.com"'
+      - name: EVOLUTION_API_ONLY_SERVER
+        value: "true"
+      - name: DISABLE_TELEMETRY
+        value: "true"
+      - name: LOG_LEVEL
+        value: info
+      - name: ENABLE_ACCOUNT_SIGNUP
+        value: "true"
+      - name: ENABLE_PUSH_RELAY_SERVER
+        value: "true"
+      - name: ENABLE_INBOX_EVENTS
+        value: "true"
+      - name: BOT_RUNTIME_URL
+        value: http://evolutioncrm-evo-bot-runtime:8080
+      - name: BOT_RUNTIME_SECRET
+        from:
+          env: BOT_RUNTIME_SECRET
+      - name: BOT_RUNTIME_POSTBACK_BASE_URL
+        value: '"http://app.example.com"'
+    volumes:
+      - evolutioncrm-evo-crm-data:/app/storage
+  evolutioncrm-evo-crm-sidekiq:
+    preset: service
+    image:
+      repository: evolutioncrm-evo-crm-sidekiq
+      tag: latest
+      build_config:
+        context: ./evolutioncrm-evo-crm-sidekiq
+        push: server
+    port: "8080"
+    env:
+      - name: RAILS_ENV
+        value: production
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: JWT_SECRET_KEY
+        from:
+          env: JWT_SECRET_KEY
+      - name: EVOAI_CRM_API_TOKEN
+        from:
+          env: API_TOKEN
+      - name: POSTGRES_HOST
+        value: evolutioncrm-postgres
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: POSTGRES_USERNAME
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DATABASE
+        value: evo_crm_production
+      - name: POSTGRES_SSLMODE
+        value: disable
+      - name: REDIS_URL
+        value: redis://evolutioncrm-redis:6379/3
+      - name: EVO_AUTH_SERVICE_URL
+        value: '"http://app.example.com"'
+      - name: EVO_AI_CORE_SERVICE_URL
+        value: http://evolutioncrm-evo-core:5555
+      - name: BACKEND_URL
+        value: '"http://app.example.com"'
+      - name: FRONTEND_URL
+        value: '"http://app.example.com"'
+      - name: CORS_ORIGINS
+        value: '"http://app.example.com","http://app.example.com","http://app.example.com"'
+      - name: DISABLE_TELEMETRY
+        value: "true"
+      - name: LOG_LEVEL
+        value: info
+      - name: ENABLE_ACCOUNT_SIGNUP
+        value: "true"
+      - name: ENABLE_PUSH_RELAY_SERVER
+        value: "true"
+      - name: ENABLE_INBOX_EVENTS
+        value: "true"
+      - name: BOT_RUNTIME_URL
+        value: http://evolutioncrm-evo-bot-runtime:8080
+      - name: BOT_RUNTIME_SECRET
+        from:
+          env: BOT_RUNTIME_SECRET
+      - name: BOT_RUNTIME_POSTBACK_BASE_URL
+        value: '"http://app.example.com"'
+      - name: SIDEKIQ_CONCURRENCY
+        value: "10"
+  evolutioncrm-evo-core:
+    preset: service
+    image: evoapicloud/evo-ai-core-service-community:latest
+    port: "8080"
+    env:
+      - name: DB_HOST
+        value: evolutioncrm-postgres
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_USER
+        value: postgres
+      - name: DB_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: DB_NAME
+        value: evo_crm_production
+      - name: DB_SSLMODE
+        value: disable
+      - name: DB_MAX_IDLE_CONNS
+        value: "10"
+      - name: DB_MAX_OPEN_CONNS
+        value: "100"
+      - name: DB_CONN_MAX_LIFETIME
+        value: 1h
+      - name: DB_CONN_MAX_IDLE_TIME
+        value: 30m
+      - name: PORT
+        value: "5555"
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: JWT_SECRET_KEY
+        from:
+          env: JWT_SECRET_KEY
+      - name: JWT_ALGORITHM
+        value: HS256
+      - name: ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: EVOLUTION_BASE_URL
+        value: http://evolutioncrm-evo-crm:3000
+      - name: EVO_AUTH_BASE_URL
+        value: http://evolutioncrm-evo-auth:3001
+      - name: AI_PROCESSOR_URL
+        value: http://evolutioncrm-evo-processor:8000
+      - name: AI_PROCESSOR_VERSION
+        value: v1
+  evolutioncrm-evo-processor:
+    image: evoapicloud/evo-ai-processor-community:latest
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: POSTGRES_CONNECTION_STRING
+        from:
+          env: EVOLUTIONCRM_EVO_PROCESSOR__POSTGRES_CONNECTION_STRING
+      - name: REDIS_HOST
+        value: evolutioncrm-redis
+      - name: REDIS_PORT
+        value: "6379"
+      - name: REDIS_SSL
+        value: "false"
+      - name: REDIS_DB
+        value: "3"
+      - name: REDIS_KEY_PREFIX
+        value: '"a2a:"'
+      - name: REDIS_TTL
+        value: "3600"
+      - name: HOST
+        value: 0.0.0.0
+      - name: PORT
+        value: "8000"
+      - name: DEBUG
+        value: "false"
+      - name: SECRET_KEY_BASE
+        from:
+          env: SECRET_KEY_BASE
+      - name: ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: EVOAI_CRM_API_TOKEN
+        from:
+          env: API_TOKEN
+      - name: EVO_AI_CRM_URL
+        value: http://evolutioncrm-evo-crm:3000
+      - name: CORE_SERVICE_URL
+        value: http://evolutioncrm-evo-core:5555/api/v1
+      - name: EVO_AUTH_BASE_URL
+        value: http://evolutioncrm-evo-auth:3001
+      - name: APP_URL
+        value: '"http://app.example.com"'
+      - name: API_URL
+        value: '"http://app.example.com"'
+      - name: API_TITLE
+        value: Agent Processor Community
+      - name: API_DESCRIPTION
+        value: Agent Processor Community for Evolution AI
+      - name: API_VERSION
+        value: 1.0.0
+      - name: ORGANIZATION_NAME
+        value: Evolution CRM
+      - name: TOOLS_CACHE_ENABLED
+        value: "true"
+      - name: TOOLS_CACHE_TTL
+        value: "3600"
+  evolutioncrm-evo-bot-runtime:
+    preset: service
+    image: evoapicloud/evo-bot-runtime:latest
+    port: "8080"
+    env:
+      - name: LISTEN_ADDR
+        value: 0.0.0.0:8080
+      - name: REDIS_URL
+        value: redis://:@evolutioncrm-redis:6379/3
+      - name: AI_PROCESSOR_URL
+        value: http://evolutioncrm-evo-processor:8000
+      - name: BOT_RUNTIME_SECRET
+        from:
+          env: BOT_RUNTIME_SECRET
+      - name: AI_CALL_TIMEOUT_SECONDS
+        value: "30"
+  evolutioncrm-evo-crm-frontend:
+    image: evoapicloud/evo-ai-frontend-community:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: VITE_APP_ENV
+        value: production
+      - name: VITE_API_URL
+        value: '"http://app.example.com"'
+      - name: VITE_AUTH_API_URL
+        value: '"http://app.example.com"'
+      - name: VITE_EVOAI_API_URL
+        value: '"http://app.example.com"'
+      - name: VITE_AGENT_PROCESSOR_URL
+        value: '"http://app.example.com"'
+      - name: VITE_WS_URL
+        value: wss://app.example.com
+      - name: VITE_FRONT_URL
+        value: '"http://app.example.com"'
+  evolutioncrm-postgres:
+    preset: database
+    image: postgres:16-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: evo_crm_community
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - evolutioncrm-postgres-data:/var/lib/postgresql/data
+  evolutioncrm-redis:
+    preset: database
+    image: redis:alpine
+    port: "6379"
+    volumes:
+      - evolutioncrm-redis-data:/data

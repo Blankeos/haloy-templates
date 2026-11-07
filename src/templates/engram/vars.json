@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "JWT_SECRET": "password:64",
+    "CLOUD_TOKEN": "password:48",
+    "ADMIN_TOKEN": "password:48"
+  },
+  "derived": {}
+}

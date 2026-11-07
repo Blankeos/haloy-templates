@@ -1,0 +1,16 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:64",
+    "GARAGE_RPC_SECRET": "hash:64",
+    "STORAGE_S3_ACCESS_KEY": "password:24",
+    "STORAGE_S3_SECRET_KEY": "password:64",
+    "JWT_SECRET": "password:64",
+    "AI_SECRET_KEY": "password:64",
+    "AUTH_2FA_SECRET_KEY": "password:64",
+    "LIVEKIT_API_KEY": "password:24",
+    "LIVEKIT_API_SECRET": "password:64"
+  },
+  "derived": {
+    "NEBULYNK_LIVEKIT__LIVEKIT_KEYS": "${LIVEKIT_API_KEY}: ${LIVEKIT_API_SECRET}"
+  }
+}

@@ -1,0 +1,8 @@
+name: bentopdf
+server: localhost
+targets:
+  bentopdf:
+    image: ghcr.io/alam00000/bentopdf-simple:sha-72d20bb
+    port: "8080"
+    domains:
+      - domain: app.example.com

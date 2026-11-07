@@ -1,0 +1,21 @@
+name: mosquitto
+server: localhost
+targets:
+  mosquitto:
+    image:
+      repository: mosquitto
+      tag: latest
+      build_config:
+        context: ./mosquitto
+        push: server
+    port: "9001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: MQTT_USERNAME
+        value: mqtt
+      - name: MQTT_PASSWORD
+        from:
+          env: MQTT_PASSWORD
+    volumes:
+      - mosquitto-mosquitto-data:/mosquitto/data

@@ -1,0 +1,50 @@
+name: misaka-danmu-server
+server: localhost
+targets:
+  misaka-danmu-server-postgres:
+    preset: database
+    image: postgres:18
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_USER
+        value: danmuapi
+      - name: POSTGRES_DB
+        value: danmuapi
+      - name: TZ
+        value: Asia/Shanghai
+    volumes:
+      - misaka-danmu-server-postgres-data:/var/lib/postgresql
+  misaka-danmu-server-danmu-app:
+    image: l429609201/misaka_danmu_server:latest
+    port: "7768"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: UMASK
+        value: "0022"
+      - name: TZ
+        value: Asia/Shanghai
+      - name: DANMUAPI_DATABASE__TYPE
+        value: postgresql
+      - name: DANMUAPI_DATABASE__HOST
+        value: misaka-danmu-server-postgres
+      - name: DANMUAPI_DATABASE__PORT
+        value: "5432"
+      - name: DANMUAPI_DATABASE__NAME
+        value: danmuapi
+      - name: DANMUAPI_DATABASE__USER
+        value: danmuapi
+      - name: DANMUAPI_DATABASE__PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DANMUAPI_ADMIN__INITIAL_USER
+        value: admin
+    volumes:
+      - misaka-danmu-server-danmu-config:/app/config

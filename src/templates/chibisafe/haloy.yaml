@@ -1,0 +1,36 @@
+name: chibisafe
+server: localhost
+targets:
+  chibisafe:
+    health_check_path: /
+    preset: service
+    image: chibisafe/chibisafe:latest
+    port: "8080"
+    env:
+      - name: BASE_API_URL
+        value: http://chibisafe-server:8000
+  chibisafe-server:
+    health_check_path: /api/health
+    preset: service
+    image: chibisafe/chibisafe-server:latest
+    port: "8080"
+    volumes:
+      - chibisafe-database:/app/database
+      - chibisafe-uploads:/app/uploads
+      - chibisafe-logs:/app/logs
+  chibisafe-caddy:
+    health_check_path: /
+    image:
+      repository: chibisafe-caddy
+      tag: latest
+      build_config:
+        context: ./chibisafe-caddy
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: BASE_URL
+        value: '":80"'
+    volumes:
+      - chibisafe-uploads:/app/uploads:ro

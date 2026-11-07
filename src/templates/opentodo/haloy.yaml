@@ -1,0 +1,16 @@
+name: opentodo
+server: localhost
+targets:
+  opentodo:
+    image: ghcr.io/opentodoapp/opentodo:0.19.0
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: OPENTODO_SETUP_TOKEN
+        from:
+          env: SETUP_TOKEN
+      - name: OPENTODO_ALLOW_SIGNUP
+        value: "false"
+    volumes:
+      - opentodo-opentodo-data:/data

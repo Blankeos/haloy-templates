@@ -1,0 +1,13 @@
+name: shiori
+server: localhost
+targets:
+  shiori:
+    image: ghcr.io/go-shiori/shiori:v1.8.0-2-g585ea34
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SHIORI_DIR
+        value: /srv/shiori
+    volumes:
+      - shiori-shiori-data:/srv/shiori

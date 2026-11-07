@@ -1,0 +1,12 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:48",
+    "MINIO_ROOT_PASSWORD": "password:48",
+    "JWT_SECRET": "base64:48",
+    "ENCRYPTION_SECRET": "base64:48",
+    "CRON_SECRET": "base64:48"
+  },
+  "derived": {
+    "BLOGFACTORY_API__DATABASE_URL": "postgresql://blogfactory:${POSTGRES_PASSWORD}@blogfactory-postgres:5432/blogfactory"
+  }
+}

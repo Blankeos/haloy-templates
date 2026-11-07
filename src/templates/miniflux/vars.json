@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "ADMIN_PASSWORD": "password:32"
+  },
+  "derived": {
+    "MINIFLUX__DATABASE_URL": "user=miniflux password=${POSTGRES_PASSWORD} dbname=miniflux host=db sslmode=disable"
+  }
+}

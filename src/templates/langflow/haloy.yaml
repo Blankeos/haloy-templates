@@ -1,0 +1,47 @@
+name: langflow
+server: localhost
+targets:
+  langflow:
+    image: langflowai/langflow:latest
+    port: "7860"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: LANGFLOW_DATABASE_URL
+        from:
+          env: LANGFLOW__LANGFLOW_DATABASE_URL
+      - name: LANGFLOW_CONFIG_DIR
+        value: /app/config
+      - name: LANGFLOW_SUPERUSER
+        value: email@domain.com
+      - name: LANGFLOW_SUPERUSER_PASSWORD
+        value: changepassword
+      - name: LANGFLOW_SECRET_KEY
+        value: PP_G4Gwm1lOkyG8r8N0LrdlpWXZ7Tyq5CVyfBquuj6g=
+      - name: DO_NOT_TRACK
+        value: "True"
+      - name: LANGFLOW_AUTO_SAVING
+        value: "True"
+      - name: LANGFLOW_AUTO_LOGIN
+        value: "False"
+      - name: LANGFLOW_NEW_USER_IS_ACTIVE
+        value: "False"
+      - name: LANGFLOW_ENABLE_SUPERUSER_CLI
+        value: "False"
+    volumes:
+      - langflow-app-data:/app/langflow
+      - langflow-app-config:/app/config
+  langflow-postgres-langflow:
+    preset: database
+    image: postgres:16
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: langflow
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: langflow
+    volumes:
+      - langflow-postgres-data:/var/lib/postgresql/data

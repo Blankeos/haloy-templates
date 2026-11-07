@@ -1,0 +1,17 @@
+name: mumble
+server: localhost
+targets:
+  mumble-server:
+    preset: service
+    image: mumblevoip/mumble-server:latest
+    port: "64738"
+    env:
+      - name: MUMBLE_SUPERUSER_PASSWORD
+        from:
+          env: SUPERUSER_PASSWORD
+      - name: MUMBLE_CONFIG_WELCOMETEXT
+        value: Welcome to Mumble Server! Low-latency voice chat.
+      - name: MUMBLE_CONFIG_USERS
+        value: "50"
+    volumes:
+      - mumble-mumble-data:/data

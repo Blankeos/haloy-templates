@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "SESSION_SECRET_KEY": "password:64",
+    "ADMIN_PASSWORD": "password:16"
+  },
+  "derived": {
+    "RUSTRAK__CREATE_SUPERUSER": "admin@app.example.com:${ADMIN_PASSWORD}"
+  }
+}

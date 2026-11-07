@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "PASSWORD_SALT": "password:64"
+  },
+  "derived": {}
+}

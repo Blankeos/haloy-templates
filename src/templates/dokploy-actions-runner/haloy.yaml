@@ -1,0 +1,34 @@
+name: dokploy-actions-runner
+server: localhost
+targets:
+  dokploy-actions-runner:
+    preset: service
+    image:
+      repository: dokploy-actions-runner
+      tag: latest
+      build_config:
+        context: ./dokploy-actions-runner
+        push: server
+    port: "8080"
+    env:
+      - name: RUNNER_SCOPE
+        value: repo
+      - name: RUNNER_NAME
+        from:
+          env: DOKPLOY_ACTIONS_RUNNER__RUNNER_NAME
+      - name: LABELS
+        value: dokploy
+      - name: RUNNER_GROUP
+        value: Default
+      - name: PATH
+        value: /actions-runner/externals/node24/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - name: RUN_AS_ROOT
+        value: "false"
+      - name: START_DOCKER_SERVICE
+        value: "false"
+      - name: DISABLE_AUTOMATIC_DEREGISTRATION
+        value: "false"
+      - name: RUNNER_WORKDIR
+        value: /_work
+      - name: UNSET_CONFIG_VARS
+        value: "false"

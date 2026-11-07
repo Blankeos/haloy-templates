@@ -1,0 +1,33 @@
+name: open-notebook
+server: localhost
+targets:
+  open-notebook-surrealdb:
+    image:
+      repository: open-notebook-surrealdb
+      tag: latest
+      build_config:
+        context: ./open-notebook-surrealdb
+        push: server
+    port: "8000"
+    domains:
+      - domain: surrealdb-app.example.com
+    volumes:
+      - open-notebook-surreal-data:/mydata
+  open-notebook:
+    image: lfnovo/open_notebook:latest
+    port: "8502"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SURREAL_URL
+        value: ws://open-notebook-surrealdb:8000/rpc
+      - name: SURREAL_USER
+        value: root
+      - name: SURREAL_PASSWORD
+        value: root
+      - name: SURREAL_NAMESPACE
+        value: open_notebook
+      - name: SURREAL_DATABASE
+        value: staging
+    volumes:
+      - open-notebook-notebook-data:/app/data

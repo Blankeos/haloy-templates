@@ -1,0 +1,162 @@
+name: itsaplan
+server: localhost
+targets:
+  itsaplan-postgres:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: itsaplan
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: itsaplan
+    volumes:
+      - itsaplan-postgres-data:/var/lib/postgresql/data
+  itsaplan-minio:
+    health_check_path: /health
+    preset: service
+    image: rustfs/rustfs:1.0.0
+    port: "8080"
+    env:
+      - name: RUSTFS_ACCESS_KEY
+        value: admin
+      - name: RUSTFS_SECRET_KEY
+        from:
+          env: S3_SECRET_KEY
+    volumes:
+      - itsaplan-minio-data:/data
+  itsaplan-minio-init:
+    preset: service
+    image:
+      repository: itsaplan-minio-init
+      tag: latest
+      build_config:
+        context: ./itsaplan-minio-init
+        push: server
+    port: "8080"
+    env:
+      - name: S3_ACCESS_KEY_ID
+        value: admin
+      - name: S3_SECRET_ACCESS_KEY
+        from:
+          env: S3_SECRET_KEY
+      - name: S3_BUCKET
+        value: planner-attachments
+  itsaplan-migrate:
+    preset: service
+    image:
+      repository: itsaplan-migrate
+      tag: latest
+      build_config:
+        context: ./itsaplan-migrate
+        push: server
+    port: "8080"
+    env:
+      - name: DATABASE_URL
+        from:
+          env: ITSAPLAN_MIGRATE__DATABASE_URL
+      - name: BACKUP_RETENTION_DAYS
+        value: "30"
+    volumes:
+      - itsaplan-db-backups:/backups
+  itsaplan-api:
+    health_check_path: /
+    image:
+      repository: itsaplan-api
+      tag: latest
+      build_config:
+        context: ./itsaplan-api
+        push: server
+    port: "3000"
+    domains:
+      - domain: api.app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: API_PORT
+        value: "3000"
+      - name: DATABASE_URL
+        from:
+          env: ITSAPLAN_API__DATABASE_URL
+      - name: BETTER_AUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: APP_ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: API_URL
+        value: https://api.app.example.com
+      - name: APP_URL
+        value: https://app.example.com
+      - name: S3_ENDPOINT
+        value: http://itsaplan-minio:9000
+      - name: S3_BUCKET
+        value: planner-attachments
+      - name: S3_ACCESS_KEY_ID
+        value: admin
+      - name: S3_SECRET_ACCESS_KEY
+        from:
+          env: S3_SECRET_KEY
+      - name: S3_REGION
+        value: us-east-1
+      - name: S3_FORCE_PATH_STYLE
+        value: "true"
+  itsaplan-worker:
+    preset: service
+    image: ghcr.io/croffasia/itsaplan-worker:1.9.0
+    port: "8080"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: DATABASE_URL
+        from:
+          env: ITSAPLAN_WORKER__DATABASE_URL
+      - name: APP_ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: S3_ENDPOINT
+        value: http://itsaplan-minio:9000
+      - name: S3_BUCKET
+        value: planner-attachments
+      - name: S3_ACCESS_KEY_ID
+        value: admin
+      - name: S3_SECRET_ACCESS_KEY
+        from:
+          env: S3_SECRET_KEY
+      - name: S3_REGION
+        value: us-east-1
+      - name: S3_FORCE_PATH_STYLE
+        value: "true"
+  itsaplan-bot:
+    preset: service
+    image: ghcr.io/croffasia/itsaplan-bot:1.9.0
+    port: "8080"
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: DATABASE_URL
+        from:
+          env: ITSAPLAN_BOT__DATABASE_URL
+      - name: APP_ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+  itsaplan-web:
+    health_check_path: /login
+    image: ghcr.io/croffasia/itsaplan-web:1.9.0
+    port: "3001"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3001"
+      - name: HOSTNAME
+        value: 0.0.0.0
+      - name: API_URL
+        value: https://api.app.example.com
+      - name: SERVICE_URL_API
+        value: http://itsaplan-api:3000

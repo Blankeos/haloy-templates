@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "AUTH_SECRET": "base64:32",
+    "ENCRYPTION_KEY": "base64:32"
+  },
+  "derived": {
+    "ZEQQAT__DATABASE_URL": "postgresql://zeqqat:${POSTGRES_PASSWORD}@zeqqat-postgres:5432/zeqqat"
+  }
+}

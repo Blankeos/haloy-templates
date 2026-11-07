@@ -1,0 +1,17 @@
+name: couchdb
+server: localhost
+targets:
+  couchdb:
+    preset: database
+    image: couchdb:latest
+    port: "5984"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: COUCHDB_USER
+        value: admin
+      - name: COUCHDB_PASSWORD
+        from:
+          env: PASSWORD
+    volumes:
+      - couchdb-couchdb-data:/opt/couchdb/data

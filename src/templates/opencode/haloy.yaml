@@ -1,0 +1,25 @@
+name: opencode
+server: localhost
+targets:
+  opencode:
+    image:
+      repository: opencode
+      tag: latest
+      build_config:
+        context: ./opencode
+        push: server
+    port: "4096"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: OPENCODE_SERVER_USERNAME
+        value: opencode
+      - name: OPENCODE_SERVER_PASSWORD
+        from:
+          env: OPENCODE_PASSWORD
+      - name: TOOLCHAIN_PACKAGES
+        value: git nodejs npm python3
+    volumes:
+      - opencode-opencode-data:/root/.local/share/opencode
+      - opencode-opencode-config:/root/.config/opencode
+      - opencode-opencode-workspace:/workspace

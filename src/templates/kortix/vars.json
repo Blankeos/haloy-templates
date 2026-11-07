@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:64",
+    "JWT_SECRET": "password:128",
+    "KORTIX_SECRET_SEED": "password:64"
+  },
+  "derived": {
+    "KORTIX_REST__PGRST_DB_URI": "postgres://authenticator:${POSTGRES_PASSWORD}@kortix-db:5432/postgres"
+  }
+}

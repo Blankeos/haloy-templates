@@ -1,0 +1,25 @@
+name: calibre-web
+server: localhost
+targets:
+  calibre-web:
+    image:
+      repository: calibre-web
+      tag: latest
+      build_config:
+        context: ./calibre-web
+        push: server
+    port: "8083"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: Etc/UTC
+      - name: OAUTHLIB_RELAX_TOKEN_SCOPE
+        value: "1"
+    volumes:
+      - calibre-web-calibre-config:/config
+      - calibre-web-calibre-books:/books

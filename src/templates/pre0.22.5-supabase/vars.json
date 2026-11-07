@@ -1,0 +1,16 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "DASHBOARD_PASSWORD": "password:32",
+    "LOGFLARE_API_KEY": "password:32",
+    "INLINE_HASH_4": "hash:4"
+  },
+  "derived": {
+    "PRE0_22_5_SUPABASE_AUTH__GOTRUE_DB_DATABASE_URL": "postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@pre0-22-5-supabase-db:5432/postgres",
+    "PRE0_22_5_SUPABASE_REST__PGRST_DB_URI": "postgres://authenticator:${POSTGRES_PASSWORD}@pre0-22-5-supabase-db:5432/postgres",
+    "PRE0_22_5_SUPABASE_STORAGE__DATABASE_URL": "postgres://supabase_storage_admin:${POSTGRES_PASSWORD}@pre0-22-5-supabase-db:5432/postgres",
+    "PRE0_22_5_SUPABASE_FUNCTIONS__SUPABASE_DB_URL": "postgresql://postgres:${POSTGRES_PASSWORD}@pre0-22-5-supabase-db:5432/postgres",
+    "PRE0_22_5_SUPABASE_ANALYTICS__POSTGRES_BACKEND_URL": "postgresql://supabase_admin:${POSTGRES_PASSWORD}@pre0-22-5-supabase-db:5432/_supabase",
+    "PRE0_22_5_SUPABASE_SUPAVISOR__DATABASE_URL": "ecto://supabase_admin:${POSTGRES_PASSWORD}@pre0-22-5-supabase-db:5432/_supabase"
+  }
+}

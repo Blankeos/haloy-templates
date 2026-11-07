@@ -1,0 +1,28 @@
+name: convex
+server: localhost
+targets:
+  convex-backend:
+    health_check_path: /version
+    image: ghcr.io/convex/convex-backend:72ce13c379fe6dbdfc305bc8ad699c5663c68c2a
+    port: "3210"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: CONVEX_CLOUD_ORIGIN
+        value: http://app.example.com
+      - name: CONVEX_SITE_ORIGIN
+        value: http://app.example.com
+      - name: DISABLE_BEACON
+        value: "FALSE"
+      - name: RUST_LOG
+        value: info
+    volumes:
+      - convex-data:/convex/data
+  convex-dashboard:
+    image: ghcr.io/convex/convex-dashboard:72ce13c379fe6dbdfc305bc8ad699c5663c68c2a
+    port: "6791"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NEXT_PUBLIC_DEPLOYMENT_URL
+        value: http://app.example.com

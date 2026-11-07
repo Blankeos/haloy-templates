@@ -1,0 +1,48 @@
+name: infisical
+server: localhost
+targets:
+  infisical-backend:
+    image: infisical/infisical:v0.162.6
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: ENCRYPTION_KEY
+        from:
+          env: ENCRYPTION_KEY
+      - name: AUTH_SECRET
+        from:
+          env: AUTH_SECRET
+      - name: SITE_URL
+        value: http://app.example.com
+      - name: DB_CONNECTION_URI
+        from:
+          env: INFISICAL_BACKEND__DB_CONNECTION_URI
+      - name: REDIS_URL
+        value: redis://infisical-redis:6379
+      - name: SMTP_PORT
+        value: "587"
+      - name: SMTP_FROM_NAME
+        value: Infisical
+  infisical-redis:
+    preset: database
+    image: redis:7.4.1
+    port: "6379"
+    volumes:
+      - infisical-redis-infisical-data:/data
+  infisical-db:
+    preset: database
+    image: postgres:14-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        value: infisical
+      - name: POSTGRES_DB
+        value: infisical
+    volumes:
+      - infisical-pg-infisical-data:/var/lib/postgresql/data

@@ -1,0 +1,63 @@
+name: passbolt
+server: localhost
+targets:
+  passbolt:
+    health_check_path: /
+    image:
+      repository: passbolt
+      tag: latest
+      build_config:
+        context: ./passbolt
+        push: server
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_FULL_BASE_URL
+        value: http://app.example.com
+      - name: DATASOURCES_DEFAULT_HOST
+        value: passbolt-mariadb
+      - name: DATASOURCES_DEFAULT_PORT
+        value: "3306"
+      - name: DATASOURCES_DEFAULT_USERNAME
+        value: passbolt
+      - name: DATASOURCES_DEFAULT_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: DATASOURCES_DEFAULT_DATABASE
+        value: passbolt
+      - name: PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED
+        value: "true"
+      - name: EMAIL_DEFAULT_FROM
+        value: passbolt@app.example.com
+      - name: EMAIL_TRANSPORT_DEFAULT_HOST
+        value: smtp.example.com
+      - name: EMAIL_TRANSPORT_DEFAULT_PORT
+        value: "587"
+      - name: EMAIL_TRANSPORT_DEFAULT_USERNAME
+        value: noreply@example.com
+      - name: EMAIL_TRANSPORT_DEFAULT_PASSWORD
+        from:
+          env: EMAIL_PASS
+      - name: EMAIL_TRANSPORT_DEFAULT_TLS
+        value: "true"
+    volumes:
+      - passbolt-gpg-volume:/etc/passbolt/gpg
+      - passbolt-jwt-volume:/etc/passbolt/jwt
+  passbolt-mariadb:
+    preset: database
+    image: mariadb:11
+    port: "3306"
+    env:
+      - name: MARIADB_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PASSWORD
+      - name: MARIADB_DATABASE
+        value: passbolt
+      - name: MARIADB_USER
+        value: passbolt
+      - name: MARIADB_PASSWORD
+        from:
+          env: DB_PASSWORD
+    volumes:
+      - passbolt-passbolt-mariadb-data:/var/lib/mysql

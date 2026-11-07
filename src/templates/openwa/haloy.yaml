@@ -1,0 +1,35 @@
+name: openwa
+server: localhost
+targets:
+  openwa:
+    image: ghcr.io/rmyndharis/openwa:0.25.0
+    port: "2785"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "2785"
+      - name: HOME
+        value: /tmp
+      - name: XDG_CONFIG_HOME
+        value: /tmp/.config
+      - name: XDG_CACHE_HOME
+        value: /tmp/.cache
+      - name: ENGINE_TYPE
+        value: whatsapp-web.js
+      - name: AUTO_START_SESSIONS
+        value: "true"
+      - name: TZ
+        value: UTC
+      - name: CSP_UPGRADE_INSECURE_REQUESTS
+        value: "false"
+      - name: MCP_ENABLED
+        value: "true"
+      - name: MCP_READONLY
+        value: "true"
+      - name: ENABLE_SWAGGER
+        value: "true"
+    volumes:
+      - openwa-openwa-data:/app/data

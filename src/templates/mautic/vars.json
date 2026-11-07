@@ -1,0 +1,7 @@
+{
+  "secrets": {
+    "DB_PASSWORD": "password:32",
+    "ROOT_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

@@ -1,0 +1,17 @@
+name: alist
+server: localhost
+targets:
+  alist:
+    image: xhofe/alist:v3.55.0
+    port: "5244"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "0"
+      - name: PGID
+        value: "0"
+      - name: UMASK
+        value: "022"
+    volumes:
+      - alist-alist-data:/opt/alist/data

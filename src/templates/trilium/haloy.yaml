@@ -1,0 +1,10 @@
+name: trilium
+server: localhost
+targets:
+  trilium:
+    image: zadam/trilium:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - /root/trilium-backups:/home/node/trilium-data/backup

@@ -1,0 +1,47 @@
+name: joomla
+server: localhost
+targets:
+  joomla:
+    image: joomla:6.1.0-apache
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: JOOMLA_DB_HOST
+        value: joomla-db
+      - name: JOOMLA_DB_USER
+        value: joomla
+      - name: JOOMLA_DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: JOOMLA_DB_NAME
+        value: joomla
+      - name: JOOMLA_SITE_NAME
+        value: Joomla
+      - name: JOOMLA_ADMIN_USER
+        value: Joomla Administrator
+      - name: JOOMLA_ADMIN_USERNAME
+        value: admin
+      - name: JOOMLA_ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: JOOMLA_ADMIN_EMAIL
+        value: admin@app.example.com
+    volumes:
+      - joomla-joomla-data:/var/www/html
+  joomla-db:
+    preset: database
+    image: mariadb:11.4
+    port: "3306"
+    env:
+      - name: MARIADB_DATABASE
+        value: joomla
+      - name: MARIADB_USER
+        value: joomla
+      - name: MARIADB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: MARIADB_RANDOM_ROOT_PASSWORD
+        value: "1"
+    volumes:
+      - joomla-joomla-db:/var/lib/mysql

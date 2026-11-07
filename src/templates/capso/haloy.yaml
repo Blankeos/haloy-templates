@@ -1,0 +1,77 @@
+name: capso
+server: localhost
+targets:
+  capso-cap-web:
+    image: ghcr.io/capsoftware/cap-web:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: CAPSO_CAP_WEB__DATABASE_URL
+      - name: WEB_URL
+        value: http://app.example.com:3000
+      - name: NEXTAUTH_URL
+        value: http://app.example.com:3000
+      - name: DATABASE_ENCRYPTION_KEY
+        from:
+          env: INLINE_PASSWORD_32
+      - name: NEXTAUTH_SECRET
+        from:
+          env: INLINE_PASSWORD_32
+      - name: CAP_AWS_ACCESS_KEY
+        from:
+          env: INLINE_PASSWORD_16
+      - name: CAP_AWS_SECRET_KEY
+        from:
+          env: INLINE_PASSWORD_16
+      - name: CAP_AWS_BUCKET
+        value: capso
+      - name: CAP_AWS_REGION
+        value: us-east-1
+      - name: S3_PUBLIC_ENDPOINT
+        value: http://app.example.com:3902
+      - name: S3_INTERNAL_ENDPOINT
+        value: http://capso-minio:3902
+  capso-ps-mysql:
+    preset: database
+    image:
+      repository: capso-ps-mysql
+      tag: latest
+      build_config:
+        context: ./capso-ps-mysql
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: planetscale
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: INLINE_PASSWORD_32
+      - name: MYSQL_ROOT_HOST
+        value: "%"
+    volumes:
+      - capso-ps-mysql:/var/lib/mysql
+  capso-minio:
+    health_check_path: /minio/health/ready
+    image:
+      repository: capso-minio
+      tag: latest
+      build_config:
+        context: ./capso-minio
+        push: server
+    port: "3902"
+    domains:
+      - domain: minio-domain-1.app.example.com
+      - domain: minio-domain-2.app.example.com
+    env:
+      - name: MINIO_ROOT_USER
+        from:
+          env: INLINE_PASSWORD_16
+      - name: MINIO_ROOT_PASSWORD
+        from:
+          env: INLINE_PASSWORD_16
+    volumes:
+      - capso-minio-data:/bitnami/minio/data
+      - capso-minio-certs:/certs

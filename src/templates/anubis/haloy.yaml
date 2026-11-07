@@ -1,0 +1,25 @@
+name: anubis
+server: localhost
+targets:
+  anubis:
+    image: ghcr.io/techarohq/anubis:latest
+    port: "8923"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: TARGET
+        value: YOURLOCALHOST:PORT
+      - name: BIND
+        value: :8923
+      - name: COOKIE_DOMAIN
+        value: app.example.com
+      - name: DIFFICULTY
+        value: "5"
+      - name: OG_PASSTHROUGH
+        value: "true"
+      - name: OG_EXPIRY_TIME
+        value: 1h
+      - name: OG_CACHE_CONSIDER_HOST
+        value: "true"
+      - name: SERVE_ROBOTS_TXT
+        value: "false"

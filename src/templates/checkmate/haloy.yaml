@@ -1,0 +1,33 @@
+name: checkmate
+server: localhost
+targets:
+  checkmate-server:
+    image: ghcr.io/bluewave-labs/checkmate-backend-mono:latest
+    port: "52345"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: UPTIME_APP_API_BASE_URL
+        value: http://app.example.com:52345/api/v1
+      - name: UPTIME_APP_CLIENT_HOST
+        value: http://app.example.com
+      - name: DB_CONNECTION_STRING
+        value: mongodb://checkmate-mongodb:27017/uptime_db?replicaSet=rs0
+      - name: REDIS_URL
+        value: redis://redis:6379
+      - name: CLIENT_HOST
+        value: http://app.example.com
+      - name: JWT_SECRET
+        from:
+          env: JWT_SECRET
+  checkmate-mongodb:
+    preset: service
+    image:
+      repository: checkmate-mongodb
+      tag: latest
+      build_config:
+        context: ./checkmate-mongodb
+        push: server
+    port: "8080"
+    volumes:
+      - checkmate-mongo-data:/data/db

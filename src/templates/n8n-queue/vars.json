@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:24",
+    "REDIS_PASSWORD": "password:24",
+    "N8N_ENCRYPTION_KEY": "base64:32"
+  },
+  "derived": {}
+}

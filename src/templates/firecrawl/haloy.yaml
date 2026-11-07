@@ -1,0 +1,210 @@
+name: firecrawl
+server: localhost
+targets:
+  firecrawl-db:
+    preset: database
+    image: postgres:17-alpine@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73
+    port: "5432"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: APP_POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: firecrawl
+    volumes:
+      - firecrawl-firecrawl-db-data:/var/lib/postgresql/data
+  firecrawl-db-seed:
+    preset: database
+    image:
+      repository: firecrawl-db-seed
+      tag: latest
+      build_config:
+        context: ./firecrawl-db-seed
+        push: server
+    port: "5432"
+    env:
+      - name: PGHOST
+        value: firecrawl-db
+      - name: PGPORT
+        value: "5432"
+      - name: PGUSER
+        value: postgres
+      - name: PGPASSWORD
+        from:
+          env: APP_POSTGRES_PASSWORD
+      - name: PGDATABASE
+        value: firecrawl
+      - name: FIRECRAWL_ORG_ID
+        from:
+          env: FIRECRAWL_ORG_ID
+      - name: FIRECRAWL_TEAM_ID
+        from:
+          env: FIRECRAWL_TEAM_ID
+      - name: FIRECRAWL_API_KEY
+        from:
+          env: FIRECRAWL_DB_SEED__FIRECRAWL_API_KEY
+  firecrawl-nuq-postgres:
+    preset: service
+    image: ghcr.io/firecrawl/nuq-postgres@sha256:aed86f62858f29bd971abddcdeb301c12888098d2cf5d33c1ba42b053bc460f6
+    port: "8080"
+    env:
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: NUQ_POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: postgres
+    volumes:
+      - firecrawl-nuq-postgres-data:/var/lib/postgresql/data
+  firecrawl-redis:
+    preset: database
+    image:
+      repository: firecrawl-redis
+      tag: latest
+      build_config:
+        context: ./firecrawl-redis
+        push: server
+    port: "6379"
+    env:
+      - name: REDIS_PASSWORD
+        from:
+          env: REDIS_PASSWORD
+    volumes:
+      - firecrawl-redis-data:/data
+  firecrawl-rabbitmq:
+    preset: database
+    image: rabbitmq:3-management@sha256:e582c0bc7766f3342496d8485efb5a1df782b5ce3886ad017e2eaae442311f69
+    port: "5672"
+    env:
+      - name: RABBITMQ_DEFAULT_USER
+        value: firecrawl
+      - name: RABBITMQ_DEFAULT_PASS
+        from:
+          env: RABBITMQ_PASSWORD
+    volumes:
+      - firecrawl-rabbitmq-data:/var/lib/rabbitmq
+  firecrawl-playwright-service:
+    preset: service
+    image: ghcr.io/firecrawl/playwright-service@sha256:468009bae00911d40d7120d58489a1d529362c22c45585cb9076094fe61b0025
+    port: "8080"
+    env:
+      - name: PORT
+        value: "3000"
+      - name: MAX_CONCURRENT_PAGES
+        value: "10"
+      - name: ALLOW_LOCAL_WEBHOOKS
+        value: "false"
+      - name: BLOCK_MEDIA
+        value: "true"
+  firecrawl:
+    health_check_path: /v0/health/liveness
+    preset: service
+    image:
+      repository: firecrawl
+      tag: latest
+      build_config:
+        context: ./firecrawl
+        push: server
+    port: "3002"
+    env:
+      - name: ENV
+        value: local
+      - name: HOST
+        value: 0.0.0.0
+      - name: PORT
+        value: "3002"
+      - name: EXTRACT_WORKER_PORT
+        value: "3004"
+      - name: WORKER_PORT
+        value: "3005"
+      - name: USE_DB_AUTHENTICATION
+        value: "true"
+      - name: DATABASE_URL
+        from:
+          env: FIRECRAWL__DATABASE_URL
+      - name: DATABASE_REPLICA_URL
+        from:
+          env: FIRECRAWL__DATABASE_REPLICA_URL
+      - name: REDIS_URL
+        from:
+          env: FIRECRAWL__REDIS_URL
+      - name: REDIS_RATE_LIMIT_URL
+        from:
+          env: FIRECRAWL__REDIS_RATE_LIMIT_URL
+      - name: PLAYWRIGHT_MICROSERVICE_URL
+        value: http://firecrawl-playwright-service:3000/scrape
+      - name: NUQ_DATABASE_URL
+        from:
+          env: FIRECRAWL__NUQ_DATABASE_URL
+      - name: NUQ_DATABASE_URL_LISTEN
+        from:
+          env: FIRECRAWL__NUQ_DATABASE_URL_LISTEN
+      - name: NUQ_RABBITMQ_URL
+        from:
+          env: FIRECRAWL__NUQ_RABBITMQ_URL
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_PASSWORD
+        from:
+          env: NUQ_POSTGRES_PASSWORD
+      - name: POSTGRES_DB
+        value: postgres
+      - name: POSTGRES_HOST
+        value: firecrawl-nuq-postgres
+      - name: POSTGRES_PORT
+        value: "5432"
+      - name: NUM_WORKERS_PER_QUEUE
+        value: "8"
+      - name: CRAWL_CONCURRENT_REQUESTS
+        value: "10"
+      - name: MAX_CONCURRENT_JOBS
+        value: "5"
+      - name: BROWSER_POOL_SIZE
+        value: "5"
+      - name: HARNESS_STARTUP_TIMEOUT_MS
+        value: "120000"
+      - name: LOGGING_LEVEL
+        value: INFO
+      - name: DISABLE_ENGPICKER
+        value: "true"
+      - name: BULL_AUTH_KEY
+        from:
+          env: BULL_AUTH_KEY
+      - name: SELF_HOSTED_WEBHOOK_HMAC_SECRET
+        from:
+          env: SELF_HOSTED_WEBHOOK_HMAC_SECRET
+      - name: ALLOW_LOCAL_WEBHOOKS
+        value: "false"
+  firecrawl-swagger-ui:
+    preset: service
+    image:
+      repository: firecrawl-swagger-ui
+      tag: latest
+      build_config:
+        context: ./firecrawl-swagger-ui
+        push: server
+    port: "8080"
+    env:
+      - name: SWAGGER_JSON_URL
+        value: /openapi.json
+      - name: DEEP_LINKING
+        value: "true"
+      - name: DISPLAY_OPERATION_ID
+        value: "false"
+      - name: DISPLAY_REQUEST_DURATION
+        value: "true"
+      - name: DOC_EXPANSION
+        value: none
+      - name: PERSIST_AUTHORIZATION
+        value: "true"
+      - name: TRY_IT_OUT_ENABLED
+        value: "true"
+  firecrawl-gateway:
+    health_check_path: /v0/health/liveness
+    image: nginx:1.29-alpine@sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de
+    port: "8080"
+    domains:
+      - domain: app.example.com

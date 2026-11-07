@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "OPENCODE_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

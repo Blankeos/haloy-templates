@@ -1,0 +1,50 @@
+name: ezbookkeeping
+server: localhost
+targets:
+  ezbookkeeping-mysql:
+    preset: database
+    image: mysql:8.0
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: ROOT_PASS
+      - name: MYSQL_DATABASE
+        value: ezbookkeeping
+      - name: MYSQL_USER
+        value: ezbookkeeping
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PASS
+    volumes:
+      - ezbookkeeping-mysql-data:/var/lib/mysql
+  ezbookkeeping:
+    image: mayswind/ezbookkeeping
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: EBK_SERVER_DOMAIN
+        value: app.example.com
+      - name: EBK_SERVER_ENABLE_GZIP
+        value: "true"
+      - name: EBK_DATABASE_TYPE
+        value: mysql
+      - name: EBK_DATABASE_HOST
+        value: ezbookkeeping-mysql:3306
+      - name: EBK_DATABASE_NAME
+        value: ezbookkeeping
+      - name: EBK_DATABASE_USER
+        value: ezbookkeeping
+      - name: EBK_DATABASE_PASSWD
+        from:
+          env: DB_PASS
+      - name: EBK_LOG_MODE
+        value: file
+      - name: EBK_SECURITY_SECRET_KEY
+        from:
+          env: SECRET_KEY
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ezbookkeeping-storage:/ezbookkeeping/storage
+      - ezbookkeeping-logs:/ezbookkeeping/log

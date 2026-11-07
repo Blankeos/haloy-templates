@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "AUTH_PASSWORD": "password:24"
+  },
+  "derived": {
+    "T_3DOKPLOY__BASIC_AUTH": "admin:${AUTH_PASSWORD}"
+  }
+}

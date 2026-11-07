@@ -1,0 +1,14 @@
+name: glances
+server: localhost
+targets:
+  glances:
+    image: nicolargo/glances:4.3.0.8-full
+    port: "61208"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: GLANCES_OPT
+        value: -w
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - glances-glances-data:/glances/exports

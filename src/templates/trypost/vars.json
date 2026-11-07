@@ -1,0 +1,12 @@
+{
+  "secrets": {
+    "APP_KEY": "base64:32",
+    "DATABASE_PASSWORD": "password:48",
+    "REDIS_PASSWORD": "password:48",
+    "REVERB_KEY": "hash:32",
+    "REVERB_SECRET": "password:64",
+    "REVERB_APP_ID": "uuid",
+    "INITIAL_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

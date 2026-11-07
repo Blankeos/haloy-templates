@@ -1,0 +1,71 @@
+name: openclaw
+server: localhost
+targets:
+  openclaw:
+    health_check_path: /healthz
+    image: coollabsio/openclaw:2026.2.6
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: AUTH_USERNAME
+        value: dokploy
+      - name: AUTH_PASSWORD
+        from:
+          env: AUTH_PASSWORD
+      - name: OPENCLAW_GATEWAY_TOKEN
+        from:
+          env: GATEWAY_TOKEN
+      - name: OPENROUTER_API_KEY
+        value: YOUR-API-KEY
+      - name: AWS_REGION
+        value: us-east-1
+      - name: BEDROCK_PROVIDER_FILTER
+        value: anthropic
+      - name: PORT
+        value: "8080"
+      - name: OPENCLAW_GATEWAY_PORT
+        value: "18789"
+      - name: OPENCLAW_GATEWAY_BIND
+        value: lan
+      - name: OPENCLAW_STATE_DIR
+        value: /data/.openclaw
+      - name: OPENCLAW_WORKSPACE_DIR
+        value: /data/workspace
+      - name: BROWSER_CDP_URL
+        value: http://openclaw-browser:9223
+      - name: BROWSER_DEFAULT_PROFILE
+        value: openclaw
+      - name: BROWSER_EVALUATE_ENABLED
+        value: "true"
+      - name: BROWSER_SNAPSHOT_MODE
+        value: efficient
+      - name: BROWSER_REMOTE_TIMEOUT_MS
+        value: "1500"
+      - name: BROWSER_REMOTE_HANDSHAKE_TIMEOUT_MS
+        value: "3000"
+      - name: HOOKS_ENABLED
+        value: "false"
+      - name: HOOKS_PATH
+        value: /hooks
+      - name: MOONSHOT_BASE_URL
+        value: https://api.moonshot.ai/v1
+      - name: KIMI_BASE_URL
+        value: https://api.moonshot.ai/anthropic
+    volumes:
+      - openclaw-openclaw-data:/data
+  openclaw-browser:
+    preset: service
+    image: coollabsio/openclaw-browser:latest
+    port: "8080"
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: Etc/UTC
+      - name: CHROME_CLI
+        value: --remote-debugging-port=9222
+    volumes:
+      - openclaw-browser-data:/config

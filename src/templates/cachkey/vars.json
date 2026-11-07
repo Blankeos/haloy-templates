@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "hash:32",
+    "BETTER_AUTH_SECRET": "base64:48",
+    "ENCRYPTION_KEY": "base64:32"
+  },
+  "derived": {
+    "CACHKEY_API__DATABASE_URL": "postgresql://cachkey:${POSTGRES_PASSWORD}@cachkey-postgres:5432/cachkey"
+  }
+}

@@ -1,0 +1,70 @@
+name: directus
+server: localhost
+targets:
+  directus:
+    health_check_path: /server/ping
+    image: directus/directus:12.1.1
+    port: "8055"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SECRET
+        from:
+          env: DIRECTUS_SECRET
+      - name: DB_CLIENT
+        value: pg
+      - name: DB_HOST
+        value: directus-database
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_DATABASE
+        value: directus
+      - name: DB_USER
+        value: directus
+      - name: DB_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: CACHE_ENABLED
+        value: "true"
+      - name: CACHE_AUTO_PURGE
+        value: "true"
+      - name: CACHE_STORE
+        value: redis
+      - name: REDIS
+        value: redis://directus-cache:6379
+      - name: WEBSOCKETS_ENABLED
+        value: "true"
+      - name: PUBLIC_URL
+        value: https://app.example.com
+      - name: ADMIN_EMAIL
+        value: admin@app.example.com
+      - name: ADMIN_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+      - name: STORAGE_LOCATIONS
+        value: local
+      - name: STORAGE_LOCAL_DRIVER
+        value: local
+      - name: STORAGE_LOCAL_ROOT
+        value: /directus/uploads
+    volumes:
+      - directus-directus-uploads:/directus/uploads
+      - directus-directus-extensions:/directus/extensions
+  directus-database:
+    preset: service
+    image: postgis/postgis:13-master
+    port: "8080"
+    env:
+      - name: POSTGRES_USER
+        value: directus
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PASSWORD
+      - name: POSTGRES_DB
+        value: directus
+    volumes:
+      - directus-directus-database:/var/lib/postgresql/data
+  directus-cache:
+    preset: database
+    image: redis:6
+    port: "6379"

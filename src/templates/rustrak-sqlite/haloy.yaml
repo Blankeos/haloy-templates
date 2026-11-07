@@ -1,0 +1,35 @@
+name: rustrak-sqlite
+server: localhost
+targets:
+  rustrak-sqlite-rustrak-server:
+    image: rustrak/rustrak-server:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: HOST
+        value: 0.0.0.0
+      - name: PORT
+        value: "8080"
+      - name: RUST_LOG
+        value: info
+      - name: SSL_PROXY
+        value: "true"
+      - name: SESSION_SECRET_KEY
+        from:
+          env: SESSION_SECRET_KEY
+      - name: CREATE_SUPERUSER
+        from:
+          env: RUSTRAK_SQLITE_RUSTRAK_SERVER__CREATE_SUPERUSER
+    volumes:
+      - rustrak-sqlite-rustrak-data:/data
+  rustrak-sqlite-rustrak-ui:
+    image: rustrak/rustrak-ui:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: RUSTRAK_API_URL
+        value: https://app.example.com
+      - name: HOSTNAME
+        value: 0.0.0.0

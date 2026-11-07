@@ -1,0 +1,14 @@
+name: ipfs
+server: localhost
+targets:
+  ipfs:
+    image: ipfs/kubo:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: IPFS_PROFILE
+        value: server
+    volumes:
+      - ipfs-ipfs-data:/data/ipfs
+      - ipfs-ipfs-staging:/export

@@ -1,0 +1,31 @@
+port: ${livekit_port}
+bind_addresses:
+    - ""
+rtc:
+    tcp_port: ${livekit_tcp_port}
+    udp_port: ${livekit_udp_port}
+    use_external_ip: true
+    enable_loopback_candidate: false
+redis:
+    address: ${redis_address}
+    username: ""
+    password: ${redis_password}
+    db: 0
+    use_tls: false
+    sentinel_master_name: ""
+    sentinel_username: ""
+    sentinel_password: ""
+    sentinel_addresses: []
+    cluster_addresses: []
+    max_redirects: null
+turn:
+    enabled: true
+    domain: ${turn_domain}
+    tls_port: ${turn_tls_port}
+    udp_port: ${turn_udp_port}
+    external_tls: true
+ingress:
+    rtmp_base_url: rtmp://${main_domain}:${rtmp_port}/x
+    whip_base_url: https://${whip_domain}/w
+keys:
+    ${api_key}: ${api_secret}

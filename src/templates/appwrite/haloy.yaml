@@ -1,0 +1,1001 @@
+name: appwrite
+server: localhost
+targets:
+  appwrite:
+    health_check_path: /v1/health/version
+    image: appwrite/appwrite:2.7.0
+    port: "80"
+    domains:
+      - domain: v1.app.example.com
+      - domain: well-known.app.example.com
+      - domain: v1.console.app.example.com
+      - domain: sites.app.example.com
+      - domain: functions.app.example.com
+    env:
+      - name: _APP_ENV
+        value: production
+      - name: _APP_MEMORY_LIMIT
+        value: 512M
+      - name: _APP_EDITION
+        value: self-hosted
+      - name: _APP_WORKER_PER_CORE
+        value: "6"
+      - name: _APP_LOCALE
+        value: en
+      - name: _APP_COMPRESSION_ENABLED
+        value: enabled
+      - name: _APP_COMPRESSION_MIN_SIZE_BYTES
+        value: "1024"
+      - name: _APP_CONSOLE_WHITELIST_ROOT
+        value: enabled
+      - name: _APP_CONSOLE_SESSION_ALERTS
+        value: disabled
+      - name: _APP_CONSOLE_HOSTNAMES
+        value: console.app.example.com
+      - name: _APP_CONSOLE_SCHEMA
+        value: appwriteio
+      - name: _APP_SYSTEM_EMAIL_NAME
+        value: Appwrite
+      - name: _APP_SYSTEM_EMAIL_ADDRESS
+        value: noreply@appwrite.io
+      - name: _APP_SYSTEM_TEAM_EMAIL
+        value: team@appwrite.io
+      - name: _APP_OPTIONS_ABUSE
+        value: enabled
+      - name: _APP_OPTIONS_ROUTER_PROTECTION
+        value: disabled
+      - name: _APP_OPTIONS_FORCE_HTTPS
+        value: disabled
+      - name: _APP_OPTIONS_ROUTER_FORCE_HTTPS
+        value: disabled
+      - name: _APP_ROUTER_AUTO_CERTIFICATES
+        value: enabled
+      - name: _APP_OPENSSL_KEY_V1
+        from:
+          env: OPENSSL_KEY
+      - name: _APP_OPENSSL_KEY_CURRENT
+        value: "1"
+      - name: _APP_OPENSSL_KEY_OLDEST
+        value: "1"
+      - name: _APP_NOTIFICATIONS_TRACKING_SECRET
+        from:
+          env: NOTIFICATIONS_TRACKING_SECRET
+      - name: _APP_DOMAIN
+        value: app.example.com
+      - name: _APP_CONSOLE_DOMAIN
+        value: console.app.example.com
+      - name: _APP_CONSOLE_URL
+        value: https://console.app.example.com
+      - name: _APP_DOMAIN_TARGET_CNAME
+        value: localhost
+      - name: _APP_DOMAIN_TARGET_AAAA
+        value: ::1
+      - name: _APP_DOMAIN_TARGET_A
+        value: 127.0.0.1
+      - name: _APP_DNS
+        value: 8.8.8.8
+      - name: _APP_DOMAIN_FUNCTIONS
+        value: functions.app.example.com
+      - name: _APP_DOMAIN_SITES
+        value: sites.app.example.com
+      - name: _APP_CUSTOM_DOMAIN_DENY_LIST
+        value: example.com,test.com,app.example.com
+      - name: _APP_TRUSTED_HEADERS
+        value: x-forwarded-for
+      - name: _APP_REDIS_HOST
+        value: appwrite-redis
+      - name: _APP_REDIS_PORT
+        value: "6379"
+      - name: _APP_DB_ADAPTER
+        value: postgresql
+      - name: _APP_DB_HOST
+        value: appwrite-postgresql
+      - name: _APP_DB_PORT
+        value: "5432"
+      - name: _APP_DB_SCHEMA
+        value: appwrite
+      - name: _APP_DB_USER
+        value: user
+      - name: _APP_DB_PASS
+        from:
+          env: DB_PW
+      - name: _APP_DB_ROOT_PASS
+        from:
+          env: DB_ROOT_PW
+      - name: _APP_DB_USER_PASS
+        from:
+          env: DB_USER_PW
+      - name: _APP_LIMIT_DATABASE_BATCH
+        value: "100"
+      - name: _APP_LOCKING_ENABLED
+        value: enabled
+      - name: _APP_DOCUMENTSDB
+        value: enabled
+      - name: _APP_DB_ADAPTER_DOCUMENTSDB
+        value: mongodb
+      - name: _APP_DB_HOST_DOCUMENTSDB
+        value: appwrite-mongodb
+      - name: _APP_DB_PORT_DOCUMENTSDB
+        value: "27017"
+      - name: _APP_VECTORSDB
+        value: enabled
+      - name: _APP_DB_ADAPTER_VECTORSDB
+        value: postgresql
+      - name: _APP_DB_HOST_VECTORSDB
+        value: appwrite-postgresql
+      - name: _APP_DB_PORT_VECTORSDB
+        value: "5432"
+      - name: _APP_EMBEDDING
+        value: disabled
+      - name: _APP_USAGE_STATS
+        value: enabled
+      - name: _APP_ALERTS_USAGE_LAG
+        value: "120"
+      - name: _APP_USAGE_PASS
+        from:
+          env: USAGE_PW
+      - name: _APP_CONNECTIONS_DB_USAGE
+        from:
+          env: APPWRITE___APP_CONNECTIONS_DB_USAGE
+      - name: _APP_POOL_SIZE_USAGE
+        value: "2"
+      - name: _APP_CONNECTIONS_DB_EXECUTIONS
+        from:
+          env: APPWRITE___APP_CONNECTIONS_DB_EXECUTIONS
+      - name: _APP_POOL_SIZE_EXECUTIONS
+        value: "2"
+      - name: _APP_MAINTENANCE_RETENTION_USAGE_TTL
+        value: "180"
+      - name: _APP_STATS_USAGE_QUEUE_NAME
+        value: v1-stats-usage
+      - name: _APP_STATS_RESOURCES_QUEUE_NAME
+        value: v1-stats-resources
+      - name: _APP_STATS_RESOURCES_INTERVAL
+        value: "3600"
+      - name: _APP_STORAGE_LIMIT
+        value: "30000000"
+      - name: _APP_STORAGE_PREVIEW_LIMIT
+        value: "20000000"
+      - name: _APP_AUTOGRAVITY_HOST
+        value: http://appwrite-autogravity:8080
+      - name: _APP_EXIFTOOL_HOST
+        value: http://appwrite-exiftool:8080
+      - name: _APP_STORAGE_ANTIVIRUS
+        value: disabled
+      - name: _APP_STORAGE_ANTIVIRUS_HOST
+        value: clamav
+      - name: _APP_STORAGE_ANTIVIRUS_PORT
+        value: "3310"
+      - name: _APP_STORAGE_DEVICE
+        value: local
+      - name: _APP_STORAGE_S3_REGION
+        value: us-east-1
+      - name: _APP_STORAGE_DO_SPACES_REGION
+        value: us-east-1
+      - name: _APP_STORAGE_BACKBLAZE_REGION
+        value: us-west-004
+      - name: _APP_STORAGE_LINODE_REGION
+        value: eu-central-1
+      - name: _APP_STORAGE_WASABI_REGION
+        value: eu-central-1
+      - name: _APP_COMPUTE_SIZE_LIMIT
+        value: "30000000"
+      - name: _APP_COMPUTE_BUILD_SIZE_LIMIT
+        value: "2000000000"
+      - name: _APP_COMPUTE_BUILD_TIMEOUT
+        value: "2700"
+      - name: _APP_COMPUTE_CPUS
+        value: "0"
+      - name: _APP_COMPUTE_MEMORY
+        value: "0"
+      - name: _APP_FUNCTIONS_TIMEOUT
+        value: "900"
+      - name: _APP_FUNCTIONS_RUNTIMES
+        value: node-22,node-24,node-26,python-3.12,php-8.3,ruby-3.3,dart-3.5,go-1.23,rust-1.83,bun-1.1,deno-1.46,java-21.0,dotnet-8.0
+      - name: _APP_FUNCTIONS_CREATION_ABUSE_LIMIT
+        value: "5000"
+      - name: _APP_SITES_TIMEOUT
+        value: "900"
+      - name: _APP_SITES_RUNTIMES
+        value: static-1,node-22
+      - name: _APP_EXECUTOR_SECRET
+        from:
+          env: EXECUTOR_SECRET
+      - name: _APP_EXECUTOR_HOST
+        value: http://appwrite-openruntimes-executor/v1
+      - name: _APP_BUILDS_VOLUME
+        value: appwrite_appwrite-builds
+      - name: _APP_JOBS_HOST
+        value: http://appwrite-orchestrator:8080
+      - name: _APP_JOBS_SECRET
+        from:
+          env: JOBS_SECRET
+      - name: _APP_JOBS_ENDPOINT
+        value: http://appwrite
+      - name: _APP_GEO_SECRET
+        from:
+          env: GEO_SECRET
+      - name: _APP_GEO_ENDPOINT
+        value: http://appwrite-geo/v1
+      - name: _APP_LOGGING_FORMAT
+        value: pretty
+      - name: _APP_MAINTENANCE_INTERVAL
+        value: "86400"
+      - name: _APP_MAINTENANCE_RETENTION_EXECUTION
+        value: "1209600"
+      - name: _APP_MAINTENANCE_RETENTION_CACHE
+        value: "2592000"
+      - name: _APP_MAINTENANCE_RETENTION_ABUSE
+        value: "86400"
+      - name: _APP_MAINTENANCE_RETENTION_AUDIT
+        value: "1209600"
+      - name: _APP_MAINTENANCE_RETENTION_AUDIT_CONSOLE
+        value: "15778800"
+      - name: _APP_MAINTENANCE_RETENTION_SCHEDULES
+        value: "86400"
+      - name: _APP_MAINTENANCE_RETENTION_ALERTS
+        value: "7776000"
+      - name: _APP_GRAPHQL_INTROSPECTION
+        value: enabled
+      - name: _APP_GRAPHQL_MAX_BATCH_SIZE
+        value: "10"
+      - name: _APP_GRAPHQL_MAX_COMPLEXITY
+        value: "250"
+      - name: _APP_GRAPHQL_MAX_DEPTH
+        value: "4"
+      - name: _APP_MIGRATION_HOST
+        value: appwrite
+      - name: _APP_PWNED_PASSWORDS_DSN
+        value: none://localhost
+    volumes:
+      - appwrite-appwrite-uploads:/storage/uploads
+      - appwrite-appwrite-imports:/storage/imports
+      - appwrite-appwrite-cache:/storage/cache
+      - appwrite-appwrite-config:/storage/config
+      - appwrite-appwrite-certificates:/storage/certificates
+      - appwrite-appwrite-functions:/storage/functions
+      - appwrite-appwrite-sites:/storage/sites
+      - appwrite-appwrite-builds:/storage/builds
+  appwrite-console:
+    image: appwrite/new:1.2.138-self-hosted
+    port: "3000"
+    domains:
+      - domain: app.example.com
+      - domain: console.app.example.com
+    env:
+      - name: VITE_CONSOLE_PROFILE
+        value: self-hosted
+      - name: VITE_APPWRITE_VERSION
+        value: 2.7.0
+      - name: APPWRITE_ENDPOINT_SAME_ORIGIN
+        value: "true"
+      - name: VITE_GROWTH_ENDPOINT
+        value: https://growth.appwrite.io/v1
+  appwrite-realtime:
+    image:
+      repository: appwrite-realtime
+      tag: latest
+      build_config:
+        context: ./appwrite-realtime
+        push: server
+    port: "80"
+    domains:
+      - domain: v1-realtime.app.example.com
+      - domain: v1-realtime.console.app.example.com
+    env:
+      - name: _APP_ENV
+        value: production
+      - name: _APP_MEMORY_LIMIT
+        value: 512M
+      - name: _APP_WORKER_PER_CORE
+        value: "6"
+      - name: _APP_OPTIONS_ABUSE
+        value: enabled
+      - name: _APP_OPTIONS_ROUTER_PROTECTION
+        value: disabled
+      - name: _APP_CONSOLE_HOSTNAMES
+        value: console.app.example.com
+      - name: _APP_LIMIT_REALTIME_SUBSCRIPTIONS
+        value: "100"
+      - name: _APP_LIMIT_REALTIME_CHANNELS
+        value: "100"
+      - name: _APP_LIMIT_REALTIME_QUERIES
+        value: "100"
+      - name: _APP_OPENSSL_KEY_V1
+        from:
+          env: OPENSSL_KEY
+      - name: _APP_OPENSSL_KEY_CURRENT
+        value: "1"
+      - name: _APP_OPENSSL_KEY_OLDEST
+        value: "1"
+      - name: _APP_REDIS_HOST
+        value: appwrite-redis
+      - name: _APP_REDIS_PORT
+        value: "6379"
+      - name: _APP_DB_ADAPTER
+        value: postgresql
+      - name: _APP_DB_HOST
+        value: appwrite-postgresql
+      - name: _APP_DB_PORT
+        value: "5432"
+      - name: _APP_DB_SCHEMA
+        value: appwrite
+      - name: _APP_DB_USER
+        value: user
+      - name: _APP_DB_PASS
+        from:
+          env: DB_PW
+      - name: _APP_LIMIT_DATABASE_BATCH
+        value: "100"
+      - name: _APP_DOCUMENTSDB
+        value: enabled
+      - name: _APP_DB_ADAPTER_DOCUMENTSDB
+        value: mongodb
+      - name: _APP_DB_HOST_DOCUMENTSDB
+        value: appwrite-mongodb
+      - name: _APP_DB_PORT_DOCUMENTSDB
+        value: "27017"
+      - name: _APP_VECTORSDB
+        value: enabled
+      - name: _APP_DB_ADAPTER_VECTORSDB
+        value: postgresql
+      - name: _APP_DB_HOST_VECTORSDB
+        value: appwrite-postgresql
+      - name: _APP_DB_PORT_VECTORSDB
+        value: "5432"
+      - name: _APP_EMBEDDING
+        value: disabled
+      - name: _APP_USAGE_STATS
+        value: enabled
+      - name: _APP_STATS_USAGE_QUEUE_NAME
+        value: v1-stats-usage
+      - name: _APP_LOGGING_FORMAT
+        value: pretty
+  appwrite-mqtt:
+    image:
+      repository: appwrite-mqtt
+      tag: latest
+      build_config:
+        context: ./appwrite-mqtt
+        push: server
+    port: "8083"
+    domains:
+      - domain: mqtt.app.example.com
+    env:
+      - name: _APP_ENV
+        value: production
+      - name: _APP_MEMORY_LIMIT
+        value: 512M
+      - name: _APP_WORKER_PER_CORE
+        value: "6"
+      - name: _APP_OPTIONS_ABUSE
+        value: enabled
+      - name: _APP_OPTIONS_ROUTER_PROTECTION
+        value: disabled
+      - name: _APP_OPENSSL_KEY_V1
+        from:
+          env: OPENSSL_KEY
+      - name: _APP_OPENSSL_KEY_CURRENT
+        value: "1"
+      - name: _APP_OPENSSL_KEY_OLDEST
+        value: "1"
+      - name: _APP_REDIS_HOST
+        value: appwrite-redis
+      - name: _APP_REDIS_PORT
+        value: "6379"
+      - name: _APP_DB_ADAPTER
+        value: postgresql
+      - name: _APP_DB_HOST
+        value: appwrite-postgresql
+      - name: _APP_DB_PORT
+        value: "5432"
+      - name: _APP_DB_SCHEMA
+        value: appwrite
+      - name: _APP_DB_USER
+        value: user
+      - name: _APP_DB_PASS
+        from:
+          env: DB_PW
+      - name: _APP_DB_ADAPTER_VECTORSDB
+        value: postgresql
+      - name: _APP_DB_HOST_VECTORSDB
+        value: appwrite-postgresql
+      - name: _APP_DB_PORT_VECTORSDB
+        value: "5432"
+      - name: _APP_LOGGING_FORMAT
+        value: pretty
+      - name: _APP_MQTT_REPLAY_DEPTH
+        value: "5"
+      - name: _APP_MQTT_MAX_PACKET_SIZE
+        value: "64000"
+  appwrite-worker:
+    preset: service
+    image:
+      repository: appwrite-worker
+      tag: latest
+      build_config:
+        context: ./appwrite-worker
+        push: server
+    port: "8080"
+    env:
+      - name: _APP_ENV
+        value: production
+      - name: _APP_MEMORY_LIMIT
+        value: 512M
+      - name: _APP_WORKERS_NUM
+        value: "1"
+      - name: _APP_WORKER_MAX_COROUTINES
+        value: "83"
+      - name: _APP_WORKER_PER_CORE
+        value: "6"
+      - name: _APP_OPENSSL_KEY_V1
+        from:
+          env: OPENSSL_KEY
+      - name: _APP_OPENSSL_KEY_CURRENT
+        value: "1"
+      - name: _APP_OPENSSL_KEY_OLDEST
+        value: "1"
+      - name: _APP_NOTIFICATIONS_TRACKING_SECRET
+        from:
+          env: NOTIFICATIONS_TRACKING_SECRET
+      - name: _APP_REDIS_HOST
+        value: appwrite-redis
+      - name: _APP_REDIS_PORT
+        value: "6379"
+      - name: _APP_DB_ADAPTER
+        value: postgresql
+      - name: _APP_DB_HOST
+        value: appwrite-postgresql
+      - name: _APP_DB_PORT
+        value: "5432"
+      - name: _APP_DB_SCHEMA
+        value: appwrite
+      - name: _APP_DB_USER
+        value: user
+      - name: _APP_DB_PASS
+        from:
+          env: DB_PW
+      - name: _APP_LIMIT_DATABASE_BATCH
+        value: "100"
+      - name: _APP_DOCUMENTSDB
+        value: enabled
+      - name: _APP_DB_ADAPTER_DOCUMENTSDB
+        value: mongodb
+      - name: _APP_DB_HOST_DOCUMENTSDB
+        value: appwrite-mongodb
+      - name: _APP_DB_PORT_DOCUMENTSDB
+        value: "27017"
+      - name: _APP_VECTORSDB
+        value: enabled
+      - name: _APP_DB_ADAPTER_VECTORSDB
+        value: postgresql
+      - name: _APP_DB_HOST_VECTORSDB
+        value: appwrite-postgresql
+      - name: _APP_DB_PORT_VECTORSDB
+        value: "5432"
+      - name: _APP_EMBEDDING
+        value: disabled
+      - name: _APP_USAGE_STATS
+        value: enabled
+      - name: _APP_ALERTS_USAGE_LAG
+        value: "120"
+      - name: _APP_USAGE_PASS
+        from:
+          env: USAGE_PW
+      - name: _APP_CONNECTIONS_DB_USAGE
+        from:
+          env: APPWRITE_WORKER___APP_CONNECTIONS_DB_USAGE
+      - name: _APP_POOL_SIZE_USAGE
+        value: "2"
+      - name: _APP_CONNECTIONS_DB_EXECUTIONS
+        from:
+          env: APPWRITE_WORKER___APP_CONNECTIONS_DB_EXECUTIONS
+      - name: _APP_POOL_SIZE_EXECUTIONS
+        value: "2"
+      - name: _APP_MAINTENANCE_RETENTION_USAGE_TTL
+        value: "180"
+      - name: _APP_STATS_USAGE_QUEUE_NAME
+        value: v1-stats-usage
+      - name: _APP_STATS_RESOURCES_QUEUE_NAME
+        value: v1-stats-resources
+      - name: _APP_MAINTENANCE_QUEUE_NAME
+        value: v1-maintenance
+      - name: _APP_STATS_RESOURCES_INTERVAL
+        value: "3600"
+      - name: _APP_LOGGING_FORMAT
+        value: pretty
+      - name: _APP_CONSOLE_URL
+        value: https://console.app.example.com
+      - name: _APP_CONSOLE_DOMAIN
+        value: console.app.example.com
+      - name: _APP_DOMAIN
+        value: app.example.com
+      - name: _APP_DOMAIN_TARGET_CNAME
+        value: localhost
+      - name: _APP_DOMAIN_TARGET_AAAA
+        value: ::1
+      - name: _APP_DOMAIN_TARGET_A
+        value: 127.0.0.1
+      - name: _APP_DNS
+        value: 8.8.8.8
+      - name: _APP_DOMAIN_FUNCTIONS
+        value: functions.app.example.com
+      - name: _APP_DOMAIN_SITES
+        value: sites.app.example.com
+      - name: _APP_OPTIONS_FORCE_HTTPS
+        value: disabled
+      - name: _APP_OPTIONS_ROUTER_FORCE_HTTPS
+        value: disabled
+      - name: _APP_WEBHOOK_MAX_FAILED_ATTEMPTS
+        value: "10"
+      - name: _APP_STORAGE_DEVICE
+        value: local
+      - name: _APP_STORAGE_S3_REGION
+        value: us-east-1
+      - name: _APP_STORAGE_DO_SPACES_REGION
+        value: us-east-1
+      - name: _APP_STORAGE_BACKBLAZE_REGION
+        value: us-west-004
+      - name: _APP_STORAGE_LINODE_REGION
+        value: eu-central-1
+      - name: _APP_STORAGE_WASABI_REGION
+        value: eu-central-1
+      - name: _APP_EXECUTOR_SECRET
+        from:
+          env: EXECUTOR_SECRET
+      - name: _APP_EXECUTOR_HOST
+        value: http://appwrite-openruntimes-executor/v1
+      - name: _APP_BUILDS_VOLUME
+        value: appwrite_appwrite-builds
+      - name: _APP_JOBS_HOST
+        value: http://appwrite-orchestrator:8080
+      - name: _APP_JOBS_SECRET
+        from:
+          env: JOBS_SECRET
+      - name: _APP_JOBS_ENDPOINT
+        value: http://appwrite
+      - name: _APP_BROWSER_HOST
+        value: http://appwrite-browser:3000/v1
+      - name: _APP_WORKER_SCREENSHOTS_ROUTER
+        value: http://appwrite
+      - name: _APP_FUNCTIONS_TIMEOUT
+        value: "900"
+      - name: _APP_SITES_TIMEOUT
+        value: "900"
+      - name: _APP_COMPUTE_BUILD_TIMEOUT
+        value: "2700"
+      - name: _APP_COMPUTE_CPUS
+        value: "0"
+      - name: _APP_COMPUTE_MEMORY
+        value: "0"
+      - name: _APP_COMPUTE_SIZE_LIMIT
+        value: "30000000"
+      - name: _APP_COMPUTE_BUILD_SIZE_LIMIT
+        value: "2000000000"
+      - name: _APP_OPEN_RUNTIMES_NFT
+        value: enabled
+      - name: _APP_SYSTEM_EMAIL_NAME
+        value: Appwrite
+      - name: _APP_SYSTEM_EMAIL_ADDRESS
+        value: noreply@appwrite.io
+      - name: _APP_MIGRATION_HOST
+        value: appwrite
+      - name: _APP_MAINTENANCE_RETENTION_AUDIT
+        value: "1209600"
+      - name: _APP_MAINTENANCE_RETENTION_AUDIT_CONSOLE
+        value: "15778800"
+    volumes:
+      - appwrite-appwrite-uploads:/storage/uploads
+      - appwrite-appwrite-cache:/storage/cache
+      - appwrite-appwrite-functions:/storage/functions
+      - appwrite-appwrite-sites:/storage/sites
+      - appwrite-appwrite-builds:/storage/builds
+      - appwrite-appwrite-certificates:/storage/certificates
+      - appwrite-appwrite-config:/storage/config
+      - appwrite-appwrite-imports:/storage/imports
+  appwrite-task-scheduler:
+    preset: service
+    image:
+      repository: appwrite-task-scheduler
+      tag: latest
+      build_config:
+        context: ./appwrite-task-scheduler
+        push: server
+    port: "8080"
+    env:
+      - name: _APP_ENV
+        value: production
+      - name: _APP_MEMORY_LIMIT
+        value: 512M
+      - name: _APP_WORKER_MAX_COROUTINES
+        value: "8"
+      - name: _APP_WORKER_PER_CORE
+        value: "6"
+      - name: _APP_OPENSSL_KEY_V1
+        from:
+          env: OPENSSL_KEY
+      - name: _APP_OPENSSL_KEY_CURRENT
+        value: "1"
+      - name: _APP_OPENSSL_KEY_OLDEST
+        value: "1"
+      - name: _APP_OPTIONS_FORCE_HTTPS
+        value: disabled
+      - name: _APP_DOMAIN
+        value: app.example.com
+      - name: _APP_CONSOLE_DOMAIN
+        value: console.app.example.com
+      - name: _APP_CONSOLE_SCHEMA
+        value: appwriteio
+      - name: _APP_DOMAIN_FUNCTIONS
+        value: functions.app.example.com
+      - name: _APP_DOMAIN_SITES
+        value: sites.app.example.com
+      - name: _APP_MIGRATION_HOST
+        value: appwrite
+      - name: _APP_REDIS_HOST
+        value: appwrite-redis
+      - name: _APP_REDIS_PORT
+        value: "6379"
+      - name: _APP_DB_ADAPTER
+        value: postgresql
+      - name: _APP_DB_HOST
+        value: appwrite-postgresql
+      - name: _APP_DB_PORT
+        value: "5432"
+      - name: _APP_DB_SCHEMA
+        value: appwrite
+      - name: _APP_DB_USER
+        value: user
+      - name: _APP_DB_PASS
+        from:
+          env: DB_PW
+      - name: _APP_USAGE_STATS
+        value: enabled
+      - name: _APP_USAGE_PASS
+        from:
+          env: USAGE_PW
+      - name: _APP_CONNECTIONS_DB_USAGE
+        from:
+          env: APPWRITE_TASK_SCHEDULER___APP_CONNECTIONS_DB_USAGE
+      - name: _APP_POOL_SIZE_USAGE
+        value: "2"
+      - name: _APP_CONNECTIONS_DB_EXECUTIONS
+        from:
+          env: APPWRITE_TASK_SCHEDULER___APP_CONNECTIONS_DB_EXECUTIONS
+      - name: _APP_POOL_SIZE_EXECUTIONS
+        value: "2"
+      - name: _APP_MAINTENANCE_RETENTION_USAGE_TTL
+        value: "180"
+      - name: _APP_STATS_USAGE_QUEUE_NAME
+        value: v1-stats-usage
+      - name: _APP_STATS_RESOURCES_QUEUE_NAME
+        value: v1-stats-resources
+      - name: _APP_MAINTENANCE_QUEUE_NAME
+        value: v1-maintenance
+      - name: _APP_STATS_RESOURCES_INTERVAL
+        value: "3600"
+      - name: _APP_FUNCTIONS_SCHEDULE_SPREAD
+        value: "0"
+      - name: _APP_MAINTENANCE_INACTIVE_INTERVAL
+        value: "604800"
+      - name: _APP_MAINTENANCE_INTERVAL
+        value: "86400"
+      - name: _APP_ALERTS_INTERVAL
+        value: "60"
+      - name: _APP_LOGGING_FORMAT
+        value: pretty
+  appwrite-task-maintenance:
+    preset: service
+    image:
+      repository: appwrite-task-maintenance
+      tag: latest
+      build_config:
+        context: ./appwrite-task-maintenance
+        push: server
+    port: "8080"
+    env:
+      - name: _APP_ENV
+        value: production
+      - name: _APP_MEMORY_LIMIT
+        value: 512M
+      - name: _APP_EDITION
+        value: self-hosted
+      - name: _APP_WORKER_PER_CORE
+        value: "6"
+      - name: _APP_DOMAIN
+        value: app.example.com
+      - name: _APP_DOMAIN_TARGET_CNAME
+        value: localhost
+      - name: _APP_DOMAIN_TARGET_AAAA
+        value: ::1
+      - name: _APP_DOMAIN_TARGET_A
+        value: 127.0.0.1
+      - name: _APP_DNS
+        value: 8.8.8.8
+      - name: _APP_DOMAIN_FUNCTIONS
+        value: functions.app.example.com
+      - name: _APP_ROUTER_AUTO_CERTIFICATES
+        value: enabled
+      - name: _APP_OPENSSL_KEY_V1
+        from:
+          env: OPENSSL_KEY
+      - name: _APP_OPENSSL_KEY_CURRENT
+        value: "1"
+      - name: _APP_OPENSSL_KEY_OLDEST
+        value: "1"
+      - name: _APP_REDIS_HOST
+        value: appwrite-redis
+      - name: _APP_REDIS_PORT
+        value: "6379"
+      - name: _APP_DB_ADAPTER
+        value: postgresql
+      - name: _APP_DB_HOST
+        value: appwrite-postgresql
+      - name: _APP_DB_PORT
+        value: "5432"
+      - name: _APP_DB_SCHEMA
+        value: appwrite
+      - name: _APP_DB_USER
+        value: user
+      - name: _APP_DB_PASS
+        from:
+          env: DB_PW
+      - name: _APP_MAINTENANCE_INTERVAL
+        value: "86400"
+      - name: _APP_MAINTENANCE_START_TIME
+        value: 00:00
+      - name: _APP_MAINTENANCE_RETENTION_EXECUTION
+        value: "1209600"
+      - name: _APP_MAINTENANCE_RETENTION_CACHE
+        value: "2592000"
+      - name: _APP_MAINTENANCE_RETENTION_ABUSE
+        value: "86400"
+      - name: _APP_MAINTENANCE_RETENTION_AUDIT
+        value: "1209600"
+      - name: _APP_MAINTENANCE_RETENTION_AUDIT_CONSOLE
+        value: "15778800"
+      - name: _APP_MAINTENANCE_RETENTION_SCHEDULES
+        value: "86400"
+      - name: _APP_MAINTENANCE_RETENTION_ALERTS
+        value: "7776000"
+      - name: _APP_LOGGING_FORMAT
+        value: pretty
+  appwrite-task-interval:
+    preset: service
+    image:
+      repository: appwrite-task-interval
+      tag: latest
+      build_config:
+        context: ./appwrite-task-interval
+        push: server
+    port: "8080"
+    env:
+      - name: _APP_ENV
+        value: production
+      - name: _APP_MEMORY_LIMIT
+        value: 512M
+      - name: _APP_WORKER_PER_CORE
+        value: "6"
+      - name: _APP_DOMAIN
+        value: app.example.com
+      - name: _APP_DOMAIN_TARGET_CNAME
+        value: localhost
+      - name: _APP_DOMAIN_TARGET_AAAA
+        value: ::1
+      - name: _APP_DOMAIN_TARGET_A
+        value: 127.0.0.1
+      - name: _APP_DNS
+        value: 8.8.8.8
+      - name: _APP_DOMAIN_FUNCTIONS
+        value: functions.app.example.com
+      - name: _APP_DOMAIN_SITES
+        value: sites.app.example.com
+      - name: _APP_OPENSSL_KEY_V1
+        from:
+          env: OPENSSL_KEY
+      - name: _APP_OPENSSL_KEY_CURRENT
+        value: "1"
+      - name: _APP_OPENSSL_KEY_OLDEST
+        value: "1"
+      - name: _APP_REDIS_HOST
+        value: appwrite-redis
+      - name: _APP_REDIS_PORT
+        value: "6379"
+      - name: _APP_DB_ADAPTER
+        value: postgresql
+      - name: _APP_DB_HOST
+        value: appwrite-postgresql
+      - name: _APP_DB_PORT
+        value: "5432"
+      - name: _APP_DB_SCHEMA
+        value: appwrite
+      - name: _APP_DB_USER
+        value: user
+      - name: _APP_DB_PASS
+        from:
+          env: DB_PW
+      - name: _APP_INTERVAL_DOMAIN_VERIFICATION
+        value: "120"
+      - name: _APP_INTERVAL_CLEANUP_STALE_EXECUTIONS
+        value: "300"
+      - name: _APP_LOGGING_FORMAT
+        value: pretty
+  appwrite-browser:
+    preset: service
+    image: appwrite/browser:0.3.10
+    port: "8080"
+    env:
+      - name: ALLOWED_HOSTS
+        value: appwrite
+  appwrite-autogravity:
+    preset: service
+    image: ghcr.io/appwrite/autogravity:0.0.11
+    port: "8080"
+    env:
+      - name: MODEL_BACKEND
+        value: focalnet
+  appwrite-exiftool:
+    preset: service
+    image: ghcr.io/appwrite/exiftool:0.1.1
+    port: "8080"
+  appwrite-geo:
+    health_check_path: /v1/health
+    preset: service
+    image: appwrite/geo:0.3.2
+    port: "8080"
+    env:
+      - name: GEO_SECRET
+        from:
+          env: GEO_SECRET
+  appwrite-clickhouse:
+    preset: database
+    image:
+      repository: appwrite-clickhouse
+      tag: latest
+      build_config:
+        context: ./appwrite-clickhouse
+        push: server
+    port: "8123"
+    env:
+      - name: CLICKHOUSE_DB
+        value: appwrite
+      - name: CLICKHOUSE_USER
+        value: appwrite
+      - name: CLICKHOUSE_PASSWORD
+        from:
+          env: USAGE_PW
+      - name: CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT
+        value: "1"
+      - name: CLICKHOUSE_ALWAYS_RUN_INITDB_SCRIPTS
+        value: "1"
+    volumes:
+      - appwrite-appwrite-clickhouse:/var/lib/clickhouse
+  appwrite-openruntimes-executor:
+    health_check_path: /v1/health
+    preset: service
+    image: openruntimes/executor:1.1.2
+    port: "8080"
+    env:
+      - name: OPR_EXECUTOR_IMAGES
+        value: openruntimes/node:v5-22,openruntimes/python:v5-3.12,openruntimes/php:v5-8.3,openruntimes/static:v5-1
+      - name: OPR_EXECUTOR_INACTIVE_THRESHOLD
+        value: "60"
+      - name: OPR_EXECUTOR_MAINTENANCE_INTERVAL
+        value: "3600"
+      - name: OPR_EXECUTOR_NETWORK
+        value: appwrite_default
+      - name: OPR_EXECUTOR_ENV
+        value: production
+      - name: OPR_EXECUTOR_RUNTIMES
+        value: node-22,node-24,node-26,python-3.12,php-8.3,ruby-3.3,dart-3.5,go-1.23,rust-1.83,bun-1.1,deno-1.46,java-21.0,dotnet-8.0,static-1,node-22
+      - name: OPR_EXECUTOR_SECRET
+        from:
+          env: EXECUTOR_SECRET
+      - name: OPR_EXECUTOR_RUNTIME_VERSIONS
+        value: v5
+      - name: OPEN_RUNTIMES_NFT
+        value: enabled
+      - name: OPR_EXECUTOR_CONNECTION_STORAGE
+        value: local://localhost
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - appwrite-appwrite-builds:/storage/builds
+      - appwrite-appwrite-functions:/storage/functions
+      - appwrite-appwrite-sites:/storage/sites
+      - /tmp:/tmp
+  appwrite-orchestrator:
+    preset: service
+    image: ghcr.io/open-runtimes/orchestrator/orchestrator:4.0.0
+    port: "8080"
+    env:
+      - name: ORCHESTRATOR_BACKEND
+        value: docker
+      - name: ORCHESTRATOR_NETWORK
+        value: appwrite_default
+      - name: DOCKER_NETWORK
+        value: appwrite_default
+      - name: ARTIFACT_ENDPOINT
+        value: http://appwrite-orchestrator:8080
+      - name: S3_REGION
+        value: us-east-1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  appwrite-postgresql:
+    preset: database
+    image:
+      repository: appwrite-postgresql
+      tag: latest
+      build_config:
+        context: ./appwrite-postgresql
+        push: server
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: appwrite
+      - name: POSTGRES_USER
+        value: user
+      - name: POSTGRES_PASSWORD
+        from:
+          env: DB_PW
+    volumes:
+      - appwrite-appwrite-postgresql:/var/lib/postgresql
+  appwrite-redis:
+    preset: database
+    image:
+      repository: appwrite-redis
+      tag: latest
+      build_config:
+        context: ./appwrite-redis
+        push: server
+    port: "6379"
+    volumes:
+      - appwrite-appwrite-redis:/data
+  appwrite-mariadb:
+    preset: database
+    image:
+      repository: appwrite-mariadb
+      tag: latest
+      build_config:
+        context: ./appwrite-mariadb
+        push: server
+    port: "3306"
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PW
+      - name: MYSQL_DATABASE
+        value: appwrite
+      - name: MYSQL_USER
+        value: user
+      - name: MYSQL_PASSWORD
+        from:
+          env: DB_PW
+      - name: MARIADB_AUTO_UPGRADE
+        value: "1"
+    volumes:
+      - appwrite-appwrite-mariadb:/var/lib/mysql
+  appwrite-mongodb:
+    preset: database
+    image:
+      repository: appwrite-mongodb
+      tag: latest
+      build_config:
+        context: ./appwrite-mongodb
+        push: server
+    port: "27017"
+    env:
+      - name: MONGO_INITDB_ROOT_USERNAME
+        value: root
+      - name: MONGO_INITDB_ROOT_PASSWORD
+        from:
+          env: DB_ROOT_PW
+      - name: MONGO_INITDB_DATABASE
+        value: appwrite
+      - name: MONGO_INITDB_USERNAME
+        value: user
+      - name: MONGO_INITDB_PASSWORD
+        from:
+          env: DB_PW
+    volumes:
+      - appwrite-appwrite-mongodb:/data/db
+      - appwrite-appwrite-mongodb-keyfile:/data/keyfile

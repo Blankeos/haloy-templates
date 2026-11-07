@@ -1,0 +1,50 @@
+name: mattermost
+server: localhost
+targets:
+  mattermost-postgres:
+    preset: database
+    image: postgres:17
+    port: "5432"
+    env:
+      - name: TZ
+        value: UTC
+      - name: POSTGRES_USER
+        value: mmuser
+      - name: POSTGRES_PASSWORD
+        from:
+          env: INLINE_PASSWORD_32
+      - name: POSTGRES_DB
+        value: mattermost
+    volumes:
+      - mattermost-mattermostdbdata:/var/lib/postgresql/data
+  mattermost:
+    image: mattermost/mattermost-team-edition:10.6.1
+    port: "8065"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DOMAIN
+        value: app.example.com
+      - name: TZ
+        value: UTC
+      - name: POSTGRES_USER
+        value: mmuser
+      - name: POSTGRES_PASSWORD
+        from:
+          env: INLINE_PASSWORD_32
+      - name: POSTGRES_DB
+        value: mattermost
+      - name: MM_SQLSETTINGS_DRIVERNAME
+        value: postgres
+      - name: MM_SQLSETTINGS_DATASOURCE
+        from:
+          env: MATTERMOST__MM_SQLSETTINGS_DATASOURCE
+      - name: APP_PORT
+        value: "8065"
+    volumes:
+      - mattermost-mattermostconf:/mattermost/config
+      - mattermost-mattermostdata:/mattermost/data
+      - mattermost-mattermostlogs:/mattermost/logs
+      - mattermost-mattermostplugsin:/mattermost/plugins
+      - mattermost-mattermostclientplugins:/mattermost/client/plugins
+      - mattermost-mattermostbleveindexes:/mattermost/bleve-indexes

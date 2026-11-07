@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "DUMBBUDGET_PIN": "password:16"
+  },
+  "derived": {}
+}

@@ -1,0 +1,68 @@
+name: wupnext
+server: localhost
+targets:
+  wupnext:
+    image: docker.io/javierlnmn/wupnext:0.3.0
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: DEBUG
+        value: "False"
+      - name: ALLOWED_HOSTS
+        value: app.example.com
+      - name: CSRF_TRUSTED_ORIGINS
+        value: https://app.example.com
+      - name: SITE_URL
+        value: https://app.example.com
+      - name: MCP_BASE_URL
+        value: https://app.example.com
+      - name: EMAIL_BACKEND
+        value: anymail.backends.resend.EmailBackend
+      - name: DEFAULT_FROM_EMAIL
+        value: wupnext <onboarding@resend.dev>
+      - name: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - name: DJANGO_SUPERUSER_EMAIL
+        value: admin@app.example.com
+      - name: DJANGO_SUPERUSER_PASSWORD
+        from:
+          env: ADMIN_PASSWORD
+    volumes:
+      - wupnext-wupnext-db:/app/db
+  wupnext-worker:
+    preset: service
+    image:
+      repository: wupnext-worker
+      tag: latest
+      build_config:
+        context: ./wupnext-worker
+        push: server
+    port: "8080"
+    env:
+      - name: SECRET_KEY
+        from:
+          env: SECRET_KEY
+      - name: DEBUG
+        value: "False"
+      - name: ALLOWED_HOSTS
+        value: app.example.com
+      - name: CSRF_TRUSTED_ORIGINS
+        value: https://app.example.com
+      - name: SITE_URL
+        value: https://app.example.com
+      - name: EMAIL_BACKEND
+        value: anymail.backends.resend.EmailBackend
+      - name: DEFAULT_FROM_EMAIL
+        value: wupnext <onboarding@resend.dev>
+      - name: Q_WORKERS
+        value: "2"
+      - name: Q_TIMEOUT
+        value: "60"
+      - name: Q_RETRY
+        value: "120"
+    volumes:
+      - wupnext-wupnext-db:/app/db

@@ -1,0 +1,53 @@
+name: instantdb
+server: localhost
+targets:
+  instantdb-postgres:
+    preset: service
+    image:
+      repository: instantdb-postgres
+      tag: latest
+      build_config:
+        context: ./instantdb-postgres
+        push: server
+    port: "8080"
+    env:
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+      - name: POSTGRES_USER
+        value: instant
+      - name: POSTGRES_DB
+        value: instant
+    volumes:
+      - instantdb-backend-db:/var/lib/postgresql/data
+  instantdb-server:
+    health_check_path: /health
+    image:
+      repository: instantdb-server
+      tag: latest
+      build_config:
+        context: ./instantdb-server
+        push: server
+    port: "8888"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: DATABASE_URL
+        from:
+          env: INSTANTDB_SERVER__DATABASE_URL
+      - name: NREPL_BIND_ADDRESS
+        value: 0.0.0.0
+      - name: PORT
+        value: "8888"
+      - name: HOST
+        value: 0.0.0.0
+      - name: AWS_ACCESS_KEY_ID
+        value: FILL-YOUR-CREDENTIALS
+      - name: AWS_SECRET_ACCESS_KEY
+        value: FILL-YOUR-CREDENTIALS
+      - name: AWS_REGION
+        value: us-east-1
+      - name: PYTHONUNBUFFERED
+        value: "1"
+      - name: NODE_ENV
+        value: production

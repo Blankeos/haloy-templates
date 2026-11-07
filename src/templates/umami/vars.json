@@ -1,0 +1,9 @@
+{
+  "secrets": {
+    "INLINE_BASE64_64": "base64:64",
+    "INLINE_PASSWORD_32": "password:32"
+  },
+  "derived": {
+    "UMAMI__DATABASE_URL": "postgresql://umami:${INLINE_PASSWORD_32}@umami-db:5432/umami"
+  }
+}

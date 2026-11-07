@@ -1,0 +1,59 @@
+name: filerun
+server: localhost
+targets:
+  filerun-init:
+    preset: service
+    image:
+      repository: filerun-init
+      tag: latest
+      build_config:
+        context: ./filerun-init
+        push: server
+    port: "8080"
+    volumes:
+      - filerun-filerun-html:/var/www/html
+      - filerun-filerun-user-files:/user-files
+  filerun:
+    image: filerun/filerun:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: FR_DB_HOST
+        value: filerun-db
+      - name: FR_DB_PORT
+        value: "3306"
+      - name: FR_DB_NAME
+        value: filerun
+      - name: FR_DB_USER
+        value: filerun
+      - name: FR_DB_PASS
+        from:
+          env: MYSQL_PASSWORD
+    volumes:
+      - filerun-filerun-html:/var/www/html
+      - filerun-filerun-user-files:/user-files
+  filerun-db:
+    preset: database
+    image:
+      repository: filerun-db
+      tag: latest
+      build_config:
+        context: ./filerun-db
+        push: server
+    port: "3306"
+    env:
+      - name: MARIADB_ROOT_PASSWORD
+        from:
+          env: MARIADB_ROOT_PASSWORD
+      - name: MYSQL_USER
+        value: filerun
+      - name: MYSQL_PASSWORD
+        from:
+          env: MYSQL_PASSWORD
+      - name: MYSQL_DATABASE
+        value: filerun
+      - name: MARIADB_AUTO_UPGRADE
+        value: "1"
+    volumes:
+      - filerun-filerun-db:/var/lib/mysql

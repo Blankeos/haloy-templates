@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "KENER_SECRET_KEY": "password:64"
+  },
+  "derived": {}
+}

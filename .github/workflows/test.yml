@@ -1,0 +1,15 @@
+name: test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun test
+      - run: bunx tsc --noEmit
+      - name: Install haloy CLI
+        run: curl -fsSL https://sh.haloy.dev/install-haloy.sh | sh
+      - name: Every bundled template passes haloy validate-config
+        run: bash scripts/validate-all.sh

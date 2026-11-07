@@ -1,0 +1,10 @@
+name: dumbbudget
+server: localhost
+targets:
+  dumbbudget:
+    image: dumbwareio/dumbbudget:latest
+    port: "3000"
+    domains:
+      - domain: app.example.com
+    volumes:
+      - dumbbudget-dumbbudget-data:/app/data

@@ -1,0 +1,30 @@
+name: typecho
+server: localhost
+targets:
+  typecho:
+    image: 80x86/typecho:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PHP_TZ
+        value: Asia/Shanghai
+      - name: PHP_MAX_EXECUTION_TIME
+        value: "600"
+    volumes:
+      - typecho-typecho-data:/data
+  typecho-db:
+    preset: database
+    image: mysql:5.7
+    port: "3306"
+    env:
+      - name: MYSQL_DATABASE
+        value: typecho
+      - name: MYSQL_USER
+        value: typecho
+      - name: MYSQL_PASSWORD
+        value: typecho_password
+      - name: MYSQL_ROOT_PASSWORD
+        value: root_password
+    volumes:
+      - typecho-db-data:/var/lib/mysql

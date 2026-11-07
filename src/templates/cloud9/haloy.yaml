@@ -1,0 +1,25 @@
+name: cloud9
+server: localhost
+targets:
+  cloud9:
+    image: lscr.io/linuxserver/cloud9:1.29.2
+    port: "8000"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PUID
+        value: "1000"
+      - name: PGID
+        value: "1000"
+      - name: TZ
+        value: Europe/London
+      - name: GITURL
+        value: https://github.com/linuxserver/docker-cloud9.git
+      - name: USERNAME
+        value: user
+      - name: PASSWORD
+        from:
+          env: PASSWORD
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - cloud9-code:/code

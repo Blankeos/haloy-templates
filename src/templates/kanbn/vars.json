@@ -1,0 +1,10 @@
+{
+  "secrets": {
+    "POSTGRES_PASSWORD": "password:32",
+    "BETTER_AUTH_SECRET": "password:32"
+  },
+  "derived": {
+    "KANBN__POSTGRES_URL": "postgresql://kan:${POSTGRES_PASSWORD}@kanbn-postgres:5432/kan_db",
+    "KANBN_MIGRATE__POSTGRES_URL": "postgresql://kan:${POSTGRES_PASSWORD}@kanbn-postgres:5432/kan_db"
+  }
+}

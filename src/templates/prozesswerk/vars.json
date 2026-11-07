@@ -1,0 +1,6 @@
+{
+  "secrets": {
+    "LLM_API_KEY": "password:32"
+  },
+  "derived": {}
+}

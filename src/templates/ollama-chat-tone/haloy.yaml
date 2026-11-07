@@ -1,0 +1,31 @@
+name: ollama-chat-tone
+server: localhost
+targets:
+  ollama-chat-tone:
+    image: billnice250/chattone:latest
+    port: "8080"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: APP_NAME
+        value: Ollama Chat Tone
+      - name: ADDR
+        value: :8080
+      - name: SESSION_SECRET
+        value: change-me......32charsOrMore
+      - name: DB_PATH
+        value: /data/app.db
+      - name: OLLAMA_URL
+        value: http://your-ollama-host:11434
+      - name: OLLAMA_TIMEOUT
+        value: "5"
+      - name: DEFAULT_MODEL
+        value: llama3.2
+      - name: OPEN_BROWSER
+        value: "false"
+      - name: BASIC_AUTH_USER
+        value: admin
+      - name: BASIC_AUTH_PASSWORD
+        value: change-me
+    volumes:
+      - ollama-chat-tone-ollama-chat-tone-data:/data

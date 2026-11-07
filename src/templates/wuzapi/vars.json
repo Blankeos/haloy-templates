@@ -1,0 +1,8 @@
+{
+  "secrets": {
+    "ADMIN_TOKEN": "password:32",
+    "ENCRYPTION_KEY": "password:32",
+    "DB_PASSWORD": "password:32"
+  },
+  "derived": {}
+}

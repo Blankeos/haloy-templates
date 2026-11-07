@@ -1,0 +1,58 @@
+name: portabase
+server: localhost
+targets:
+  portabase:
+    health_check_path: /api/health
+    image: portabase/portabase:latest
+    port: "80"
+    domains:
+      - domain: app.example.com
+    env:
+      - name: PROJECT_URL
+        value: https://app.example.com
+      - name: PROJECT_SECRET
+        from:
+          env: PROJECT_SECRET
+      - name: DATABASE_URL
+        from:
+          env: PORTABASE__DATABASE_URL
+      - name: PROJECT_NAME
+        value: Portabase
+      - name: TZ
+        value: Europe/Paris
+      - name: LOG_LEVEL
+        value: info
+      - name: RETENTION_CRON
+        value: 0 7 * * *
+      - name: STALE_BACKUP_THRESHOLD_HOURS
+        value: "6"
+      - name: BACKUP_FOLDER_NAME
+        value: backups
+      - name: TELEMETRY
+        value: "true"
+      - name: SKIP_ONBOARDING
+        value: "false"
+      - name: API_ENABLED
+        value: "false"
+      - name: OPENAPI_ENABLED
+        value: "false"
+      - name: MCP_ENABLED
+        value: "false"
+      - name: SMTP_SECURE
+        value: "false"
+    volumes:
+      - portabase-portabase-data:/data
+  portabase-db:
+    preset: database
+    image: postgres:17-alpine
+    port: "5432"
+    env:
+      - name: POSTGRES_DB
+        value: portabase
+      - name: POSTGRES_USER
+        value: portabase
+      - name: POSTGRES_PASSWORD
+        from:
+          env: POSTGRES_PASSWORD
+    volumes:
+      - portabase-postgres-data:/var/lib/postgresql/data
