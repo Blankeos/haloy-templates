@@ -8,7 +8,7 @@ description: Add a self-hosted app to a Haloy server by translating its Dokploy 
 Haloy has no template marketplace. `haloy-templates` bundles Dokploy's templates, translated into `haloy.yaml`.
 
 1. Find the template id (folder name in https://github.com/Dokploy/templates/tree/canary/blueprints).
-2. Add the bundled template: `bun run add <id> --domain <host> --server <haloy server> --out <registry>/apps` (all Dokploy templates are pre-translated in `templates/`; `bun run list` shows them). If it is missing, run `bun run sync --only <id>`.
+2. Add the bundled template, no clone needed: `bunx github:Blankeos/haloy-templates add <id> --domain <host> --server <haloy server> --out <registry>/apps` (inside a clone: `bun run add ...`) (all Dokploy templates are pre-translated in `templates/`; `bun run list` shows them). If it is missing, run `bun run sync --only <id>`.
 3. Read `REPORT.md`, starting with its badges: ✅ verified means `haloy validate-config` passes, 🟢 tested means someone deployed it and used it. No 🟢 means it is unproven: expect to debug it. `partial` entries are workarounds already applied (check them). `manual` entries need a human decision: privileged, devices, `build:`, `env_file`.
 4. Path routing (`/api` on the main host) is served by a generated `<id>-gateway` nginx target, so only the main host needs DNS. Haloy exposes one port per target: any extra published port is listed in the report.
 5. Optional vars the report lists as unset are omitted; add them to `haloy.yaml` only if the app needs them. `.env` already holds generated secrets; never commit it.
