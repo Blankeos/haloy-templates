@@ -38,8 +38,8 @@ async function writeFiles(dir: string, files: Record<string, string>) {
   for (const [p, c] of Object.entries(files)) {
     const file = join(dir, p);
     await mkdir(dirname(file), { recursive: true });
-    await writeFile(file, c);
-    if (p === "deploy.sh") await chmod(file, 0o755);
+    await writeFile(file, c, { mode: 0o644 });
+    await chmod(file, p === "deploy.sh" ? 0o755 : 0o644);
   }
 }
 

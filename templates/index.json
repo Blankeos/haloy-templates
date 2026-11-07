@@ -391,8 +391,8 @@
  },
  {
   "id": "chatwoot",
-  "status": "ok",
-  "targets": 4
+  "status": "partial",
+  "targets": 5
  },
  {
   "id": "checkcle",

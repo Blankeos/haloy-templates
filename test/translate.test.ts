@@ -74,7 +74,7 @@ test("output is deterministic", () => {
 test("multi-service chatwoot template: command survives in a Dockerfile", () => {
   const r = translate(load("chatwoot"));
   expect(Object.keys(r.files).filter((f) => f.endsWith("/Dockerfile")).length).toBeGreaterThanOrEqual(1);
-  expect(r.targets.length).toBe(4);
+  expect(r.targets.length).toBe(5);
 });
 
 import { shlex } from "../src/translate";

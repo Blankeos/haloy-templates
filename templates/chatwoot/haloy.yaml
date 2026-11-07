@@ -2,6 +2,7 @@ name: chatwoot
 server: localhost
 targets:
   chatwoot:
+    preset: service
     image:
       repository: chatwoot
       tag: latest
@@ -9,8 +10,6 @@ targets:
         context: ./chatwoot
         push: server
     port: "3000"
-    domains:
-      - domain: app.example.com
     env:
       - name: FRONTEND_URL
         value: https://app.example.com
@@ -135,3 +134,14 @@ targets:
           env: REDIS_PASSWORD
     volumes:
       - chatwoot-chatwoot-redis-data:/data
+  chatwoot-gateway:
+    image:
+      repository: chatwoot-gateway
+      tag: latest
+      build_config:
+        context: ./chatwoot-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
+    domains:
+      - domain: app.example.com

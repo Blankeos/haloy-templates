@@ -8,3 +8,4 @@ haloy deploy -t chatwoot-postgres
 haloy deploy -t chatwoot-redis
 haloy deploy -t chatwoot
 haloy deploy -t chatwoot-worker
+haloy deploy -t chatwoot-gateway

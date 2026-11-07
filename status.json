@@ -3013,11 +3013,11 @@
  },
  "tested": {
   "chatwoot": {
-   "hash": "4f006a924cf010af708505859cb13d9d1e69deee",
+   "hash": "544615c78de05a1b770e4d8d32c737939a159ce6",
    "date": "2026-11-07",
    "haloy": "v0.1.0-beta.73",
-   "arch": "arm64",
-   "notes": "web healthy; /api reports queue and data services ok; 88 tables migrated; Sidekiq worker registered"
+   "arch": "amd64",
+   "notes": "Production (netc, 2026-11-07): restored real data, login and conversations work. Rails boots slower than Haloy's health window, so the web target runs as a service behind the generated nginx gateway."
   },
   "rustfs": {
    "hash": "4ba51b89851816518b01f257fd82172759a7057c",

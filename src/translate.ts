@@ -197,6 +197,14 @@ export function translate(input: Input): Result {
   for (const [svc, ds] of Object.entries(domainsBySvc)) for (const d of ds) if (d.path && d.path !== "/") gwHosts.set(normHost(d.host), []);
   for (const [svc, ds] of Object.entries(domainsBySvc)) for (const d of ds) gwHosts.get(normHost(d.host))?.push({ svc, port: d.port, path: d.path || "/" });
 
+  /** Images that boot slower than Haloy's health-check window (~20s): front them with the gateway so the app target runs as a plain service. */
+  const SLOW_START = new Set(["chatwoot/chatwoot"]);
+  for (const [svc, ds] of Object.entries(domainsBySvc)) {
+    const img = String((services as any)[svc]?.image ?? "");
+    if (!SLOW_START.has(img.split(":")[0])) continue;
+    for (const d of ds) { const h = normHost(d.host); if (!gwHosts.has(h)) gwHosts.set(h, [{ svc, port: d.port, path: "/" }]); }
+  }
+
   // ---- per-service -------------------------------------------------------
   const targets: Record<string, any> = {};
   const order: { name: string; deps: string[] }[] = [];
