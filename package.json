@@ -1,0 +1,16 @@
+{
+  "name": "haloy-templates",
+  "version": "0.1.0",
+  "description": "Translate Dokploy templates (docker-compose + template.toml) into Haloy configs.",
+  "type": "module",
+  "license": "MIT",
+  "bin": { "haloy-templates": "src/cli.ts" },
+  "scripts": {
+    "test": "bun test",
+    "translate": "bun run src/cli.ts translate",
+    "all": "bun run src/cli.ts all",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": { "smol-toml": "^1.9.1", "yaml": "^2.9.1" },
+  "devDependencies": { "@types/bun": "latest", "typescript": "^5" }
+}
