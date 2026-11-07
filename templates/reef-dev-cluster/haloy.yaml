@@ -12,8 +12,6 @@ targets:
     domains:
       - domain: app.example.com
       - domain: spec.app.example.com
-      - domain: ws.app.example.com
-      - domain: faucet.app.example.com
     env:
       - name: DEFAULT_AMOUNT
         value: "2000"

@@ -1,2 +1,3 @@
 FROM glitchtip/glitchtip:6.1.0
-CMD ["sh","-c","./bin/run-migrate.sh"]
+EXPOSE 8080
+CMD ["./bin/run-migrate.sh"]

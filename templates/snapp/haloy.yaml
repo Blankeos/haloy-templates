@@ -15,7 +15,7 @@ targets:
         from:
           env: TOKEN_SECRET
       - name: ORIGIN
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DISABLED_EMAIL_AND_PASSWORD
         value: "false"
       - name: LOG_LEVEL

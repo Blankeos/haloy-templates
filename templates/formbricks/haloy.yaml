@@ -17,9 +17,9 @@ targets:
       - domain: app.example.com
     env:
       - name: WEBAPP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXTAUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DATABASE_URL
         value: postgresql://postgres:postgres@formbricks-postgres:5432/formbricks?schema=public
       - name: NEXTAUTH_SECRET

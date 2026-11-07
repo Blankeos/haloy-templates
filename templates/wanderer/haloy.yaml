@@ -33,7 +33,7 @@ targets:
         from:
           env: POCKETBASE_KEY
       - name: ORIGIN
-        value: http://app.example.com
+        value: https://app.example.com
     volumes:
       - wanderer-db-data:/pb_data
   wanderer-web:
@@ -49,7 +49,7 @@ targets:
         from:
           env: MEILI_MASTER_KEY
       - name: ORIGIN
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BODY_SIZE_LIMIT
         value: Infinity
       - name: PUBLIC_POCKETBASE_URL

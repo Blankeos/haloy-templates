@@ -22,7 +22,7 @@ targets:
       - name: GRAYLOG_HTTP_BIND_ADDRESS
         value: 0.0.0.0:9000
       - name: GRAYLOG_HTTP_EXTERNAL_URI
-        value: http://app.example.com/
+        value: https://app.example.com/
       - name: GRAYLOG_MONGODB_URI
         value: mongodb://graylog-mongodb:27017/graylog
       - name: GRAYLOG_ELASTICSEARCH_HOSTS

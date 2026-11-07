@@ -92,7 +92,12 @@ targets:
   novu-worker:
     health_check_path: /
     preset: service
-    image: ghcr.io/novuhq/novu/worker:3.18.0
+    image:
+      repository: novu-worker
+      tag: latest
+      build_config:
+        context: ./novu-worker
+        push: server
     port: "8080"
     env:
       - name: NODE_ENV

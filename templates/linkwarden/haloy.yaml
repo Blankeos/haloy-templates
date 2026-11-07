@@ -12,7 +12,7 @@ targets:
         from:
           env: NEXT_SECRET
       - name: NEXTAUTH_URL
-        value: http://app.example.com/api/v1/auth
+        value: https://app.example.com/api/v1/auth
       - name: DATABASE_URL
         from:
           env: LINKWARDEN__DATABASE_URL

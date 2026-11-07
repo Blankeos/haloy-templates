@@ -14,7 +14,12 @@ targets:
       - silverbullet-silverbullet-space:/space
   silverbullet-watchtower:
     preset: service
-    image: containrrr/watchtower
+    image:
+      repository: silverbullet-watchtower
+      tag: latest
+      build_config:
+        context: ./silverbullet-watchtower
+        push: server
     port: "8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

@@ -26,6 +26,7 @@ targets:
     volumes:
       - usesend-cache:/data
   usesend-storage-prod:
+    health_check_path: /minio/health/live
     preset: service
     image:
       repository: usesend-storage-prod

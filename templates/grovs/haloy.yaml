@@ -134,7 +134,7 @@ targets:
       - name: MAILER_FROM
         value: Grovs <noreply@app.example.com>
       - name: MCP_CONSENT_URL
-        value: http://dashboard.app.example.com/mcp/authorize
+        value: https://dashboard.app.example.com/mcp/authorize
       - name: MCP_HOST
         value: mcp.app.example.com
       - name: OAUTH_CLIENT_SECRET
@@ -155,7 +155,7 @@ targets:
       - name: POSTGRES_USER
         value: grovs
       - name: PREVIEW_BASE_URL
-        value: http://preview.app.example.com
+        value: https://preview.app.example.com
       - name: PREVIEW_HOST
         value: preview.app.example.com
       - name: PUBLIC_GO_PROJECT_IDENTIFIER
@@ -179,7 +179,7 @@ targets:
       - name: REVENUE_READS_FROM_LEDGER
         value: "true"
       - name: S3_ASSET_PREFIX
-        value: http://api.app.example.com
+        value: https://api.app.example.com
       - name: SDK_HOST
         value: sdk.app.example.com
       - name: SECRET_KEY_BASE
@@ -304,7 +304,7 @@ targets:
       - name: MAILER_FROM
         value: Grovs <noreply@app.example.com>
       - name: MCP_CONSENT_URL
-        value: http://dashboard.app.example.com/mcp/authorize
+        value: https://dashboard.app.example.com/mcp/authorize
       - name: MCP_HOST
         value: mcp.app.example.com
       - name: OAUTH_CLIENT_SECRET
@@ -325,7 +325,7 @@ targets:
       - name: POSTGRES_USER
         value: grovs
       - name: PREVIEW_BASE_URL
-        value: http://preview.app.example.com
+        value: https://preview.app.example.com
       - name: PREVIEW_HOST
         value: preview.app.example.com
       - name: PUBLIC_GO_PROJECT_IDENTIFIER
@@ -349,7 +349,7 @@ targets:
       - name: REVENUE_READS_FROM_LEDGER
         value: "true"
       - name: S3_ASSET_PREFIX
-        value: http://api.app.example.com
+        value: https://api.app.example.com
       - name: SDK_HOST
         value: sdk.app.example.com
       - name: SECRET_KEY_BASE
@@ -466,7 +466,7 @@ targets:
       - name: MAILER_FROM
         value: Grovs <noreply@app.example.com>
       - name: MCP_CONSENT_URL
-        value: http://dashboard.app.example.com/mcp/authorize
+        value: https://dashboard.app.example.com/mcp/authorize
       - name: MCP_HOST
         value: mcp.app.example.com
       - name: OAUTH_CLIENT_SECRET
@@ -487,7 +487,7 @@ targets:
       - name: POSTGRES_USER
         value: grovs
       - name: PREVIEW_BASE_URL
-        value: http://preview.app.example.com
+        value: https://preview.app.example.com
       - name: PREVIEW_HOST
         value: preview.app.example.com
       - name: PUBLIC_GO_PROJECT_IDENTIFIER
@@ -511,7 +511,7 @@ targets:
       - name: REVENUE_READS_FROM_LEDGER
         value: "true"
       - name: S3_ASSET_PREFIX
-        value: http://api.app.example.com
+        value: https://api.app.example.com
       - name: SDK_HOST
         value: sdk.app.example.com
       - name: SECRET_KEY_BASE
@@ -628,7 +628,7 @@ targets:
       - name: MAILER_FROM
         value: Grovs <noreply@app.example.com>
       - name: MCP_CONSENT_URL
-        value: http://dashboard.app.example.com/mcp/authorize
+        value: https://dashboard.app.example.com/mcp/authorize
       - name: MCP_HOST
         value: mcp.app.example.com
       - name: OAUTH_CLIENT_SECRET
@@ -649,7 +649,7 @@ targets:
       - name: POSTGRES_USER
         value: grovs
       - name: PREVIEW_BASE_URL
-        value: http://preview.app.example.com
+        value: https://preview.app.example.com
       - name: PREVIEW_HOST
         value: preview.app.example.com
       - name: PUBLIC_GO_PROJECT_IDENTIFIER
@@ -673,7 +673,7 @@ targets:
       - name: REVENUE_READS_FROM_LEDGER
         value: "true"
       - name: S3_ASSET_PREFIX
-        value: http://api.app.example.com
+        value: https://api.app.example.com
       - name: SDK_HOST
         value: sdk.app.example.com
       - name: SECRET_KEY_BASE
@@ -709,7 +709,7 @@ targets:
       - domain: dashboard.app.example.com
     env:
       - name: API_URL
-        value: http://api.app.example.com
+        value: https://api.app.example.com
       - name: OAUTH_CLIENT_UID
         from:
           env: OAUTH_CLIENT_UID

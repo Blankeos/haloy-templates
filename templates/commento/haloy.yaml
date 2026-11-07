@@ -8,7 +8,7 @@ targets:
       - domain: app.example.com
     env:
       - name: COMMENTO_ORIGIN
-        value: http://app.example.com
+        value: https://app.example.com
       - name: COMMENTO_POSTGRES
         from:
           env: COMMENTO__COMMENTO_POSTGRES

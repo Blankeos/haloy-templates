@@ -16,7 +16,7 @@ targets:
       - name: APP_DOMAIN
         value: app.example.com
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DB_DATABASE
         value: mixpost_db
       - name: DB_USERNAME
@@ -29,7 +29,12 @@ targets:
       - mixpost-logs:/var/www/html/storage/logs
   mixpost-mysql:
     preset: service
-    image: mysql/mysql-server:8.0
+    image:
+      repository: mixpost-mysql
+      tag: latest
+      build_config:
+        context: ./mixpost-mysql
+        push: server
     port: "8080"
     env:
       - name: MYSQL_DATABASE

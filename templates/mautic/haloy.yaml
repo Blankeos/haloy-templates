@@ -65,7 +65,12 @@ targets:
       - mautic-mautic-data:/var/www/html
   mautic-cron:
     preset: service
-    image: mautic/mautic:5.1.1-apache
+    image:
+      repository: mautic-cron
+      tag: latest
+      build_config:
+        context: ./mautic-cron
+        push: server
     port: "8080"
     env:
       - name: DOCKER_MAUTIC_ROLE
@@ -89,7 +94,12 @@ targets:
       - mautic-mautic-data:/var/www/html
   mautic-worker:
     preset: service
-    image: mautic/mautic:5.1.1-apache
+    image:
+      repository: mautic-worker
+      tag: latest
+      build_config:
+        context: ./mautic-worker
+        push: server
     port: "8080"
     env:
       - name: DOCKER_MAUTIC_ROLE

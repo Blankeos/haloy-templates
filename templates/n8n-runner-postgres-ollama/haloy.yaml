@@ -126,7 +126,12 @@ targets:
         value: "6379"
   n8n-runner-postgres-ollama-n8n-runner:
     preset: service
-    image: n8nio/runners:nightly
+    image:
+      repository: n8n-runner-postgres-ollama-n8n-runner
+      tag: latest
+      build_config:
+        context: ./n8n-runner-postgres-ollama-n8n-runner
+        push: server
     port: "8080"
     env:
       - name: N8N_RUNNERS_TASK_BROKER_URI
@@ -143,7 +148,12 @@ targets:
         value: "50"
   n8n-runner-postgres-ollama-ollama:
     preset: service
-    image: ollama/ollama:latest
+    image:
+      repository: n8n-runner-postgres-ollama-ollama
+      tag: latest
+      build_config:
+        context: ./n8n-runner-postgres-ollama-ollama
+        push: server
     port: "8080"
     volumes:
       - n8n-runner-postgres-ollama-ollama-storage:/home/node/.ollama

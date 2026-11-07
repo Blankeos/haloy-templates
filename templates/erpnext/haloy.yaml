@@ -3,7 +3,12 @@ server: localhost
 targets:
   erpnext-backend:
     preset: service
-    image: ${IMAGE_NAME:-docker.io/frappe/erpnext}:${VERSION:-version-15}
+    image:
+      repository: erpnext-backend
+      tag: latest
+      build_config:
+        context: ./erpnext-backend
+        push: server
     port: "8080"
     volumes:
       - erpnext-sites:/home/frappe/frappe-bench/sites

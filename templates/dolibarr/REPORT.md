@@ -1,5 +1,6 @@
 # dolibarr
 
-Status: **partial**
+Status: **ok**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
-- [partial] `dolibarr` internal-ref-to-public: dolibarr is reached by hostname from another service but has a domain; with rolling deploys its container name changes
+No issues.

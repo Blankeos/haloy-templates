@@ -56,7 +56,12 @@ targets:
       - openclaw-openclaw-data:/data
   openclaw-browser:
     preset: service
-    image: coollabsio/openclaw-browser:latest
+    image:
+      repository: openclaw-browser
+      tag: latest
+      build_config:
+        context: ./openclaw-browser
+        push: server
     port: "8080"
     env:
       - name: PUID

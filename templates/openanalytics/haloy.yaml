@@ -110,7 +110,12 @@ targets:
   openanalytics-gateway:
     health_check_path: /
     preset: service
-    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/query-gateway:${OA_IMAGE_TAG:-v0.5.0}
+    image:
+      repository: openanalytics-gateway
+      tag: latest
+      build_config:
+        context: ./openanalytics-gateway
+        push: server
     port: "8080"
     env:
       - name: NODE_ENV
@@ -142,7 +147,12 @@ targets:
   openanalytics-api:
     health_check_path: /
     preset: service
-    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/api:${OA_IMAGE_TAG:-v0.5.0}
+    image:
+      repository: openanalytics-api
+      tag: latest
+      build_config:
+        context: ./openanalytics-api
+        push: server
     port: "8080"
     env:
       - name: NODE_ENV
@@ -196,7 +206,12 @@ targets:
   openanalytics-collector:
     health_check_path: /
     preset: service
-    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/collector:${OA_IMAGE_TAG:-v0.5.0}
+    image:
+      repository: openanalytics-collector
+      tag: latest
+      build_config:
+        context: ./openanalytics-collector
+        push: server
     port: "8080"
     env:
       - name: NODE_ENV
@@ -228,7 +243,12 @@ targets:
   openanalytics-realtime:
     health_check_path: /
     preset: service
-    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/realtime:${OA_IMAGE_TAG:-v0.5.0}
+    image:
+      repository: openanalytics-realtime
+      tag: latest
+      build_config:
+        context: ./openanalytics-realtime
+        push: server
     port: "8080"
     env:
       - name: NODE_ENV
@@ -249,7 +269,12 @@ targets:
   openanalytics-worker:
     health_check_path: /
     preset: service
-    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/worker:${OA_IMAGE_TAG:-v0.5.0}
+    image:
+      repository: openanalytics-worker
+      tag: latest
+      build_config:
+        context: ./openanalytics-worker
+        push: server
     port: "8080"
     env:
       - name: NODE_ENV
@@ -299,7 +324,12 @@ targets:
   openanalytics-web:
     health_check_path: /login
     preset: service
-    image: ${OA_IMAGE_REPO:-ghcr.io/openlabs-so/openanalytics}/web:${OA_IMAGE_TAG:-v0.5.0}
+    image:
+      repository: openanalytics-web
+      tag: latest
+      build_config:
+        context: ./openanalytics-web
+        push: server
     port: "8080"
     env:
       - name: NODE_ENV

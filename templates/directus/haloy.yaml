@@ -52,7 +52,12 @@ targets:
       - directus-directus-extensions:/directus/extensions
   directus-database:
     preset: service
-    image: postgis/postgis:13-master
+    image:
+      repository: directus-database
+      tag: latest
+      build_config:
+        context: ./directus-database
+        push: server
     port: "8080"
     env:
       - name: POSTGRES_USER

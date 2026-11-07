@@ -95,6 +95,7 @@ targets:
       - ethora-core-minio:/data
   ethora-core-centrifugo:
     health_check_path: /health
+    preset: service
     image:
       repository: ethora-core-centrifugo
       tag: latest
@@ -102,11 +103,10 @@ targets:
         context: ./ethora-core-centrifugo
         push: server
     port: "8000"
-    domains:
-      - domain: connection-websocket.app.app.example.com
     volumes:
       - ethora-core-config:/ethora/config:ro
   ethora-core-xmpp:
+    preset: service
     image:
       repository: ethora-core-xmpp
       tag: latest
@@ -114,9 +114,6 @@ targets:
         context: ./ethora-core-xmpp
         push: server
     port: "5280"
-    domains:
-      - domain: ws.xmpp.app.example.com
-      - domain: bosh.xmpp.app.example.com
     env:
       - name: XMPP_DOMAIN
         value: xmpp.${ROOT_DOMAIN}
@@ -176,6 +173,7 @@ targets:
       - ethora-core-config:/ethora/config:ro
       - ethora-core-scripts:/ethora/scripts:ro
   ethora-core-frontend:
+    preset: service
     image:
       repository: ethora-core-frontend
       tag: latest
@@ -183,8 +181,18 @@ targets:
         context: ./ethora-core-frontend
         push: server
     port: "8080"
-    domains:
-      - domain: app.app.example.com
     volumes:
       - ethora-core-config:/ethora/config:ro
       - ethora-core-scripts:/ethora/scripts:ro
+  ethora-core-gateway:
+    image:
+      repository: ethora-core-gateway
+      tag: latest
+      build_config:
+        context: ./ethora-core-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
+    domains:
+      - domain: app.app.example.com
+      - domain: xmpp.app.example.com

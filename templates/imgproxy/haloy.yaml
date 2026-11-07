@@ -35,7 +35,7 @@ targets:
       - name: IMGPROXY_QUALITY
         value: "80"
       - name: IMGPROXY_ALLOWED_SOURCES
-        value: http://app.example.com,https://app.example.com
+        value: https://app.example.com,https://app.example.com
       - name: IMGPROXY_ALLOW_ORIGIN
         value: "*"
       - name: IMGPROXY_MAX_SRC_FILE_SIZE

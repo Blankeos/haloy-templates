@@ -16,7 +16,7 @@ targets:
       - name: HOPP_AIO_ALTERNATE_PORT
         value: "80"
       - name: WHITELISTED_ORIGINS
-        value: https://app.example.com,http://app.example.com,app://hoppscotch
+        value: https://app.example.com,https://app.example.com,app://hoppscotch
       - name: VITE_BASE_URL
         value: https://app.example.com
       - name: VITE_SHORTCODE_BASE_URL

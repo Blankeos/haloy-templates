@@ -76,7 +76,12 @@ targets:
       - arche-postgres-data:/var/lib/postgresql/data
   arche-docker-socket-proxy:
     preset: service
-    image: ghcr.io/tecnativa/docker-socket-proxy:master
+    image:
+      repository: arche-docker-socket-proxy
+      tag: latest
+      build_config:
+        context: ./arche-docker-socket-proxy
+        push: server
     port: "8080"
     env:
       - name: CONTAINERS

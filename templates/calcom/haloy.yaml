@@ -28,17 +28,17 @@ targets:
         from:
           env: CALCOM__DATABASE_DIRECT_URL
       - name: NEXT_PUBLIC_WEBAPP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXT_PUBLIC_WEBSITE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXT_PUBLIC_EMBED_LIB_URL
-        value: http://app.example.com/embed/embed.js
+        value: https://app.example.com/embed/embed.js
       - name: ALLOWED_HOSTNAMES
         value: '"app.example.com"'
       - name: RESERVED_SUBDOMAINS
         value: '"app","auth","docs","design","console","go","status","api","saml","www","matrix","developer","cal","my","team","support","security","blog","learn","admin"'
       - name: NEXTAUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXTAUTH_SECRET
         from:
           env: NEXTAUTH_SECRET

@@ -8,3 +8,4 @@ haloy deploy -t sim-db
 haloy deploy -t sim-migrations
 haloy deploy -t sim-realtime
 haloy deploy -t simstudio
+haloy deploy -t sim-gateway

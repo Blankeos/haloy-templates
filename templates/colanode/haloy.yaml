@@ -26,6 +26,7 @@ targets:
     volumes:
       - colanode-valkey-data:/data
   colanode-minio:
+    health_check_path: /minio/health/live
     preset: service
     image:
       repository: colanode-minio

@@ -17,3 +17,4 @@ haloy deploy -t ethora-core-jobs
 haloy deploy -t ethora-core-init
 haloy deploy -t ethora-core-verify
 haloy deploy -t ethora-core-frontend
+haloy deploy -t ethora-core-gateway

@@ -37,6 +37,42 @@ const IMAGE_PORTS: Record<string, string> = {
   rabbitmq: "5672", nats: "4222", couchdb: "5984", influxdb: "8086", cassandra: "9042",
 };
 
+/** POSIX word splitting, the way Compose parses a string `command:` / `entrypoint:` (no shell is involved). */
+export function shlex(input: string): string[] {
+  const out: string[] = [];
+  let cur = "";
+  let has = false;
+  let i = 0;
+  while (i < input.length) {
+    const c = input[i];
+    if (/\s/.test(c)) { if (has) { out.push(cur); cur = ""; has = false; } i++; continue; }
+    has = true;
+    if (c === "'") {
+      const j = input.indexOf("'", i + 1);
+      const end = j < 0 ? input.length : j;
+      cur += input.slice(i + 1, end);
+      i = end + 1;
+    } else if (c === '"') {
+      i++;
+      while (i < input.length && input[i] !== '"') {
+        if (input[i] === "\\" && /["\\$`\n]/.test(input[i + 1] ?? "")) { if (input[i + 1] !== "\n") cur += input[i + 1]; i += 2; }
+        else cur += input[i++];
+      }
+      i++;
+    } else if (c === "\\") {
+      if (input[i + 1] !== "\n") cur += input[i + 1] ?? "";
+      i += 2;
+    } else { cur += c; i++; }
+  }
+  if (has) out.push(cur);
+  return out;
+}
+
+/** Services that publish several ports: which one gets the public domain. */
+/** Images whose "/" is not a 2xx (S3 servers answer 403), so Haloy's default health check would fail. */
+const HEALTH_PATH: Record<string, string> = { rustfs: "/health", minio: "/minio/health/live" };
+const PREFERRED_PORT: Record<string, string> = { rustfs: "9000" };
+
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 const upper = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]+/g, "_").replace(/^(\d)/, "T_$1");
 const imageName = (image: string) => image.split("/").pop()!.split(":")[0].split("@")[0];
@@ -154,6 +190,13 @@ export function translate(input: Input): Result {
     (domainsBySvc[d.serviceName] ??= []).push({ host: subTpl(String(d.host ?? domain)), port: d.port != null ? String(d.port) : undefined, path: d.path });
   }
 
+  const normHost = (h: string) => { const x = h.replace(/_/g, "-"); return x.includes(".") ? x : `${x}.${domain}`; };
+  const allHosts = new Set(Object.values(domainsBySvc).flat().map((d) => normHost(d.host)));
+  /** Hosts where Dokploy routes by path: Haloy cannot, so a generated nginx gateway fronts them. */
+  const gwHosts = new Map<string, { svc: string; port?: string; path: string }[]>();
+  for (const [svc, ds] of Object.entries(domainsBySvc)) for (const d of ds) if (d.path && d.path !== "/") gwHosts.set(normHost(d.host), []);
+  for (const [svc, ds] of Object.entries(domainsBySvc)) for (const d of ds) gwHosts.get(normHost(d.host))?.push({ svc, port: d.port, path: d.path || "/" });
+
   // ---- per-service -------------------------------------------------------
   const targets: Record<string, any> = {};
   const order: { name: string; deps: string[] }[] = [];
@@ -184,7 +227,7 @@ export function translate(input: Input): Result {
     if (def.deploy?.resources) warn("partial", "resources", "resource limits dropped (Haloy has no limit fields)", t);
 
     // entrypoint / command
-    const toArr = (v: any) => (v == null ? undefined : Array.isArray(v) ? v.map(String) : ["sh", "-c", String(v)]);
+    const toArr = (v: any) => (v == null ? undefined : Array.isArray(v) ? v.map(String) : shlex(String(v)));
     const rs = (a?: string[]) => a?.map((x) => resolve(x, t));
     const entry = rs(toArr(def.entrypoint));
     const cmd = rs(toArr(def.command));
@@ -201,7 +244,9 @@ export function translate(input: Input): Result {
         warn("partial", "shell-var-in-env", `${k} contains a literal $VAR meant for the container shell; Haloy would interpolate it, so it was omitted`, t);
         continue;
       }
-      const value = resolve(v, t, k);
+      let value = resolve(v, t, k);
+      // Haloy serves every domain over TLS, so public URLs that point at one must be https.
+      for (const h of allHosts) value = value.replaceAll(`http://${h}`, `https://${h}`);
       if (value === "") continue;
       envList.push({ name: k, value });
     }
@@ -233,7 +278,7 @@ export function translate(input: Input): Result {
         continue;
       }
       if (src.startsWith("/")) {
-        if (src.includes("docker.sock")) warn("manual", "docker-sock", "mounts the Docker socket", t);
+        if (src.includes("docker.sock")) warn("partial", "docker-sock", "mounts the host Docker socket (works as a plain bind mount, but gives the container control of every container on the server)", t);
         else warn("partial", "host-path", `host path ${src} mounted as-is; make sure it exists on the server`, t);
         vols.push(`${src}:${dst}${ro ? ":ro" : ""}`);
         continue;
@@ -245,15 +290,16 @@ export function translate(input: Input): Result {
     // domains / port / health
     const doms = domainsBySvc[svc] ?? [];
     const domainEntries: { domain: string }[] = [];
-    let port: string | undefined = doms.find((d) => d.port)?.port;
+    // Haloy exposes ONE port per target. If a template routes several ports of a service,
+    // keep the API-ish one (PREFERRED_PORT) or the first, and report the rest.
+    const portsHere = [...new Set(doms.map((d) => d.port).filter(Boolean))] as string[];
+    let port: string | undefined = (PREFERRED_PORT[base] && portsHere.includes(PREFERRED_PORT[base])) ? PREFERRED_PORT[base] : portsHere[0];
     for (const d of doms) {
-      let host = d.host;
-      host = host.replace(/_/g, "-");
-      if (!host.includes(".")) host = `${host}.${domain}`;
-      if (d.path && d.path !== "/") {
-        const seg = slug(d.path) || "app";
-        host = `${seg}.${host}`;
-        warn("partial", "path-routing", `Haloy routes by hostname only; ${d.path} on ${d.host} became ${host}. Point DNS there and update any URL env vars (e.g. BASE_URL).`, t);
+      let host = normHost(d.host);
+      if (gwHosts.has(host)) continue; // served by the gateway target
+      if (d.port && port && d.port !== port) {
+        warn("partial", "extra-port", `Haloy exposes one port per target; port ${d.port} (${d.host}) is not published, only ${port} is. Reach it with \`haloy tunnel\` or a separate reverse proxy.`, t);
+        continue;
       }
       if (!domainEntries.some((e) => e.domain === host)) domainEntries.push({ domain: host });
     }
@@ -268,7 +314,13 @@ export function translate(input: Input): Result {
     }
     if (!port) {
       port = IMAGE_PORTS[base];
-      if (!port) { port = "8080"; if (domainEntries.length) warn("partial", "guessed-port", "could not determine the container port; defaulted to 8080", t); }
+      if (!port) {
+        port = "8080";
+        if (domainEntries.length) warn("partial", "guessed-port", "could not determine the container port; defaulted to 8080", t);
+        // Haloy refuses a port the image does not EXPOSE; declare the placeholder one so workers/cron services start.
+        needsDockerfile = true;
+        df.push(`EXPOSE ${port}`);
+      }
     }
     const hc = def.healthcheck?.test;
     if (hc) {
@@ -278,6 +330,7 @@ export function translate(input: Input): Result {
       else if (!DB_IMAGES.has(base)) warn("partial", "healthcheck", "command-style healthcheck dropped (Haloy supports HTTP path checks only)", t);
     }
 
+    if (!out.health_check_path && HEALTH_PATH[base] && !DB_IMAGES.has(base)) out.health_check_path = HEALTH_PATH[base];
     const stateful = DB_IMAGES.has(base);
     if (stateful) out.preset = "database";
     else if (domainEntries.length === 0) out.preset = "service";
@@ -292,10 +345,23 @@ export function translate(input: Input): Result {
         if (alreadyShell(a) || !a.some((x) => /\$\{[A-Z0-9_]+\}/.test(x))) return a;
         return ["sh", "-c", "exec " + a.map((x) => (/\$\{[A-Z0-9_]+\}/.test(x) ? `"${x.replace(/"/g, '\\"')}"` : /^[\w./:=@%+,-]+$/.test(x) ? x : `'${x.replace(/'/g, `'\\''`)}'`)).join(" ")];
       };
-      const entryF = entry && shellForm(entry);
-      const cmdF = cmd && shellForm(cmd);
-      if (entryF) df.push(`ENTRYPOINT ${JSON.stringify(entryF)}`);
-      if (cmdF) df.push(`CMD ${JSON.stringify(cmdF)}`);
+      const hasVar = (a?: string[]) => !!a?.some((x) => /\$\{[A-Z0-9_]+\}/.test(x));
+      if (entry && cmd && alreadyShell(entry)) {
+        // `sh -c` entrypoint: the command is its script, and the shell expands env at runtime.
+        [...entry, ...cmd].forEach(addEnv);
+        df.push(`ENTRYPOINT ${JSON.stringify(entry)}`, `CMD ${JSON.stringify(cmd)}`);
+      } else if (entry && cmd && (hasVar(entry) || hasVar(cmd))) {
+        // Entrypoint and command are one argv; expand env once around the whole of it.
+        df.push(`ENTRYPOINT ${JSON.stringify(shellForm([...entry, ...cmd]))}`, "CMD []");
+      } else {
+        const entryF = entry && shellForm(entry);
+        const cmdF = cmd && shellForm(cmd);
+        if (entryF) df.push(`ENTRYPOINT ${JSON.stringify(entryF)}`);
+        if (cmdF) df.push(`CMD ${JSON.stringify(cmdF)}`);
+        if (cmdF && !entry && hasVar(cmd) && !alreadyShell(cmd!) && !DB_IMAGES.has(base)) {
+          warn("partial", "entrypoint-wrapped", "command needs env expansion, so it runs via `sh -c`; if the image's own ENTRYPOINT matters, check it still starts correctly", t);
+        }
+      }
       files[`${t}/Dockerfile`] = df.join("\n") + "\n";
       out.image = { repository: t, tag: "latest", build_config: { context: `./${t}`, push: "server" } };
     } else {
@@ -334,11 +400,39 @@ export function translate(input: Input): Result {
     order.push({ name: t, deps: deps.map((d: string) => names[d]).filter(Boolean) });
   }
 
+  // ---- gateway for path routing -------------------------------------------
+  if (gwHosts.size) {
+    const g = `${slug(id)}-gateway`;
+    const q = (x: string) => x.replace(/[^\w./-]/g, "");
+    let conf = "map $http_upgrade $connection_upgrade { default upgrade; '' close; }\nresolver 127.0.0.11 valid=10s;\n\n";
+    let first = true;
+    for (const [host, routes] of gwHosts) {
+      conf += `server {\n  listen 80${first ? " default_server" : ""};\n  server_name ${host};\n  client_max_body_size 0;\n  location = /_gateway_health { return 200 "ok"; }\n`;
+      first = false;
+      for (const r of [...routes].sort((a, b) => b.path.length - a.path.length)) {
+        const to = names[r.svc] ?? r.svc;
+        const prt = r.port ?? targets[to]?.port ?? "80";
+        conf += `  location ${q(r.path)} {\n    set $up http://${to}:${prt};\n    proxy_pass $up;\n    proxy_http_version 1.1;\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n    proxy_set_header X-Forwarded-Proto https;\n    proxy_set_header Upgrade $http_upgrade;\n    proxy_set_header Connection $connection_upgrade;\n    proxy_read_timeout 3600s;\n  }\n`;
+      }
+      conf += "}\n";
+      warn("partial", "path-routing", `Haloy routes by hostname only, so ${host} (${routes.map((r) => r.path).join(", ")}) is served by a generated nginx target \`${g}\` that proxies each path to its service.`, g);
+    }
+    files[`${g}/default.conf`] = conf;
+    files[`${g}/Dockerfile`] = "FROM nginx:alpine\nCOPY default.conf /etc/nginx/conf.d/default.conf\n";
+    targets[g] = {
+      image: { repository: g, tag: "latest", build_config: { context: `./${g}`, push: "server" } },
+      port: "80",
+      health_check_path: "/_gateway_health",
+      domains: [...gwHosts.keys()].map((domain) => ({ domain })),
+    };
+    order.push({ name: g, deps: [...new Set([...gwHosts.values()].flat().map((r) => names[r.svc]).filter(Boolean))] });
+  }
+
   // services referenced by others by hostname must be domainless (static name)
   for (const [svc, def] of Object.entries<any>(services)) {
     const t = names[svc];
     if (!targets[t].domains) continue;
-    const referenced = Object.values<any>(targets).some((o: any) => o !== targets[t] && (o.env ?? []).some((e: any) => new RegExp(`(?<![\\w-])${t}(?![\\w-])`).test(String(e.value))));
+    const referenced = Object.values<any>(targets).some((o: any) => o !== targets[t] && (o.env ?? []).some((e: any) => new RegExp(`(@|://)${t}(?=[:/?]|$)|(?<![\\w-])${t}:\\d`).test(String(e.value))));
     if (referenced) warn("partial", "internal-ref-to-public", `${t} is reached by hostname from another service but has a domain; with rolling deploys its container name changes`, t);
   }
 

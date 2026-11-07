@@ -1,0 +1,2 @@
+FROM reloopsh/be-logs@sha256:3c0be118c7df0ebd76e24ed65de014980f96a8c14c2783231a39b0c54c4065e0
+EXPOSE 8080

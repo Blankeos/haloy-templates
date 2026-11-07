@@ -1,0 +1,2 @@
+FROM posthog/posthog-node:${POSTHOG_NODE_VERSION}
+EXPOSE 8080

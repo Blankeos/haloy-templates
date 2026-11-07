@@ -1,0 +1,2 @@
+FROM airbyte/manifest-server:${MANIFEST_SERVER_VERSION}
+EXPOSE 8080

@@ -52,10 +52,9 @@ targets:
       - rybbit-redis-data:/data
   rybbit-backend:
     health_check_path: /api/health
+    preset: service
     image: ghcr.io/rybbit-io/rybbit-backend:v2.7.0
     port: "3001"
-    domains:
-      - domain: api.app.example.com
     env:
       - name: NODE_ENV
         value: production
@@ -90,20 +89,30 @@ targets:
         from:
           env: BETTER_AUTH_SECRET
       - name: BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DISABLE_SIGNUP
         value: "false"
       - name: DISABLE_TELEMETRY
         value: "false"
   rybbit-client:
+    preset: service
     image: ghcr.io/rybbit-io/rybbit-client:v2.7.0
     port: "3002"
-    domains:
-      - domain: app.example.com
     env:
       - name: NODE_ENV
         value: production
       - name: NEXT_PUBLIC_BACKEND_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXT_PUBLIC_DISABLE_SIGNUP
         value: "false"
+  rybbit-gateway:
+    image:
+      repository: rybbit-gateway
+      tag: latest
+      build_config:
+        context: ./rybbit-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
+    domains:
+      - domain: app.example.com

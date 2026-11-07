@@ -57,7 +57,7 @@ targets:
         from:
           env: INSTANCE_ID
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: ENABLE_DEMO_DATA
         value: "1"
       - name: TRUSTED_PROXIES
@@ -189,7 +189,7 @@ targets:
         from:
           env: INSTANCE_ID
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: ENABLE_DEMO_DATA
         value: "1"
       - name: TRUSTED_PROXIES
@@ -300,7 +300,7 @@ targets:
         from:
           env: INSTANCE_ID
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: ENABLE_DEMO_DATA
         value: "1"
       - name: TRUSTED_PROXIES
@@ -410,7 +410,7 @@ targets:
         from:
           env: INSTANCE_ID
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: ENABLE_DEMO_DATA
         value: "1"
       - name: TRUSTED_PROXIES
@@ -520,7 +520,7 @@ targets:
         from:
           env: INSTANCE_ID
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: ENABLE_DEMO_DATA
         value: "1"
       - name: TRUSTED_PROXIES

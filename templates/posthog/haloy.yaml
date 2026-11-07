@@ -40,7 +40,12 @@ targets:
       - posthog-redis-data:/data
   posthog-zookeeper:
     preset: service
-    image: zookeeper:3.7.0
+    image:
+      repository: posthog-zookeeper
+      tag: latest
+      build_config:
+        context: ./posthog-zookeeper
+        push: server
     port: "8080"
     env:
       - name: ZOO_AUTOPURGE_PURGEINTERVAL
@@ -143,7 +148,7 @@ targets:
       - name: OBJECT_STORAGE_ENDPOINT
         value: http://posthog-objectstorage:19000
       - name: OBJECT_STORAGE_PUBLIC_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: OBJECT_STORAGE_ACCESS_KEY_ID
         value: object_storage_root_user
       - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
@@ -159,7 +164,7 @@ targets:
       - name: RECORDING_API_URL
         value: http://posthog-recording-api:6738
       - name: SITE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: SECRET_KEY
         from:
           env: SECRET_KEY
@@ -179,7 +184,7 @@ targets:
       - name: FEATURE_FLAGS_SERVICE_URL
         value: http://posthog-feature-flags:3001
       - name: LIVESTREAM_HOST
-        value: http://app.example.com/livestream
+        value: https://app.example.com/livestream
       - name: API_QUERIES_PER_TEAM
         value: '{"1": 100}'
       - name: OTEL_SDK_DISABLED
@@ -239,7 +244,7 @@ targets:
       - name: OBJECT_STORAGE_ENDPOINT
         value: http://posthog-objectstorage:19000
       - name: OBJECT_STORAGE_PUBLIC_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: OBJECT_STORAGE_ACCESS_KEY_ID
         value: object_storage_root_user
       - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
@@ -255,7 +260,7 @@ targets:
       - name: RECORDING_API_URL
         value: http://posthog-recording-api:6738
       - name: SITE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: SECRET_KEY
         from:
           env: SECRET_KEY
@@ -275,7 +280,7 @@ targets:
       - name: FEATURE_FLAGS_SERVICE_URL
         value: http://posthog-feature-flags:3001
       - name: LIVESTREAM_HOST
-        value: http://app.example.com/livestream
+        value: https://app.example.com/livestream
       - name: API_QUERIES_PER_TEAM
         value: '{"1": 100}'
       - name: OTEL_SDK_DISABLED
@@ -286,13 +291,18 @@ targets:
         value: "2"
   posthog-plugins:
     preset: service
-    image: posthog/posthog-node:${POSTHOG_NODE_VERSION}
+    image:
+      repository: posthog-plugins
+      tag: latest
+      build_config:
+        context: ./posthog-plugins
+        push: server
     port: "8080"
     env:
       - name: NODEJS_CAPABILITY_GROUPS
         value: cdp_workflows,realtime_cohorts,feature_flags
       - name: SITE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: SECRET_KEY
         from:
           env: SECRET_KEY
@@ -340,7 +350,7 @@ targets:
       - name: OBJECT_STORAGE_ENDPOINT
         value: http://posthog-objectstorage:19000
       - name: OBJECT_STORAGE_PUBLIC_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: OBJECT_STORAGE_ACCESS_KEY_ID
         value: object_storage_root_user
       - name: OBJECT_STORAGE_SECRET_ACCESS_KEY
@@ -349,7 +359,12 @@ targets:
       - posthog-geoip-data:/share:ro
   posthog-ingestion-general:
     preset: service
-    image: posthog/posthog-node:${POSTHOG_NODE_VERSION}
+    image:
+      repository: posthog-ingestion-general
+      tag: latest
+      build_config:
+        context: ./posthog-ingestion-general
+        push: server
     port: "8080"
     env:
       - name: PLUGIN_SERVER_MODE
@@ -393,7 +408,12 @@ targets:
       - posthog-geoip-data:/share:ro
   posthog-ingestion-sessionreplay:
     preset: service
-    image: posthog/posthog-node:${POSTHOG_NODE_VERSION}
+    image:
+      repository: posthog-ingestion-sessionreplay
+      tag: latest
+      build_config:
+        context: ./posthog-ingestion-sessionreplay
+        push: server
     port: "8080"
     env:
       - name: PLUGIN_SERVER_MODE
@@ -417,7 +437,12 @@ targets:
         value: "120000"
   posthog-recording-api:
     preset: service
-    image: posthog/posthog-node:${POSTHOG_NODE_VERSION}
+    image:
+      repository: posthog-recording-api
+      tag: latest
+      build_config:
+        context: ./posthog-recording-api
+        push: server
     port: "8080"
     env:
       - name: PLUGIN_SERVER_MODE
@@ -449,7 +474,12 @@ targets:
         value: object_storage_root_password
   posthog-capture:
     preset: service
-    image: ghcr.io/posthog/posthog/capture:master
+    image:
+      repository: posthog-capture
+      tag: latest
+      build_config:
+        context: ./posthog-capture
+        push: server
     port: "8080"
     env:
       - name: ADDRESS
@@ -484,7 +514,12 @@ targets:
         value: ingestion-clientwarnings-main-1
   posthog-replay-capture:
     preset: service
-    image: ghcr.io/posthog/posthog/capture:master
+    image:
+      repository: posthog-replay-capture
+      tag: latest
+      build_config:
+        context: ./posthog-replay-capture
+        push: server
     port: "8080"
     env:
       - name: ADDRESS
@@ -499,7 +534,12 @@ targets:
         value: recordings
   posthog-feature-flags:
     preset: service
-    image: ghcr.io/posthog/posthog/feature-flags:master
+    image:
+      repository: posthog-feature-flags
+      tag: latest
+      build_config:
+        context: ./posthog-feature-flags
+        push: server
     port: "8080"
     env:
       - name: WRITE_DATABASE_URL
@@ -526,7 +566,12 @@ targets:
       - posthog-geoip-data:/share:ro
   posthog-hypercache-server:
     preset: service
-    image: ghcr.io/posthog/posthog/hypercache-server:master
+    image:
+      repository: posthog-hypercache-server
+      tag: latest
+      build_config:
+        context: ./posthog-hypercache-server
+        push: server
     port: "8080"
     env:
       - name: REDIS_URL
@@ -537,13 +582,19 @@ targets:
         value: info
   posthog-livestream:
     preset: service
-    image: ghcr.io/posthog/posthog/livestream:master
+    image:
+      repository: posthog-livestream
+      tag: latest
+      build_config:
+        context: ./posthog-livestream
+        push: server
     port: "8080"
     env:
       - name: LIVESTREAM_JWT_SECRET
         from:
           env: SECRET_KEY
   posthog-objectstorage:
+    health_check_path: /minio/health/live
     preset: service
     image:
       repository: posthog-objectstorage

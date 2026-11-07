@@ -11,9 +11,9 @@ targets:
         from:
           env: CAPSO_CAP_WEB__DATABASE_URL
       - name: WEB_URL
-        value: http://app.example.com:3000
+        value: https://app.example.com:3000
       - name: NEXTAUTH_URL
-        value: http://app.example.com:3000
+        value: https://app.example.com:3000
       - name: DATABASE_ENCRYPTION_KEY
         from:
           env: INLINE_PASSWORD_32
@@ -31,7 +31,7 @@ targets:
       - name: CAP_AWS_REGION
         value: us-east-1
       - name: S3_PUBLIC_ENDPOINT
-        value: http://app.example.com:3902
+        value: https://app.example.com:3902
       - name: S3_INTERNAL_ENDPOINT
         value: http://capso-minio:3902
   capso-ps-mysql:
@@ -64,7 +64,6 @@ targets:
     port: "3902"
     domains:
       - domain: minio-domain-1.app.example.com
-      - domain: minio-domain-2.app.example.com
     env:
       - name: MINIO_ROOT_USER
         from:

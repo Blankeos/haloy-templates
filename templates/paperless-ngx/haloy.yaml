@@ -22,7 +22,7 @@ targets:
         from:
           env: PAPERLESS_SECRET_KEY
       - name: PAPERLESS_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: PAPERLESS_TIME_ZONE
         value: UTC
       - name: PAPERLESS_OCR_LANGUAGE

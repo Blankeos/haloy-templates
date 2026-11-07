@@ -52,7 +52,12 @@ targets:
       - jitsi-jitsiwebtranscripts:/usr/share/jitsi-meet/transcripts
   jitsi-prosody:
     preset: service
-    image: jitsi/prosody:${JITSI_IMAGE_VERSION:-unstable}
+    image:
+      repository: jitsi-prosody
+      tag: latest
+      build_config:
+        context: ./jitsi-prosody
+        push: server
     port: "8080"
     env:
       - name: TZ
@@ -89,7 +94,12 @@ targets:
       - jitsi-jitsiprosodyplugins:/prosody-plugins-custom
   jitsi-jicofo:
     preset: service
-    image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-unstable}
+    image:
+      repository: jitsi-jicofo
+      tag: latest
+      build_config:
+        context: ./jitsi-jicofo
+        push: server
     port: "8080"
     env:
       - name: TZ

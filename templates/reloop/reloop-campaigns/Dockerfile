@@ -1,0 +1,2 @@
+FROM reloopsh/be-campaigns@sha256:446287b0dc88f77ca5ac12199bda637e1e2216a38a47e281be161dba4fea3624
+EXPOSE 8080

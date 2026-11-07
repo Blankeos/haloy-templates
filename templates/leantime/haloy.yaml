@@ -8,7 +8,7 @@ targets:
       - domain: app.example.com
     env:
       - name: LEAN_APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: LEAN_SESSION_PASSWORD
         from:
           env: SESSION_PASSWORD

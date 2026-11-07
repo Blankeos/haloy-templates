@@ -1,6 +1,7 @@
 # evolutioncrm
 
 Status: **partial**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
 - [partial] `evolutioncrm-evo-auth` internal-ref-to-public: evolutioncrm-evo-auth is reached by hostname from another service but has a domain; with rolling deploys its container name changes
 - [partial] `evolutioncrm-evo-crm` internal-ref-to-public: evolutioncrm-evo-crm is reached by hostname from another service but has a domain; with rolling deploys its container name changes

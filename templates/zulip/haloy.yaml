@@ -3,7 +3,12 @@ server: localhost
 targets:
   zulip-database:
     preset: service
-    image: zulip/zulip-postgresql:14
+    image:
+      repository: zulip-database
+      tag: latest
+      build_config:
+        context: ./zulip-database
+        push: server
     port: "8080"
     env:
       - name: POSTGRES_DB

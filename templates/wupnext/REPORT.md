@@ -1,5 +1,6 @@
 # wupnext
 
-Status: **partial**
+Status: **ok**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
-- [partial] `wupnext` internal-ref-to-public: wupnext is reached by hostname from another service but has a domain; with rolling deploys its container name changes
+No issues.

@@ -1,0 +1,2 @@
+FROM airbyte/worker:${AIRBYTE_VERSION}
+EXPOSE 8080

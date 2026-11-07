@@ -23,3 +23,4 @@ haloy deploy -t appwrite-openruntimes-executor
 haloy deploy -t appwrite-orchestrator
 haloy deploy -t appwrite-mariadb
 haloy deploy -t appwrite-mongodb
+haloy deploy -t appwrite-gateway

@@ -1,2 +1,3 @@
 FROM docker.io/javierlnmn/wupnext:latest
-CMD ["sh","-c","python manage.py qcluster"]
+EXPOSE 8080
+CMD ["python","manage.py","qcluster"]

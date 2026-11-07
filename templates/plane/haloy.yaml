@@ -3,19 +3,39 @@ server: localhost
 targets:
   plane-web:
     preset: service
-    image: makeplane/plane-frontend:${APP_RELEASE:-v1.3.1}
+    image:
+      repository: plane-web
+      tag: latest
+      build_config:
+        context: ./plane-web
+        push: server
     port: "8080"
   plane-space:
     preset: service
-    image: makeplane/plane-space:${APP_RELEASE:-v1.3.1}
+    image:
+      repository: plane-space
+      tag: latest
+      build_config:
+        context: ./plane-space
+        push: server
     port: "8080"
   plane-admin:
     preset: service
-    image: makeplane/plane-admin:${APP_RELEASE:-v1.3.1}
+    image:
+      repository: plane-admin
+      tag: latest
+      build_config:
+        context: ./plane-admin
+        push: server
     port: "8080"
   plane-live:
     preset: service
-    image: makeplane/plane-live:${APP_RELEASE:-v1.3.1}
+    image:
+      repository: plane-live
+      tag: latest
+      build_config:
+        context: ./plane-live
+        push: server
     port: "8080"
     env:
       - name: API_BASE_URL
@@ -415,6 +435,7 @@ targets:
     volumes:
       - plane-rabbitmq-data:/var/lib/rabbitmq
   plane-minio:
+    health_check_path: /minio/health/live
     preset: service
     image:
       repository: plane-minio

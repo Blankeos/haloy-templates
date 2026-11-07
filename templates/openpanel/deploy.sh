@@ -10,3 +10,4 @@ haloy deploy -t openpanel-op-ch
 haloy deploy -t openpanel-op-api
 haloy deploy -t openpanel-op-dashboard
 haloy deploy -t openpanel-op-worker
+haloy deploy -t openpanel-gateway

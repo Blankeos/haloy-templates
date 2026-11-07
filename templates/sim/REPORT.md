@@ -1,7 +1,6 @@
 # sim
 
 Status: **partial**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
-- [partial] `sim-realtime` path-routing: Haloy routes by hostname only; /socket.io on app.example.com became socket-io.app.example.com. Point DNS there and update any URL env vars (e.g. BASE_URL).
-- [partial] `simstudio` internal-ref-to-public: simstudio is reached by hostname from another service but has a domain; with rolling deploys its container name changes
-- [partial] `sim-realtime` internal-ref-to-public: sim-realtime is reached by hostname from another service but has a domain; with rolling deploys its container name changes
+- [partial] `sim-gateway` path-routing: Haloy routes by hostname only, so app.example.com (/, /socket.io) is served by a generated nginx target `sim-gateway` that proxies each path to its service.

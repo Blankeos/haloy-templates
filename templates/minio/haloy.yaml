@@ -2,6 +2,7 @@ name: minio
 server: localhost
 targets:
   minio:
+    health_check_path: /minio/health/live
     image:
       repository: minio
       tag: latest
@@ -18,6 +19,6 @@ targets:
         from:
           env: INLINE_PASSWORD_16
       - name: MINIO_BROWSER_REDIRECT_URL
-        value: http://app.example.com
+        value: https://app.example.com
     volumes:
       - minio-minio-data:/data

@@ -17,7 +17,12 @@ targets:
       - taiga-taiga-db-data:/var/lib/postgresql/data
   taiga-back:
     preset: service
-    image: taigaio/taiga-back:latest
+    image:
+      repository: taiga-back
+      tag: latest
+      build_config:
+        context: ./taiga-back
+        push: server
     port: "8080"
     env:
       - name: POSTGRES_DB
@@ -141,7 +146,12 @@ targets:
       - taiga-taiga-async-rabbitmq-data:/var/lib/rabbitmq
   taiga-front:
     preset: service
-    image: taigaio/taiga-front:latest
+    image:
+      repository: taiga-front
+      tag: latest
+      build_config:
+        context: ./taiga-front
+        push: server
     port: "8080"
     env:
       - name: TAIGA_URL
@@ -152,7 +162,12 @@ targets:
         value: "false"
   taiga-events:
     preset: service
-    image: taigaio/taiga-events:latest
+    image:
+      repository: taiga-events
+      tag: latest
+      build_config:
+        context: ./taiga-events
+        push: server
     port: "8080"
     env:
       - name: RABBITMQ_USER
@@ -184,7 +199,12 @@ targets:
       - taiga-taiga-events-rabbitmq-data:/var/lib/rabbitmq
   taiga-protected:
     preset: service
-    image: taigaio/taiga-protected:latest
+    image:
+      repository: taiga-protected
+      tag: latest
+      build_config:
+        context: ./taiga-protected
+        push: server
     port: "8080"
     env:
       - name: MAX_AGE

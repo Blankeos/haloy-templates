@@ -3,7 +3,12 @@ server: localhost
 targets:
   dockroute:
     preset: service
-    image: ghcr.io/dockroute/dockroute:0.2.0
+    image:
+      repository: dockroute
+      tag: latest
+      build_config:
+        context: ./dockroute
+        push: server
     port: "8080"
     env:
       - name: DOCKROUTE_PROVIDER

@@ -3,10 +3,9 @@ server: localhost
 targets:
   simstudio:
     health_check_path: /
+    preset: service
     image: ghcr.io/simstudioai/simstudio:latest
     port: "3000"
-    domains:
-      - domain: app.example.com
     env:
       - name: NODE_ENV
         value: production
@@ -14,9 +13,9 @@ targets:
         from:
           env: SIMSTUDIO__DATABASE_URL
       - name: BETTER_AUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXT_PUBLIC_APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BETTER_AUTH_SECRET
         from:
           env: BETTER_AUTH_SECRET
@@ -33,10 +32,9 @@ targets:
         value: http://sim-realtime:3002
   sim-realtime:
     health_check_path: /health
+    preset: service
     image: ghcr.io/simstudioai/realtime:latest
     port: "3002"
-    domains:
-      - domain: socket-io.app.example.com
     env:
       - name: NODE_ENV
         value: production
@@ -44,9 +42,9 @@ targets:
         from:
           env: SIM_REALTIME__DATABASE_URL
       - name: NEXT_PUBLIC_APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BETTER_AUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BETTER_AUTH_SECRET
         from:
           env: BETTER_AUTH_SECRET
@@ -80,3 +78,14 @@ targets:
         value: simstudio
     volumes:
       - sim-postgres-data:/var/lib/postgresql/data
+  sim-gateway:
+    image:
+      repository: sim-gateway
+      tag: latest
+      build_config:
+        context: ./sim-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
+    domains:
+      - domain: app.example.com

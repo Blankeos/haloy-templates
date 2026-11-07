@@ -1,3 +1,4 @@
 FROM goharbor/registry-photon:v2.15.4@sha256:dc0cb388a6445c69c8a0c406679290d2991c9698833d9e6e86a23bdfaf2f83c3
+EXPOSE 8080
 ENTRYPOINT ["/bin/sh","/etc/registry/launch.sh"]
 CMD []

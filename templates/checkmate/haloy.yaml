@@ -8,15 +8,15 @@ targets:
       - domain: app.example.com
     env:
       - name: UPTIME_APP_API_BASE_URL
-        value: http://app.example.com:52345/api/v1
+        value: https://app.example.com:52345/api/v1
       - name: UPTIME_APP_CLIENT_HOST
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DB_CONNECTION_STRING
         value: mongodb://checkmate-mongodb:27017/uptime_db?replicaSet=rs0
       - name: REDIS_URL
         value: redis://redis:6379
       - name: CLIENT_HOST
-        value: http://app.example.com
+        value: https://app.example.com
       - name: JWT_SECRET
         from:
           env: JWT_SECRET

@@ -5,3 +5,4 @@ set -a; [ -f .env ] && . ./.env; set +a
 
 # Haloy has no depends_on: deploy in dependency order.
 haloy deploy -t chroma
+haloy deploy -t chroma-gateway

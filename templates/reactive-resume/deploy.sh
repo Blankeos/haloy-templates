@@ -8,3 +8,4 @@ haloy deploy -t reactive-resume-postgres
 haloy deploy -t reactive-resume-minio
 haloy deploy -t reactive-resume-chrome
 haloy deploy -t reactive-resume-app
+haloy deploy -t reactive-resume-gateway

@@ -1,0 +1,2 @@
+FROM reloopsh/be-email@sha256:4caf97f84d7faf7bf45f69e12b8226d724b0e58c0205cd82d1ef7031f4ea8b2d
+EXPOSE 8080

@@ -32,7 +32,7 @@ targets:
       - name: SYMFONY__ENV__FROM_EMAIL
         value: wallabag@example.com
       - name: SYMFONY__ENV__DOMAIN_NAME
-        value: http://app.example.com
+        value: https://app.example.com
       - name: SYMFONY__ENV__SERVER_NAME
         value: wallabag
       - name: SYMFONY__ENV__SECRET

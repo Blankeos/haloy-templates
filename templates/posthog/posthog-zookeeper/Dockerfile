@@ -1,0 +1,2 @@
+FROM zookeeper:3.7.0
+EXPOSE 8080

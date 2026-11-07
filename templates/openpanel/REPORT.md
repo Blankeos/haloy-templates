@@ -1,5 +1,6 @@
 # openpanel
 
 Status: **partial**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
-- [partial] `openpanel-op-api` path-routing: Haloy routes by hostname only; /api on app.example.com became api.app.example.com. Point DNS there and update any URL env vars (e.g. BASE_URL).
+- [partial] `openpanel-gateway` path-routing: Haloy routes by hostname only, so app.example.com (/, /api) is served by a generated nginx target `openpanel-gateway` that proxies each path to its service.

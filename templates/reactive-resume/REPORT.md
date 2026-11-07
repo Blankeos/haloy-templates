@@ -1,6 +1,6 @@
 # reactive-resume
 
 Status: **partial**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
-- [partial] `reactive-resume-minio` path-routing: Haloy routes by hostname only; /default on app.example.com became default.app.example.com. Point DNS there and update any URL env vars (e.g. BASE_URL).
-- [partial] `reactive-resume-minio` internal-ref-to-public: reactive-resume-minio is reached by hostname from another service but has a domain; with rolling deploys its container name changes
+- [partial] `reactive-resume-gateway` path-routing: Haloy routes by hostname only, so app.example.com (/, /default) is served by a generated nginx target `reactive-resume-gateway` that proxies each path to its service.

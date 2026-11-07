@@ -1,0 +1,2 @@
+FROM ghcr.io/firecrawl/nuq-postgres@sha256:aed86f62858f29bd971abddcdeb301c12888098d2cf5d33c1ba42b053bc460f6
+EXPOSE 8080

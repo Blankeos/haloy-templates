@@ -41,5 +41,10 @@ targets:
         value: "true"
   fider-mailhog:
     preset: service
-    image: mailhog/mailhog:v1.0.1
+    image:
+      repository: fider-mailhog
+      tag: latest
+      build_config:
+        context: ./fider-mailhog
+        push: server
     port: "8080"

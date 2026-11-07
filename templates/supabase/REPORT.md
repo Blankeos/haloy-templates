@@ -1,6 +1,7 @@
 # supabase
 
 Status: **partial**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
 - [partial] `supabase-api-gw` bind-mount: bind mount ../files/volumes/api/envoy/envoy.yaml is a file with no matching content in template.toml; dropped
 - [partial] `supabase-api-gw` bind-mount: bind mount ../files/volumes/api/envoy/cds.yaml is a file with no matching content in template.toml; dropped

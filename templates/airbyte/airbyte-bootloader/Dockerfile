@@ -1,0 +1,2 @@
+FROM airbyte/bootloader:${AIRBYTE_VERSION}
+EXPOSE 8080

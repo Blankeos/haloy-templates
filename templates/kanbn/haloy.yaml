@@ -19,7 +19,12 @@ targets:
         value: "true"
   kanbn-migrate:
     preset: service
-    image: ghcr.io/kanbn/kan-migrate:0.6.0
+    image:
+      repository: kanbn-migrate
+      tag: latest
+      build_config:
+        context: ./kanbn-migrate
+        push: server
     port: "8080"
     env:
       - name: POSTGRES_URL

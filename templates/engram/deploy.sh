@@ -6,3 +6,4 @@ set -a; [ -f .env ] && . ./.env; set +a
 # Haloy has no depends_on: deploy in dependency order.
 haloy deploy -t engram-postgres
 haloy deploy -t engram
+haloy deploy -t engram-gateway

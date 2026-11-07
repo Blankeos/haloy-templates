@@ -95,7 +95,12 @@ targets:
       - postiz-temporal-pg-data:/var/lib/postgresql/data
   postiz-temporal:
     preset: service
-    image: temporalio/auto-setup:1.28.1
+    image:
+      repository: postiz-temporal
+      tag: latest
+      build_config:
+        context: ./postiz-temporal
+        push: server
     port: "8080"
     env:
       - name: DB

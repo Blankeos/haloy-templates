@@ -20,7 +20,7 @@ targets:
         from:
           env: API_TOKEN
       - name: OD_ALLOWED_ORIGINS
-        value: https://app.example.com,http://app.example.com
+        value: https://app.example.com,https://app.example.com
       - name: OD_DISABLE_API_AUTH
         value: "1"
     volumes:

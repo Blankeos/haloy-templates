@@ -4,7 +4,12 @@ targets:
   supabase-studio:
     health_check_path: /api/platform/profile
     preset: service
-    image: supabase/studio:2026.08.03-sha-022b374
+    image:
+      repository: supabase-studio
+      tag: latest
+      build_config:
+        context: ./supabase-studio
+        push: server
     port: "8080"
     env:
       - name: HOSTNAME
@@ -102,7 +107,12 @@ targets:
   supabase-auth:
     health_check_path: /health
     preset: service
-    image: supabase/gotrue:v2.189.0
+    image:
+      repository: supabase-auth
+      tag: latest
+      build_config:
+        context: ./supabase-auth
+        push: server
     port: "8080"
     env:
       - name: GOTRUE_MAILER_EXTERNAL_HOSTS
@@ -206,7 +216,12 @@ targets:
   supabase-realtime:
     health_check_path: /api/tenants/realtime-dev/health
     preset: service
-    image: supabase/realtime:v2.102.3
+    image:
+      repository: supabase-realtime
+      tag: latest
+      build_config:
+        context: ./supabase-realtime
+        push: server
     port: "8080"
     env:
       - name: PORT
@@ -254,7 +269,12 @@ targets:
         value: "true"
   supabase-storage:
     preset: service
-    image: supabase/storage-api:v1.60.4
+    image:
+      repository: supabase-storage
+      tag: latest
+      build_config:
+        context: ./supabase-storage
+        push: server
     port: "8080"
     env:
       - name: ANON_KEY
@@ -303,7 +323,12 @@ targets:
       - supabase-volumes-storage:/var/lib/storage
   supabase-imgproxy:
     preset: service
-    image: darthsim/imgproxy:v3.30.1
+    image:
+      repository: supabase-imgproxy
+      tag: latest
+      build_config:
+        context: ./supabase-imgproxy
+        push: server
     port: "8080"
     env:
       - name: IMGPROXY_BIND
@@ -320,7 +345,12 @@ targets:
       - supabase-volumes-storage:/var/lib/storage
   supabase-meta:
     preset: service
-    image: supabase/postgres-meta:v0.96.6
+    image:
+      repository: supabase-meta
+      tag: latest
+      build_config:
+        context: ./supabase-meta
+        push: server
     port: "8080"
     env:
       - name: PG_META_PORT

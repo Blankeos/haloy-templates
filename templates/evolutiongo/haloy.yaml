@@ -3,7 +3,12 @@ server: localhost
 targets:
   evolutiongo-evolution-go:
     preset: service
-    image: evoapicloud/evolution-go:latest
+    image:
+      repository: evolutiongo-evolution-go
+      tag: latest
+      build_config:
+        context: ./evolutiongo-evolution-go
+        push: server
     port: "8080"
     env:
       - name: SERVER_PORT

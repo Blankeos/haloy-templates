@@ -1,0 +1,2 @@
+FROM airbyte/db:${AIRBYTE_VERSION}
+EXPOSE 8080

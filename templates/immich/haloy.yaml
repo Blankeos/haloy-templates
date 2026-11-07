@@ -31,7 +31,12 @@ targets:
       - /etc/localtime:/etc/localtime:ro
   immich-machine-learning:
     preset: service
-    image: ghcr.io/immich-app/immich-machine-learning:v3.0.2
+    image:
+      repository: immich-machine-learning
+      tag: latest
+      build_config:
+        context: ./immich-machine-learning
+        push: server
     port: "8080"
     volumes:
       - immich-immich-model-cache:/cache

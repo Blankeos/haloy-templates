@@ -15,7 +15,12 @@ targets:
       - windmill-windmill-postgres-data:/var/lib/postgresql/data
   windmill-server:
     preset: service
-    image: ghcr.io/windmill-labs/windmill:main
+    image:
+      repository: windmill-server
+      tag: latest
+      build_config:
+        context: ./windmill-server
+        push: server
     port: "8080"
     env:
       - name: DATABASE_URL
@@ -24,12 +29,17 @@ targets:
       - name: MODE
         value: server
       - name: BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
     volumes:
       - windmill-windmill-worker-logs:/tmp/windmill/logs
   windmill-worker:
     preset: service
-    image: ghcr.io/windmill-labs/windmill:main
+    image:
+      repository: windmill-worker
+      tag: latest
+      build_config:
+        context: ./windmill-worker
+        push: server
     port: "8080"
     env:
       - name: DATABASE_URL
@@ -45,7 +55,12 @@ targets:
       - windmill-windmill-worker-logs:/tmp/windmill/logs
   windmill-worker-native:
     preset: service
-    image: ghcr.io/windmill-labs/windmill:main
+    image:
+      repository: windmill-worker-native
+      tag: latest
+      build_config:
+        context: ./windmill-worker-native
+        push: server
     port: "8080"
     env:
       - name: DATABASE_URL
@@ -63,7 +78,12 @@ targets:
       - windmill-windmill-worker-logs:/tmp/windmill/logs
   windmill-lsp:
     preset: service
-    image: ghcr.io/windmill-labs/windmill-lsp:latest
+    image:
+      repository: windmill-lsp
+      tag: latest
+      build_config:
+        context: ./windmill-lsp
+        push: server
     port: "8080"
     volumes:
       - windmill-windmill-lsp-cache:/root/.cache

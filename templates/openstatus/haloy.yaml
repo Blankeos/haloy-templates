@@ -16,7 +16,12 @@ targets:
       - openstatus-libsql-data:/var/lib/sqld
   openstatus-db-migrate:
     preset: service
-    image: openstatus-db-migrate
+    image:
+      repository: openstatus-db-migrate
+      tag: latest
+      build_config:
+        context: ./openstatus-db-migrate
+        push: server
     port: "8080"
     env:
       - name: DATABASE_URL

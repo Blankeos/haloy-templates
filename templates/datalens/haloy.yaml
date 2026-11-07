@@ -14,7 +14,12 @@ targets:
         value: postgres
   datalens-control-api:
     preset: service
-    image: ghcr.io/datalens-tech/datalens-control-api:0.2192.0
+    image:
+      repository: datalens-control-api
+      tag: latest
+      build_config:
+        context: ./datalens-control-api
+        push: server
     port: "8080"
     env:
       - name: BI_API_UWSGI_WORKERS_COUNT
@@ -33,7 +38,12 @@ targets:
         value: fake-us-master-token
   datalens-data-api:
     preset: service
-    image: ghcr.io/datalens-tech/datalens-data-api:0.2192.0
+    image:
+      repository: datalens-data-api
+      tag: latest
+      build_config:
+        context: ./datalens-data-api
+        push: server
     port: "8080"
     env:
       - name: GUNICORN_WORKERS_COUNT
@@ -71,7 +81,12 @@ targets:
       - datalens-metadata:/var/lib/postgresql/data
   datalens-us:
     preset: service
-    image: ghcr.io/datalens-tech/datalens-us:0.310.0
+    image:
+      repository: datalens-us
+      tag: latest
+      build_config:
+        context: ./datalens-us
+        push: server
     port: "8080"
     env:
       - name: APP_INSTALLATION

@@ -1,0 +1,2 @@
+FROM reloopsh/be-workflow@sha256:d7d75e9145891b7167b42b4fb1ec441c53361e825e5fdf0d72962ef95d3d5b56
+EXPOSE 8080

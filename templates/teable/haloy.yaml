@@ -38,7 +38,12 @@ targets:
       - teable-teable-db:/var/lib/postgresql/data
   teable-db-migrate:
     preset: service
-    image: ghcr.io/teableio/teable-db-migrate:latest
+    image:
+      repository: teable-db-migrate
+      tag: latest
+      build_config:
+        context: ./teable-db-migrate
+        push: server
     port: "8080"
     env:
       - name: TZ

@@ -1,6 +1,7 @@
 # container-monitoring
 
 Status: **manual**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
 - [manual] `container-monitoring-cadvisor` unsupported-privileged: privileged mode has no Haloy equivalent
 - [manual] `container-monitoring-cadvisor` unsupported-devices: device passthrough has no Haloy equivalent

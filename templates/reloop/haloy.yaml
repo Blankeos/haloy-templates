@@ -27,7 +27,12 @@ targets:
         value: http://reloop-mail:8015/api/mail
   reloop-dashboard:
     preset: service
-    image: reloopsh/fe-dashboard@sha256:dd2369d2f0d7fe836664ae49b2b4492f90ee654dd8af7c819e7ca07e469b58dc
+    image:
+      repository: reloop-dashboard
+      tag: latest
+      build_config:
+        context: ./reloop-dashboard
+        push: server
     port: "8080"
     env:
       - name: HOSTNAME
@@ -92,7 +97,12 @@ targets:
           env: RELOOP_MIGRATE__PG_URL
   reloop-auth:
     preset: service
-    image: reloopsh/be-auth@sha256:741ef934ec59aa173f8dcfa980c163c107e6e5693786777326eaf90e49cb47c5
+    image:
+      repository: reloop-auth
+      tag: latest
+      build_config:
+        context: ./reloop-auth
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -184,7 +194,12 @@ targets:
       - reloop-reloop-setup:/run/reloop
   reloop-domain:
     preset: service
-    image: reloopsh/be-domain@sha256:cb12e37221a697278822819fdf4fd0ada2bb2f13e2979be789c9c44ee09a3f56
+    image:
+      repository: reloop-domain
+      tag: latest
+      build_config:
+        context: ./reloop-domain
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -269,7 +284,12 @@ targets:
         value: "8011"
   reloop-api-key:
     preset: service
-    image: reloopsh/be-api-key@sha256:535f9837d39acdd7e155a14752b1ab6e3cbef06331cf26634577ff82a0156572
+    image:
+      repository: reloop-api-key
+      tag: latest
+      build_config:
+        context: ./reloop-api-key
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -354,7 +374,12 @@ targets:
         value: "8012"
   reloop-webhook:
     preset: service
-    image: reloopsh/be-webhook@sha256:644a6b79756f57c045c8572c42bee6dfb6b31663ee08d21f2565cead4dfc1ca9
+    image:
+      repository: reloop-webhook
+      tag: latest
+      build_config:
+        context: ./reloop-webhook
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -439,7 +464,12 @@ targets:
         value: "8013"
   reloop-contacts:
     preset: service
-    image: reloopsh/be-contacts@sha256:43da0b373e2777fdc7af97d92fdb916320a27e2ffdea61df69bca477722b2dfa
+    image:
+      repository: reloop-contacts
+      tag: latest
+      build_config:
+        context: ./reloop-contacts
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -524,7 +554,12 @@ targets:
         value: "8014"
   reloop-mail:
     preset: service
-    image: reloopsh/be-mail@sha256:c4b2fe0de847a606f12fe0d50adadda9719135205cb227c6e12c6a6f0889aae8
+    image:
+      repository: reloop-mail
+      tag: latest
+      build_config:
+        context: ./reloop-mail
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -609,7 +644,12 @@ targets:
         value: "8015"
   reloop-logs:
     preset: service
-    image: reloopsh/be-logs@sha256:3c0be118c7df0ebd76e24ed65de014980f96a8c14c2783231a39b0c54c4065e0
+    image:
+      repository: reloop-logs
+      tag: latest
+      build_config:
+        context: ./reloop-logs
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -694,7 +734,12 @@ targets:
         value: "8016"
   reloop-workflow:
     preset: service
-    image: reloopsh/be-workflow@sha256:d7d75e9145891b7167b42b4fb1ec441c53361e825e5fdf0d72962ef95d3d5b56
+    image:
+      repository: reloop-workflow
+      tag: latest
+      build_config:
+        context: ./reloop-workflow
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -779,7 +824,12 @@ targets:
         value: "8017"
   reloop-upload:
     preset: service
-    image: reloopsh/be-upload@sha256:22632cbbc686fa0c766a0ecd316b4bdeb3097fe5652d3b8e183133ff8055a299
+    image:
+      repository: reloop-upload
+      tag: latest
+      build_config:
+        context: ./reloop-upload
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -864,7 +914,12 @@ targets:
         value: "8018"
   reloop-template:
     preset: service
-    image: reloopsh/be-template@sha256:9734939a04b211aa99c96d89446cb5b28ba5e065a2b8388a88ae634c50f5f77d
+    image:
+      repository: reloop-template
+      tag: latest
+      build_config:
+        context: ./reloop-template
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -949,7 +1004,12 @@ targets:
         value: "8019"
   reloop-campaigns:
     preset: service
-    image: reloopsh/be-campaigns@sha256:446287b0dc88f77ca5ac12199bda637e1e2216a38a47e281be161dba4fea3624
+    image:
+      repository: reloop-campaigns
+      tag: latest
+      build_config:
+        context: ./reloop-campaigns
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -1034,7 +1094,12 @@ targets:
         value: "8027"
   reloop-inbox:
     preset: service
-    image: reloopsh/be-inbox@sha256:4d6fe16298fbec859c86cc6ac55f2804223e9d1c9ff52afc92c01845b99a5f74
+    image:
+      repository: reloop-inbox
+      tag: latest
+      build_config:
+        context: ./reloop-inbox
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -1119,7 +1184,12 @@ targets:
         value: "8028"
   reloop-email:
     preset: service
-    image: reloopsh/be-email@sha256:4caf97f84d7faf7bf45f69e12b8226d724b0e58c0205cd82d1ef7031f4ea8b2d
+    image:
+      repository: reloop-email
+      tag: latest
+      build_config:
+        context: ./reloop-email
+        push: server
     port: "8080"
     env:
       - name: RELOOP_VERSION
@@ -1204,7 +1274,12 @@ targets:
         value: "8022"
   reloop-spam:
     preset: service
-    image: reloopsh/be-spam@sha256:4fcd262354ddb11ed67d8ce8f4b5f08b274f22a8da6987233fb1486d9150a540
+    image:
+      repository: reloop-spam
+      tag: latest
+      build_config:
+        context: ./reloop-spam
+        push: server
     port: "8080"
     env:
       - name: RSPAMD_REDIS_SERVERS

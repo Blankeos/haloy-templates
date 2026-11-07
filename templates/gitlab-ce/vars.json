@@ -3,6 +3,6 @@
     "GITLAB_ROOT_PASSWORD": "password:32"
   },
   "derived": {
-    "GITLAB_CE_GITLAB__GITLAB_OMNIBUS_CONFIG": "external_url 'http://app.example.com'\nnginx['listen_port'] = 80\nnginx['listen_https'] = false\ngitlab_rails['initial_root_password'] = '${GITLAB_ROOT_PASSWORD}'\ngitlab_rails['gitlab_email_enabled'] = false\npuma['worker_processes'] = 0\nsidekiq['concurrency'] = 10\nprometheus_monitoring['enable'] = false\n"
+    "GITLAB_CE_GITLAB__GITLAB_OMNIBUS_CONFIG": "external_url 'https://app.example.com'\nnginx['listen_port'] = 80\nnginx['listen_https'] = false\ngitlab_rails['initial_root_password'] = '${GITLAB_ROOT_PASSWORD}'\ngitlab_rails['gitlab_email_enabled'] = false\npuma['worker_processes'] = 0\nsidekiq['concurrency'] = 10\nprometheus_monitoring['enable'] = false\n"
   }
 }

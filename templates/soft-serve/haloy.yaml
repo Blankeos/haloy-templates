@@ -18,7 +18,7 @@ targets:
       - name: SOFT_SERVE_HTTP_LISTEN_ADDR
         value: :23232
       - name: SOFT_SERVE_HTTP_PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: SOFT_SERVE_GIT_LISTEN_ADDR
         value: :9418
       - name: SOFT_SERVE_STATS_LISTEN_ADDR

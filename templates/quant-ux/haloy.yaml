@@ -21,7 +21,12 @@ targets:
         value: wss://app.example.com
   quant-ux-qux-be:
     preset: service
-    image: klausenschaefersinho/quant-ux-backend
+    image:
+      repository: quant-ux-qux-be
+      tag: latest
+      build_config:
+        context: ./quant-ux-qux-be
+        push: server
     port: "8080"
     env:
       - name: QUX_HTTP_HOST

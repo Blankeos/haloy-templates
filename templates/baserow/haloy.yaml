@@ -8,6 +8,6 @@ targets:
       - domain: app.example.com
     env:
       - name: BASEROW_PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
     volumes:
       - baserow-baserow-data:/baserow/data

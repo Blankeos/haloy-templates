@@ -24,7 +24,7 @@ targets:
       - name: AUTH_TRUST_HOST
         value: "true"
       - name: AUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: PROXY_DOMAIN
         value: app.example.com
       - name: DISABLE_SIGNUP

@@ -1,2 +1,2 @@
 FROM chirpstack/chirpstack:4
-CMD ["sh","-c","-c /etc/chirpstack"]
+CMD ["-c","/etc/chirpstack"]

@@ -22,7 +22,7 @@ targets:
       - domain: app.example.com
     env:
       - name: VITE_API_BASE
-        value: http://app.example.com
+        value: https://app.example.com
   rote-postgres:
     preset: database
     image: postgres:17

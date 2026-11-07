@@ -19,7 +19,12 @@ targets:
           env: AUTH_PASSWORD
   maintenant-app:
     preset: service
-    image: ghcr.io/kolapsis/maintenant:1.10.1
+    image:
+      repository: maintenant-app
+      tag: latest
+      build_config:
+        context: ./maintenant-app
+        push: server
     port: "8080"
     env:
       - name: MAINTENANT_ADDR

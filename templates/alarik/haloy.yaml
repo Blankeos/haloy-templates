@@ -8,9 +8,9 @@ targets:
       - domain: app.example.com
     env:
       - name: API_BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: CONSOLE_BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: ADMIN_USERNAME
         value: alarik
       - name: ADMIN_PASSWORD
@@ -30,8 +30,8 @@ targets:
       - domain: app.example.com
     env:
       - name: NUXT_PUBLIC_API_BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NUXT_PUBLIC_CONSOLE_BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NUXT_PUBLIC_ALLOW_ACCOUNT_CREATION
         value: "false"

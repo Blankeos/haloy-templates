@@ -8,7 +8,12 @@ targets:
       - domain: app.example.com
   nebulynk-postgres:
     preset: service
-    image: ${NEBULYNK_POSTGRES_IMAGE:-postgres:17-alpine3.24@sha256:742f40ea20b9ff2ff31db5458d127452988a2164df9e17441e191f3b72252193}
+    image:
+      repository: nebulynk-postgres
+      tag: latest
+      build_config:
+        context: ./nebulynk-postgres
+        push: server
     port: "8080"
     env:
       - name: POSTGRES_DB
@@ -22,7 +27,12 @@ targets:
       - nebulynk-nebulynk-postgres-data:/var/lib/postgresql/data
   nebulynk-redis:
     preset: service
-    image: ${NEBULYNK_REDIS_IMAGE:-redis:7.4.7-alpine3.21}
+    image:
+      repository: nebulynk-redis
+      tag: latest
+      build_config:
+        context: ./nebulynk-redis
+        push: server
     port: "8080"
     volumes:
       - nebulynk-nebulynk-redis-data:/data
@@ -161,7 +171,7 @@ targets:
       - name: STORAGE_S3_ENDPOINT
         value: http://nebulynk-garage:3900
       - name: STORAGE_S3_PUBLIC_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: STORAGE_S3_ACCESS_KEY
         from:
           env: STORAGE_S3_ACCESS_KEY
@@ -187,7 +197,7 @@ targets:
       - name: LIVEKIT_HOST
         value: http://nebulynk-livekit:7880
       - name: LIVEKIT_PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: LIVEKIT_API_KEY
         from:
           env: LIVEKIT_API_KEY
@@ -203,7 +213,7 @@ targets:
       - name: SMTP_FROM_NAME
         value: Nebulynk
       - name: FRONTEND_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: TRUST_PROXY
         value: "true"
   nebulynk-transcription-worker:

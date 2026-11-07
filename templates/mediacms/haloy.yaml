@@ -88,7 +88,12 @@ targets:
       - mediacms-mediacms-static:/home/mediacms.io/mediacms/staticfiles
   mediacms-celery-beat:
     preset: service
-    image: mediacms/mediacms:latest
+    image:
+      repository: mediacms-celery-beat
+      tag: latest
+      build_config:
+        context: ./mediacms-celery-beat
+        push: server
     port: "8080"
     env:
       - name: ENABLE_UWSGI
@@ -124,7 +129,12 @@ targets:
       - mediacms-mediacms-static:/home/mediacms.io/mediacms/staticfiles
   mediacms-celery-worker:
     preset: service
-    image: mediacms/mediacms:latest
+    image:
+      repository: mediacms-celery-worker
+      tag: latest
+      build_config:
+        context: ./mediacms-celery-worker
+        push: server
     port: "8080"
     env:
       - name: ENABLE_UWSGI

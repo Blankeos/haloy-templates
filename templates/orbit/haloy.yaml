@@ -61,7 +61,12 @@ targets:
   orbit-web:
     health_check_path: /api/health
     preset: service
-    image: ghcr.io/noveum/orbit-runtime:2026.09.24
+    image:
+      repository: orbit-web
+      tag: latest
+      build_config:
+        context: ./orbit-web
+        push: server
     port: "8080"
     env:
       - name: DATABASE_URL

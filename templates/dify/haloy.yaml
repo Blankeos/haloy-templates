@@ -25,7 +25,12 @@ targets:
   dify-api:
     health_check_path: /health
     preset: service
-    image: langgenius/dify-api:1.15.0
+    image:
+      repository: dify-api
+      tag: latest
+      build_config:
+        context: ./dify-api
+        push: server
     port: "8080"
     env:
       - name: LOG_LEVEL
@@ -140,7 +145,12 @@ targets:
       - dify-dify-app-storage:/app/api/storage
   dify-worker:
     preset: service
-    image: langgenius/dify-api:1.15.0
+    image:
+      repository: dify-worker
+      tag: latest
+      build_config:
+        context: ./dify-worker
+        push: server
     port: "8080"
     env:
       - name: LOG_LEVEL
@@ -255,7 +265,12 @@ targets:
       - dify-dify-app-storage:/app/api/storage
   dify-worker-beat:
     preset: service
-    image: langgenius/dify-api:1.15.0
+    image:
+      repository: dify-worker-beat
+      tag: latest
+      build_config:
+        context: ./dify-worker-beat
+        push: server
     port: "8080"
     env:
       - name: LOG_LEVEL
@@ -368,7 +383,12 @@ targets:
         value: beat
   dify-web:
     preset: service
-    image: langgenius/dify-web:1.15.0
+    image:
+      repository: dify-web
+      tag: latest
+      build_config:
+        context: ./dify-web
+        push: server
     port: "8080"
     env:
       - name: CONSOLE_API_URL
@@ -421,7 +441,12 @@ targets:
       - dify-dify-redis-data:/data
   dify-sandbox:
     preset: service
-    image: langgenius/dify-sandbox:0.2.15
+    image:
+      repository: dify-sandbox
+      tag: latest
+      build_config:
+        context: ./dify-sandbox
+        push: server
     port: "8080"
     env:
       - name: API_KEY
@@ -452,7 +477,12 @@ targets:
     port: "8080"
   dify-plugin-daemon:
     preset: service
-    image: langgenius/dify-plugin-daemon:0.6.3-local
+    image:
+      repository: dify-plugin-daemon
+      tag: latest
+      build_config:
+        context: ./dify-plugin-daemon
+        push: server
     port: "8080"
     env:
       - name: DB_HOST

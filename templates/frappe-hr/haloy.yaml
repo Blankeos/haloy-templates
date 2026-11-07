@@ -3,7 +3,12 @@ server: localhost
 targets:
   frappe-hr-backend:
     preset: service
-    image: ${IMAGE_NAME:-ghcr.io/frappe/hrms}:${VERSION:-version-15}
+    image:
+      repository: frappe-hr-backend
+      tag: latest
+      build_config:
+        context: ./frappe-hr-backend
+        push: server
     port: "8080"
     volumes:
       - frappe-hr-sites:/home/frappe/frappe-bench/sites

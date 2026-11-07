@@ -28,7 +28,12 @@ targets:
     port: "8080"
   karakeep-meilisearch:
     preset: service
-    image: getmeili/meilisearch:v1.13.3
+    image:
+      repository: karakeep-meilisearch
+      tag: latest
+      build_config:
+        context: ./karakeep-meilisearch
+        push: server
     port: "8080"
     env:
       - name: MEILI_NO_ANALYTICS

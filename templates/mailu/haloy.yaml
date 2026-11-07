@@ -66,7 +66,12 @@ targets:
       - mailu-mailu-certs:/certs
   mailu-admin:
     preset: service
-    image: ghcr.io/mailu/admin:2024.06
+    image:
+      repository: mailu-admin
+      tag: latest
+      build_config:
+        context: ./mailu-admin
+        push: server
     port: "8080"
     env:
       - name: SECRET_KEY
@@ -128,7 +133,12 @@ targets:
       - mailu-mailu-dkim:/dkim
   mailu-imap:
     preset: service
-    image: ghcr.io/mailu/dovecot:2024.06
+    image:
+      repository: mailu-imap
+      tag: latest
+      build_config:
+        context: ./mailu-imap
+        push: server
     port: "8080"
     env:
       - name: SECRET_KEY
@@ -189,7 +199,12 @@ targets:
       - mailu-mailu-mail:/mail
   mailu-smtp:
     preset: service
-    image: ghcr.io/mailu/postfix:2024.06
+    image:
+      repository: mailu-smtp
+      tag: latest
+      build_config:
+        context: ./mailu-smtp
+        push: server
     port: "8080"
     env:
       - name: SECRET_KEY
@@ -250,7 +265,12 @@ targets:
       - mailu-mailu-mailqueue:/queue
   mailu-antispam:
     preset: service
-    image: ghcr.io/mailu/rspamd:2024.06
+    image:
+      repository: mailu-antispam
+      tag: latest
+      build_config:
+        context: ./mailu-antispam
+        push: server
     port: "8080"
     env:
       - name: SECRET_KEY
@@ -311,7 +331,12 @@ targets:
       - mailu-mailu-filter:/var/lib/rspamd
   mailu-webmail:
     preset: service
-    image: ghcr.io/mailu/webmail:2024.06
+    image:
+      repository: mailu-webmail
+      tag: latest
+      build_config:
+        context: ./mailu-webmail
+        push: server
     port: "8080"
     env:
       - name: SECRET_KEY

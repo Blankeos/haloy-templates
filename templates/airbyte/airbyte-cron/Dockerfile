@@ -1,0 +1,2 @@
+FROM airbyte/cron:${AIRBYTE_VERSION}
+EXPOSE 8080

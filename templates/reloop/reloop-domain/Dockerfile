@@ -1,0 +1,2 @@
+FROM reloopsh/be-domain@sha256:cb12e37221a697278822819fdf4fd0ada2bb2f13e2979be789c9c44ee09a3f56
+EXPOSE 8080

@@ -19,7 +19,12 @@ targets:
         value: docker
   rocketchat-mongodb:
     preset: service
-    image: docker.io/bitnami/mongodb:5.0
+    image:
+      repository: rocketchat-mongodb
+      tag: latest
+      build_config:
+        context: ./rocketchat-mongodb
+        push: server
     port: "8080"
     env:
       - name: MONGODB_REPLICA_SET_MODE

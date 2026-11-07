@@ -1,7 +1,7 @@
 # kestra
 
-Status: **manual**
+Status: **partial**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
-- [manual] `kestra` docker-sock: mounts the Docker socket
+- [partial] `kestra` docker-sock: mounts the host Docker socket (works as a plain bind mount, but gives the container control of every container on the server)
 - [partial] `kestra` host-path: host path /tmp/kestra-wd mounted as-is; make sure it exists on the server
-- [partial] `kestra` internal-ref-to-public: kestra is reached by hostname from another service but has a domain; with rolling deploys its container name changes

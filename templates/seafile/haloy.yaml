@@ -98,7 +98,12 @@ targets:
       - seafile-seafile-data:/shared
   seafile-seadoc:
     preset: service
-    image: seafileltd/sdoc-server:2.0.11
+    image:
+      repository: seafile-seadoc
+      tag: latest
+      build_config:
+        context: ./seafile-seadoc
+        push: server
     port: "8080"
     env:
       - name: DB_HOST

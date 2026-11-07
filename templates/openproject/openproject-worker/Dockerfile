@@ -1,2 +1,3 @@
 FROM openproject/openproject:17-slim
-CMD ["sh","-c","./docker/prod/worker"]
+EXPOSE 8080
+CMD ["./docker/prod/worker"]

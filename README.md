@@ -25,7 +25,7 @@ Each template lives in `templates/<id>/`:
 | `deploy.sh` | targets in dependency order (Haloy has no `depends_on`) |
 | `<target>/Dockerfile` | only where a `command`, `entrypoint` or config file had to be baked in |
 | `vars.json` | secret recipes. `add` turns them into a `.env` and never overwrites one |
-| `REPORT.md` | what needed a workaround and what needs a human |
+| `REPORT.md` | badges, what needed a workaround and what needs a human |
 
 ## 🔁 How it translates
 
@@ -34,18 +34,36 @@ Each template lives in `templates/<id>/`:
 | service | target |
 | postgres, redis, mongo... | `preset: database` |
 | `command` / `entrypoint` / mounted config | tiny generated Dockerfile |
-| `/api` path routing | subdomain (`api.host`), Haloy routes by hostname only |
+| `/api` path routing | generated nginx gateway target (Haloy routes by hostname only) |
 | `${password:32}` and friends | generated into `.env`, read with `from: env` |
 | `depends_on` | order in `deploy.sh` |
 | Traefik labels | dropped |
 
-Not translatable (flagged `manual`): Docker socket, `privileged`, devices, `cap_add`, host networking, `build:`, `env_file`.
+Not translatable (flagged `manual`): `privileged`, devices, `cap_add`, host networking, `build:`, `env_file`.
 
 ## ✅ Status
 
-- All 602 templates pass `haloy validate-config` (CI checks this).
-- 316 clean, 215 with workarounds, 71 need a human. Details in [COVERAGE.md](COVERAGE.md).
-- Validated is not the same as deployed. Deploy-tested so far: Uptime Kuma, Ackee + MongoDB.
+Every template's `REPORT.md` carries its badges. A badge only counts while the template is unchanged since it was earned.
+
+- ✅ **verified**: `haloy validate-config` passes.
+- 🟢 **tested**: deployed on a real Haloy server, containers healthy, and the app answered requests.
+
+<!-- status:start -->
+| | |
+|---|---|
+| ✅ **verified** (`haloy validate-config` passes) | 602 / 602 |
+| 🟢 **tested** (deployed, healthy, answers requests) | 4 / 602 |
+| 🧩 **translation** | 388 clean, 167 with workarounds, 47 need a human |
+
+| 🟢 Tested | What was checked | Arch | Date |
+|---|---|---|---|
+| [`chatwoot`](templates/chatwoot) | web healthy; /api reports queue and data services ok; 88 tables migrated; Sidekiq worker registered | arm64 | 2026-11-07 |
+| [`rustfs`](templates/rustfs) | S3 API on the domain: create bucket, put and get object; bad credentials rejected. Console (9001) not published | arm64 | 2026-11-07 |
+| [`rybbit`](templates/rybbit) | all 6 targets up; /api and / both served on one host by the gateway; sign-up and session work; Postgres and ClickHouse connected | arm64 | 2026-11-07 |
+| [`uptime-kuma`](templates/uptime-kuma) | container healthy; UI served through haloy-proxy; docker.sock mount present | arm64 | 2026-11-07 |
+<!-- status:end -->
+
+Translation details per warning are in [COVERAGE.md](COVERAGE.md).
 
 ## 🛠️ Maintain
 

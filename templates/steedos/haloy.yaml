@@ -8,6 +8,6 @@ targets:
       - domain: app.example.com
     env:
       - name: ROOT_URL
-        value: http://app.example.com
+        value: https://app.example.com
     volumes:
       - steedos-steedos-data:/steedos-storage

@@ -8,8 +8,8 @@ targets:
       - domain: app.example.com
     env:
       - name: PUBLIC_WEB_ADDRESS
-        value: http://app.example.com
+        value: https://app.example.com
       - name: PUBLIC_API_ADDRESS
-        value: http://app.example.com
+        value: https://app.example.com
     volumes:
       - storyden-storyden-data:/storyden/data

@@ -3,7 +3,12 @@ server: localhost
 targets:
   cloudflare-ddns:
     preset: service
-    image: favonia/cloudflare-ddns:1
+    image:
+      repository: cloudflare-ddns
+      tag: latest
+      build_config:
+        context: ./cloudflare-ddns
+        push: server
     port: "8080"
     env:
       - name: CLOUDFLARE_API_TOKEN

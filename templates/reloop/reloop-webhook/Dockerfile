@@ -1,0 +1,2 @@
+FROM reloopsh/be-webhook@sha256:644a6b79756f57c045c8572c42bee6dfb6b31663ee08d21f2565cead4dfc1ca9
+EXPOSE 8080

@@ -18,7 +18,12 @@ targets:
   itsaplan-minio:
     health_check_path: /health
     preset: service
-    image: rustfs/rustfs:1.0.0
+    image:
+      repository: itsaplan-minio
+      tag: latest
+      build_config:
+        context: ./itsaplan-minio
+        push: server
     port: "8080"
     env:
       - name: RUSTFS_ACCESS_KEY
@@ -29,6 +34,7 @@ targets:
     volumes:
       - itsaplan-minio-data:/data
   itsaplan-minio-init:
+    health_check_path: /health
     preset: service
     image:
       repository: itsaplan-minio-init
@@ -106,7 +112,12 @@ targets:
         value: "true"
   itsaplan-worker:
     preset: service
-    image: ghcr.io/croffasia/itsaplan-worker:1.9.0
+    image:
+      repository: itsaplan-worker
+      tag: latest
+      build_config:
+        context: ./itsaplan-worker
+        push: server
     port: "8080"
     env:
       - name: NODE_ENV
@@ -132,7 +143,12 @@ targets:
         value: "true"
   itsaplan-bot:
     preset: service
-    image: ghcr.io/croffasia/itsaplan-bot:1.9.0
+    image:
+      repository: itsaplan-bot
+      tag: latest
+      build_config:
+        context: ./itsaplan-bot
+        push: server
     port: "8080"
     env:
       - name: NODE_ENV

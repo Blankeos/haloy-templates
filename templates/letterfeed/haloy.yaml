@@ -3,7 +3,12 @@ server: localhost
 targets:
   letterfeed-backend:
     preset: service
-    image: ghcr.io/leonmuscoden/letterfeed-backend:latest
+    image:
+      repository: letterfeed-backend
+      tag: latest
+      build_config:
+        context: ./letterfeed-backend
+        push: server
     port: "8080"
     env:
       - name: LETTERFEED_APP_BASE_URL

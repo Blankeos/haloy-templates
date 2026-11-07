@@ -28,7 +28,7 @@ targets:
       - name: PORT
         value: "3000"
       - name: NEXTAUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXTAUTH_SECRET
         from:
           env: NEXTAUTH_SECRET
@@ -39,7 +39,7 @@ targets:
         from:
           env: SECONDARY_ENCRYPTION_KEY
       - name: NEXT_PUBLIC_WEBAPP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXT_PRIVATE_DATABASE_URL
         value: postgres://documenso:password@documenso-postgres:5432/documenso
       - name: NEXT_PRIVATE_DIRECT_DATABASE_URL

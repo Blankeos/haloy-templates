@@ -23,9 +23,9 @@ targets:
       - name: PORT
         value: "3000"
       - name: SERVER_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FRONT_BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: PG_DATABASE_URL
         from:
           env: TWENTY_SERVER__PG_DATABASE_URL
@@ -61,9 +61,9 @@ targets:
         from:
           env: TWENTY_WORKER__PG_DATABASE_URL
       - name: SERVER_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FRONT_BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: REDIS_URL
         value: redis://twenty-redis:6379
       - name: ENABLE_DB_MIGRATIONS

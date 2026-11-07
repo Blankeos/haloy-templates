@@ -3,7 +3,12 @@ server: localhost
 targets:
   habitica-server:
     preset: service
-    image: docker.io/awinterstein/habitica-server:latest
+    image:
+      repository: habitica-server
+      tag: latest
+      build_config:
+        context: ./habitica-server
+        push: server
     port: "8080"
     env:
       - name: NODE_DB_URI

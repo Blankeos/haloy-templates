@@ -23,7 +23,7 @@ targets:
       - domain: app.example.com
     env:
       - name: KANEO_CLIENT_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: AUTH_SECRET
         from:
           env: AUTH_SECRET

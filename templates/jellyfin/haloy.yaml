@@ -8,7 +8,7 @@ targets:
       - domain: app.example.com
     env:
       - name: JELLYFIN_PublishedServerUrl
-        value: http://app.example.com
+        value: https://app.example.com
     volumes:
       - jellyfin-config:/config
       - jellyfin-cache:/cache

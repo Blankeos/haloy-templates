@@ -1,2 +1,2 @@
 FROM appwrite/appwrite:2.7.0
-ENTRYPOINT ["sh","-c","realtime"]
+ENTRYPOINT ["realtime"]

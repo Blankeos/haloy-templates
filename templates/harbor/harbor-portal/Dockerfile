@@ -1,3 +1,4 @@
 FROM goharbor/harbor-portal:v2.15.4@sha256:01edf478505b21dba23a83c095f6ecac0c1e705690093edbab41e9a4d6754a75
+EXPOSE 8080
 ENTRYPOINT ["/bin/sh","/run/harbor-config/launch.sh"]
 CMD []

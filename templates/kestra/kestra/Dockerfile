@@ -1,2 +1,2 @@
 FROM kestra/kestra:latest
-CMD ["sh","-c","server standalone"]
+CMD ["server","standalone"]

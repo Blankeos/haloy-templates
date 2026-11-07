@@ -15,7 +15,12 @@ targets:
   signoz-zookeeper-1:
     health_check_path: /commands/ruok
     preset: service
-    image: signoz/zookeeper:3.7.1
+    image:
+      repository: signoz-zookeeper-1
+      tag: latest
+      build_config:
+        context: ./signoz-zookeeper-1
+        push: server
     port: "8080"
     env:
       - name: ZOO_SERVER_ID

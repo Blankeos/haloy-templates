@@ -4,7 +4,12 @@ targets:
   budibase-apps:
     health_check_path: /health
     preset: service
-    image: budibase/apps:3.23.47
+    image:
+      repository: budibase-apps
+      tag: latest
+      build_config:
+        context: ./budibase-apps
+        push: server
     port: "8080"
     env:
       - name: SELF_HOSTED
@@ -52,7 +57,12 @@ targets:
   budibase-worker:
     health_check_path: /health
     preset: service
-    image: budibase/worker:3.23.47
+    image:
+      repository: budibase-worker
+      tag: latest
+      build_config:
+        context: ./budibase-worker
+        push: server
     port: "8080"
     env:
       - name: SELF_HOSTED

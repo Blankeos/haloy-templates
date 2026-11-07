@@ -1,2 +1,2 @@
 FROM ghcr.io/dagucloud/dagu:2.25.4
-CMD ["sh","-c","dagu start-all"]
+CMD ["dagu","start-all"]

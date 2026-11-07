@@ -6,7 +6,6 @@ targets:
     port: "18083"
     domains:
       - domain: emqx.yourdomain.com
-      - domain: broker.yourdomain.com
     env:
       - name: EMQX_NODE_NAME
         value: emqx@node1.emqx.com

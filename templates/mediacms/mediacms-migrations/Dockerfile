@@ -1,2 +1,3 @@
 FROM mediacms/mediacms:latest
-CMD ["sh","-c","./deploy/docker/prestart.sh"]
+EXPOSE 8080
+CMD ["./deploy/docker/prestart.sh"]

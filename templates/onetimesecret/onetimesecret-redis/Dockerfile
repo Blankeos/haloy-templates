@@ -1,2 +1,2 @@
 FROM redis:7-alpine
-CMD ["sh","-c","redis-server --requirepass ${REDIS_PASSWORD}"]
+CMD ["sh","-c","exec redis-server --requirepass \"${REDIS_PASSWORD}\""]

@@ -2,13 +2,14 @@ name: rustfs
 server: localhost
 targets:
   rustfs:
+    health_check_path: /health
     image:
       repository: rustfs
       tag: latest
       build_config:
         context: ./rustfs
         push: server
-    port: "9001"
+    port: "9000"
     domains:
       - domain: app.example.com
     env:

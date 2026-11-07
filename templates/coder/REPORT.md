@@ -1,6 +1,6 @@
 # coder
 
-Status: **manual**
+Status: **partial**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
-- [manual] `coder` docker-sock: mounts the Docker socket
-- [partial] `coder` internal-ref-to-public: coder is reached by hostname from another service but has a domain; with rolling deploys its container name changes
+- [partial] `coder` docker-sock: mounts the host Docker socket (works as a plain bind mount, but gives the container control of every container on the server)

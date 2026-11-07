@@ -3,7 +3,12 @@ server: localhost
 targets:
   tailscale-exitnode:
     preset: service
-    image: tailscale/tailscale:latest
+    image:
+      repository: tailscale-exitnode
+      tag: latest
+      build_config:
+        context: ./tailscale-exitnode
+        push: server
     port: "8080"
     env:
       - name: TS_EXTRA_ARGS

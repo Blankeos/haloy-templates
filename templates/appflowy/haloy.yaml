@@ -7,6 +7,7 @@ targets:
     domains:
       - domain: app.example.com
   appflowy-minio:
+    health_check_path: /minio/health/live
     preset: service
     image:
       repository: appflowy-minio
@@ -50,7 +51,12 @@ targets:
   appflowy-gotrue:
     health_check_path: /health
     preset: service
-    image: appflowyinc/gotrue:${GOTRUE_VERSION:-latest}
+    image:
+      repository: appflowy-gotrue
+      tag: latest
+      build_config:
+        context: ./appflowy-gotrue
+        push: server
     port: "8080"
     env:
       - name: GOTRUE_ADMIN_EMAIL
@@ -114,7 +120,12 @@ targets:
         value: "false"
   appflowy-cloud:
     preset: service
-    image: appflowyinc/appflowy_cloud:${APPFLOWY_CLOUD_VERSION:-latest}
+    image:
+      repository: appflowy-cloud
+      tag: latest
+      build_config:
+        context: ./appflowy-cloud
+        push: server
     port: "8080"
     env:
       - name: RUST_LOG
@@ -169,7 +180,12 @@ targets:
         value: "5001"
   appflowy-admin-frontend:
     preset: service
-    image: appflowyinc/admin_frontend:${APPFLOWY_ADMIN_FRONTEND_VERSION:-latest}
+    image:
+      repository: appflowy-admin-frontend
+      tag: latest
+      build_config:
+        context: ./appflowy-admin-frontend
+        push: server
     port: "8080"
     env:
       - name: RUST_LOG
@@ -185,7 +201,12 @@ targets:
   appflowy-ai:
     health_check_path: /health
     preset: service
-    image: appflowyinc/appflowy_ai:${APPFLOWY_AI_VERSION:-latest}
+    image:
+      repository: appflowy-ai
+      tag: latest
+      build_config:
+        context: ./appflowy-ai
+        push: server
     port: "8080"
     env:
       - name: AI_SERVER_PORT
@@ -220,7 +241,12 @@ targets:
           env: INLINE_PASSWORD_64
   appflowy-worker:
     preset: service
-    image: appflowyinc/appflowy_worker:${APPFLOWY_WORKER_VERSION:-latest}
+    image:
+      repository: appflowy-worker
+      tag: latest
+      build_config:
+        context: ./appflowy-worker
+        push: server
     port: "8080"
     env:
       - name: RUST_LOG
@@ -258,7 +284,12 @@ targets:
         value: wrapper
   appflowy-web:
     preset: service
-    image: appflowyinc/appflowy_web:${APPFLOWY_WEB_VERSION:-latest}
+    image:
+      repository: appflowy-web
+      tag: latest
+      build_config:
+        context: ./appflowy-web
+        push: server
     port: "8080"
     env:
       - name: AF_BASE_URL

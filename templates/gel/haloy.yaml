@@ -2,10 +2,9 @@ name: gel
 server: localhost
 targets:
   gel:
+    preset: service
     image: geldata/gel:6
     port: "5656"
-    domains:
-      - domain: ui.app.example.com
     env:
       - name: GEL_SERVER_SECURITY
         value: strict
@@ -20,3 +19,14 @@ targets:
         value: enabled
     volumes:
       - gel-gel-data:/var/lib/gel/data
+  gel-gateway:
+    image:
+      repository: gel-gateway
+      tag: latest
+      build_config:
+        context: ./gel-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
+    domains:
+      - domain: app.example.com

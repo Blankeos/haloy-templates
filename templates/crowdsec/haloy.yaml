@@ -3,7 +3,12 @@ server: localhost
 targets:
   crowdsec:
     preset: service
-    image: crowdsecurity/crowdsec:latest
+    image:
+      repository: crowdsec
+      tag: latest
+      build_config:
+        context: ./crowdsec
+        push: server
     port: "8080"
     env:
       - name: GID

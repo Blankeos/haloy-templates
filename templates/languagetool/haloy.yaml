@@ -2,7 +2,17 @@ name: languagetool
 server: localhost
 targets:
   languagetool:
+    preset: service
     image: collabora/languagetool:6.6
     port: "8010"
+  languagetool-gateway:
+    image:
+      repository: languagetool-gateway
+      tag: latest
+      build_config:
+        context: ./languagetool-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
     domains:
-      - domain: v2-languages.app.example.com
+      - domain: app.example.com

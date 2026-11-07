@@ -10,7 +10,7 @@ targets:
       - name: NODE_ENV
         value: production
       - name: FRONTEND_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: JWT_SECRET
         from:
           env: JWT_SECRET
@@ -32,6 +32,6 @@ targets:
       - domain: app.example.com
     env:
       - name: NEXT_PUBLIC_BACKEND_URL
-        value: http://api-app.example.com
+        value: https://api-app.example.com
       - name: NEXT_PUBLIC_DEFAULT_LANGUAGE
         value: en

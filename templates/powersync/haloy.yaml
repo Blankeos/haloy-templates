@@ -21,6 +21,7 @@ targets:
     volumes:
       - powersync-postgres-data:/var/lib/postgresql/data
   powersync:
+    preset: service
     image:
       repository: powersync
       tag: latest
@@ -28,10 +29,19 @@ targets:
         context: ./powersync
         push: server
     port: "8080"
-    domains:
-      - domain: probes-liveness.app.example.com
     env:
       - name: POWERSYNC_CONFIG_PATH
         value: /config/powersync.yaml
       - name: NODE_OPTIONS
         value: --max-old-space-size=1000
+  powersync-gateway:
+    image:
+      repository: powersync-gateway
+      tag: latest
+      build_config:
+        context: ./powersync-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
+    domains:
+      - domain: app.example.com

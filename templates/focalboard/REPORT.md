@@ -1,6 +1,6 @@
 # focalboard
 
 Status: **partial**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
-- [partial] `focalboard` internal-ref-to-public: focalboard is reached by hostname from another service but has a domain; with rolling deploys its container name changes
 - [partial] unset-vars: 2 optional vars have no value in template.toml and were left empty/omitted: POSTGRES_password, postgres_db

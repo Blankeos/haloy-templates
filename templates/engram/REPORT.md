@@ -1,6 +1,6 @@
 # engram
 
 Status: **partial**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
-- [partial] `engram` path-routing: Haloy routes by hostname only; /dashboard on app.example.com became dashboard.app.example.com. Point DNS there and update any URL env vars (e.g. BASE_URL).
-- [partial] `engram` internal-ref-to-public: engram is reached by hostname from another service but has a domain; with rolling deploys its container name changes
+- [partial] `engram-gateway` path-routing: Haloy routes by hostname only, so app.example.com (/dashboard) is served by a generated nginx target `engram-gateway` that proxies each path to its service.

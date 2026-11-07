@@ -1,0 +1,2 @@
+FROM reloopsh/be-upload@sha256:22632cbbc686fa0c766a0ecd316b4bdeb3097fe5652d3b8e183133ff8055a299
+EXPOSE 8080

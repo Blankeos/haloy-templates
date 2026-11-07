@@ -3,7 +3,12 @@ server: localhost
 targets:
   airbyte-db:
     preset: service
-    image: airbyte/db:${AIRBYTE_VERSION}
+    image:
+      repository: airbyte-db
+      tag: latest
+      build_config:
+        context: ./airbyte-db
+        push: server
     port: "8080"
     env:
       - name: POSTGRES_DB
@@ -160,15 +165,20 @@ targets:
       - airbyte-dataplane-credentials:/credentials
   airbyte-bootloader:
     preset: service
-    image: airbyte/bootloader:${AIRBYTE_VERSION}
+    image:
+      repository: airbyte-bootloader
+      tag: latest
+      build_config:
+        context: ./airbyte-bootloader
+        push: server
     port: "8080"
     env:
       - name: AIRBYTE_VERSION
         value: 2.2.0
       - name: AIRBYTE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: AIRBYTE_API_HOST
-        value: http://app.example.com/api/public
+        value: https://app.example.com/api/public
       - name: AIRBYTE_SERVER_HOST
         value: airbyte-server:8001
       - name: INTERNAL_API_HOST
@@ -247,9 +257,9 @@ targets:
       - name: AIRBYTE_VERSION
         value: 2.2.0
       - name: AIRBYTE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: AIRBYTE_API_HOST
-        value: http://app.example.com/api/public
+        value: https://app.example.com/api/public
       - name: AIRBYTE_SERVER_HOST
         value: airbyte-server:8001
       - name: INTERNAL_API_HOST
@@ -314,15 +324,20 @@ targets:
   airbyte-manifest-server:
     health_check_path: /health/
     preset: service
-    image: airbyte/manifest-server:${MANIFEST_SERVER_VERSION}
+    image:
+      repository: airbyte-manifest-server
+      tag: latest
+      build_config:
+        context: ./airbyte-manifest-server
+        push: server
     port: "8080"
     env:
       - name: AIRBYTE_VERSION
         value: 2.2.0
       - name: AIRBYTE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: AIRBYTE_API_HOST
-        value: http://app.example.com/api/public
+        value: https://app.example.com/api/public
       - name: AIRBYTE_SERVER_HOST
         value: airbyte-server:8001
       - name: INTERNAL_API_HOST
@@ -388,15 +403,20 @@ targets:
         value: "false"
   airbyte-workload-api-server:
     preset: service
-    image: airbyte/workload-api-server:${AIRBYTE_VERSION}
+    image:
+      repository: airbyte-workload-api-server
+      tag: latest
+      build_config:
+        context: ./airbyte-workload-api-server
+        push: server
     port: "8080"
     env:
       - name: AIRBYTE_VERSION
         value: 2.2.0
       - name: AIRBYTE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: AIRBYTE_API_HOST
-        value: http://app.example.com/api/public
+        value: https://app.example.com/api/public
       - name: AIRBYTE_SERVER_HOST
         value: airbyte-server:8001
       - name: INTERNAL_API_HOST
@@ -460,15 +480,20 @@ targets:
         value: airbyte-workload-api
   airbyte-worker:
     preset: service
-    image: airbyte/worker:${AIRBYTE_VERSION}
+    image:
+      repository: airbyte-worker
+      tag: latest
+      build_config:
+        context: ./airbyte-worker
+        push: server
     port: "8080"
     env:
       - name: AIRBYTE_VERSION
         value: 2.2.0
       - name: AIRBYTE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: AIRBYTE_API_HOST
-        value: http://app.example.com/api/public
+        value: https://app.example.com/api/public
       - name: AIRBYTE_SERVER_HOST
         value: airbyte-server:8001
       - name: INTERNAL_API_HOST
@@ -532,15 +557,20 @@ targets:
         value: airbyte-worker
   airbyte-cron:
     preset: service
-    image: airbyte/cron:${AIRBYTE_VERSION}
+    image:
+      repository: airbyte-cron
+      tag: latest
+      build_config:
+        context: ./airbyte-cron
+        push: server
     port: "8080"
     env:
       - name: AIRBYTE_VERSION
         value: 2.2.0
       - name: AIRBYTE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: AIRBYTE_API_HOST
-        value: http://app.example.com/api/public
+        value: https://app.example.com/api/public
       - name: AIRBYTE_SERVER_HOST
         value: airbyte-server:8001
       - name: INTERNAL_API_HOST
@@ -615,9 +645,9 @@ targets:
       - name: AIRBYTE_VERSION
         value: 2.2.0
       - name: AIRBYTE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: AIRBYTE_API_HOST
-        value: http://app.example.com/api/public
+        value: https://app.example.com/api/public
       - name: AIRBYTE_SERVER_HOST
         value: airbyte-server:8001
       - name: INTERNAL_API_HOST

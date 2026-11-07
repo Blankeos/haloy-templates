@@ -17,7 +17,12 @@ targets:
       - multica-pgdata:/var/lib/postgresql/data
   multica-backend:
     preset: service
-    image: multica-backend
+    image:
+      repository: multica-backend
+      tag: latest
+      build_config:
+        context: ./multica-backend
+        push: server
     port: "8080"
     env:
       - name: DATABASE_URL

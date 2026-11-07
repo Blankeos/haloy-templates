@@ -9,9 +9,9 @@ targets:
       - domain: app.example.com
     env:
       - name: CONVEX_CLOUD_ORIGIN
-        value: http://app.example.com
+        value: https://app.example.com
       - name: CONVEX_SITE_ORIGIN
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DISABLE_BEACON
         value: "FALSE"
       - name: RUST_LOG
@@ -25,4 +25,4 @@ targets:
       - domain: app.example.com
     env:
       - name: NEXT_PUBLIC_DEPLOYMENT_URL
-        value: http://app.example.com
+        value: https://app.example.com

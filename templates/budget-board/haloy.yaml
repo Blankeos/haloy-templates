@@ -3,7 +3,12 @@ server: localhost
 targets:
   budget-board-server:
     preset: service
-    image: ghcr.io/teelur/budget-board/server:release
+    image:
+      repository: budget-board-server
+      tag: latest
+      build_config:
+        context: ./budget-board-server
+        push: server
     port: "8080"
     env:
       - name: Logging__LogLevel__Default

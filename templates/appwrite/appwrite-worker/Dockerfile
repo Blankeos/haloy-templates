@@ -1,2 +1,3 @@
 FROM appwrite/appwrite:2.7.0
-ENTRYPOINT ["sh","-c","worker"]
+EXPOSE 8080
+ENTRYPOINT ["worker"]

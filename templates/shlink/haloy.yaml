@@ -28,4 +28,4 @@ targets:
         from:
           env: INITIAL_API_KEY
       - name: SHLINK_SERVER_URL
-        value: http://app.example.com
+        value: https://app.example.com

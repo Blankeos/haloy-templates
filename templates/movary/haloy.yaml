@@ -19,7 +19,7 @@ targets:
         from:
           env: MYSQL_PASSWORD
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: APP_ENV
         value: production
     volumes:

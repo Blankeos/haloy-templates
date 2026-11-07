@@ -38,7 +38,12 @@ targets:
       - struxa-struxa-minio:/data
   struxa-migrate:
     preset: service
-    image: ghcr.io/struxadotcloud/migrate:${IMAGE_TAG}
+    image:
+      repository: struxa-migrate
+      tag: latest
+      build_config:
+        context: ./struxa-migrate
+        push: server
     port: "8080"
     env:
       - name: DATABASE_URL
@@ -62,11 +67,11 @@ targets:
         from:
           env: BETTER_AUTH_SECRET
       - name: BETTER_AUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: CORS_ORIGIN
-        value: http://app.example.com
+        value: https://app.example.com
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DATABASE_ENCRYPTION_KEY
         from:
           env: DB_ENCRYPTION_KEY
@@ -83,7 +88,12 @@ targets:
         value: production
   struxa-watchkeeper:
     preset: service
-    image: ghcr.io/struxadotcloud/watchkeeper:${IMAGE_TAG}
+    image:
+      repository: struxa-watchkeeper
+      tag: latest
+      build_config:
+        context: ./struxa-watchkeeper
+        push: server
     port: "8080"
     env:
       - name: DATABASE_URL

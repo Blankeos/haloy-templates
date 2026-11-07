@@ -47,6 +47,7 @@ targets:
       - openpanel-op-ch-logs:/var/log/clickhouse-server
   openpanel-op-api:
     health_check_path: /healthcheck
+    preset: service
     image:
       repository: openpanel-op-api
       tag: latest
@@ -54,8 +55,6 @@ targets:
         context: ./openpanel-op-api
         push: server
     port: "3000"
-    domains:
-      - domain: api.app.example.com
     env:
       - name: COOKIE_SECRET
         from:
@@ -69,9 +68,9 @@ targets:
       - name: SELF_HOSTED
         value: "true"
       - name: API_URL
-        value: http://app.example.com/api
+        value: https://app.example.com/api
       - name: DASHBOARD_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DATABASE_URL
         from:
           env: OPENPANEL_OP_API__DATABASE_URL
@@ -85,19 +84,18 @@ targets:
         value: http://openpanel-op-ch:8123/openpanel
   openpanel-op-dashboard:
     health_check_path: /api/healthcheck
+    preset: service
     image: lindesvard/openpanel-dashboard:2.2.1
     port: "3000"
-    domains:
-      - domain: app.example.com
     env:
       - name: NODE_ENV
         value: production
       - name: SELF_HOSTED
         value: "true"
       - name: API_URL
-        value: http://app.example.com/api
+        value: https://app.example.com/api
       - name: DASHBOARD_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DATABASE_URL
         from:
           env: OPENPANEL_OP_DASHBOARD__DATABASE_URL
@@ -112,7 +110,12 @@ targets:
   openpanel-op-worker:
     health_check_path: /healthcheck
     preset: service
-    image: lindesvard/openpanel-worker:2.2.1
+    image:
+      repository: openpanel-op-worker
+      tag: latest
+      build_config:
+        context: ./openpanel-op-worker
+        push: server
     port: "8080"
     env:
       - name: NODE_ENV
@@ -120,9 +123,9 @@ targets:
       - name: SELF_HOSTED
         value: "true"
       - name: API_URL
-        value: http://app.example.com/api
+        value: https://app.example.com/api
       - name: DASHBOARD_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DATABASE_URL
         from:
           env: OPENPANEL_OP_WORKER__DATABASE_URL
@@ -134,3 +137,14 @@ targets:
           env: OPENPANEL_OP_WORKER__REDIS_URL
       - name: CLICKHOUSE_URL
         value: http://openpanel-op-ch:8123/openpanel
+  openpanel-gateway:
+    image:
+      repository: openpanel-gateway
+      tag: latest
+      build_config:
+        context: ./openpanel-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
+    domains:
+      - domain: app.example.com

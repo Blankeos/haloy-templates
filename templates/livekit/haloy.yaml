@@ -12,7 +12,6 @@ targets:
     port: "7880"
     domains:
       - domain: livekit.app.example.com
-      - domain: livekit-turn.app.example.com
   livekit-redis:
     preset: database
     image:

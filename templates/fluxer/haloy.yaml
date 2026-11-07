@@ -45,7 +45,12 @@ targets:
       - fluxer-nats-data:/data
   fluxer-meilisearch:
     preset: service
-    image: getmeili/meilisearch:v1.12
+    image:
+      repository: fluxer-meilisearch
+      tag: latest
+      build_config:
+        context: ./fluxer-meilisearch
+        push: server
     port: "8080"
     env:
       - name: MEILI_ENV
@@ -70,7 +75,12 @@ targets:
       - fluxer-seaweedfs-data:/data
   fluxer-gifs:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-gifs:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-gifs
+      tag: latest
+      build_config:
+        context: ./fluxer-gifs
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -218,13 +228,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -236,16 +246,21 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_SVC_NAME
         value: gifs
       - name: FLUXER_SVC_MODE
         value: router
       - name: FLUXER_MEDIA_PROXY_PUBLIC_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
   fluxer-gifs-shard:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-gifs:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-gifs-shard
+      tag: latest
+      build_config:
+        context: ./fluxer-gifs-shard
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -393,13 +408,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -411,7 +426,7 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_SVC_NAME
         value: gifs
       - name: FLUXER_SVC_MODE
@@ -419,7 +434,7 @@ targets:
       - name: FLUXER_SVC_SHARD_ID
         value: "0"
       - name: FLUXER_MEDIA_PROXY_PUBLIC_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
   fluxer-seaweedfs-init:
     preset: service
     image:
@@ -445,7 +460,12 @@ targets:
   fluxer-api:
     health_check_path: /_health
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-api:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-api
+      tag: latest
+      build_config:
+        context: ./fluxer-api
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -593,13 +613,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -611,7 +631,7 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_API_PORT
         value: "8080"
       - name: FLUXER_API_PRESIGNED_ATTACHMENT_UPLOADS_ENABLED
@@ -771,13 +791,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -789,7 +809,7 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_API_WORKER_MODE
         value: all_lanes
       - name: FLUXER_API_WORKER_ENABLE_CRON_SCHEDULER
@@ -798,7 +818,12 @@ targets:
         value: "true"
   fluxer-gateway:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-gateway:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-gateway
+      tag: latest
+      build_config:
+        context: ./fluxer-gateway
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -946,13 +971,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -964,18 +989,23 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_GATEWAY_PORT
         value: "8080"
       - name: FLUXER_GATEWAY_MEDIA_PROXY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_GATEWAY_STATIC_CDN_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_GATEWAY_LOGGER_LEVEL
         value: info
   fluxer-media-proxy:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-media-proxy:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-media-proxy
+      tag: latest
+      build_config:
+        context: ./fluxer-media-proxy
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -1123,13 +1153,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -1141,7 +1171,7 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_MEDIA_PROXY_HOST
         value: 0.0.0.0
       - name: FLUXER_MEDIA_PROXY_PORT
@@ -1152,11 +1182,21 @@ targets:
         value: s3
   fluxer-static-proxy:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-static:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-static-proxy
+      tag: latest
+      build_config:
+        context: ./fluxer-static-proxy
+        push: server
     port: "8080"
   fluxer-app-proxy:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-app-proxy-self-hosted:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-app-proxy
+      tag: latest
+      build_config:
+        context: ./fluxer-app-proxy
+        push: server
     port: "8080"
     env:
       - name: FLUXER_APP_PROXY_HOST
@@ -1168,10 +1208,15 @@ targets:
       - name: PUBLIC_BOOTSTRAP_API_ENDPOINT
         value: /api
       - name: PUBLIC_BOOTSTRAP_API_PUBLIC_ENDPOINT
-        value: http://app.example.com/api
+        value: https://app.example.com/api
   fluxer-snowflakes:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-snowflakes:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-snowflakes
+      tag: latest
+      build_config:
+        context: ./fluxer-snowflakes
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -1319,13 +1364,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -1337,12 +1382,17 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_SVC_MODE
         value: router
   fluxer-snowflakes-shard:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-snowflakes:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-snowflakes-shard
+      tag: latest
+      build_config:
+        context: ./fluxer-snowflakes-shard
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -1490,13 +1540,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -1508,14 +1558,19 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_SVC_MODE
         value: shard
       - name: FLUXER_SVC_SHARD_ID
         value: "0"
   fluxer-users:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-users:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-users
+      tag: latest
+      build_config:
+        context: ./fluxer-users
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -1663,13 +1718,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -1681,12 +1736,17 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_SVC_MODE
         value: router
   fluxer-users-shard:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-users:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-users-shard
+      tag: latest
+      build_config:
+        context: ./fluxer-users-shard
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -1834,13 +1894,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -1852,14 +1912,19 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_SVC_MODE
         value: shard
       - name: FLUXER_SVC_SHARD_ID
         value: "0"
   fluxer-messages:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-messages:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-messages
+      tag: latest
+      build_config:
+        context: ./fluxer-messages
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -2007,13 +2072,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -2025,12 +2090,17 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_SVC_MODE
         value: router
   fluxer-messages-shard:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-messages:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-messages-shard
+      tag: latest
+      build_config:
+        context: ./fluxer-messages-shard
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -2178,13 +2248,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -2196,14 +2266,19 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_SVC_MODE
         value: shard
       - name: FLUXER_SVC_SHARD_ID
         value: "0"
   fluxer-unfurl:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-unfurl:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-unfurl
+      tag: latest
+      build_config:
+        context: ./fluxer-unfurl
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -2351,13 +2426,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -2369,12 +2444,17 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_SVC_MODE
         value: router
   fluxer-unfurl-shard:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-unfurl:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-unfurl-shard
+      tag: latest
+      build_config:
+        context: ./fluxer-unfurl-shard
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -2522,13 +2602,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -2540,14 +2620,19 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_SVC_MODE
         value: shard
       - name: FLUXER_SVC_SHARD_ID
         value: "0"
   fluxer-admin:
     preset: service
-    image: ${FLUXER_REGISTRY:-ghcr.io/fluxerapp}/fluxer-admin:${FLUXER_IMAGE_TAG:-v1}
+    image:
+      repository: fluxer-admin
+      tag: latest
+      build_config:
+        context: ./fluxer-admin
+        push: server
     port: "8080"
     env:
       - name: FLUXER_ENV
@@ -2695,13 +2780,13 @@ targets:
       - name: FLUXER_INTERNAL_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MARKETING_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_MEDIA_PROXY_ENDPOINT
         value: http://fluxer-media-proxy:8080
       - name: FLUXER_MEDIA_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_MEDIA_PROXY_UPLOAD_RELAY_ENDPOINT
-        value: http://app.example.com/media
+        value: https://app.example.com/media
       - name: FLUXER_ERLANG_COOKIE
         from:
           env: FLUXER_ERLANG_COOKIE
@@ -2713,7 +2798,7 @@ targets:
       - name: FLUXER_PASSKEY_RP_ID
         value: app.example.com}
       - name: FLUXER_PASSKEY_ADDITIONAL_ALLOWED_ORIGINS
-        value: http://app.example.com}
+        value: https://app.example.com}
       - name: FLUXER_ADMIN_HOST
         value: 0.0.0.0
       - name: FLUXER_ADMIN_PORT
@@ -2723,10 +2808,10 @@ targets:
       - name: FLUXER_API_ENDPOINT
         value: http://fluxer-api:8080
       - name: FLUXER_ADMIN_ENDPOINT
-        value: http://app.example.com/admin
+        value: https://app.example.com/admin
       - name: FLUXER_APP_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_STATIC_CDN_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: FLUXER_ADMIN_OAUTH_REDIRECT_URI
-        value: http://app.example.com/admin/oauth2_callback
+        value: https://app.example.com/admin/oauth2_callback

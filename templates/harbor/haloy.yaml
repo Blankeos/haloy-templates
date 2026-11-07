@@ -3,7 +3,12 @@ server: localhost
 targets:
   harbor-init:
     preset: service
-    image: harbor-harbor-init
+    image:
+      repository: harbor-init
+      tag: latest
+      build_config:
+        context: ./harbor-init
+        push: server
     port: "8080"
     env:
       - name: HARBOR_INSTANCE_ID

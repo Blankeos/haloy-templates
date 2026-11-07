@@ -16,9 +16,9 @@ targets:
         from:
           env: BLINKO_WEBSITE__DATABASE_URL
       - name: NEXTAUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXT_PUBLIC_BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
   blinko-postgres:
     preset: database
     image: postgres:14

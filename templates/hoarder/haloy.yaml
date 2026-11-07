@@ -8,7 +8,7 @@ targets:
       - domain: app.example.com
     env:
       - name: NEXTAUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXTAUTH_SECRET
         from:
           env: NEXT_SECRET
@@ -35,7 +35,12 @@ targets:
   hoarder-meilisearch:
     health_check_path: /health
     preset: service
-    image: getmeili/meilisearch:v1.6
+    image:
+      repository: hoarder-meilisearch
+      tag: latest
+      build_config:
+        context: ./hoarder-meilisearch
+        push: server
     port: "8080"
     env:
       - name: MEILI_MASTER_KEY

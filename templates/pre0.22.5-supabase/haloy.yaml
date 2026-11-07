@@ -3,7 +3,12 @@ server: localhost
 targets:
   pre0-22-5-supabase-studio:
     preset: service
-    image: supabase/studio:2025.04.21-sha-173cc56
+    image:
+      repository: pre0-22-5-supabase-studio
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-studio
+        push: server
     port: "8080"
     env:
       - name: STUDIO_PG_META_URL
@@ -16,9 +21,9 @@ targets:
       - name: DEFAULT_PROJECT_NAME
         value: Default Project
       - name: SUPABASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: SUPABASE_PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: SUPABASE_ANON_KEY
         value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
       - name: SUPABASE_SERVICE_KEY
@@ -69,7 +74,12 @@ targets:
   pre0-22-5-supabase-auth:
     health_check_path: /health
     preset: service
-    image: supabase/gotrue:v2.171.0
+    image:
+      repository: pre0-22-5-supabase-auth
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-auth
+        push: server
     port: "8080"
     env:
       - name: GOTRUE_MAILER_EXTERNAL_HOSTS
@@ -79,7 +89,7 @@ targets:
       - name: GOTRUE_API_PORT
         value: "9999"
       - name: API_EXTERNAL_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: GOTRUE_DB_DRIVER
         value: postgres
       - name: GOTRUE_DB_DATABASE_URL
@@ -88,7 +98,7 @@ targets:
       - name: GOTRUE_SITE_URL
         value: http://localhost:3000
       - name: GOTRUE_URI_ALLOW_LIST
-        value: http://app.example.com/*,http://localhost:3000/*
+        value: https://app.example.com/*,http://localhost:3000/*
       - name: GOTRUE_DISABLE_SIGNUP
         value: "false"
       - name: GOTRUE_JWT_ADMIN_ROLES
@@ -159,7 +169,12 @@ targets:
   pre0-22-5-supabase-realtime:
     health_check_path: /api/tenants/realtime-dev/health
     preset: service
-    image: supabase/realtime:v2.34.47
+    image:
+      repository: pre0-22-5-supabase-realtime
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-realtime
+        push: server
     port: "8080"
     env:
       - name: PORT
@@ -197,7 +212,12 @@ targets:
         value: "true"
   pre0-22-5-supabase-storage:
     preset: service
-    image: supabase/storage-api:v1.22.7
+    image:
+      repository: pre0-22-5-supabase-storage
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-storage
+        push: server
     port: "8080"
     env:
       - name: ANON_KEY
@@ -231,7 +251,12 @@ targets:
       - pre0-22-5-supabase-volumes-storage:/var/lib/storage
   pre0-22-5-supabase-imgproxy:
     preset: service
-    image: darthsim/imgproxy:v3.8.0
+    image:
+      repository: pre0-22-5-supabase-imgproxy
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-imgproxy
+        push: server
     port: "8080"
     env:
       - name: IMGPROXY_BIND
@@ -246,7 +271,12 @@ targets:
       - pre0-22-5-supabase-volumes-storage:/var/lib/storage
   pre0-22-5-supabase-meta:
     preset: service
-    image: supabase/postgres-meta:v0.88.9
+    image:
+      repository: pre0-22-5-supabase-meta
+      tag: latest
+      build_config:
+        context: ./pre0-22-5-supabase-meta
+        push: server
     port: "8080"
     env:
       - name: PG_META_PORT

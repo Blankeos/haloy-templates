@@ -1,0 +1,2 @@
+FROM reloopsh/be-contacts@sha256:43da0b373e2777fdc7af97d92fdb916320a27e2ffdea61df69bca477722b2dfa
+EXPOSE 8080

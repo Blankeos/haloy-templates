@@ -1,2 +1,2 @@
 FROM redis:7-alpine
-CMD ["sh","-c","redis-server --appendonly yes --maxmemory-policy noeviction"]
+CMD ["redis-server","--appendonly","yes","--maxmemory-policy","noeviction"]

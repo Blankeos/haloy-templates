@@ -3,7 +3,12 @@ server: localhost
 targets:
   crawlab-worker:
     preset: service
-    image: crawlabteam/crawlab:latest
+    image:
+      repository: crawlab-worker
+      tag: latest
+      build_config:
+        context: ./crawlab-worker
+        push: server
     port: "8080"
     env:
       - name: CRAWLAB_NODE_MASTER

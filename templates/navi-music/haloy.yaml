@@ -18,7 +18,12 @@ targets:
           env: INLINE_PASSWORD_32
   navi-music-yt-cipher:
     preset: service
-    image: ghcr.io/kikkia/yt-cipher:master@sha256:4c5ec381ff57336cfc24822d2b526a5ad7cd0171f61065a1bbc87bb736842449
+    image:
+      repository: navi-music-yt-cipher
+      tag: latest
+      build_config:
+        context: ./navi-music-yt-cipher
+        push: server
     port: "8080"
     env:
       - name: OVERRIDE_PLAYER_VARIANT

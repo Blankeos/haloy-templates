@@ -76,7 +76,12 @@ targets:
       - librechat-mongo-data:/data/db
   librechat-meilisearch:
     preset: service
-    image: getmeili/meilisearch:v1.12.3
+    image:
+      repository: librechat-meilisearch
+      tag: latest
+      build_config:
+        context: ./librechat-meilisearch
+        push: server
     port: "8080"
     env:
       - name: MEILI_HOST
@@ -104,7 +109,12 @@ targets:
       - librechat-postgres-data:/var/lib/postgresql/data
   librechat-rag-api:
     preset: service
-    image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
+    image:
+      repository: librechat-rag-api
+      tag: latest
+      build_config:
+        context: ./librechat-rag-api
+        push: server
     port: "8080"
     env:
       - name: DB_HOST

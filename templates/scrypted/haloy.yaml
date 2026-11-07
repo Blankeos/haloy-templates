@@ -11,6 +11,6 @@ targets:
         from:
           env: SCRYPTED_WEBHOOK_UPDATE_AUTHORIZATION
       - name: SCRYPTED_WEBHOOK_UPDATE
-        value: http://app.example.com:10444/v1/update
+        value: https://app.example.com:10444/v1/update
     volumes:
       - scrypted-scrypted-volume:/server/volume

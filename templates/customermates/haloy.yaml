@@ -20,7 +20,7 @@ targets:
         from:
           env: CUSTOMERMATES__WORKFLOW_POSTGRES_URL
       - name: BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BETTER_AUTH_SECRET
         from:
           env: AUTH_SECRET

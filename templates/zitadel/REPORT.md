@@ -1,6 +1,7 @@
 # zitadel
 
 Status: **partial**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
 - [partial] `zitadel` healthcheck: command-style healthcheck dropped (Haloy supports HTTP path checks only)
-- [partial] `zitadel` internal-ref-to-public: zitadel is reached by hostname from another service but has a domain; with rolling deploys its container name changes
+- [partial] `zitadel` entrypoint-wrapped: command needs env expansion, so it runs via `sh -c`; if the image's own ENTRYPOINT matters, check it still starts correctly

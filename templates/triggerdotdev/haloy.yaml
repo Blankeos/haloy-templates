@@ -8,11 +8,11 @@ targets:
       - domain: app.example.com
     env:
       - name: LOGIN_ORIGIN
-        value: http://app.example.com
+        value: https://app.example.com
       - name: APP_ORIGIN
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DEV_OTEL_EXPORTER_OTLP_ENDPOINT
-        value: http://app.example.com/otel
+        value: https://app.example.com/otel
       - name: ELECTRIC_ORIGIN
         value: http://triggerdotdev-electric:3000
   triggerdotdev-postgres:
@@ -44,7 +44,7 @@ targets:
       - name: SECURE_CONNECTION
         value: "false"
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: http://app.example.com/otel
+        value: https://app.example.com/otel
       - name: PLATFORM_SECRET
         from:
           env: PROVIDER_SECRET
@@ -62,7 +62,7 @@ targets:
       - name: SECURE_CONNECTION
         value: "false"
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: http://app.example.com/otel
+        value: https://app.example.com/otel
       - name: PLATFORM_SECRET
         from:
           env: COORDINATOR_SECRET

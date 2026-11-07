@@ -17,11 +17,21 @@ targets:
       - zabbix-zabbix-postgres-data:/var/lib/postgresql/data
   zabbix-java-gateway:
     preset: service
-    image: zabbix/zabbix-java-gateway:alpine-7.4-latest
+    image:
+      repository: zabbix-java-gateway
+      tag: latest
+      build_config:
+        context: ./zabbix-java-gateway
+        push: server
     port: "8080"
   zabbix-snmptraps:
     preset: service
-    image: zabbix/zabbix-snmptraps:alpine-7.4-latest
+    image:
+      repository: zabbix-snmptraps
+      tag: latest
+      build_config:
+        context: ./zabbix-snmptraps
+        push: server
     port: "8080"
     volumes:
       - zabbix-zabbix-snmptraps:/var/lib/zabbix/snmptraps

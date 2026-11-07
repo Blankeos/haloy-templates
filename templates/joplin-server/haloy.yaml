@@ -22,7 +22,7 @@ targets:
       - domain: app.example.com
     env:
       - name: APP_BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: APP_PORT
         value: "22300"
       - name: DB_CLIENT

@@ -26,9 +26,9 @@ targets:
       - name: DATABASE_URL
         value: postgresql://typebot:typebot@typebot-db:5432/typebot
       - name: NEXTAUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXT_PUBLIC_VIEWER_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: ADMIN_EMAIL
         value: typebot@example.com
       - name: SMTP_HOST
@@ -55,9 +55,9 @@ targets:
       - name: DATABASE_URL
         value: postgresql://typebot:typebot@typebot-db:5432/typebot
       - name: NEXTAUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: NEXT_PUBLIC_VIEWER_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: ADMIN_EMAIL
         value: typebot@example.com
       - name: SMTP_HOST

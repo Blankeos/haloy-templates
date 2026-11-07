@@ -8,7 +8,7 @@ targets:
       - domain: app.example.com
     env:
       - name: SILEX_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: SILEX_SESSION_SECRET
         from:
           env: SESSION_SECRET

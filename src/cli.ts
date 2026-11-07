@@ -3,6 +3,7 @@ import { access, chmod, mkdir, readdir, readFile, rm, writeFile } from "node:fs/
 import { dirname, join } from "node:path";
 import { fetchTemplate, listTemplates, trimCache, upstreamSha } from "./fetch";
 import { buildEnv, type Vars } from "./secrets";
+import { badgesFor, hashTemplate, readStatus, writeStatus, withBadges } from "./status";
 import { translate, type Result } from "./translate";
 
 export const PLACEHOLDER_DOMAIN = "app.example.com";
@@ -12,10 +13,13 @@ const TEMPLATES = join(ROOT, "templates");
 const USAGE = `haloy-templates
 
   list                                     list bundled templates
-  add <id> [--domain d] [--server s] [--out dir]   copy a bundled template and generate its .env
+  add <id> [--domain d] [--server s] [--platform p] [--out dir]   copy a bundled template and generate its .env
   env <id>                                 print a freshly generated .env for a template
   translate <id> [--domain d] [--out dir]  translate straight from upstream (dev)
   sync [--only a,b] [--limit n]            re-translate upstream into templates (maintainers)
+  record verified --haloy v <id>...        mark templates as passing \`haloy validate-config\`
+  record tested <id> --haloy v --arch a --notes "..."   mark a template as deployed and healthy
+  badges                                   rewrite badges in every REPORT.md and the README summary
 `;
 
 function flags(args: string[]) {
@@ -55,6 +59,50 @@ async function bundled(id: string) {
   return { dir, files: await readTree(dir) };
 }
 
+
+const MARK = ["<!-- status:start -->", "<!-- status:end -->"];
+
+/** Writes badges into every REPORT.md and the summary into README.md. */
+async function applyBadges() {
+  const st = await readStatus(ROOT);
+  const ids = (await readdir(TEMPLATES, { withFileTypes: true })).filter((d) => d.isDirectory()).map((d) => d.name).sort();
+  let verified = 0;
+  const tested: string[] = [];
+  for (const id of ids) {
+    const dir = join(TEMPLATES, id);
+    const b = badgesFor(id, await hashTemplate(dir), st);
+    if (b.some((x) => x.startsWith("✅"))) verified++;
+    if (b.some((x) => x.startsWith("🟢"))) tested.push(id);
+    const file = join(dir, "REPORT.md");
+    const next = withBadges(await readFile(file, "utf8"), b);
+    await writeFile(file, next);
+  }
+  const counts: Record<string, number> = {};
+  for (const id of ids) {
+    const st2 = /Status: \*\*(\w+)\*\*/.exec(await readFile(join(TEMPLATES, id, "REPORT.md"), "utf8"))?.[1] ?? "unknown";
+    counts[st2] = (counts[st2] ?? 0) + 1;
+  }
+  const rows = tested.map((id) => {
+    const t = st.tested[id];
+    return `| [\`${id}\`](templates/${id}) | ${t.notes} | ${t.arch} | ${t.date} |`;
+  });
+  const block = `${MARK[0]}
+| | |
+|---|---|
+| ✅ **verified** (\`haloy validate-config\` passes) | ${verified} / ${ids.length} |
+| 🟢 **tested** (deployed, healthy, answers requests) | ${tested.length} / ${ids.length} |
+| 🧩 **translation** | ${counts.ok ?? 0} clean, ${counts.partial ?? 0} with workarounds, ${counts.manual ?? 0} need a human |
+
+${tested.length ? `| 🟢 Tested | What was checked | Arch | Date |\n|---|---|---|---|\n${rows.join("\n")}` : "No template is deploy-tested yet."}
+${MARK[1]}`;
+  const readmePath = join(ROOT, "README.md");
+  const readme = await readFile(readmePath, "utf8");
+  const a = readme.indexOf(MARK[0]);
+  const z = readme.indexOf(MARK[1]);
+  if (a >= 0 && z > a) await writeFile(readmePath, readme.slice(0, a) + block + readme.slice(z + MARK[1].length));
+  return { verified, tested: tested.length, total: ids.length };
+}
+
 const [cmd, ...rest] = process.argv.slice(2);
 const { f, pos } = flags(rest);
 
@@ -70,10 +118,9 @@ if (cmd === "list") {
   for (const [p, c] of Object.entries(files)) {
     if (p === "vars.json") continue;
     let text = c;
-    if (p === "haloy.yaml") {
-      if (domain) text = text.replaceAll(PLACEHOLDER_DOMAIN, domain);
-      if (server) text = text.replace(/^server: localhost$/m, `server: ${server}`);
-    }
+    if (domain && p !== "REPORT.md") text = text.replaceAll(PLACEHOLDER_DOMAIN, domain);
+    if (f.platform && p === "haloy.yaml") text = text.replace(/^( +)push: server$/gm, `$1push: server\n$1platform: ${f.platform}`);
+    if (server && p === "haloy.yaml") text = text.replace(/^server: localhost$/m, `server: ${server}`);
     next[p] = text;
   }
   if (files["vars.json"] && !(await exists(join(out, ".env")))) next[".env"] = buildEnv(JSON.parse(files["vars.json"]) as Vars);
@@ -131,7 +178,23 @@ if (cmd === "list") {
   await writeFile(join(ROOT, "COVERAGE.md"),
     `# Coverage\n\n${index.length} templates: **${count("ok")} clean**, ${count("partial")} with workarounds, ${count("manual")} needing manual work.\n\nUpstream: Dokploy/templates @ \`${(await readFile(join(TEMPLATES, "UPSTREAM"), "utf8").catch(() => "unknown")).trim()}\`\n\n## Warnings by frequency\n\n${Object.entries(codes).sort((a, b) => b[1] - a[1]).map(([c, n]) => `- \`${c}\`: ${n}`).join("\n")}\n\n## Failed to translate\n\n${errors.map((e) => `- ${e.id}: ${e.error}`).join("\n") || "None."}\n`);
   await trimCache();
+  await applyBadges();
   console.log(`synced ${results.length} templates (${errors.length} failed). clean=${count("ok")} partial=${count("partial")} manual=${count("manual")}`);
+} else if (cmd === "record" && pos[0] === "verified") {
+  const st = await readStatus(ROOT);
+  const date = new Date().toISOString().slice(0, 10);
+  for (const id of pos.slice(1)) st.verified[id] = { hash: await hashTemplate(join(TEMPLATES, id)), date, haloy: f.haloy ?? "unknown" };
+  await writeStatus(ROOT, st);
+  console.log("recorded", await applyBadges());
+} else if (cmd === "record" && pos[0] === "tested" && pos[1]) {
+  const st = await readStatus(ROOT);
+  const id = pos[1];
+  if (!f.notes) throw new Error("--notes is required: say what was actually checked");
+  st.tested[id] = { hash: await hashTemplate(join(TEMPLATES, id)), date: new Date().toISOString().slice(0, 10), haloy: f.haloy ?? "unknown", arch: f.arch ?? "unknown", notes: f.notes };
+  await writeStatus(ROOT, st);
+  console.log("recorded", await applyBadges());
+} else if (cmd === "badges") {
+  console.log(await applyBadges());
 } else {
   console.log(USAGE);
 }

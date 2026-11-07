@@ -111,7 +111,12 @@ targets:
         value: peerdbbucket
   peerdb-flow-snapshot-worker:
     preset: service
-    image: ghcr.io/peerdb-io/flow-snapshot-worker:stable-v0.35.5
+    image:
+      repository: peerdb-flow-snapshot-worker
+      tag: latest
+      build_config:
+        context: ./peerdb-flow-snapshot-worker
+        push: server
     port: "8080"
     env:
       - name: PEERDB_CATALOG_HOST
@@ -147,7 +152,12 @@ targets:
         value: peerdbbucket
   peerdb-flow-worker:
     preset: service
-    image: ghcr.io/peerdb-io/flow-worker:stable-v0.35.5
+    image:
+      repository: peerdb-flow-worker
+      tag: latest
+      build_config:
+        context: ./peerdb-flow-worker
+        push: server
     port: "8080"
     env:
       - name: PEERDB_CATALOG_HOST
@@ -236,6 +246,7 @@ targets:
       - name: PEERDB_EXPERIMENTAL_ENABLE_SCRIPTING
         value: "true"
   peerdb-minio:
+    health_check_path: /minio/health/live
     image:
       repository: peerdb-minio
       tag: latest

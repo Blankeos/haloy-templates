@@ -10,12 +10,17 @@ targets:
       - name: PUBLIC_SERVER_URL
         value: app.example.com
       - name: ORIGIN
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BODY_SIZE_LIMIT
         value: Infinity
   adventurelog-db:
     preset: service
-    image: postgis/postgis:16-3.5
+    image:
+      repository: adventurelog-db
+      tag: latest
+      build_config:
+        context: ./adventurelog-db
+        push: server
     port: "8080"
     env:
       - name: POSTGRES_DB
@@ -55,10 +60,10 @@ targets:
       - name: DEBUG
         value: "False"
       - name: CSRF_TRUSTED_ORIGINS
-        value: http://app.example.com,http://app.example.com
+        value: https://app.example.com,https://app.example.com
       - name: FRONTEND_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
     volumes:
       - adventurelog-adventurelog-media:/code/media/

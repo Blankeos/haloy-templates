@@ -2,12 +2,22 @@ name: chroma
 server: localhost
 targets:
   chroma:
+    preset: service
     image: chromadb/chroma:1.5.6
     port: "8000"
-    domains:
-      - domain: api-v2-heartbeat.app.example.com
     env:
       - name: ANONYMIZED_TELEMETRY
         value: "FALSE"
     volumes:
       - chroma-chroma-data:/data
+  chroma-gateway:
+    image:
+      repository: chroma-gateway
+      tag: latest
+      build_config:
+        context: ./chroma-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
+    domains:
+      - domain: app.example.com

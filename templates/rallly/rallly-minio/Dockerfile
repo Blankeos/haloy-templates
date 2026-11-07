@@ -1,2 +1,3 @@
 FROM minio/minio:latest
-CMD ["sh","-c","server /data"]
+EXPOSE 8080
+CMD ["server","/data"]

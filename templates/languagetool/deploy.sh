@@ -5,3 +5,4 @@ set -a; [ -f .env ] && . ./.env; set +a
 
 # Haloy has no depends_on: deploy in dependency order.
 haloy deploy -t languagetool
+haloy deploy -t languagetool-gateway

@@ -1,5 +1,6 @@
 # chroma
 
 Status: **partial**
+Badge: ✅ verified (haloy v0.1.0-beta.73, 2026-11-07)
 
-- [partial] `chroma` path-routing: Haloy routes by hostname only; /api/v2/heartbeat on app.example.com became api-v2-heartbeat.app.example.com. Point DNS there and update any URL env vars (e.g. BASE_URL).
+- [partial] `chroma-gateway` path-routing: Haloy routes by hostname only, so app.example.com (/api/v2/heartbeat) is served by a generated nginx target `chroma-gateway` that proxies each path to its service.

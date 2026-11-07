@@ -1,0 +1,2 @@
+FROM ghcr.io/firecrawl/playwright-service@sha256:468009bae00911d40d7120d58489a1d529362c22c45585cb9076094fe61b0025
+EXPOSE 8080

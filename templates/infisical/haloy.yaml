@@ -16,7 +16,7 @@ targets:
         from:
           env: AUTH_SECRET
       - name: SITE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DB_CONNECTION_URI
         from:
           env: INFISICAL_BACKEND__DB_CONNECTION_URI

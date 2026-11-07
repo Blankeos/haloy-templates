@@ -18,6 +18,7 @@ targets:
     volumes:
       - huly-db:/data/db
   huly-minio:
+    health_check_path: /minio/health/live
     preset: service
     image:
       repository: huly-minio
@@ -55,7 +56,12 @@ targets:
       - huly-elastic:/usr/share/elasticsearch/data
   huly-rekoni:
     preset: service
-    image: hardcoreeng/rekoni-service:${HULY_VERSION}
+    image:
+      repository: huly-rekoni
+      tag: latest
+      build_config:
+        context: ./huly-rekoni
+        push: server
     port: "8080"
     env:
       - name: SECRET
@@ -63,7 +69,12 @@ targets:
           env: HULY_SECRET
   huly-transactor:
     preset: service
-    image: hardcoreeng/transactor:${HULY_VERSION}
+    image:
+      repository: huly-transactor
+      tag: latest
+      build_config:
+        context: ./huly-transactor
+        push: server
     port: "8080"
     env:
       - name: SERVER_PORT
@@ -91,7 +102,12 @@ targets:
         value: "true"
   huly-collaborator:
     preset: service
-    image: hardcoreeng/collaborator:${HULY_VERSION}
+    image:
+      repository: huly-collaborator
+      tag: latest
+      build_config:
+        context: ./huly-collaborator
+        push: server
     port: "8080"
     env:
       - name: COLLABORATOR_PORT
@@ -109,7 +125,12 @@ targets:
         value: minio|minio?accessKey=minioadmin&secretKey=minioadmin
   huly-account:
     preset: service
-    image: hardcoreeng/account:${HULY_VERSION}
+    image:
+      repository: huly-account
+      tag: latest
+      build_config:
+        context: ./huly-account
+        push: server
     port: "8080"
     env:
       - name: SERVER_PORT
@@ -137,7 +158,12 @@ targets:
         value: "3000"
   huly-workspace:
     preset: service
-    image: hardcoreeng/workspace:${HULY_VERSION}
+    image:
+      repository: huly-workspace
+      tag: latest
+      build_config:
+        context: ./huly-workspace
+        push: server
     port: "8080"
     env:
       - name: SERVER_SECRET
@@ -159,7 +185,12 @@ targets:
         value: http://huly-stats:4900
   huly-front:
     preset: service
-    image: hardcoreeng/front:${HULY_VERSION}
+    image:
+      repository: huly-front
+      tag: latest
+      build_config:
+        context: ./huly-front
+        push: server
     port: "8080"
     env:
       - name: SERVER_PORT
@@ -168,19 +199,19 @@ targets:
         from:
           env: HULY_SECRET
       - name: LOVE_ENDPOINT
-        value: http://app.example.com/_love
+        value: https://app.example.com/_love
       - name: ACCOUNTS_URL
-        value: http://app.example.com/_accounts
+        value: https://app.example.com/_accounts
       - name: REKONI_URL
-        value: http://app.example.com/_rekoni
+        value: https://app.example.com/_rekoni
       - name: CALENDAR_URL
-        value: http://app.example.com/_calendar
+        value: https://app.example.com/_calendar
       - name: GMAIL_URL
-        value: http://app.example.com/_gmail
+        value: https://app.example.com/_gmail
       - name: TELEGRAM_URL
-        value: http://app.example.com/_telegram
+        value: https://app.example.com/_telegram
       - name: STATS_URL
-        value: http://app.example.com/_stats
+        value: https://app.example.com/_stats
       - name: UPLOAD_URL
         value: /files
       - name: ELASTIC_URL
@@ -203,7 +234,12 @@ targets:
         value: selfhost
   huly-fulltext:
     preset: service
-    image: hardcoreeng/fulltext:${HULY_VERSION}
+    image:
+      repository: huly-fulltext
+      tag: latest
+      build_config:
+        context: ./huly-fulltext
+        push: server
     port: "8080"
     env:
       - name: SERVER_SECRET
@@ -225,7 +261,12 @@ targets:
         value: http://huly-stats:4900
   huly-stats:
     preset: service
-    image: hardcoreeng/stats:${HULY_VERSION}
+    image:
+      repository: huly-stats
+      tag: latest
+      build_config:
+        context: ./huly-stats
+        push: server
     port: "8080"
     env:
       - name: PORT

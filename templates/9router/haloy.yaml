@@ -43,5 +43,10 @@ targets:
   9router-headroom:
     health_check_path: /health
     preset: service
-    image: ghcr.io/chopratejas/headroom:0.6.7
+    image:
+      repository: 9router-headroom
+      tag: latest
+      build_config:
+        context: ./9router-headroom
+        push: server
     port: "8080"

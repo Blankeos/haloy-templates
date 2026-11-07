@@ -9,9 +9,9 @@ targets:
       - domain: app.example.com
     env:
       - name: FRONTEND_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: HYPERDX_APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: HYPERDX_APP_PORT
         value: "8080"
       - name: HYPERDX_API_PORT

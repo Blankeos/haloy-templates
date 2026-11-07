@@ -18,7 +18,7 @@ targets:
       - name: database__connection__database
         value: ghost
       - name: url
-        value: http://app.example.com
+        value: https://app.example.com
     volumes:
       - ghost-ghost:/var/lib/ghost/content
   ghost-db:

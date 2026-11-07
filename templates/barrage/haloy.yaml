@@ -11,7 +11,7 @@ targets:
         from:
           env: INLINE_BASE64
       - name: NEXTAUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DELUGE_URL
         value: http://your-deluge-ip:8112
       - name: DELUGE_PASSWORD

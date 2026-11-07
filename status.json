@@ -1,0 +1,3044 @@
+{
+ "verified": {
+  "3dokploy": {
+   "hash": "8be5e5137a5b068dae2c7212ea28ff86bab8671f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "9router": {
+   "hash": "746810c51d25885c6fa472ca12363a459fc21a3a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ackee": {
+   "hash": "75e490ea0f1ac18cdfc036c7cc3c391f36fbc308",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "activepieces": {
+   "hash": "a32a26a04e2d461719fd0b64763bbfaa9503dfc9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "actualbudget": {
+   "hash": "223697847fd68dca982d04d475615f48e90f7a1f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "adguardhome": {
+   "hash": "18017b8c1b71fbe05cee3353e5dd2f2798bee707",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "adminer": {
+   "hash": "84a751a094437a59dfd793709beb42c45668f950",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "adventurelog": {
+   "hash": "f4632fa838deb1fc2b8fc1ee7ad9a3dbd1f6e7a6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "affinepro": {
+   "hash": "0751daee61d468b28cd5598e28a851b5bb2a9987",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "agent-zero": {
+   "hash": "9c44b6e18ccd6d06ba1ec4fea65b397ba8761c70",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "agentdvr": {
+   "hash": "41b7870c22a8769ff0beaf83ac0e049174904926",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "airbyte": {
+   "hash": "5ce6b04255f93848943e7e501f0366479fcf1c14",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "akaunting": {
+   "hash": "a4da97bcf285f323961fee4ddd86ce3b5a28b849",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "alarik": {
+   "hash": "3fb841cb922b2c90988faf621543878bc1bad16e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "alist": {
+   "hash": "970010deec52d91ee2b558dc50309d76734b25e8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "alltube": {
+   "hash": "09692fd8e2c93455506c5636a7529443e105e505",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ampache": {
+   "hash": "b0e737cbf882981dbfba53844faffbd36a4ecc6c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "anonupload": {
+   "hash": "7d1e8810c6cbcebd28dc7e6c4fca58b8817ef18f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "anse": {
+   "hash": "63e70b61473974cb22463192f466e9d4983a497c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "answer": {
+   "hash": "a4a42bd7dc0b2da51d8e74e96d46c9e400f2c6a3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "anubis": {
+   "hash": "2f8b781cb99d012edc4db1fbb353471bc652c3e3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "anythingllm": {
+   "hash": "d8ccb437f0352a7a38ff22e591380a247b9bba55",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "anytype": {
+   "hash": "942bff2cedfa695e27d9253b80e98da855edd429",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "appflowy": {
+   "hash": "43ae67093cff305edba5f714b65db4440b57951a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "apprise-api": {
+   "hash": "743cfd17dd0cdeaa9244f5d99f6c5bfb78db375e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "appsmith": {
+   "hash": "9cdfc61767f423481d779a4c5ab9f80295e7f0f6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "appwrite": {
+   "hash": "89c9cff8fa96f5666394ffb53ec95b3346cc483f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "aptabase": {
+   "hash": "99459adf0a1fcccd4da8865e88af16a310118c8d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "arangodb": {
+   "hash": "d4167ec78f7792a2b6214bcc6e5a46a0bba18e6d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "arche": {
+   "hash": "128a2f0830ead0a4ff1b7b3b01b481afa21f9620",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "archivebox": {
+   "hash": "78e345d811a9fdfd7633ce91e43e93ac2a9dcfa3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "argilla": {
+   "hash": "d90e6cc16ba19d4b56a1a214e52b5d49bc3e9ed8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "audiobookshelf": {
+   "hash": "acf6a2bd85462b965a7a5700bec1f147e6d612dd",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "authelia": {
+   "hash": "7b2dd1ad3fef54b88a10206a9ef2d9a387fcba0d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "authentik": {
+   "hash": "5fb505b32a85da4bb1c9b7f2d80e8f0c31678b98",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "authorizer": {
+   "hash": "11ab1f32dc02b5d14f5c10fadbe99f0d3a923a1f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "autobase": {
+   "hash": "f1890a7fd9b77e44d9ca8a4068675989ded0ac31",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "automatisch": {
+   "hash": "0807880ce35090abb69deb4ae4a85fe33d7d8c7b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "azerothcore": {
+   "hash": "5a760668434550473eb3a78aefa39384f8d49bce",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "azuracast": {
+   "hash": "f63d7e103290c9afc0c741b374bb948d145406ae",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "babybuddy": {
+   "hash": "0a76bd5b3868be2a4635b884cadecbc6ad94e3be",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "backrest": {
+   "hash": "11bea692fbb33a015b40f032f39ab44c35c243eb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "baikal": {
+   "hash": "f5ff46be480c5b7a7e48477adee89f46c0e7482f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "barrage": {
+   "hash": "9f7d4e9ca7d9d2f2bfb7bd316ce9bc87aa153e4b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "baserow": {
+   "hash": "db063058ba9031cff30aed4e97588f9e2ca1f515",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "bazarr": {
+   "hash": "1385808a9f6044ea6141348daefa27095b0c7710",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "bentopdf": {
+   "hash": "b5e5c464cde1031891671cc36d08fe2e61fb081d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "beszel": {
+   "hash": "08d6bc80e6be09da81ecfb9a8a5932562f3176f8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "bigcapital": {
+   "hash": "cbe13b3fc16ac086111a99c3d8d7a2d58fbb7e0a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "billmora": {
+   "hash": "bf8ce37a13421e78f9cdad520f11bf1ef688f6e0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "blender": {
+   "hash": "87a1f7fde32db9af8f2c0a56c6afffc458273e38",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "blinko": {
+   "hash": "603239461d8558bde4ca2fda84ea5eab611e238e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "blogfactory": {
+   "hash": "8ababd368f36fd5775c8784f816a100c14d5ade0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "bluesky-pds": {
+   "hash": "8e0b825481bcd35928420449a22edb88d9fa1edb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "bolt.diy": {
+   "hash": "35335d96b482a03c55c4e5be6c62a4df7ab568e7",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "bonfire": {
+   "hash": "e2e57b81b2931ca895cd9390b624bae50e8b6700",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "booklore": {
+   "hash": "e2f169ed7b09ed2353951ff7a96101c1337a7659",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "bookstack": {
+   "hash": "ec5fc61ac37e4192b47ab4f0514c9e16d87e9086",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "borgitory": {
+   "hash": "3cb22cdf34fd02d4a00abe72ff57497bea023420",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "botpress": {
+   "hash": "2eafd685d3b8ceef6ac305c53fa1d28eaacf007e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "browserless": {
+   "hash": "172d9c6f6df37c6b0bb0fb86bcd78a652361f197",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "budget-board": {
+   "hash": "4a46969ae0efa88912031bb819289b8d91a8b502",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "budibase": {
+   "hash": "279ace93d4faad1a887784cb91054b9bfcfce975",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "bugsink": {
+   "hash": "d910a3ea867cc02035522887b4ced951a9310cbb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "bytebase": {
+   "hash": "8aa08a58b3fc143d86fe997f8833c9737ade925d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "bytestash": {
+   "hash": "65031ecf7d82d36b4e250e503c6a83fddc1a5b8f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cachkey": {
+   "hash": "700cb9b7ae819ea86e6376969d0adac94086770a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cakephp": {
+   "hash": "e0cc18f7483752e4cff272658fab0b6df90ff968",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "calcom": {
+   "hash": "83db472c998e493cd14b2bdd69dbb5c0f83fbcb6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "calibre": {
+   "hash": "5647bc982a7b017feef43bb3cbf44de1ba306a0f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "calibre-web": {
+   "hash": "4ebf5b6901939227d1785096a636bee1d00bfa25",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "calnode": {
+   "hash": "995b88f0a1c4b185e1781ce5b93f0f6d976e84d0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "capso": {
+   "hash": "ba61b7e41ca10c83d8db93b0fef4f8a173c5cc36",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "carbone": {
+   "hash": "0a12f0689ca22db8ee0cc0e452710f37fc56539e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "casdoor": {
+   "hash": "a61a72efab627506db48c5e2e2e4dcb3e5b7af8a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "certmate": {
+   "hash": "ecf5b2d3eb2cf1ee6a72f19e4cf57cf9de9accd4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "changedetection": {
+   "hash": "49a7db8ec77d986d2e2edd8737d1df154c53b5de",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "chatto": {
+   "hash": "fe856dc310711e4ec3507678fec062b1ddd53667",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "chatwoot": {
+   "hash": "4f006a924cf010af708505859cb13d9d1e69deee",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "checkcle": {
+   "hash": "0bd870074ec78e2924a8c0b6a44ca7c0748dbec9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "checkmate": {
+   "hash": "0d221fc95160d0e9f4baa4a1b6fe8a404ef3260c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "chevereto": {
+   "hash": "e914dcbb3d88eaa0bbe23501baea77e06a720645",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "chibisafe": {
+   "hash": "999400d41eb314140a05409e97dbf9a5a332f319",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "chiefonboarding": {
+   "hash": "c1d01d0cbf1d26a536815f5c459c0470e7419672",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "chirpstack": {
+   "hash": "116db5cd75d791b86fd4e81ef4fe8660bb1ecb0d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "chroma": {
+   "hash": "90690584c3af458ba3b5a91cb7c6c387feb25ae7",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "chromium": {
+   "hash": "945e7c10fd16455c1482f695024eb3308ad9579b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "classicpress": {
+   "hash": "4028a2bceddb148c3def6ca1635223fc0d44c083",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "clickhouse": {
+   "hash": "e1eab6236390a0ebd92a45ffcaf0b88ab2a3c386",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cloud9": {
+   "hash": "79591067fd822923420506e5838895d746f62e8c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cloudcommander": {
+   "hash": "c29c97b0d0ea7272b8b37aaebc3bfd266f952ad0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cloudflare-ddns": {
+   "hash": "197fd9770f51573f038c51685fbf59b54db8e200",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cloudflared": {
+   "hash": "d4e9bbfbe0dacbc44b06d5834bbba3d89ede9c70",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cloudreve": {
+   "hash": "3c766336643582f4132dfbfba6b1a987ef47d107",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cockpit": {
+   "hash": "ec67d77b04eb3c70943810d5eafe0ba7e097259e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "code-server": {
+   "hash": "0f696386a84376668697470ae2b01fb60a39fac3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "coder": {
+   "hash": "1a6eadf061e7bced25f362edf3c826da31e0ac80",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "codex-docs": {
+   "hash": "3634fe59691545e593ff39be53d94243e8e2c7a2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "colanode": {
+   "hash": "5f1d292861d47cf26bcb23fc9602da26459835f7",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "collabora-office": {
+   "hash": "8ed553649c1d634e6ba4def38993f4e22b60813c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "commafeed": {
+   "hash": "bbe5ff19613b2608dbe5d2a6a6fb8d4b9b8860d6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "commento": {
+   "hash": "15c6127cc87fec8dd23a4d41a08b67d5cd036f56",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "commentoplusplus": {
+   "hash": "fe72f81a6d9abb963ee55ee5f5e3397ea6be9fc3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "conduit": {
+   "hash": "ef04439ca237c80480de3750ad4bd32290cbd5fc",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "confluence": {
+   "hash": "26d7407dac18f9e5afcff3656fd3ca05533c9ecf",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "container-monitoring": {
+   "hash": "c6972c6e552cd3967abf2b293b174e04553f5576",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "convertx": {
+   "hash": "228178ed771e3cfc89d650fbf30f45b13e3fe3e9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "convex": {
+   "hash": "01d5dddc1a8ce0319067b882f0b1cc820b538551",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cookie-cloud": {
+   "hash": "9b9896a5d47746e13e641848e2f43ef573b33f71",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "coralproject": {
+   "hash": "93569419cec4c7464ca3e776c181247d4acc6f85",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "corsfix": {
+   "hash": "a5f399430946730c4ec39fc71cfd867ec7166dde",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "couchdb": {
+   "hash": "a94a10bec0b914353eee3b577706139113f341fe",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "crawl4ai": {
+   "hash": "3fd00f87939098fa215f580c736153af86312b36",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "crawlab-master": {
+   "hash": "ffd7d81a776593b679c9f365432d6889d24984f1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "crawlab-worker": {
+   "hash": "6e7eaa35af202f0919b55a28af73bbdd2eefc011",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "creed": {
+   "hash": "c92dcc0f2307e1202bcd54c651de118a0fee6054",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "crowdsec": {
+   "hash": "7a7592a2b21d5498eb88188651430487138c66fb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cup": {
+   "hash": "5e3acfb63bb5a7a525caf9ef8d99480486281cc3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "customermates": {
+   "hash": "f364f38119461ee011d16b5164ab660a39417801",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cut": {
+   "hash": "b5dadab54ec846959e5e060af31d1c52e81c738c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cyberchef": {
+   "hash": "ab738ea4b31b728707f093b9ce0ccd60adea610f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "cypht": {
+   "hash": "eee4eaa5026b8ee3fd7524c5d481fbf774d7b30b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dagu": {
+   "hash": "00098001bf3cd553689b59bc975b31e21918fd3c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dashy": {
+   "hash": "4df66388a156bf7ae7aab467959751b5a4eeb32a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "databasement": {
+   "hash": "f21488797c96a07924101d778835b716a31bd35d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "databasus": {
+   "hash": "9268d24ae54815c09a2e201f7ed025ad34113024",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "datalens": {
+   "hash": "7fa74cb96ab2b2e97b15240e8853448123b319e2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dexio": {
+   "hash": "65135da6824c11ac60f2aeb3c7a98ef1b51bded3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "didacta": {
+   "hash": "3f5ccdd6ac024ed2fac96bf3c9739f7369800821",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dify": {
+   "hash": "0f6ad4ddca4661ef88c227aa5ff1068198753c4c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "directory-lister": {
+   "hash": "eddcafd52291883d385ef9b1556a17c71b371470",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "directus": {
+   "hash": "b1680c37e9818401e139216bd4ebd99c0d5619bd",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "discord-tickets": {
+   "hash": "069b7944e7d1f3c0633a2e723acd5bbfac8ef591",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "discourse": {
+   "hash": "9a004335c28fe4b361c365093b73c4196ca75afd",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dockge": {
+   "hash": "7fe69fce76847a624cbc4c68ea11abc7b834d536",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dockroute": {
+   "hash": "b54839b7952b25e950d8ce043a813829c032cd49",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "docktail": {
+   "hash": "a885fc45f748bc4a4f0afe49d36ec5a256ae3979",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "docling-serve": {
+   "hash": "5808f72080c461d0f594ca92372511fb3a93ecb5",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "docmost": {
+   "hash": "87f54bc7ceec15ff79e8289206c3b980e58206af",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "documenso": {
+   "hash": "cc22c97522af43cb5aac09ae5f0b77d2fdbcf2a2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "docuseal": {
+   "hash": "f45456f41682487ee70bc0ffdcae675139775799",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dokploy-actions-runner": {
+   "hash": "f39d93315d5ecee280550794806c5a6e38feee9a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dokploy-prom-monitoring-extension": {
+   "hash": "9f9de8117fd610f79109ec4d5c4080235626b413",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dolibarr": {
+   "hash": "1e6e266d078a5fd728d7c40e312269d072082e61",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "domain-locker": {
+   "hash": "60bb7eaaf47b4adc95d78be1e8ce6c4ad3323f23",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dossier": {
+   "hash": "da7201a96d6442bd28c2d527b5c14a11910a252d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "doublezero": {
+   "hash": "2e3bdf939dad5cf13c0548fe0b2b5a1d6bdb39b4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dozzle": {
+   "hash": "0e8e49124bd6c90749216f3b41d15216cf9aa4eb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dragonfly-db": {
+   "hash": "cef76eca076d08455cc9782239379f02ba8d399e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "drawio": {
+   "hash": "6812c9feb4dccacc0b08c986240f0b248ac95f3d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "drawnix": {
+   "hash": "f3ec191bdf6cc04ff4e1cdd86d8675f130815f9e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "drizzle-gateway": {
+   "hash": "ac213d891d59322ed3fc80cd0b89bde5cef23fa6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dumbassets": {
+   "hash": "9982bfb95992312f5ca93d139db15904c2e0256a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dumbbudget": {
+   "hash": "5b7420769021a9aa1319610835a4f79354979fd4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dumbdrop": {
+   "hash": "ae90652375fb8582f51197e58c47efc7abbf37e1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "dumbpad": {
+   "hash": "24b1f3c02d0ffefa0f0e549b02a91cb1f685dfd4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "duplicati": {
+   "hash": "8dcf3233f6e341d4137ca10fddccaabea5e3f3aa",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "easyappointments": {
+   "hash": "9bcbd5c945818fa1fd8e085350328ad208012537",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "elastic-search": {
+   "hash": "d20003d47bc5b36db1f65335f169fdcceec6d7f3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "emaki-video-starter": {
+   "hash": "3112b7d6f7769c0c8a2be9fcc4bb8b9a4dbe2f22",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "emby": {
+   "hash": "7d38ae608bab25e8911d451d1d99db04cddd70aa",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "emqx": {
+   "hash": "42c90e776e5b42f9cf7a8942707574eb45a4bdc6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "engram": {
+   "hash": "2a6a0cd5de4d2c52212a95d9c0cc35bcf9692b77",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "enshrouded": {
+   "hash": "a616f75a3cf6783c194200d0f9189100073f8d1a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "erpnext": {
+   "hash": "29899435d545e68d76bc594ea0e8505f92707433",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "erpnext-v16": {
+   "hash": "ae743e808776d956587d2e1b462f95ea190716a0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "etherpad": {
+   "hash": "ddd867168247cd48169e4489b78c3842d4b9c1af",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ethora-core": {
+   "hash": "b27912108b1aace144e13f4e113fbf15d9d781aa",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "evershop": {
+   "hash": "c9792e688739e5f908e56485775b78ceaf31f4f8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "evolutionapi": {
+   "hash": "4d0e8622c5d2ecc7879dfdf3ec8b8c7c58a96ca0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "evolutioncrm": {
+   "hash": "b10a50ee315e8b3169cea929092c3680e73b0ec3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "evolutiongo": {
+   "hash": "050d27865d5a435d56ca69889f8f731821473497",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "excalidraw": {
+   "hash": "91d65f5398492b4b45c893c7c47c0e362efde4ea",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ezbookkeeping": {
+   "hash": "b2ce6c810dd07956e7f410d0a75bd1bf831fdce8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "falco": {
+   "hash": "b521a85209bb5b715639fc8b802f15fe6944b5b1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "falkordb": {
+   "hash": "3d01593fdc6480eb20ae2e6b1a159af14f2f3ff7",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "feedbacks": {
+   "hash": "67bab0a8225c2fe672825ccd690b0f91aa05bc12",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "fider": {
+   "hash": "cf19fae6d259a774df4a349cd7459ee3562bbe9a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "filebrowser": {
+   "hash": "ade6da49fa9cf38cdd1e524a0579a287ef828053",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "filegator": {
+   "hash": "9ca3782c0bae4bade3f87be358f27256f04fcf81",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "filerun": {
+   "hash": "c357058c9ce2ba8097df879525297483c5902937",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "filestash": {
+   "hash": "749139cbe714c77cdecd49ffd5df5f0ddcf1a6a8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "firecrawl": {
+   "hash": "99fe71e6e119c8a0d4be236ce6ff24457bf6c79b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "firefly-iii": {
+   "hash": "9ee53cb94497ea2d257a00f1b17f399c60353d95",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "fivem": {
+   "hash": "fb25147600efdeab9255af9b28ac95c8824939ec",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "flagsmith": {
+   "hash": "1b7c96c94cf64af69160d9ec7c97dcd1034c470f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "flaresolverr": {
+   "hash": "2d0a9c7fd5eb57d623ca7e0766f48f556f61ae8b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "flarum": {
+   "hash": "8ed490658606a1ce07746fb5314b907b2685f303",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "flatnotes": {
+   "hash": "5974023518bdc60f15ae650e25f4153d1e477c40",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "flatnotes-totp": {
+   "hash": "a27ae94c7f3b89a753a3df89efff27a82407ef88",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "flowise": {
+   "hash": "e37d76ddb2e3f9fd4d905a6a9f497631fdcc8bfa",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "fluxer": {
+   "hash": "16a84a40b651e83d13f9161e4cf0abe84f0cc0c6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "fmd-server": {
+   "hash": "1432f6f3a1f10d2e208c9757041f0d1a03d33719",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "focalboard": {
+   "hash": "6d779c230c386b21d653859c5d048e38da21186d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "fonoster": {
+   "hash": "c8752f27fa2cc7bf23f19891e2505896f56059d0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "forgejo": {
+   "hash": "369d08b944710a5f827e88ae01ffa14b9a617bbb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "formbricks": {
+   "hash": "15306c952082c9fd2d52ebb617a6df93a573bff1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "frappe-hr": {
+   "hash": "96af39e17175ce96c642d1a8173aa3b2ae5c9edd",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "frappe-lending": {
+   "hash": "3ecd0bbd30f5b3f4596852a80033ed2d317f8773",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "frappe-lms": {
+   "hash": "6023421a16956ba40ad56461fde06c03d3dd434f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "freellmapi": {
+   "hash": "dd21c0e48815b9e952d3942a3ee2d538e4317249",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "freescout": {
+   "hash": "b4f83bb34810d0b22ea96d20a5863ce42bef04c3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "freshrss": {
+   "hash": "3e339ab67ff3fc44406c9e4f02cdeb411061b9d1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "garage": {
+   "hash": "e0ce42783676c4ad6ab14a8ebf4ccdf781633bc0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "garage-with-ui": {
+   "hash": "7f76b6e93a107a2c61d6f68208be62e23069c26c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "gatus": {
+   "hash": "c580a207a7ef0218d36fe988230563fc7e9761dc",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "gel": {
+   "hash": "69e6e238743e2cdc00efa63e1117008e176cc3ee",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "geoserver": {
+   "hash": "5376f1425718a565f33c6bf47508e9fbea72c4b9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ghost": {
+   "hash": "4990aaf1383f132ae1ac4d6547eac86257766360",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "gitea-mirror": {
+   "hash": "0997105dbcc768dfb69804e75fd467e746ee29f9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "gitea-mysql": {
+   "hash": "830bbfedf13ac76369bbc9fd77dc2829d5ffd9c6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "gitea-postgres": {
+   "hash": "26c3310353da4872cd51dc032b5fd92b66e68a9a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "gitea-sqlite": {
+   "hash": "4b98e3561956613280212127fe6b34101bb8d9d5",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "gitingest": {
+   "hash": "3917341b9a714bb8a9d5502f6075621a92ff490d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "gitlab-ce": {
+   "hash": "408b5d46b3b76d4a9956ebb4c239cce99893b8d0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "glance": {
+   "hash": "3c1ecfc154578d67078125a02c5d927e0be90c72",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "glances": {
+   "hash": "a0c3f26708eea2682b4050189a76c6129e141872",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "glitchtip": {
+   "hash": "3fab0541d030bf06557f64c6d8cb4f0db55a23ce",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "glpi": {
+   "hash": "8f6e069b393f4bedfa2962b82ef8a3df48bbd1f3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "go-whatsapp-web-multidevice": {
+   "hash": "a65f177106bb0428a997e521235678dde7fecd11",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "go2rtc": {
+   "hash": "fdefab7f5a48f38355d03f071460f62ad7529b6f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "goatcounter": {
+   "hash": "b2f54b5671b5046c63da0cb020cb0b744bc810e4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "gotenberg": {
+   "hash": "c7f76b47abaebfb957a4326d979189cf8aaa3067",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "gotify": {
+   "hash": "800d1cfe6338fa232be9fa5fec78a27db02dc3fc",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "grafana": {
+   "hash": "0f574d69014ed860f7587b230d46e9b8050c9989",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "graylog": {
+   "hash": "0180c206c71025fd553daaad8c1dbf23fff5f74b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "grimoire": {
+   "hash": "9035d036520eb643efb1e25bb328e0983804c828",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "grist": {
+   "hash": "b9bc3dd216b40b093cb09a39fb213a68837c5a82",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "grovs": {
+   "hash": "fc716d29566aebf722e95933db1768a2ccf3344f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "habitica": {
+   "hash": "4329bd97eb20f50643016e286cf6c2b822ef99e1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "harbor": {
+   "hash": "ab8415b5cf5a61cb6d523c47f52239cfacec31d2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "healthchecks": {
+   "hash": "b829098c0d5b68918aad2db389959c615d514c9f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "hedgedoc": {
+   "hash": "7e74ac02baa0a3ff2516089c26612744ca5cea86",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "hermes": {
+   "hash": "637826327e42860cc96a84a1ceacb016086f2fd4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "heyform": {
+   "hash": "9dc41a62d7c0372c170822bdc7bd37c950232ab4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "heyo-docs": {
+   "hash": "e676d888d96ae6f18ff87250debe0492140b6ee8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "hi-events": {
+   "hash": "bdb86d98c6e19363f4606f2e183014cb14137b44",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "hivemq-ce": {
+   "hash": "ed487ed6694af4a2c610fa814ad52b0f010a8fce",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "hoarder": {
+   "hash": "a177072fe713edb37d611c164ae4fcf9c0f71f7d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "homarr": {
+   "hash": "44b2f0bfa25379031bbec323d858876a1f7ed7af",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "homeassistant": {
+   "hash": "805fede5eaf4cb87d751c6bdd3098216813a0753",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "homebox": {
+   "hash": "0138f2066cf75d46dfb0702316d559bd18641b77",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "homebridge": {
+   "hash": "e8a49f595203379e38ad15f0f524c02a4b8631eb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "homepage": {
+   "hash": "211af8999f205f08fbc6923cd5a9727ff3050015",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "hoppscotch": {
+   "hash": "065a6ffb82adeaddaf9ac789c90b3608d29cdc4d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "hortusfox": {
+   "hash": "d964b44d52887bc302b3063ea03e4439cc7ce963",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "huly": {
+   "hash": "6fc53098012ffd2279edb9f9994ac89e7ff8ffa0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "hydrodactyl": {
+   "hash": "15b9ca230644d1da78aa56ef55dadf033d448e4f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "hyperdx": {
+   "hash": "3255f0a3a74a5cd5617b15b9876cf920a13238eb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "i18n-blog": {
+   "hash": "ff1899a6e27c38881536e080ce697c5e9fadb1b5",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ihatemoney": {
+   "hash": "1057db02905d37d347bb13256c05ebc06987caa1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "imgproxy": {
+   "hash": "637ef79e38b1fcb405b945b2ecfdccfe0f05ef4a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "immich": {
+   "hash": "9677aab15a944045c6601c28b5e43f734a58cf84",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "infisical": {
+   "hash": "dfdcef5524d3c677a300c192205a67f6175ee926",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "influxdb": {
+   "hash": "ebe54d66f7d2c852f8e25ff33799504b7288b42d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "inkvoice": {
+   "hash": "54a8ab613df151cc584819e32eba0ea8edd5cab6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "inngest": {
+   "hash": "4239058b5a5d40d3150ab22c1ad38486d74bfda9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "instantdb": {
+   "hash": "ac02484a133e946a452e5da841169cf1b9ecabb7",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "instatic": {
+   "hash": "5c3ce5490d85bfae96c7e36667a9d1c075e3d8f9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "invoiceshelf": {
+   "hash": "069c4d46476d49d7244b7bbf1defa43478877ff3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ipfs": {
+   "hash": "3d3e060b57ee8b62e7edc32c46f36405c252b3d4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "it-tools": {
+   "hash": "055a45dc63c7716ca2129bc1e0dd2a8b8b545269",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "itsaplan": {
+   "hash": "750251e4850dcadc257b45ad7edfff19a11ab3ec",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "java": {
+   "hash": "a9836bbd1be1756c01234cdf3e8114fc542bdfab",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "jellyfin": {
+   "hash": "36bbeb4a2d266489ed16447ed3cfd50f8b9b98de",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "jellyseerr": {
+   "hash": "340213f6234c13e23105ae50ebb7a3af2e7d4534",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "jenkins": {
+   "hash": "eb6f9195ac32e672c12c19ee67d2283747904a83",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "jitsi": {
+   "hash": "ecf568eadd76a381242b3ec501a31e37b148118b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "joomla": {
+   "hash": "1302bd56b437d40351246bc88375bdc429de96e2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "joplin-server": {
+   "hash": "46224c299bbec18e827633c867a68a135dc50ccc",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "junctio": {
+   "hash": "f33c9fc1e4c27ebb9077276500a807d1e80371a9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kanbn": {
+   "hash": "9a353ae870764b72463c3ca2f2df42ffe585a568",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kaneo": {
+   "hash": "9b6a6d4264ee9e6e0a6514d41a793a397c6efd79",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "karakeep": {
+   "hash": "9211809afbd026e0d47daddf02990a115f031500",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kavita": {
+   "hash": "40257a7de033565c6c32572a8d93d7b5fa1665fc",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kener": {
+   "hash": "154f9b7d0ae17d8aaff9cbe31d76a72454bb5069",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kestra": {
+   "hash": "b011a5aeef14e32469af3be43b91638245bf1723",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "keycloak": {
+   "hash": "e8f099420496a626dec170e3f1db743092fa4005",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "keydb": {
+   "hash": "30e4cb35a1cbbb14f3eb624f504dc3a050f8b209",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "keyzori": {
+   "hash": "21ea0bb2b7a1b4e7f14a9cc3f64c02ebadc1d821",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kimai": {
+   "hash": "af8e766daa403249dc84516c228e2e7250708b02",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kitchenowl": {
+   "hash": "515319961ca10d9910d399648d15718f4460868c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kokoro-tts": {
+   "hash": "c37b071c9d7cff17db7735ef8ce8958f3bd1c8ac",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kokoro-web": {
+   "hash": "f5ebf8fb1495888bb6dd784011860caf8ff93af1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "komari-monitor": {
+   "hash": "b520d7e06c35158fe697e121d4bca6d78a0ebd05",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kortix": {
+   "hash": "9df8002c64a11258df594c5c80a86fb7ea7fb972",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kotonoba": {
+   "hash": "9468086d84dd682e63a34932be2690ea698f7a08",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kutt": {
+   "hash": "2c7aa554faefe640f03b732844115d64aa4ceb03",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "kuukura": {
+   "hash": "cda35bbf6ab00418e6b6cd6845edc3e18a336d10",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "langflow": {
+   "hash": "25c350208f74520870779235c6596d8d2904750f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "langfuse": {
+   "hash": "00f803b81e5d2b1a7016960ce738b68c5893d680",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "languagetool": {
+   "hash": "a612e4df3c920d288dcb682d63c90d0e3b130de6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "lavalink": {
+   "hash": "f2f7277b72087073b5c445a388b4256cea021f99",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "leantime": {
+   "hash": "08f2d919a941f28ac5f49fe046acb3f22effde66",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "legejo": {
+   "hash": "a380cd68ac84132a2dd5ea393045ccc15e0e73f2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "letterfeed": {
+   "hash": "a5c449635fd48ff7841104607d49db33293bfa6c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "lfsx": {
+   "hash": "ac67451fe78383eb3b0c4f441ce07b2c78c7c0f8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "librechat": {
+   "hash": "638f93f594b473786112c19b1aa5388def73c2a6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "libredb-studio": {
+   "hash": "5f2ca23eeecd1cf10ea05cd21f70b7ce326eaf65",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "libredesk": {
+   "hash": "fb3a2570dc5f884e5e5622bc4857033b500e0c8d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "librespeed": {
+   "hash": "6e6820046de21e03d25b929d930822d7aca6c9d5",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "libretranslate": {
+   "hash": "f582190afd6a81fe82598e2553eb3e785166fb4e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "limesurvey": {
+   "hash": "d788a28ddeae990e74cb7a1a49a7b1b9f52caacf",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "linkding": {
+   "hash": "43295f05c3238957838a8a95b53dde2f8216f209",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "linkstack": {
+   "hash": "4637b4dff65d7d96063c54d70fe6d6dd7f4e3282",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "linkwarden": {
+   "hash": "248af072a6e3bde43392c3229186eb6b91cafbdb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "listmonk": {
+   "hash": "7e559c9659b686590bb5eb7555a9679b04b62c72",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "litellm": {
+   "hash": "a9adc5037c208c114fa1adeadc2000ae28f77ff4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "livekit": {
+   "hash": "fc89210df189fd644e2baf6738493b3779b758af",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "lobe-chat": {
+   "hash": "9829f20c6d8237c9f9f6906cca4cdc05b1da7459",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "lodestone": {
+   "hash": "ce18c639af0e1f3345da9482fbbaea29452fea1b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "logto": {
+   "hash": "221dbdfe000f854dc34229cc3036043c2b86987e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "louez": {
+   "hash": "327ad0d0c53069e7dcb3806a5fafff194a6e947c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "lowcoder": {
+   "hash": "812fce12199fc30d50bd77efed1cb6c6d8865fa2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "lubelogger": {
+   "hash": "43532fbe000e47b47e46a28938206f32309c54cd",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "macos": {
+   "hash": "f3ebc5cb59e0cccb149c8433a497551a75686a9b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mage-ai": {
+   "hash": "47283524d8bb43760cc86204f90477cf35893b9d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mailcatcher-ng": {
+   "hash": "7bd7074bbacbe51a8adfcb08f8d6a1b4ff834450",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mailpit": {
+   "hash": "ca9f6cf3665bc94b9b7ed4b851e50137d63c1eac",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mailu": {
+   "hash": "008a5847bea07e637e0939cea186c9846d57aab0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "maintenant": {
+   "hash": "34c3682cb133966f35393d093f9042a200d6567b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "marketing-dashboard": {
+   "hash": "346925ac298256123f59016b91a297f434dc2651",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "markup": {
+   "hash": "5df23676dcec32087ab7ab1be1ea288b7cb2505a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "matomo": {
+   "hash": "31e32c6095f84948c15c327d9f47e8baaf22e2a2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mattermost": {
+   "hash": "4293226cd1aa6fb78ab9abea90b5e7ad5b81d7b2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mautic": {
+   "hash": "25221a1f42b19a167279d2875b5ef260a4f792fc",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "maxio": {
+   "hash": "f1408acf6a034cbd6c160e54e35f801633c958a5",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "maybe": {
+   "hash": "8d44faed73ff29bfa68941ae2aeddf9f1df04998",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mazanoke": {
+   "hash": "72602fb270599c4d9e38fca14a036fd740193e72",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mc-controller": {
+   "hash": "e26f7194138ad3dcba4de1e272fab34814bc4100",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mcpspan": {
+   "hash": "49cc800265af1b2722d31cc45da3668975aab7f8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mcsmanager": {
+   "hash": "79aa2c9680a31a3961cb1ec8a717e7bb30be34a8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mealie": {
+   "hash": "84f09a47d46545d40c6d956143ffb8abaf1b5339",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mediacms": {
+   "hash": "0939be73c65c378ded640328a51f818aebcfb601",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mediafetch": {
+   "hash": "6edfa739b90f09c9196d788041a5ae187fdf9138",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "meilisearch": {
+   "hash": "94378b48255329af8083f2c0d0fe2251c07514ed",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "memos": {
+   "hash": "786d3a1431e873aad389ca61f3b877f8c22ff414",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "metabase": {
+   "hash": "d39c6fdd627edb44f9f71862f5ac8c9fe2b13ee1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "metube": {
+   "hash": "f515dc875ce28cd29883d558eaf7b54d8d37d542",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "minepanel": {
+   "hash": "5c6b6067c495894955595bc0d7c7606a7b45ff47",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "miniflux": {
+   "hash": "3d8edfab11e12148038f1c9ad8ad046e079685e1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "minio": {
+   "hash": "7d2a1ed65ad7c5554d3c52dc34095e31dbbe8c60",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "misaka-danmu-server": {
+   "hash": "e3e1eaf06f396ccad1df55c21f0c11a22ca5ed67",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mixpost": {
+   "hash": "5ca2107dd154eeb1efe01d16e0501a523727f8e1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "moltbot": {
+   "hash": "282f543939ea3929f8b2198f8732d159aee66c10",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "morphos": {
+   "hash": "27006eeac0ddc51a81a0c7e2543653426244db08",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mosquitto": {
+   "hash": "b5627a3a2629334496cfac56ddbdaf8236beb9f9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "movary": {
+   "hash": "4d062493270027516b252a809759e05d992ab44c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mulesoft-esb": {
+   "hash": "6f70c876b788ae82459b2f4547e215d56126dec8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "multica": {
+   "hash": "f097ff67df0c003ddad5107dba8d52d35c257768",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "mumble": {
+   "hash": "489df99bd968a9a79db0d6205f36012405cbbe3d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "my-links": {
+   "hash": "465cac783f59a60345abc85b86f6687d82b6a926",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "n8n": {
+   "hash": "2f756971c1a1b3e7da8030fc20b0e90b4afc6ed0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "n8n-queue": {
+   "hash": "2a7bd0234332e042613ecb026d5e2eb855dbe7bc",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "n8n-runner-postgres-ollama": {
+   "hash": "4ec763834c2bf5f80719d6c79a9f2ba6bf8d00c7",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "n8n-with-postgres": {
+   "hash": "cea406a33705be53b579ca8dd469f4e740bb90c0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "navi-music": {
+   "hash": "fd4cd0dc6738e9c0b36569bd33a00b429c95fa59",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "navidrome": {
+   "hash": "05faa7858b98e58ad2197b1b20e32ae1215e425a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "naviserver": {
+   "hash": "77eca9238df72d189aaf970253ae04332eb68bab",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "nebulynk": {
+   "hash": "d1859716b1b0f6cb4cb5a22cc93d9829fdd1eae3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "neko": {
+   "hash": "11248437eff996fd95fbefe6977064753eda0137",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "netdata": {
+   "hash": "d9cd131458bc7cf44c41487973f6df54ee99c667",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "networking-toolbox": {
+   "hash": "9bd886a881d1afadcb136fda93c7a90608af6396",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "nextcloud-aio": {
+   "hash": "398461f8e649a4b53ff67f2386eeaeda5990e20b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "nginx": {
+   "hash": "c89774ff981661f0c5e814ddba514f9ea32cbb5d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "nocodb": {
+   "hash": "8b3f9e531acce8b7974d191be6b6353caaf62825",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "nodelink": {
+   "hash": "fe63fd32525ef1f15a201ecdeb00d539dae14889",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "notifuse": {
+   "hash": "036aa0ef58c2c5b68206bd78fcdb57f19f19d9ad",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "novu": {
+   "hash": "9416a0f48359a172dcdae222c2779115d7b4bbd4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ntfy": {
+   "hash": "dc26f38741062e94b4f12c4631301556be687f84",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "obscura": {
+   "hash": "e5390dd80483b59527f63f79b39d9ad7bc1ee37e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "obsidian-livesync": {
+   "hash": "1a234dc694f76e0a1e07fa5327de4558ba190d21",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "odoo_17": {
+   "hash": "8ed8666fe39cd95b180b2842ed7dc22c1218aad0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "odoo_18": {
+   "hash": "22ccca90ca969da172977854d61173e40fcda9ba",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "odoo_19": {
+   "hash": "ad50f8a019fa9c6ccdd9efd5c511d5b4411dd340",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ojs": {
+   "hash": "a1426ab7ca21fac24dde7ba2bdc2d095efd16838",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ollama-chat-tone": {
+   "hash": "afbdd11d3968476609038210f44fec095de89d5a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "omni-tools": {
+   "hash": "387932944e8224de3fb08672453827e4df97de7d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "omniroute": {
+   "hash": "50d60d37caac13f5f260f9ca945d704e3cd4f6cf",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "onedev": {
+   "hash": "8a5918a2bc22ca459d7d69b7769ca4f8540c80a1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "onetimesecret": {
+   "hash": "f73d9491240279a9516b53decc119846c93d3b54",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "oneuptime": {
+   "hash": "bbbe6ce40b086946c53cfb74bed2181be471bc66",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ontime": {
+   "hash": "11fac23777b565e2d04cdce3d7a6fcf2e6a46d75",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "open_notebook": {
+   "hash": "93cb55dc21320771a8d3b4163d111d7cadd5e1ee",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "open-design": {
+   "hash": "989ce27fff62d49a6dad44e652a0fdfdea5089c6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "open-fiesta": {
+   "hash": "029a472fcf6fe1dbdd8ee7bca538741f5e89623a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "open-webui": {
+   "hash": "82c9ab81304cd581d3c2d01b15f58130db8c0f03",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openanalytics": {
+   "hash": "94a7aa3ae88153d950142b0415074397ebdc96bd",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openclaw": {
+   "hash": "0b32f60244443dfcb77a4301db6952cabc24d305",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "opencloud": {
+   "hash": "677d27c7e030b68dda1a4f70ca495275e2cc21a7",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "opencode": {
+   "hash": "7a62444a8d7fd82ea788b9e6dcb42296544528d6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "opendots": {
+   "hash": "4ce9c16ea3ae5422a4c66b603d7be7cb3ce7e13c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "opengist": {
+   "hash": "e8f23fc170383036ec406a1adb7c8345e019231e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openhabittracker": {
+   "hash": "07124a6acfaa9da805c9c07c52f132b5f001e207",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openhands": {
+   "hash": "c74d4c6ca53e06dbd163115930fbbcc7224da2ca",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openinary": {
+   "hash": "8df10b35c1e8b66aa4f922fd89ec0dccd04cabdd",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openlivery": {
+   "hash": "bbc280aeee4435ea12920b8a22af58bfbff8f050",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openlmnp": {
+   "hash": "b96d22b25353f19b0e45463935a96db4b85f0b0c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openobserve": {
+   "hash": "622692dbbd260c27a4703a91d69d724e99c9d3a5",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openpanel": {
+   "hash": "2e4da87be68d5ca846472e0231c9f20a844a4e1f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openproject": {
+   "hash": "ffa3c51a2edd76d53d0e6acb5c36f9bb5a2f4182",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openresty-manager": {
+   "hash": "1b76cb9bd58561c8c58a994559cc819e8b0c32d1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openseo": {
+   "hash": "ec80928a1d4e5763f5bdae5f1c46c8bceb76fef1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "opensourcepos": {
+   "hash": "fe7ef6e826e17dc1cdedf6f8e06723cf372f52df",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openspeedtest": {
+   "hash": "b26a5fc098f74531ded004a4edfc745429805e48",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openstatus": {
+   "hash": "df58ff0b9ee54385dd4fe3632287c8f33f95e9ef",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "opentodo": {
+   "hash": "f518d98a5076573d397d215ae588431b63fae3a6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "openwa": {
+   "hash": "897a3be549558273869dd5a6dab69813f39207be",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "orbit": {
+   "hash": "566cd911c15143a58603a5a186442bcbefa15fee",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "orca-server": {
+   "hash": "a21d9b3112fbfcb30309fd3052a542ccd6d62415",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "oryx": {
+   "hash": "74bdd3ef46d0e0e5d37e3ac9048175215bed2b48",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "otterwiki": {
+   "hash": "a524f838347e6b14ba71d3b0b763525fe111aa1a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "outline": {
+   "hash": "f366e75e8871b5f5e1a2f5668cebf68c14a6ffc9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "owncast": {
+   "hash": "e251ddcdf91469291c16fe5f20bb888c7da538e1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "owncloud-infinite-scale": {
+   "hash": "2c609be600759490ffd743167184ace51c47fb04",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "pairdrop": {
+   "hash": "8c83e876785649b8afe8eeeeebc644ed387482d9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "palmr": {
+   "hash": "6821afa60cc926a200b1444434237c73efec6609",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "paperclip": {
+   "hash": "18e512dd44c23a1f31ef1205f0574c3292534a78",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "paperless-ngx": {
+   "hash": "ed1ecf58f4b70cbe35aff2b1dba3823e3a8c8dec",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "parseable": {
+   "hash": "dfae653fa225f6873c46cedb05e95be21d367411",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "passbolt": {
+   "hash": "031f5771c6d9c6bf353a9a6b9bcff0f2446a6a5c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "pastefy": {
+   "hash": "b584b69c425eb32909b5126e9e595baeb25c150b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "paymenter": {
+   "hash": "105b862627ed01def825d9ca8e0553d29d0ab4f9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "peerdb": {
+   "hash": "642067e7591ff18fe572abb1b1b22f2abee85a62",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "penpot": {
+   "hash": "c6990011f43e135a5d0f8ff10e1ea821200f81de",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "peppermint": {
+   "hash": "1ffbdf589cae11e7c21986e9d8c0c63567896367",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "pgadmin": {
+   "hash": "a6d83cf76bb30fcb5b7f2df856c68f09b1e80339",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "photoprism": {
+   "hash": "367c6fe157d8bde7632508c7f28e826a49567608",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "phpmyadmin": {
+   "hash": "71463b8eedf5bf4dd5751bae4946db1578ad777e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "picsur": {
+   "hash": "d7717a72d2d3832365736711a8b00dbbea577610",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "pinchflat": {
+   "hash": "1025eab76a792a9ca17af32227a2152ebadf28db",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "plane": {
+   "hash": "d7535e06056a7dcec743dc3f2f0dcf15c7bc8274",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "plark": {
+   "hash": "ef974569a238b4f755a8a44532021803a5196676",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "plausible": {
+   "hash": "11bcea77ffc28fb40c074f04d86a4c02d80fa0a3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "plunk": {
+   "hash": "eb1363d60560994c4d358c18c3bbca624e8c06df",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "pocket-id": {
+   "hash": "bbb00b3e5990e702deea12f8a4c27701bd650177",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "pocketbase": {
+   "hash": "6ce1e69d5959a287f430bc28f88b67968bef39c0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "podfetch": {
+   "hash": "76cddd8c72ac1d06394cb0bdbc5f9235e5b067df",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "poke": {
+   "hash": "e78051294bebdd63d46e68d01442ab6a0f600f43",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ponos": {
+   "hash": "83e9204190a2f323c9d20d9bbfa4301933a717a9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "portabase": {
+   "hash": "a119f605d9ace68bac03c93a1c9f66d04117d330",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "portainer": {
+   "hash": "0334d7dd829e451e975470da6b7ec88bd2115003",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "poste.io": {
+   "hash": "a8c1e3417a6ae91a8343414af402bdade8d5f040",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "postgres-extensor": {
+   "hash": "9424c3297af01e0225d151242c138eba0318b438",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "postgres-pgadmin": {
+   "hash": "e9e4860595db8d1b8bb50a59a9312aa4d8a2c7f1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "postgres-pgdog": {
+   "hash": "747ee1c3e6edb9168f978fea95d98e6579ec6f51",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "postgresus": {
+   "hash": "4178f04483444a59ac3b1bd26307e34c87c8eb0d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "posthog": {
+   "hash": "7b31d51803edc0d25e9ea48719d01ca02ba63603",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "postiz": {
+   "hash": "7f7b93bb7320a2720a85c36423e9cd1d88390f05",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "powersync": {
+   "hash": "bb04b5c5a6a112ec88e3a0a67e86ece695954150",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "pre0.22.5-supabase": {
+   "hash": "400425fa666497554122212573eeb789db7e1e61",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "prefect": {
+   "hash": "0bde3a5747a8aa3649bbf57b53e1aa439f0247bb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "pretix": {
+   "hash": "5d51653546f52ae3b1d5761797666c7e2631d1c1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "privatebin": {
+   "hash": "4db00ef529df21279f5c55c712e7e6a93443aafd",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "privatepaste": {
+   "hash": "c3bc3bdf879c7cc3362d886a19432cf7b7ef3262",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "prometheus": {
+   "hash": "6c0efcf90d21f402a80054c9d08ce2d6742a0006",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "prozesswerk": {
+   "hash": "f54bf132152bf5de009f9c145c94e0e8890ca687",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "pterodactyl": {
+   "hash": "0874fcb0679e3c0646d9e65afd5125bd75f84381",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "pulse": {
+   "hash": "9f5a46cec072e6c34872ef6ec7bd65245d2b7593",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "puppetflow": {
+   "hash": "18720fe2c888ad0d70b3e25211aa9b786d64cd96",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "puppetflow-postgres": {
+   "hash": "7d2ab8eee08d36eed07019b0921bfa40e3dfbae5",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "pyrodactyl": {
+   "hash": "49200ef46dc5d9b995731011db19d363171c689d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "qbittorrent": {
+   "hash": "1da2e116d1b9503804aeb9bb991b071b0acc53c3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "qbitwebui": {
+   "hash": "52a7971b089c7375dc57944f1667a0664d424845",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "qdrant": {
+   "hash": "593a636a71abeb7c11f817d6dad38bcf3968251c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "quant-ux": {
+   "hash": "e0aaa61ce259187c644469085edd2794bc96fcd6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "qui": {
+   "hash": "91d369a7774180361cc8df2fcbaaf5b8d23dbea7",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "quireink": {
+   "hash": "eb8656037ccd56634cf2aa45b363b6421582819f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rabbitmq": {
+   "hash": "4b688a8b2d5a633b0693606e4e6f80b347e2fab3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rallly": {
+   "hash": "e3ebee36da562dd545b530550c7eada64704a1cb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "reactive-resume": {
+   "hash": "d303ee0381a91e913d887cf5c7805bba01beb87c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "reef-dev-cluster": {
+   "hash": "bdb4026785d29864611fbda27ee9c3b7f1ead3df",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "reef-keygen": {
+   "hash": "07d706ded09bb98766f2e0874e4835af56ab8c3e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "reelsaw": {
+   "hash": "e9d2f08df088df916e41a64a38bc79835a429fd6",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "registry": {
+   "hash": "ce3033249a6cbc7ae3e4e3c1401fb8c8a4c69edb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "reloop": {
+   "hash": "497cbcc2c8086043bb8f89ebd8e676a89982c736",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rocketchat": {
+   "hash": "f375a8a75875243a8c543715bc14b400b362bf28",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rote": {
+   "hash": "a18a4dd9caeca706ab1654cd54c11affe8274f6a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "roundcube": {
+   "hash": "342581ef0bbd94858d3879e17cacb9c45925bc41",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rss-bridge": {
+   "hash": "ca2c0dc3bd0a49b54a9765c58d459d6906e45025",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rsshub": {
+   "hash": "eacf79acb5340fc2ea6afefeb379b82e0f7a53c3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rustdesk": {
+   "hash": "63df1c1c859201e537907756e5cc65abbac64eb1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rustfs": {
+   "hash": "4ba51b89851816518b01f257fd82172759a7057c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rustrak": {
+   "hash": "dc0d15958ee9fa225130878ee2b9f81e9317e1d3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rustrak-full": {
+   "hash": "4921c5ed587b867a774550632fab9c92bb8ad40b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rustrak-sqlite": {
+   "hash": "6fc49e36ae0844f74f8d1f85628ca73bcf142670",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rutorrent": {
+   "hash": "00652ec44268c2288c7bc7b62082bbdebfea66d2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "rybbit": {
+   "hash": "77c93bd94e24e98d1b2a27756d82caaf37cbc708",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "ryot": {
+   "hash": "c2a951ef22fc4de7bced04e2df025108a2a6c9e0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "sable": {
+   "hash": "1933be2a426009668b5e9fdc02062010fce06042",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "scrutiny": {
+   "hash": "5c1ce865eba5fc1bbc56d70423aa403e2cfaa3c9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "scrypted": {
+   "hash": "68c70cdb1454402bf304ad42ca43446c9937a5c8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "seafile": {
+   "hash": "e7148e20982100f29e60e4bf6f4f0725a31b45f0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "seanime": {
+   "hash": "751873243b44a70f87669db9864fd011ae3e668c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "searxng": {
+   "hash": "6633d964065a7dd4965d14070d0b664ac8eaa50b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "seaweedfs": {
+   "hash": "9f08db31ee9b5e86ce75e8108c96ac73ca834fb1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "senddock": {
+   "hash": "1c858290b00084cad02fbc42e79ce733d52a2877",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "seq": {
+   "hash": "817ea52c7f3a4461200564746785e3b95d27d90b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "sftpgo": {
+   "hash": "225b56b2ba29951aaf6b654eb84b6028f3051b4e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "shiori": {
+   "hash": "65fed68ac7ace260def226fe4052539c82ba3b13",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "shlink": {
+   "hash": "c4f6a3a1637426e3dd29dd1cb8fcf316d46c5abc",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "shopnex": {
+   "hash": "28c68690232c58b43ddee3bdbbbf36652610fc7e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "shopware": {
+   "hash": "3695055f0f28397eadfd13b21c9f4f638893a114",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "shoutrrr": {
+   "hash": "3e3a968535d5bf303bd18c04309215f39c9b8084",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "signoz": {
+   "hash": "d7956fa29077ff01079777b2d86ee31104ceaa0b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "silex": {
+   "hash": "4c6b3f7c9a950d5167451330c9762136930cde01",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "silo": {
+   "hash": "c4017e811a76e481b6c007b3cce89a4a5dd1e45e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "silverbullet": {
+   "hash": "4749c3e2f6c8a7c978c26f7e8ce0c836766377d1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "sim": {
+   "hash": "366b3cc153dffed91a722de5586734d752668f6e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "slash": {
+   "hash": "657851d6bab5550e01fc51c9bf8859ed23c3cb35",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "snapp": {
+   "hash": "7d72412cd5cbfef06402a675cf54853251e43f87",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "snipe-it": {
+   "hash": "ea8e2d1bfd7a96956d83f584d13c969750484458",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "soft-serve": {
+   "hash": "95991553dee3f8d5417775d10a8d294152a9b080",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "soketi": {
+   "hash": "962c1bd21745486b58243410f45210614ad1042f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "solidping": {
+   "hash": "39cb6defbcbd82d7e39ec66fb0ad0e2507334601",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "spacedrive": {
+   "hash": "3a24721d2592914d447e55c4a677f6951695fd2d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "spacetimedb": {
+   "hash": "f574f54489b6303f7d7b7a2b15be993dc096006f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "speedtest-tracker": {
+   "hash": "3cd92d7e66faec6abf9d1168f602224bc25fd7cf",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "spliit": {
+   "hash": "28f849da75944d67bde81b4b0af489ce251007df",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "stack-auth": {
+   "hash": "d56014e0137ecbc0cc2af4e867e96a34a4d10ba5",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "stalwart": {
+   "hash": "6c5a25917e555f04ac804456b3999573fe542cbb",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "statping-ng": {
+   "hash": "78c6e37654fed3fa379c9f66be774e036bd2f794",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "steedos": {
+   "hash": "67ee6f6343af68acedf2511111a8e0076230155f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "stirling": {
+   "hash": "11c687b62226de79e4a759fcdcc5a84fcfc44b78",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "storyden": {
+   "hash": "c0403b185d63ddbc49f28d8fc877786359672e50",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "strapi": {
+   "hash": "f0fa99a874927be46aa79493c3d6c630c6bfdc2a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "streamflow": {
+   "hash": "aa4ff98d788ca50c059a77a9165fd85bc178df3c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "struxa": {
+   "hash": "78f648444a563a949efde4ac64f02371b33007b3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "supabase": {
+   "hash": "9177e54f255943104a5279a8d25fbb75b171ba03",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "superset": {
+   "hash": "d1e1d13a2441973d8916063fe1432d1e4bbd00dc",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "surrealdb": {
+   "hash": "eaf36145680f6d3576a944e172fd3ef16bb8a8b8",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "synapse": {
+   "hash": "1ac0fb16adccc2acf1c3e686c12f91c330eb2e30",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "syncthing": {
+   "hash": "1d1179438d0fc53d14ae6a9fdc767104e983614c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "systemprompt": {
+   "hash": "22cf6b3165585bba37a90ca926f04e80b7ea408a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "taiga": {
+   "hash": "0be8cce81bf14600caff3bf78b8a19f5de03d55e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "tailscale-exitnode": {
+   "hash": "5361e222c51b6622adc932e7974b6f121fb8dc80",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "tandoor-recipes": {
+   "hash": "662e7bbfbc3af9ff7dd6fefbb162195c2fa828cf",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "teable": {
+   "hash": "d6db27c7ff073d708af92ad3af0aca68e03abe2d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "tela": {
+   "hash": "f626b92016c75e30931144d0c617401464d03818",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "thingsboard": {
+   "hash": "644ef4f74e72f0484badad8eff4eea3322ab8da2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "tianji": {
+   "hash": "050bdfd8d96526d9460eccd2dfc0d6740cd51b49",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "timescaledb": {
+   "hash": "ddecbee4b629cfad0d0038e3ea09fc311ec8627e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "tolgee": {
+   "hash": "95e1202e21792f495acf5ee395c9ab92f0a2f88b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "tooljet": {
+   "hash": "e409bc4b00ccb26360d6dde9a093ef982e60bdf3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "tor-browser": {
+   "hash": "83161c7ce298c12b8aa2d82daaec6d5918e306e5",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "trailbase": {
+   "hash": "6f0fcd4d4d3c903bd8244e903bdb5198341b7019",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "trek": {
+   "hash": "5de15a10c293e2b523feced81d0a8739cf79ad4c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "triggerdotdev": {
+   "hash": "1d6619b23c33d52302b9650bef033390369408ac",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "trilium": {
+   "hash": "46cfe9c1aebbdc4c65c79c877460e7dc3576e63d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "trilium-next": {
+   "hash": "1a20b0ab42c7f213ee185f1e1eceab409bfd9fd0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "trmnl-larapaper": {
+   "hash": "ff10952bb468b772e5759884a223b9a52fd539a7",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "trypost": {
+   "hash": "adef2ddb31b61ddc923447f2e354aa5500321144",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "tuwunel": {
+   "hash": "294c91ac6043a4c5ad6671539c9e20362c6b38c2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "twenty": {
+   "hash": "f0cc33d8c3af1b1eecc8b49565ce9592b38b748b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "typebot": {
+   "hash": "d3283fcf25ff0b8a4a683b1a01e4ec10b46e94c1",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "typecho": {
+   "hash": "e325ab26f0beaae42c3b0695ccc0be4801379c58",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "typesense": {
+   "hash": "3db076809665dbcd5db26bb8d419ad6b6c73e2dd",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "umami": {
+   "hash": "4c4d5e8ecea93375a7e1f0ea5fb8c63828188156",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "unifi": {
+   "hash": "c844e87df5efb5295579a1570fcd01c1cc8f14c2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "unleash": {
+   "hash": "588fe994335551b548f8822ccf9fe1869714c934",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "upsnap": {
+   "hash": "1b986ee23036f33c39d7dc5cc505d3ae14f6af92",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "uptime-kotlin": {
+   "hash": "47d8fb425709b95e6309c4a233b06b92538e5d6c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "uptime-kuma": {
+   "hash": "69c9a31439f69d1a4de999d234bc4f13629a2c0a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "uptimekit": {
+   "hash": "0695cbe23cafafe67052a2bc11de1eb4717e65e3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "usesend": {
+   "hash": "90e8668df0ace58e7cead6ccf94a5f99871ead7c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "valkey": {
+   "hash": "04963de1e699e9c171e19cc7fd26b56346740a1e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "vault": {
+   "hash": "65b3c7d533a6d086c837839e085f3e6bae1b17a0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "vaultwarden": {
+   "hash": "8e0da91a2b9aa1c111d2b3e32084ee64ccb00238",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "velix-api": {
+   "hash": "d56687208d17c7ae864422244eb5b20eb1e54aaa",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "verdaccio": {
+   "hash": "4f7847acce58d719fdb3d93c1436f0ba09948530",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "versitygw": {
+   "hash": "81a34939c65202eb8fe9b54f9ed0829e9de37e12",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "victoriametrics": {
+   "hash": "360906825dbcb74866114beb085a096f881a081a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "vikunja": {
+   "hash": "ca88c384e9bd679cf06972096b7271a1a1a3abce",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wakapi": {
+   "hash": "492fa8caee2fdd4c1ce6dab7ad1d8bb81bf3e77b",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wallabag": {
+   "hash": "3f3e21375454ac02fdc2feef7a69cd72f8b7ca27",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wallos": {
+   "hash": "4b48da53f01b56f3df34c4c0bec7b4c497a1a211",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wanderer": {
+   "hash": "8ceaeb1c7771d9823d54f594390cc195f4424020",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "waxum": {
+   "hash": "129cccf92799a297e6ae84cad16589335b8fcfac",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wazuh": {
+   "hash": "171f066d60fb870bfe343d3a253ed6198ea53a99",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "web-check": {
+   "hash": "4236ffd0359d79fc68a010509d3ef7ab37d418ec",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "weblate": {
+   "hash": "8452fcd5827630dbebd4b82e66c01e1f6725b2be",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wg-easy": {
+   "hash": "b0b68e61ed3a0acce0250418d3b9af51f1687393",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "whatomate": {
+   "hash": "039a155f9ce6a21cdb7adb72db13231f70e95a5f",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wikijs": {
+   "hash": "58fe100ca63750335d59024d8783b92c551c77dc",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "windmill": {
+   "hash": "1b640c26c142097bef568928b192ed4ff0b4a953",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "windows": {
+   "hash": "ec51e9b65c81698d6e71d345d5e26d52e05d14dd",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "windshift": {
+   "hash": "fccfd5646509b6ff7361fbbd885478bace5947e9",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wise-mcp": {
+   "hash": "70ec4371eccb588c6badf8a3e8756e48e4ec32f3",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wordpress": {
+   "hash": "390c31537cb693877644e228f211fd347c32d73e",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wud": {
+   "hash": "8bd1003299789f2cf7a6aeac0459097b6c2f091d",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wupnext": {
+   "hash": "b5b6f88423096084a2d0ad9bbe9f29093113e305",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "wuzapi": {
+   "hash": "d1dafd63b06d034846cdfe8864d4682cdf65c0f2",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "xsshunter": {
+   "hash": "6677b0f6e55771d4f9e086371aac52195248abe7",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "yamtrack": {
+   "hash": "5f460de37cf9bbeabec45c0a498717a21a2d71d0",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "yourls": {
+   "hash": "516a690c654db0b6acc48ae181194004ec759c0c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "yt-dlp-webui": {
+   "hash": "5662927ac4456205128d6b58e92b2437767ec4d4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "yuvomi": {
+   "hash": "01764ade7949904fa5b6969462bfdbb058d88c16",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "zabbix": {
+   "hash": "b9fa5b7ab11f34654e83030c262d1243f996a033",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "zeqqat": {
+   "hash": "1c6b17d1247a0a97d74ed1e91e9311a6f4b42e88",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "zipline": {
+   "hash": "58615f976767e1d99b1bec04f53d7ed65d088fb4",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "zitadel": {
+   "hash": "188387fb56ef8a5b74ffb705aa12b4a6b88a0043",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  },
+  "zulip": {
+   "hash": "94a6345af285b3b7da6253c2f6e74a0f1aa400bd",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73"
+  }
+ },
+ "tested": {
+  "chatwoot": {
+   "hash": "4f006a924cf010af708505859cb13d9d1e69deee",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73",
+   "arch": "arm64",
+   "notes": "web healthy; /api reports queue and data services ok; 88 tables migrated; Sidekiq worker registered"
+  },
+  "rustfs": {
+   "hash": "4ba51b89851816518b01f257fd82172759a7057c",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73",
+   "arch": "arm64",
+   "notes": "S3 API on the domain: create bucket, put and get object; bad credentials rejected. Console (9001) not published"
+  },
+  "rybbit": {
+   "hash": "77c93bd94e24e98d1b2a27756d82caaf37cbc708",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73",
+   "arch": "arm64",
+   "notes": "all 6 targets up; /api and / both served on one host by the gateway; sign-up and session work; Postgres and ClickHouse connected"
+  },
+  "uptime-kuma": {
+   "hash": "69c9a31439f69d1a4de999d234bc4f13629a2c0a",
+   "date": "2026-11-07",
+   "haloy": "v0.1.0-beta.73",
+   "arch": "arm64",
+   "notes": "container healthy; UI served through haloy-proxy; docker.sock mount present"
+  }
+ }
+}

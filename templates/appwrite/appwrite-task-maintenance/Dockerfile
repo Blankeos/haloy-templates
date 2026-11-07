@@ -1,2 +1,3 @@
 FROM appwrite/appwrite:2.7.0
-ENTRYPOINT ["sh","-c","maintenance"]
+EXPOSE 8080
+ENTRYPOINT ["maintenance"]

@@ -36,6 +36,7 @@ targets:
       - langfuse-langfuse-clickhouse-data:/var/lib/clickhouse
       - langfuse-langfuse-clickhouse-logs:/var/log/clickhouse-server
   langfuse-minio:
+    health_check_path: /minio/health/live
     image:
       repository: langfuse-minio
       tag: latest
@@ -70,11 +71,16 @@ targets:
       - langfuse-langfuse-redis-data:/data
   langfuse-worker:
     preset: service
-    image: docker.io/langfuse/langfuse-worker:4
+    image:
+      repository: langfuse-worker
+      tag: latest
+      build_config:
+        context: ./langfuse-worker
+        push: server
     port: "8080"
     env:
       - name: NEXTAUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DATABASE_URL
         from:
           env: LANGFUSE_WORKER__DATABASE_URL
@@ -147,7 +153,7 @@ targets:
       - domain: app.example.com
     env:
       - name: NEXTAUTH_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DATABASE_URL
         from:
           env: LANGFUSE_WEB__DATABASE_URL
@@ -197,7 +203,7 @@ targets:
         from:
           env: MINIO_ROOT_PASSWORD
       - name: LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: LANGFUSE_S3_MEDIA_UPLOAD_FORCE_PATH_STYLE
         value: "true"
       - name: LANGFUSE_S3_MEDIA_UPLOAD_PREFIX

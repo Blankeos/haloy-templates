@@ -15,6 +15,7 @@ targets:
     volumes:
       - engram-engram-postgres:/var/lib/postgresql/data
   engram:
+    preset: service
     image:
       repository: engram
       tag: latest
@@ -22,8 +23,6 @@ targets:
         context: ./engram
         push: server
     port: "8080"
-    domains:
-      - domain: dashboard.app.example.com
     env:
       - name: ENGRAM_DATABASE_URL
         value: postgres://engram:engram@engram-postgres:5432/engram_cloud?sslmode=disable
@@ -42,3 +41,14 @@ targets:
         value: 0.0.0.0
       - name: ENGRAM_PORT
         value: "8080"
+  engram-gateway:
+    image:
+      repository: engram-gateway
+      tag: latest
+      build_config:
+        context: ./engram-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
+    domains:
+      - domain: app.example.com

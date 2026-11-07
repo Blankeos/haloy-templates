@@ -1,0 +1,2 @@
+FROM reloopsh/be-spam@sha256:4fcd262354ddb11ed67d8ce8f4b5f08b274f22a8da6987233fb1486d9150a540
+EXPOSE 8080

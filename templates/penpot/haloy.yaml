@@ -13,11 +13,16 @@ targets:
       - penpot-penpot-assets:/opt/data/assets
   penpot-backend:
     preset: service
-    image: penpotapp/backend:2.6.1
+    image:
+      repository: penpot-backend
+      tag: latest
+      build_config:
+        context: ./penpot-backend
+        push: server
     port: "8080"
     env:
       - name: PENPOT_PUBLIC_URI
-        value: http://app.example.com
+        value: https://app.example.com
       - name: PENPOT_FLAGS
         value: disable-email-verification enable-smtp enable-prepl-server disable-secure-session-cookies
       - name: PENPOT_DATABASE_URI
@@ -50,7 +55,12 @@ targets:
       - penpot-penpot-assets:/opt/data/assets
   penpot-exporter:
     preset: service
-    image: penpotapp/exporter:2.6.1
+    image:
+      repository: penpot-exporter
+      tag: latest
+      build_config:
+        context: ./penpot-exporter
+        push: server
     port: "8080"
     env:
       - name: PENPOT_PUBLIC_URI

@@ -4,7 +4,12 @@ targets:
   chibisafe:
     health_check_path: /
     preset: service
-    image: chibisafe/chibisafe:latest
+    image:
+      repository: chibisafe
+      tag: latest
+      build_config:
+        context: ./chibisafe
+        push: server
     port: "8080"
     env:
       - name: BASE_API_URL
@@ -12,7 +17,12 @@ targets:
   chibisafe-server:
     health_check_path: /api/health
     preset: service
-    image: chibisafe/chibisafe-server:latest
+    image:
+      repository: chibisafe-server
+      tag: latest
+      build_config:
+        context: ./chibisafe-server
+        push: server
     port: "8080"
     volumes:
       - chibisafe-database:/app/database

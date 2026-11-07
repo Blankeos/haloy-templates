@@ -49,7 +49,7 @@ targets:
       - name: DEBUG_SQL
         value: "0"
       - name: PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: SHOW_SCRIPT_NAME
         value: "false"
       - name: URL_FORMAT

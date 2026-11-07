@@ -25,7 +25,12 @@ targets:
       - heyform-heyform-data:/app/static/upload
   heyform-mongo:
     preset: service
-    image: percona/percona-server-mongodb:4.4
+    image:
+      repository: heyform-mongo
+      tag: latest
+      build_config:
+        context: ./heyform-mongo
+        push: server
     port: "8080"
     volumes:
       - heyform-mongo-data:/data/db

@@ -16,6 +16,8 @@ targets:
     volumes:
       - reactive-resume-postgres-data:/var/lib/postgresql/data
   reactive-resume-minio:
+    health_check_path: /minio/health/live
+    preset: service
     image:
       repository: reactive-resume-minio
       tag: latest
@@ -23,8 +25,6 @@ targets:
         context: ./reactive-resume-minio
         push: server
     port: "9000"
-    domains:
-      - domain: default.app.example.com
     env:
       - name: MINIO_ROOT_USER
         value: minioadmin
@@ -35,7 +35,12 @@ targets:
       - reactive-resume-minio-data:/data
   reactive-resume-chrome:
     preset: service
-    image: ghcr.io/browserless/chromium:v2.18.0
+    image:
+      repository: reactive-resume-chrome
+      tag: latest
+      build_config:
+        context: ./reactive-resume-chrome
+        push: server
     port: "8080"
     env:
       - name: TIMEOUT
@@ -50,10 +55,9 @@ targets:
       - name: PRE_REQUEST_HEALTH_CHECK
         value: "true"
   reactive-resume-app:
+    preset: service
     image: amruthpillai/reactive-resume:latest
     port: "3000"
-    domains:
-      - domain: app.example.com
     env:
       - name: PORT
         value: "3000"
@@ -96,3 +100,14 @@ targets:
         value: "false"
       - name: STORAGE_SKIP_BUCKET_CHECK
         value: "false"
+  reactive-resume-gateway:
+    image:
+      repository: reactive-resume-gateway
+      tag: latest
+      build_config:
+        context: ./reactive-resume-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
+    domains:
+      - domain: app.example.com

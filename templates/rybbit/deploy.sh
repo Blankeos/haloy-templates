@@ -9,3 +9,4 @@ haloy deploy -t rybbit-postgres
 haloy deploy -t rybbit-redis
 haloy deploy -t rybbit-backend
 haloy deploy -t rybbit-client
+haloy deploy -t rybbit-gateway

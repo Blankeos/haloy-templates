@@ -12,7 +12,7 @@ targets:
         from:
           env: APP_KEY
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DB_PASSWORD
         from:
           env: DB_PASSWORD

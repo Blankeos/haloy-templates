@@ -1,4 +1,4 @@
-import { expect, test } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { parse } from "yaml";
 import { buildEnv } from "../src/secrets";
@@ -20,10 +20,16 @@ test("single container template: domain and port mapped, docker socket flagged",
   expect(y.targets["uptime-kuma"].port).toBe("3001");
 });
 
-test("path routing becomes a subdomain with a warning", () => {
+test("path routing is served by a generated nginx gateway on one host", () => {
   const r = translate(load("rybbit"));
+  const y = yaml(r);
   expect(r.warnings.some((w) => w.code === "path-routing")).toBe(true);
-  expect(yaml(r).targets["rybbit-backend"].domains).toEqual([{ domain: "api.app.example.com" }]);
+  expect(y.targets["rybbit-backend"].domains).toBeUndefined();
+  expect(y.targets["rybbit-gateway"].domains).toEqual([{ domain: "app.example.com" }]);
+  expect(r.files["rybbit-gateway/default.conf"]).toContain("location /api");
+  expect(r.targets.at(-1)).toBe("rybbit-gateway");
+  const base = y.targets["rybbit-backend"].env.find((e: any) => e.name === "BASE_URL");
+  expect(base.value).toBe("https://app.example.com");
 });
 
 test("databases get the database preset and deploy first", () => {
@@ -69,4 +75,34 @@ test("multi-service chatwoot template: command survives in a Dockerfile", () => 
   const r = translate(load("chatwoot"));
   expect(Object.keys(r.files).filter((f) => f.endsWith("/Dockerfile")).length).toBeGreaterThanOrEqual(1);
   expect(r.targets.length).toBe(4);
+});
+
+import { shlex } from "../src/translate";
+
+describe("commands", () => {
+  test("shlex splits like Compose, with no shell", () => {
+    expect(shlex(`server /data --console-address ":9001"`)).toEqual(["server", "/data", "--console-address", ":9001"]);
+    expect(shlex(`a 'b c'  "d \\"e\\""`)).toEqual(["a", "b c", 'd "e"']);
+  });
+  test("string command is passed as arguments, not wrapped in sh -c", () => {
+    const r = translate({ id: "x", compose: `services:\n  app:\n    image: foo/bar\n    command: /data --x\n` });
+    expect(r.files["x-app/Dockerfile"]).toContain('CMD ["/data","--x"]');
+  });
+  test("sh -c entrypoint keeps its script as the command", () => {
+    const r = translate({ id: "x", compose: `services:\n  app:\n    image: foo/bar\n    entrypoint: ["sh","-c"]\n    command: ["echo $$HOME && run"]\n` });
+    expect(r.files["x-app/Dockerfile"]).toContain('ENTRYPOINT ["sh","-c"]');
+    expect(r.files["x-app/Dockerfile"]).not.toContain("exec \"");
+  });
+  test("docker.sock is a partial, not manual", () => {
+    const r = translate({ id: "x", compose: `services:\n  app:\n    image: foo/bar\n    volumes:\n      - /var/run/docker.sock:/var/run/docker.sock\n` });
+    expect(r.status).toBe("partial");
+  });
+  test("several routed ports: one is published and the rest reported", () => {
+    const r = translate({
+      id: "x",
+      compose: `services:\n  app:\n    image: foo/bar\n`,
+      templateToml: `[[config.domains]]\nserviceName="app"\nport=1\nhost="a.x.com"\n[[config.domains]]\nserviceName="app"\nport=2\nhost="b.x.com"\n`,
+    });
+    expect(r.warnings.some((w) => w.code === "extra-port")).toBe(true);
+  });
 });

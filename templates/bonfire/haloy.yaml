@@ -56,7 +56,12 @@ targets:
       - bonfire-bonfire-uploads:/opt/app/data/uploads
   bonfire-db:
     preset: service
-    image: postgis/postgis:17-3.5-alpine
+    image:
+      repository: bonfire-db
+      tag: latest
+      build_config:
+        context: ./bonfire-db
+        push: server
     port: "8080"
     env:
       - name: POSTGRES_USER
@@ -70,7 +75,12 @@ targets:
       - bonfire-db-data:/var/lib/postgresql/data
   bonfire-search:
     preset: service
-    image: getmeili/meilisearch:v1.11
+    image:
+      repository: bonfire-search
+      tag: latest
+      build_config:
+        context: ./bonfire-search
+        push: server
     port: "8080"
     env:
       - name: MEILI_MASTER_KEY

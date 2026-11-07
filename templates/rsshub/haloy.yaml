@@ -19,7 +19,12 @@ targets:
   rsshub-browserless:
     health_check_path: /pressure
     preset: service
-    image: browserless/chrome
+    image:
+      repository: rsshub-browserless
+      tag: latest
+      build_config:
+        context: ./rsshub-browserless
+        push: server
     port: "8080"
   rsshub-redis:
     preset: database

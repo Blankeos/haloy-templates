@@ -28,7 +28,12 @@ targets:
   openlivery-api:
     health_check_path: /health
     preset: service
-    image: ghcr.io/sarrazola/openlivery-api:v0.4.0
+    image:
+      repository: openlivery-api
+      tag: latest
+      build_config:
+        context: ./openlivery-api
+        push: server
     port: "8080"
     env:
       - name: DATABASE_URL
@@ -44,7 +49,7 @@ targets:
         from:
           env: BRIDGE_TOKEN
       - name: FRONTEND_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: COOKIE_SECURE
         value: "false"
       - name: COOKIE_SAMESITE
@@ -62,14 +67,24 @@ targets:
   openlivery-web:
     health_check_path: /login
     preset: service
-    image: ghcr.io/sarrazola/openlivery-web:v0.4.0
+    image:
+      repository: openlivery-web
+      tag: latest
+      build_config:
+        context: ./openlivery-web
+        push: server
     port: "8080"
     env:
       - name: BACKEND_INTERNAL_URL
         value: http://openlivery-api:8000
   openlivery-whatsapp:
     preset: service
-    image: ghcr.io/sarrazola/openlivery-whatsapp:v0.4.0
+    image:
+      repository: openlivery-whatsapp
+      tag: latest
+      build_config:
+        context: ./openlivery-whatsapp
+        push: server
     port: "8080"
     env:
       - name: BACKEND_URL

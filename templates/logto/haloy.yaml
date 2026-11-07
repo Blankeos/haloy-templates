@@ -18,9 +18,9 @@ targets:
         from:
           env: LOGTO_APP__DB_URL
       - name: ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
       - name: ADMIN_ENDPOINT
-        value: http://app.example.com
+        value: https://app.example.com
     volumes:
       - logto-logto-connectors:/etc/logto/packages/core/connectors
   logto-postgres:

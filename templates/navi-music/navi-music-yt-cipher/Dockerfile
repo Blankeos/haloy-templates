@@ -1,0 +1,2 @@
+FROM ghcr.io/kikkia/yt-cipher:master@sha256:4c5ec381ff57336cfc24822d2b526a5ad7cd0171f61065a1bbc87bb736842449
+EXPOSE 8080

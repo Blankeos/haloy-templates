@@ -14,7 +14,7 @@ targets:
       - domain: app.example.com
     env:
       - name: APP_FULL_BASE_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: DATASOURCES_DEFAULT_HOST
         value: passbolt-mariadb
       - name: DATASOURCES_DEFAULT_PORT

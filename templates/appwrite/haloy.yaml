@@ -6,9 +6,6 @@ targets:
     image: appwrite/appwrite:2.7.0
     port: "80"
     domains:
-      - domain: v1.app.example.com
-      - domain: well-known.app.example.com
-      - domain: v1.console.app.example.com
       - domain: sites.app.example.com
       - domain: functions.app.example.com
     env:
@@ -257,11 +254,9 @@ targets:
       - appwrite-appwrite-sites:/storage/sites
       - appwrite-appwrite-builds:/storage/builds
   appwrite-console:
+    preset: service
     image: appwrite/new:1.2.138-self-hosted
     port: "3000"
-    domains:
-      - domain: app.example.com
-      - domain: console.app.example.com
     env:
       - name: VITE_CONSOLE_PROFILE
         value: self-hosted
@@ -272,6 +267,7 @@ targets:
       - name: VITE_GROWTH_ENDPOINT
         value: https://growth.appwrite.io/v1
   appwrite-realtime:
+    preset: service
     image:
       repository: appwrite-realtime
       tag: latest
@@ -279,9 +275,6 @@ targets:
         context: ./appwrite-realtime
         push: server
     port: "80"
-    domains:
-      - domain: v1-realtime.app.example.com
-      - domain: v1-realtime.console.app.example.com
     env:
       - name: _APP_ENV
         value: production
@@ -822,26 +815,46 @@ targets:
         value: pretty
   appwrite-browser:
     preset: service
-    image: appwrite/browser:0.3.10
+    image:
+      repository: appwrite-browser
+      tag: latest
+      build_config:
+        context: ./appwrite-browser
+        push: server
     port: "8080"
     env:
       - name: ALLOWED_HOSTS
         value: appwrite
   appwrite-autogravity:
     preset: service
-    image: ghcr.io/appwrite/autogravity:0.0.11
+    image:
+      repository: appwrite-autogravity
+      tag: latest
+      build_config:
+        context: ./appwrite-autogravity
+        push: server
     port: "8080"
     env:
       - name: MODEL_BACKEND
         value: focalnet
   appwrite-exiftool:
     preset: service
-    image: ghcr.io/appwrite/exiftool:0.1.1
+    image:
+      repository: appwrite-exiftool
+      tag: latest
+      build_config:
+        context: ./appwrite-exiftool
+        push: server
     port: "8080"
   appwrite-geo:
     health_check_path: /v1/health
     preset: service
-    image: appwrite/geo:0.3.2
+    image:
+      repository: appwrite-geo
+      tag: latest
+      build_config:
+        context: ./appwrite-geo
+        push: server
     port: "8080"
     env:
       - name: GEO_SECRET
@@ -873,7 +886,12 @@ targets:
   appwrite-openruntimes-executor:
     health_check_path: /v1/health
     preset: service
-    image: openruntimes/executor:1.1.2
+    image:
+      repository: appwrite-openruntimes-executor
+      tag: latest
+      build_config:
+        context: ./appwrite-openruntimes-executor
+        push: server
     port: "8080"
     env:
       - name: OPR_EXECUTOR_IMAGES
@@ -905,7 +923,12 @@ targets:
       - /tmp:/tmp
   appwrite-orchestrator:
     preset: service
-    image: ghcr.io/open-runtimes/orchestrator/orchestrator:4.0.0
+    image:
+      repository: appwrite-orchestrator
+      tag: latest
+      build_config:
+        context: ./appwrite-orchestrator
+        push: server
     port: "8080"
     env:
       - name: ORCHESTRATOR_BACKEND
@@ -999,3 +1022,15 @@ targets:
     volumes:
       - appwrite-appwrite-mongodb:/data/db
       - appwrite-appwrite-mongodb-keyfile:/data/keyfile
+  appwrite-gateway:
+    image:
+      repository: appwrite-gateway
+      tag: latest
+      build_config:
+        context: ./appwrite-gateway
+        push: server
+    port: "80"
+    health_check_path: /_gateway_health
+    domains:
+      - domain: app.example.com
+      - domain: console.app.example.com

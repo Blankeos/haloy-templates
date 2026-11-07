@@ -13,7 +13,7 @@ targets:
       - domain: app.example.com
     env:
       - name: FRONTEND_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: SECRET_KEY_BASE
         from:
           env: SECRET_KEY_BASE
@@ -65,7 +65,7 @@ targets:
     port: "8080"
     env:
       - name: FRONTEND_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: SECRET_KEY_BASE
         from:
           env: SECRET_KEY_BASE

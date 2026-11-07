@@ -8,7 +8,7 @@ targets:
       - domain: app.example.com
     env:
       - name: APP_URL
-        value: http://app.example.com:3000
+        value: https://app.example.com:3000
       - name: APP_SECRET
         from:
           env: APP_SECRET

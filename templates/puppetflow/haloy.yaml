@@ -19,7 +19,7 @@ targets:
       - name: CONNECTION_TIMEOUT_MS
         value: "60000000"
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: APP_KEY
         from:
           env: APP_KEY
@@ -45,9 +45,9 @@ targets:
       - name: BROWSER_STREAM_INTERNAL_URL
         value: http://puppetflow-stream-server:6080
       - name: BROWSER_STREAM_PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_ALLOWED_ORIGINS
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_SECRET
         from:
           env: BROWSER_STREAM_SECRET
@@ -76,7 +76,7 @@ targets:
       - name: CONNECTION_TIMEOUT_MS
         value: "60000000"
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: APP_KEY
         from:
           env: APP_KEY
@@ -102,9 +102,9 @@ targets:
       - name: BROWSER_STREAM_INTERNAL_URL
         value: http://puppetflow-stream-server:6080
       - name: BROWSER_STREAM_PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_ALLOWED_ORIGINS
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_SECRET
         from:
           env: BROWSER_STREAM_SECRET
@@ -131,7 +131,7 @@ targets:
       - name: CONNECTION_TIMEOUT_MS
         value: "60000000"
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: APP_KEY
         from:
           env: APP_KEY
@@ -157,9 +157,9 @@ targets:
       - name: BROWSER_STREAM_INTERNAL_URL
         value: http://puppetflow-stream-server:6080
       - name: BROWSER_STREAM_PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_ALLOWED_ORIGINS
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_SECRET
         from:
           env: BROWSER_STREAM_SECRET
@@ -188,7 +188,7 @@ targets:
       - name: CONNECTION_TIMEOUT_MS
         value: "60000000"
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: APP_KEY
         from:
           env: APP_KEY
@@ -214,9 +214,9 @@ targets:
       - name: BROWSER_STREAM_INTERNAL_URL
         value: http://puppetflow-stream-server:6080
       - name: BROWSER_STREAM_PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_ALLOWED_ORIGINS
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_SECRET
         from:
           env: BROWSER_STREAM_SECRET
@@ -245,7 +245,7 @@ targets:
       - name: CONNECTION_TIMEOUT_MS
         value: "60000000"
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: APP_KEY
         from:
           env: APP_KEY
@@ -271,9 +271,9 @@ targets:
       - name: BROWSER_STREAM_INTERNAL_URL
         value: http://puppetflow-stream-server:6080
       - name: BROWSER_STREAM_PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_ALLOWED_ORIGINS
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_SECRET
         from:
           env: BROWSER_STREAM_SECRET
@@ -298,7 +298,7 @@ targets:
       - name: CONNECTION_TIMEOUT_MS
         value: "60000000"
       - name: APP_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: APP_KEY
         from:
           env: APP_KEY
@@ -324,9 +324,9 @@ targets:
       - name: BROWSER_STREAM_INTERNAL_URL
         value: http://puppetflow-stream-server:6080
       - name: BROWSER_STREAM_PUBLIC_URL
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_ALLOWED_ORIGINS
-        value: http://app.example.com
+        value: https://app.example.com
       - name: BROWSER_STREAM_SECRET
         from:
           env: BROWSER_STREAM_SECRET
@@ -346,7 +346,12 @@ targets:
       - puppetflow-pinokio-downloads:/browsers
   puppetflow-pinokio:
     preset: service
-    image: ghcr.io/puppetflow/pinokio:v2026.11.1
+    image:
+      repository: puppetflow-pinokio
+      tag: latest
+      build_config:
+        context: ./puppetflow-pinokio
+        push: server
     port: "8080"
     env:
       - name: TOKEN

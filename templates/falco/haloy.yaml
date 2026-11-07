@@ -20,7 +20,12 @@ targets:
       - /sys/kernel/tracing:/sys/kernel/tracing
   falcosidekick:
     preset: service
-    image: falcosecurity/falcosidekick:2.35.0
+    image:
+      repository: falcosidekick
+      tag: latest
+      build_config:
+        context: ./falcosidekick
+        push: server
     port: "8080"
     env:
       - name: TELEGRAM_MINIMUMPRIORITY

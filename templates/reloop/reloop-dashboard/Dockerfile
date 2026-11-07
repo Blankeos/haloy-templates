@@ -1,0 +1,2 @@
+FROM reloopsh/fe-dashboard@sha256:dd2369d2f0d7fe836664ae49b2b4492f90ee654dd8af7c819e7ca07e469b58dc
+EXPOSE 8080

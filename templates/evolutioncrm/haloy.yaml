@@ -42,11 +42,11 @@ targets:
       - name: REDIS_URL
         value: redis://evolutioncrm-redis:6379/3
       - name: FRONTEND_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: BACKEND_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: CORS_ORIGINS
-        value: '"http://app.example.com","http://app.example.com"'
+        value: '"https://app.example.com","https://app.example.com"'
       - name: DOORKEEPER_JWT_SECRET_KEY
         from:
           env: DOORKEEPER_JWT_SECRET_KEY
@@ -146,11 +146,11 @@ targets:
       - name: EVO_AI_CORE_SERVICE_URL
         value: http://evolutioncrm-evo-core:5555
       - name: BACKEND_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: FRONTEND_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: CORS_ORIGINS
-        value: '"http://app.example.com","http://app.example.com"'
+        value: '"https://app.example.com","https://app.example.com"'
       - name: EVOLUTION_API_ONLY_SERVER
         value: "true"
       - name: DISABLE_TELEMETRY
@@ -169,7 +169,7 @@ targets:
         from:
           env: BOT_RUNTIME_SECRET
       - name: BOT_RUNTIME_POSTBACK_BASE_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
     volumes:
       - evolutioncrm-evo-crm-data:/app/storage
   evolutioncrm-evo-crm-sidekiq:
@@ -209,15 +209,15 @@ targets:
       - name: REDIS_URL
         value: redis://evolutioncrm-redis:6379/3
       - name: EVO_AUTH_SERVICE_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: EVO_AI_CORE_SERVICE_URL
         value: http://evolutioncrm-evo-core:5555
       - name: BACKEND_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: FRONTEND_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: CORS_ORIGINS
-        value: '"http://app.example.com","http://app.example.com","http://app.example.com"'
+        value: '"https://app.example.com","https://app.example.com","https://app.example.com"'
       - name: DISABLE_TELEMETRY
         value: "true"
       - name: LOG_LEVEL
@@ -234,12 +234,17 @@ targets:
         from:
           env: BOT_RUNTIME_SECRET
       - name: BOT_RUNTIME_POSTBACK_BASE_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: SIDEKIQ_CONCURRENCY
         value: "10"
   evolutioncrm-evo-core:
     preset: service
-    image: evoapicloud/evo-ai-core-service-community:latest
+    image:
+      repository: evolutioncrm-evo-core
+      tag: latest
+      build_config:
+        context: ./evolutioncrm-evo-core
+        push: server
     port: "8080"
     env:
       - name: DB_HOST
@@ -327,9 +332,9 @@ targets:
       - name: EVO_AUTH_BASE_URL
         value: http://evolutioncrm-evo-auth:3001
       - name: APP_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: API_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: API_TITLE
         value: Agent Processor Community
       - name: API_DESCRIPTION
@@ -344,7 +349,12 @@ targets:
         value: "3600"
   evolutioncrm-evo-bot-runtime:
     preset: service
-    image: evoapicloud/evo-bot-runtime:latest
+    image:
+      repository: evolutioncrm-evo-bot-runtime
+      tag: latest
+      build_config:
+        context: ./evolutioncrm-evo-bot-runtime
+        push: server
     port: "8080"
     env:
       - name: LISTEN_ADDR
@@ -367,17 +377,17 @@ targets:
       - name: VITE_APP_ENV
         value: production
       - name: VITE_API_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: VITE_AUTH_API_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: VITE_EVOAI_API_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: VITE_AGENT_PROCESSOR_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
       - name: VITE_WS_URL
         value: wss://app.example.com
       - name: VITE_FRONT_URL
-        value: '"http://app.example.com"'
+        value: '"https://app.example.com"'
   evolutioncrm-postgres:
     preset: database
     image: postgres:16-alpine

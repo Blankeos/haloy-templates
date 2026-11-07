@@ -44,7 +44,7 @@ targets:
         from:
           env: INLINE_BASE64_48
       - name: MCPSPAN_DASHBOARD_URL
-        value: http://app.example.com
+        value: https://app.example.com
   mcpspan-dashboard:
     image: ghcr.io/mcpspan/core-dashboard:0.13.0
     port: "6270"
@@ -54,4 +54,4 @@ targets:
       - name: CORE_API_URL
         value: http://mcpspan-api:6271
       - name: MCPSPAN_INGEST_URL
-        value: http://app.example.com
+        value: https://app.example.com
