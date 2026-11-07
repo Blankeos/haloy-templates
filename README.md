@@ -6,16 +6,23 @@ Haloy is tiny (~25 MB on the server) but has no UI, no one-click installs and no
 
 ## 🚀 Use it
 
-No clone, no install. Pick a template from [`templates/`](templates) and run:
+Deploy [Plausible](templates/plausible) to your Haloy server (swap `plausible` for any [template](templates)):
 
-```sh
-bunx github:Blankeos/haloy-templates add plausible --domain stats.example.com --server my-server
-cd plausible && cat REPORT.md && ./deploy.sh
-```
+1. Point a DNS A record, e.g. `stats.example.com`, at your server.
+2. Get the template (no clone needed):
 
-That writes `./plausible` with the Haloy config and a `.env` full of freshly generated secrets. Read `REPORT.md` first, it has the badges and anything that needs you.
+   ```sh
+   bunx github:Blankeos/haloy-templates add plausible --domain stats.example.com --server my-server
+   ```
 
-Needs [bun](https://bun.sh), the [haloy CLI](https://haloy.dev/docs/client-installation) and a server running `haloyd`. `--server` is the name you gave `haloy server add`. To see everything bundled: `bunx github:Blankeos/haloy-templates list`.
+   `my-server` is the name from `haloy server add`. This creates `./plausible` with the config and a `.env` of generated secrets.
+3. Deploy:
+
+   ```sh
+   cd plausible && cat REPORT.md && ./deploy.sh
+   ```
+
+You need [bun](https://bun.sh) for step 2 and the [haloy CLI](https://haloy.dev/docs/client-installation) for step 3. `list` shows everything bundled: `bunx github:Blankeos/haloy-templates list`.
 
 ## 📦 What you get
 
